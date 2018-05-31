@@ -32,4 +32,33 @@ a {
   background: #e9e9e9;
 }
 
+.shanghu-page {
+  padding-top: .586667rem;
+  padding-left: .533333rem;
+  padding-bottom: 1.066667rem;
+  .sub-title {
+    height: 1.533333rem;
+    line-height: 1.533333rem;
+    @include font-dpr(14px);
+    .tip{
+      color: #de3232;
+      @include font-dpr(12px);      
+    }
+  }
+  .form-box {
+    padding-right: 0.533333rem;
+  }
+  .xbtn {
+    margin-top: .906667rem;
+  }
+  .weui-cells {
+    margin-top: 0;
+  }
+  .weui-cells:before {
+    border: none;
+  }
+}
 
+a.active-router{
+  color: #de3232;
+}

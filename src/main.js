@@ -6,13 +6,29 @@ import store from './store'
 /* axios插件 */
 import axios from "axios";
 Vue.prototype.$axios = axios;
+/* 引入微信jssdk */
+import wx from 'weixin-js-sdk';
+Vue.prototype.$wx = wx;
 /* 引入flexible自适应 */
 import 'lib-flexible/flexible.js'
-/* 引入 */
-// import globaljs from "@/assets/js/base.js";
-// Vue.use(globaljs);
 
+import eruda from 'eruda';
+Vue.prototype.$eruda = eruda;
+/* 点击延迟 */
+const FastClick = require('fastclick')
+FastClick.attach(document.body)
 
+import VueCookies from 'vue-cookies'
+Vue.prototype.$cookies = VueCookies;
+
+/* 引入全局js */
+import globaljs from "@/assets/js/global.js";
+Vue.use(globaljs);
+
+import  { AlertPlugin } from 'vux'
+Vue.use(AlertPlugin)
+
+import 'babel-polyfill'
 /* vux组件 */
 // import { Tabbar, TabbarItem } from 'vux'
 // Vue.component('tabbar', Tabbar);
