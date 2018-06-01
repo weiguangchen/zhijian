@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-05-31 16:19:48
+ * @Last Modified time: 2018-06-01 17:59:43
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -11,8 +11,12 @@ import tab2 from '@/components/tab/shangHuTab';
 import index from '@/pages/index/index'
 import shangpu from '@/pages/shangpu/index'
 import serviceClass from '@/pages/serviceClass/index';
+import serviceList from '@/pages/serviceList/index';
 import serviceDetail from "@/pages/serviceDetail/index";
 import me from '@/pages/me/index';
+import orderList from '@/pages/orderList/index';
+import orderDetail from '@/pages/orderList/orderDetail';
+import pingjia from '@/pages/pingjia/index';
 import agent from '@/pages/agent/index';
 import pinglun from '@/pages/pinglun/index';
 
@@ -22,13 +26,17 @@ import jingying from '@/pages/shanghu/jingying/index'
 import tongji from '@/pages/shanghu/jingying/tongji'
 import shanghume from '@/pages/shanghu/me/index'
 import xmgl from '@/pages/shanghu/me/xmgl'
+import fwList from '@/pages/shanghu/me/fwList'
 import shangjia from '@/pages/shanghu/shangjia/index';
 import logining from '@/pages/logining/index';
 Vue.use(Router)
 import store from '@/store/index';
+import muta from '@/store/mutations';
 import axios from "axios";
 import VueCookies from 'vue-cookies'
-
+import {
+  API_URL
+} from '@/assets/js/global.js';
 const router = new Router({
   linkActiveClass: 'active-router',
   routes: [{
@@ -38,12 +46,12 @@ const router = new Router({
       path: '/index',
       name: 'index',
       beforeEnter: (to, from, next) => {
-        if (to.path == '/index') {
-          next();
-        }
+        // if (to.path == '/index') {
+        //   next();
+        // }
         if (getUrl('id')) {
           VueCookies.set('user', getUrl('id'));
-          var url = delParam('http://192.168.31.75:8081?id=123/#/me', 'id');
+          var url = delParam(window.location.href, 'id');
           window.location.href = url;
         }
         next();
@@ -67,11 +75,38 @@ const router = new Router({
         tab: tab
       }
     }, {
+      path: '/serviceList/:classId',
+      name: 'serviceList',
+      components: {
+        default: serviceList,
+        tab: tab
+      }
+    }, {
       path: '/me',
       name: 'me',
       components: {
         default: me,
         tab: tab
+      }
+    }, {
+      path: '/me/orderList/:orderStatus',
+      name: 'orderList',
+      components: {
+        default: orderList,
+        tab: tab
+      }
+    }, {
+      path: '/me/orderDetail/:orderNum',
+      name: 'orderList',
+      components: {
+        default: orderDetail,
+        tab: tab
+      }
+    }, {
+      path: '/me/pingjia/:orderId',
+      name: 'pingjia',
+      components: {
+        default: pingjia,
       }
     }, {
       path: '/agent',
@@ -92,7 +127,8 @@ const router = new Router({
       path: '/shangjia',
       name: 'shangjia',
       component: shangjia
-    }, {
+    },
+    {
       path: '/shanghu',
       component: shanghu,
       children: [{
@@ -115,7 +151,10 @@ const router = new Router({
           path: 'me/xmgl',
           component: xmgl
         },
-        
+        {
+          path: 'me/fwList',
+          component: fwList
+        },
       ]
     },
     {
@@ -163,31 +202,35 @@ function delParam(url, paramKey) {
   return url;
 }
 
+// 进入每个url时判断是否登录
 router.beforeEach((to, from, next) => {
   var id = store.state.id;
+  var userId = VueCookies.get("user");
+  if (userId) {
+    console.log("存在cookie");
+    if (!id) {
+      console.log('未登录')
+      axios.get(API_URL + '/api/Show/get_user', {
+        params: {
+          id: userId
+        }
+      }).then(res => {
+        console.log(res);
+        console.log(muta)
+        muta.SAVE_ID(store.state, userId);
+        muta.SAVE_USERINFO(store.state, res.data[0]);
+        next();
 
-  // if (!id && to.path != '/me') {
-  //   // 未登录
-  //   next('/me');
-  // }else{
-  //   // 登录中
-  //   next();
-  // }
-  next();
-  // if (getUrl('id') && to.path == '/') {
-  //   VueCookies.set('url', getUrl('id'));
-  //   var url = delParam('http://192.168.31.75:8081?id=123/#/me', 'id');
-  //   router.replace(url)
-  // }else{
-  //   next();
-  // }
-  // if (to.path == '/me') {
-  //   next();
-  // }
+      });
+    }else{
+      next();
+    }
+  } else {
+    console.log("不存在cookie");
+    next();
 
-  // if (!store.state.id) {
-  //   next('/me');
-  // }
+  }
+
 })
 
 export default router;

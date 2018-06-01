@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <ViewBox>
-            <div class="me-box" >
+            <div class="me-box">
                 <div class="title">
                     <span class="left"></span>
                     <span class="middle">个人中心</span>
@@ -39,19 +39,19 @@
             <div class="order-term">
                 <div class="title">我的订单</div>
                 <div class="order-terms">
-                    <div class="order-term-item">
+                    <div class="order-term-item" @click="toOrderList(0)">
                         <div class="icon">
                             <span class="iconfont icon-weifukuan"></span>
                         </div>
                         <div class="text">未付款</div>
                     </div>
-                    <div class="order-term-item">
+                    <div class="order-term-item" @click="toOrderList(1)">
                         <div class="icon">
                             <span class="iconfont icon-weishiyong"></span>
                         </div>
                         <div class="text">未使用</div>
                     </div>
-                    <div class="order-term-item">
+                    <div class="order-term-item" @click="toOrderList(2)">
                         <div class="icon">
                             <span class="iconfont icon-yiwancheng"></span>
                         </div>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="text">退款单</div>
                     </div>
-                    <div class="order-term-item">
+                    <div class="order-term-item" @click="toOrderList(6)">
                         <div class="icon">
                             <span class="iconfont icon-quanbu"></span>
                         </div>
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import {mapState,mapMutations} from 'vuex';
+import { mapState, mapMutations } from "vuex";
 import { XButton, Group, Cell, ViewBox } from "vux";
 import checkLogin from "@/mixins/checkLogin.js";
 export default {
@@ -100,12 +100,14 @@ export default {
     return {};
   },
   created() {},
-  computed: {
-  },
+  computed: {},
   methods: {
     login() {
       window.location.href =
         "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa9ee7e36e84d8478&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+    },
+    toOrderList(status) {
+      this.$router.push("/me/orderList/" + status);
     }
   },
   components: { XButton, Group, Cell, ViewBox },

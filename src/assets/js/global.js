@@ -1,4 +1,4 @@
-const API_URL = 'http://zj.daonian.cn'
+export const API_URL = 'http://zj.daonian.cn'
 
 const $toDetail = function (id) {
   var _this = this;
