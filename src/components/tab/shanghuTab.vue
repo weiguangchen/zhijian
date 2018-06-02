@@ -17,7 +17,7 @@
         <router-link class="tabbar-item" to="/shanghu/yanzheng">
             <i class="iconfont icon-shouye"></i><div>验证</div>
         </router-link>
-        <router-link class="tabbar-item" to="/shanghu/pingjia">
+        <router-link class="tabbar-item" to="/shanghu/pingjias">
             <i class="iconfont icon-shangcheng"></i><div>评价</div>
         </router-link>
         <router-link class="tabbar-item" to="/shanghu/jingying">

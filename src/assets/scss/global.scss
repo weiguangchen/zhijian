@@ -7,6 +7,7 @@ body {
   width: 100%;
   overflow-x: hidden;
   box-sizing: border-box;
+  font-family: '微软雅黑';
 }
 
 a {
@@ -34,19 +35,19 @@ a {
 
 .shanghu-page {
   padding-top: .586667rem;
-  padding-left: .533333rem;
   padding-bottom: 1.066667rem;
   .sub-title {
     height: 1.533333rem;
     line-height: 1.533333rem;
     @include font-dpr(14px);
-    .tip{
+    .tip {
       color: #de3232;
-      @include font-dpr(12px);      
+      @include font-dpr(12px);
     }
   }
   .form-box {
     padding-right: 0.533333rem;
+    padding-left: .533333rem;
   }
   .xbtn {
     margin-top: .906667rem;
@@ -57,8 +58,18 @@ a {
   .weui-cells:before {
     border: none;
   }
+  .reset-vux-input {
+    border: 1px solid #d3d3d3;
+    border-radius: .106667rem;
+    box-shadow: 0 0 1px 1px rgba(#000000, .1);
+  }
 }
 
-a.active-router{
+.sh-page {
+  height: 100%;
+  width: 100%;
+}
+
+a.active-router {
   color: #de3232;
 }

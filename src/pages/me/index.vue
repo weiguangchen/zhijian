@@ -36,7 +36,7 @@
                     <XButton type='warn' class='login' @click.native="login">点击使用微信登录</XButton>
                 </div>
             </div>
-            <div class="order-term">
+            <div class="order-term" v-if="id">
                 <div class="title">我的订单</div>
                 <div class="order-terms">
                     <div class="order-term-item" @click="toOrderList(0)">
@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </div>
-            <div class="oplist">
+            <div class="oplist" v-if="id">
                 <Group>
                     <Cell title='历史收藏'>
                         <span class="iconfont icon-jinru"></span>

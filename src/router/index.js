@@ -2,13 +2,14 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-01 17:59:43
+ * @Last Modified time: 2018-06-02 16:25:18
  */
 import Vue from 'vue'
 import Router from 'vue-router'
 import tab from '@/components/tab/tab';
 import tab2 from '@/components/tab/shangHuTab';
 import index from '@/pages/index/index'
+import shangcheng from '@/pages/shangcheng/index';
 import shangpu from '@/pages/shangpu/index'
 import serviceClass from '@/pages/serviceClass/index';
 import serviceList from '@/pages/serviceList/index';
@@ -22,6 +23,8 @@ import pinglun from '@/pages/pinglun/index';
 
 import shanghu from '@/pages/shanghu/index'
 import yanzheng from '@/pages/shanghu/yanzheng/index'
+import pingjias from '@/pages/shanghu/pingjias/index'
+import pingjiaList from '@/pages/shanghu/pingjias/pingjiaList'
 import jingying from '@/pages/shanghu/jingying/index'
 import tongji from '@/pages/shanghu/jingying/tongji'
 import shanghume from '@/pages/shanghu/me/index'
@@ -61,6 +64,13 @@ const router = new Router({
         tab: tab
       }
     }, {
+      path: '/shop',
+      name: 'shangcheng',
+      components: {
+        default: shangcheng,
+        tab: tab
+      }
+    },{
       path: '/shangpu/:shangpuId',
       name: 'shangpu',
       components: {
@@ -100,10 +110,10 @@ const router = new Router({
       name: 'orderList',
       components: {
         default: orderDetail,
-        tab: tab
+        // tab: tab
       }
     }, {
-      path: '/me/pingjia/:orderId',
+      path: '/me/pingjia/:orderNum',
       name: 'pingjia',
       components: {
         default: pingjia,
@@ -134,6 +144,14 @@ const router = new Router({
       children: [{
           path: 'yanzheng',
           component: yanzheng
+        },
+        {
+          path: 'pingjias',
+          component: pingjias
+        },
+        {
+          path: 'pingjiaList/:pingjiaId',
+          component: pingjiaList
         },
         {
           path: 'jingying',

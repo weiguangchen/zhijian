@@ -1,5 +1,5 @@
 <template>
-    <div class="classify">
+    <div class="classify1">
         <!-- <div class="line"> -->
 
         <!-- <a href="" class="item" v-for="(item,index) in classArr" :key="index"><img src="~img/public/smxc.png" alt="" class="img">
@@ -50,12 +50,12 @@ export default {
 </script>
 
 <style lang='scss'>
-.classify {
+.classify1 {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   //   flex-direction: column;
-  justify-content: space-between;
+//   justify-content: space-between;
   background: #ffffff;
   padding: 0.533333rem 0.586667rem;
   height: 5.253333rem;
@@ -67,6 +67,7 @@ export default {
     justify-content: space-between;
   }
   .item {
+      width: 20%;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,38 +1,8 @@
 <template>
-    <div class="classify">
-        <!-- <div class="line"> -->
-
-        <!-- <a href="" class="item" v-for="(item,index) in classArr" :key="index"><img src="~img/public/smxc.png" alt="" class="img">
-            <div>{{item.class_name}}</div>
-        </a> -->
+    <div class="classify2">
         <router-link :to="'/serviceClass/'+item.id" v-for="(item,index) in classArr" :key="index" class="item"><img src="~img/public/smxc.png" alt="" class="img">
             <div>{{item.fw_name}}</div>
         </router-link>
-        <!-- <a href="" class="item"><img src="~img/public/qcmr.png" alt="" class="img">
-            <div>汽车美容</div>
-        </a>
-        <a href="" class="item"><img src="~img/public/jjyh.png" alt="" class="img">
-            <div>家具养护</div>
-        </a>
-        <a href="" class="item"><img src="~img/public/jzfw.png" alt="" class="img">
-            <div>家政服务</div>
-        </a> -->
-        <!-- </div> -->
-        <!-- <div class="line"> -->
-        <!-- <a href="" class="item"><img src="~img/public/jqqc.png" alt="" class="img">
-            <div>甲醛清除</div>
-        </a>
-        <a href="" class="item"><img src="~img/public/zxcp.png" alt="" class="img">
-            <div>在线产品</div>
-        </a>
-        <a href="" class="item"><img src="~img/public/lyfw.png" alt="" class="img">
-            <div>旅游服务</div>
-        </a>
-        <a href="" class="item"><img src="~img/public/bxfw.png" alt="" class="img">
-            <div>保险服务</div>
-        </a> -->
-        <!-- </div> -->
-
     </div>
 </template>
 
@@ -47,12 +17,12 @@ export default {
 </script>
 
 <style lang='scss'>
-.classify {
+.classify2 {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   //   flex-direction: column;
-  justify-content: space-between;
+//   justify-content: space-between;
   background: #ffffff;
   padding: 0.533333rem 0.586667rem;
   height: 5.253333rem;
@@ -64,6 +34,8 @@ export default {
     justify-content: space-between;
   }
   .item {
+      width: 25%;
+      
     display: flex;
     flex-direction: column;
     align-items: center;

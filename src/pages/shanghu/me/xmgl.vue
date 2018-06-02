@@ -1,106 +1,107 @@
 <template>
-    <div class="shanghu-page">
-        <ViewBox>
-            <bigTitle title='项目管理'></bigTitle>
-            <div class="form-box">
-                <template v-if="step == 1">
-                    <div class="form-group">
-                        <h2 class="sub-title">服务名称</h2>
-                        <Group>
-                            <XInput v-model="fw_name"></XInput>
-                        </Group>
-                    </div>
-                    <div class="form-group">
-                        <h2 class="sub-title">简短名称:
-                            <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
-                        </h2>
-                        <Group>
-                            <XInput v-model="fw_short_info"></XInput>
-                        </Group>
-                    </div>
-                    <div class="form-group">
-                        <h2 class="sub-title">服务介绍</h2>
-                        <Group>
-                            <XTextarea :max='50' v-model="fw_intr"></XTextarea>
-                        </Group>
-                    </div>
-                </template>
-                <template v-else-if="step == 2">
-                    <!-- <div class="form-group">
+  <div>
+    <ViewBox class="shanghu-page">
+      <bigTitle title='新建项目'></bigTitle>
+      {{querys}}
+      <div class="form-box">
+        <template v-if="step == 1">
+          <div class="form-group">
+            <h2 class="sub-title">服务名称</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="fw_name"></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">简短名称:
+              <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
+            </h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="fw_short_info"></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">服务介绍</h2>
+            <Group class="reset-vux-input">
+              <XTextarea :max='50' v-model="fw_intr"></XTextarea>
+            </Group>
+          </div>
+        </template>
+        <template v-else-if="step == 2">
+          <!-- <div class="form-group">
                         <h2 class="sub-title">标签:</h2>
                         <Group>
                             <XInput v-model="pay_num"></XInput>
                         </Group>
                     </div> -->
-                    <!-- <div class="form-group">
+          <!-- <div class="form-group">
                         <h2 class="sub-title">城市:</h2>
                         <Group>
                             <XInput v-model="pay_num"></XInput>
                         </Group>
                     </div> -->
-                    <div class="form-group">
-                        <h2 class="sub-title">分类:</h2>
-                        <Group>
-                            <Selector :options='one_class' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'></Selector>
-                        </Group>
-                    </div>
-                    <div class="form-group">
-                        <h2 class="sub-title">子分类列表:</h2>
-                        <Group>
-                            <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val"></Selector>
-                        </Group>
-                    </div>
-                    <div class="form-group">
-                        <h2 class="sub-title">支持门店:</h2>
-                        <Checker type='checkbox' v-model="face" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-                            <CheckerItem :value='item.id' v-for="(item,index) in faceList" :key="index">{{item.face_name}}</CheckerItem>
-                        </Checker>
-                    </div>
-                    <div class="form-group">
-                        <h2 class="sub-title">服务缩略图:</h2>
-                        <div class="uploadImage">
-                            <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
-                            <img :src="imgs" alt="" class="thumb" v-if="system == 1">
-                            <img :src="localData" alt="" v-else class="thumb">
-                        </div>
-                    </div>
-                </template>
-                <template v-else-if="step == 3">
-                    <div class="form-group">
-                        <h2 class="sub-title">有效期(天):</h2>
-                        <Group>
-                            <XInput v-model="youxiao" type='number'></XInput>
-                        </Group>
-                    </div>
-                    <div class="form-group">
-                        <h2 class="sub-title">原价(元):</h2>
-                        <Group>
-                            <XInput v-model="yuanjia" type='number'></XInput>
-                        </Group>
-                    </div>
-                    <div class="form-group">
-                        <h2 class="sub-title">现价(元):</h2>
-                        <Group>
-                            <XInput v-model="xianjia" type='number'></XInput>
-                        </Group>
-                    </div>
-                    <div class="form-group">
-                        <h2 class="sub-title">商户结算价(元):</h2>
-                        <Group>
-                            <XInput v-model="jiesuanjia" type='number'></XInput>
-                        </Group>
-                    </div>
-                </template>
-                <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
-                <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
-                <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3">完成</XButton>
+          <div class="form-group">
+            <h2 class="sub-title">分类:</h2>
+            <Group class="reset-vux-input">
+              <Selector :options='one_class' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'></Selector>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">子分类列表:</h2>
+            <Group class="reset-vux-input">
+              <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val"></Selector>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">支持门店:</h2>
+            <Checker type='checkbox' v-model="face" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
+              <CheckerItem :value='item.id' v-for="(item,index) in faceList" :key="index">{{item.face_name}}</CheckerItem>
+            </Checker>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">服务缩略图:</h2>
+            <div class="uploadImage">
+              <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
+              <img :src="imgs" alt="" class="thumb" v-if="system == 1">
+              <img :src="localData" alt="" v-else class="thumb">
             </div>
+          </div>
+        </template>
+        <template v-else-if="step == 3">
+          <div class="form-group">
+            <h2 class="sub-title">有效期(天):</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="youxiao" type='number'></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">原价(元):</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="yuanjia" type='number'></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">现价(元):</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="xianjia" type='number'></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">商户结算价(元):</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="jiesuanjia" type='number'></XInput>
+            </Group>
+          </div>
+        </template>
+        <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
+        <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
+        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3">完成</XButton>
+      </div>
 
-        </ViewBox>
-        <Confirm v-model="alertShow">
-            {{modalInfo}}
-        </Confirm>
-    </div>
+    </ViewBox>
+    <Confirm v-model="alertShow">
+      {{modalInfo}}
+    </Confirm>
+  </div>
 </template>
 
 <script>
@@ -119,7 +120,7 @@ import { KeyBoard } from "vue-ydui/dist/lib.px/keyboard";
 import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
-import wxConfig from '@/mixins/wxConfig.js';
+import wxConfig from "@/mixins/wxConfig.js";
 export default {
   data() {
     return {
@@ -166,7 +167,22 @@ export default {
         _this.one_class = res.data.fw_class;
         _this.two_class_all = res.data.fw;
       });
-    
+
+    if (this.querys) {
+      this.getOldInfo().then(res => {
+        _this.fw_name = res.fw_mingzi;
+        _this.fw_short_info = res.sub_name;
+        _this.fw_intr = res.sub_content;
+        _this.one_class_val = res.fw_cid;
+        _this.two_class_val = res.fw_id;
+        _this.face = res.fw_face;
+        _this.tupian = res.fw_img;
+        _this.youxiao = res.use_day;
+        _this.yuanjia = res.y_money;
+        _this.xianjia = res.money;
+        _this.jiesuanjia = res.j_money;
+      });
+    }
   },
   methods: {
     next1() {
@@ -332,6 +348,25 @@ export default {
             });
         }
       });
+    },
+    // 获取已有数据
+    getOldInfo() {
+      var _this = this;
+      return this.$axios
+        .get(this.API_URL + "/api/ShopFw/edit_fw", {
+          params: {
+            id: _this.querys
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+          return res.data[0];
+        });
+    }
+  },
+  computed: {
+    querys() {
+      return this.$route.query.fwId;
     }
   },
   components: {

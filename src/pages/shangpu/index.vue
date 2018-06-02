@@ -2,7 +2,7 @@
   <div class="page">
     <ViewBox>
       <div class="banner">
-        <Swiper aspect-ratio='0.512'>
+        <Swiper :aspect-ratio='0.512'>
           <SwiperItem><img src="~img/shangpu/banner.png" alt=""></SwiperItem>
           <SwiperItem><img src="~img/shangpu/banner.png" alt=""></SwiperItem>
           <SwiperItem><img src="~img/shangpu/banner.png" alt=""></SwiperItem>

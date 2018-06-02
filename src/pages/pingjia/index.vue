@@ -1,15 +1,29 @@
 <template>
-    <div>
-        <rater :val="star" @changeStar='changeStar'></rater>
-        <Group>
-            <XTextarea v-model="content"></XTextarea>
-        </Group>
-        <div class="uploadImage">
-            <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
-            <img :src="imgs" alt="" class="thumb" v-if="system == 1">
-            <img :src="localData" alt="" v-else class="thumb">
+    <div class="page">
+        <div class="pingjia">
+            <div class="rater-box">
+                <img :src="orderDetail.fw_img" alt="" class="thumb">
+                <rater :val="star" @changeStar='changeStar'></rater>
+            </div>
+            <Group class="pingjia">
+                <XTextarea v-model="content" placeholder='请对本次服务进行点评，分享您的体验心得' :height='240'></XTextarea>
+            </Group>
+            <div class="uploadImage">
+                <div class="upload-btn" @click="chooseImg">
+                    <img src="~img/public/uploadImgBtn.png" alt="" class="img">
+                </div>
+                <template v-if="imgs">
+                    <img :src="imgs" alt="" class="thumb" v-if="system == 1">
+                    <img :src="localData" alt="" v-else class="thumb">
+                </template>
+
+            </div>
+            <div class="btn-box">
+                <span class="l-btn"></span>
+                <span class="submit-btn" @click="submit">提交评价</span>
+            </div>
         </div>
-        <XButton @click.native="submit">提交</XButton>
+
     </div>
 </template>
 
@@ -22,6 +36,7 @@ import wxConfig from "@/mixins/wxConfig.js";
 export default {
   data() {
     return {
+      orderDetail: {},
       system: 1,
 
       star: 1,
@@ -32,9 +47,19 @@ export default {
     };
   },
   created() {
+    var _this = this;
     this.checkSystem();
     this.$eruda.init();
-    
+    this.$axios
+      .get(this.API_URL + "/Api/UserShow/order_content", {
+        params: {
+          order_num: _this.order_num
+        }
+      })
+      .then(res => {
+        console.log(res);
+        _this.orderDetail = res.data[0];
+      });
   },
   methods: {
     submit() {
@@ -56,27 +81,27 @@ export default {
           }
         })
         .then(res => {
-          if (res.data.status == 1) {
-            this.$vux.alert.show({
-              title: "提示",
-              content: "谢谢评论",
-              onHide() {
-                _this.$router.push({
-                  path: "/me/orderList/6"
-                });
-              }
-            });
-          } else if (res.data.status == 0) {
-            this.$vux.alert.show({
-              title: "提示",
-              content: "评论失败了",
-              onHide() {
-                _this.$router.push({
-                  path: "/me/orderList/6"
-                });
-              }
-            });
-          }
+        //   if (res.data.status == 1) {
+        //     this.$vux.alert.show({
+        //       title: "提示",
+        //       content: "谢谢评论",
+        //       onHide() {
+        //         _this.$router.push({
+        //           path: "/me/orderList/6"
+        //         });
+        //       }
+        //     });
+        //   } else if (res.data.status == 0) {
+        //     this.$vux.alert.show({
+        //       title: "提示",
+        //       content: "评论失败了",
+        //       onHide() {
+        //         _this.$router.push({
+        //           path: "/me/orderList/6"
+        //         });
+        //       }
+        //     });
+        //   }
           console.log(res);
         });
     },
@@ -152,8 +177,8 @@ export default {
     Group
   },
   computed: {
-    orderId() {
-      return this.$route.params.orderId;
+    order_num() {
+      return this.$route.params.orderNum;
     }
   },
   mixins: [wxConfig, checkLogin]
@@ -161,23 +186,65 @@ export default {
 </script>
 
 <style lang='scss'>
-.uploadImage {
-  display: flex;
-  .upload-btn {
-    margin: 0 0.4rem;
-    text-align: center;
+.pingjia {
+  .rater-box {
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: 2rem;
-    height: 2rem;
-    border: 1px dashed #2a2a2a;
-    border-radius: 0.133333rem;
+    padding: 0.266667rem 0.4rem;
+    // border-bottom: 1px solid #f0f0f0;
+    background: #ffffff;
+    .thumb {
+      width: 2.666667rem;
+      height: 2.133333rem;
+      margin-right: 0.666667rem;
+    }
   }
-  .thumb {
-    width: 2rem;
-    height: 2rem;
-    flex: none;
+  .weui-cells {
+    margin-top: 0;
+  }
+  .btn-box {
+    position: fixed;
+    display: flex;
+    height: 1.333333rem;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    .l-btn {
+      flex: 1;
+      background: #ffffff;
+    }
+    .submit-btn {
+      flex: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #de3232;
+      color: #ffffff;
+      width: 3.546667rem;
+      @include font-dpr(14px);
+    }
+  }
+  .uploadImage {
+    padding: 0.4rem;
+    background: #ffffff;
+    display: flex;
+    .upload-btn {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 2rem;
+      height: 2rem;
+      background: #ececec;
+      .img {
+        width: 0.853333rem;
+      }
+    }
+    .thumb {
+      width: 2rem;
+      height: 2rem;
+      flex: none;
+    }
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="big-title-box">
         <h1 class="big-title">{{title}}
             <span class="iconfont icon-weibiaoti-" v-if="icon"></span>
         </h1>
@@ -24,6 +24,10 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.big-title-box{
+  padding-left: .533333rem;  
+  
+}
 h1.big-title {
   display: flex;
   justify-content: space-between;

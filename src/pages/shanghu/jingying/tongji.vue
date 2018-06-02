@@ -58,6 +58,7 @@ export default {
 
 <style lang='scss'>
 .tongji-info {
+  padding-left: .533333rem;
   .tongji-item {
     @include font-dpr(12px);
     display: flex;

@@ -63,12 +63,13 @@ export default {
   align-items: center;
   padding-bottom: 0.133333rem;
   .tuijian-item {
-    margin: 0 1.5%;
+    margin: 0 .32rem;
     overflow: hidden;
     border-radius: 0.133333rem;
-    width: 30%;
+    width: 2.666667rem;
     flex: none;
     .img {
+      width: 100%;
       height: 2.666667rem;
       overflow: hidden;
       margin-bottom: 0.066667rem;

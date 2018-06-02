@@ -1,5 +1,5 @@
 <template>
- <div>
+ <div class="sh-page">
      <router-view></router-view>
      <tabbar></tabbar>
      <!-- <router-view name="tab"></router-view> -->
