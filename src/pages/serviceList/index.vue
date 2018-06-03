@@ -11,7 +11,7 @@
                     <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
                 </Swiper>
             </div>
-            <!-- <div class="classify-list">
+            <div class="classify-list">
                 <sticky>
                     <div class="term">
                         <div class="select-box">
@@ -31,16 +31,14 @@
                     </div>
                 </sticky>
                 <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
-            </div> -->
-            <tuijian :info='item' v-for="(item,index) in serviceList" :key="index" v-if="item.list.length>0"></tuijian>
+            </div>
+
         </ViewBox>
         <Loading :show="loading"></Loading>
     </div>
 </template>
 
 <script>
-import tuijian from "@/components/tuijian/index";
-import classify from "@/components/classify/index2";
 import service from "@/components/service/service";
 import { ViewBox, XHeader, Swiper, SwiperItem, Sticky, Loading } from "vux";
 export default {
@@ -52,8 +50,6 @@ export default {
     };
   },
   components: {
-    tuijian,
-    classify,
     XHeader,
     Swiper,
     SwiperItem,
@@ -98,3 +94,38 @@ export default {
 </script>
 
 <style lang='scss'>
+.classify-list {
+  .service {
+    margin-bottom: 0.133333rem;
+  }
+  .term {
+    position: relative;
+    height: 1.386667rem;
+    border-bottom: 1px solid #dfdfdf;
+    background: #ffffff;
+    color: #2b2b2b;
+    @include font-dpr(15px);
+    .select-box {
+      height: 100%;
+      display: flex;
+      .term-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+      }
+    }
+    .term-box {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: red;
+    }
+
+    .iconfont {
+      color: #b6b6b6;
+      @include font-dpr(20px);
+    }
+  }
+}
+</style>

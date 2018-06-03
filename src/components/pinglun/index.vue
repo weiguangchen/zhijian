@@ -1,30 +1,26 @@
 <template>
-    <div class="pl-item">
-        <div class="left"><img src="~img/shangpu/avatar.png" alt="" class="avatar"></div>
-        <div class="right">
-            <div class="tit">
-                <span class="name">黑夜的味道</span>
-                <span class="date">2017年11月28日</span>
-            </div>
-            <rater val='4' class="rater"></rater>
-            <div class="content">
-                <div class="txt">
-                    家门口的修理厂，巴拉巴拉北京佛无法就我IE分级加尔文覅金额外，非法金额为飞机。
-                </div>
-                <div class="imgs">
-                    <img src="~img/shangpu/pl1.png" alt="">
-                    <img src="~img/shangpu/pl2.png" alt="">
-                    <img src="~img/shangpu/pl3.png" alt="">
-                </div>
-            </div>
-            <div class="click">
-                <span>浏览2059</span>
-                <span>132
-                    <i class="iconfont icon-dianzan"></i>
-                </span>
-            </div>
+  <div class="pl-item">
+    <div class="left"><img :src="info.url" alt="" class="avatar"></div>
+    <div class="right">
+      <div class="tit">
+        <span class="name">{{info.u_name}}</span>
+        <span class="date">{{info.date}}</span>
+      </div>
+      <rater val='4' class="rater"></rater>
+      <div class="content">
+        <div class="txt">{{info.content}}</div>
+        <div class="imgs">
+          <img :src="item" alt="" v-for="(item,index) in info.img" :key="index">
         </div>
+      </div>
+      <div class="click">
+        <span>浏览2059</span>
+        <span>132
+          <i class="iconfont icon-dianzan"></i>
+        </span>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -33,9 +29,18 @@ export default {
   data() {
     return {};
   },
+  props: ["info"],
+  created() {
+    if (typeof this.info.img != "array") {
+      var arr = [];
+      arr.push(this.info.img);
+      this.info.img = arr;
+    }
+  },
   components: {
-      rater
-  }
+    rater
+  },
+  computed: {}
 };
 </script>
 
@@ -45,6 +50,7 @@ export default {
   background: #ffffff;
   border-bottom: 1px solid #dfdfdf;
   .left {
+    flex: none;
     padding: 0.32rem 0.32rem 0 0.4rem;
     .avatar {
       width: 1.466667rem;
@@ -56,12 +62,13 @@ export default {
     padding: 0.426667rem 0.4rem 0.4rem 0;
     flex: 1;
     line-height: 1;
+    width: 1px;
     .tit {
       margin-bottom: 0.346667rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: #2b2b2b;
+      color: #0e0707;
       .name {
         font-size: 15px;
       }
@@ -74,10 +81,13 @@ export default {
       margin-bottom: 0.4rem;
     }
     .content {
+      width: 100%;
       margin-bottom: 0.4rem;
       .txt {
+        width: 100%;
         line-height: 0.56rem;
         margin-bottom: 0.266667rem;
+        word-break: break-word;
       }
       .imgs {
         display: flex;

@@ -2,7 +2,6 @@
   <div>
     <ViewBox class="shanghu-page">
       <bigTitle title='新建项目'></bigTitle>
-      {{querys}}
       <div class="form-box">
         <template v-if="step == 1">
           <div class="form-group">
@@ -94,7 +93,8 @@
         </template>
         <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
         <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
-        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3">完成</XButton>
+        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys">提交</XButton>
+        <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton>
       </div>
 
     </ViewBox>
@@ -170,12 +170,14 @@ export default {
 
     if (this.querys) {
       this.getOldInfo().then(res => {
+        // console.log('门店数组')
+        // console.log(JSON.parse(res.fw_face))
         _this.fw_name = res.fw_mingzi;
         _this.fw_short_info = res.sub_name;
         _this.fw_intr = res.sub_content;
         _this.one_class_val = res.fw_cid;
         _this.two_class_val = res.fw_id;
-        _this.face = res.fw_face;
+        _this.face = JSON.parse(res.fw_face);
         _this.tupian = res.fw_img;
         _this.youxiao = res.use_day;
         _this.yuanjia = res.y_money;
@@ -202,6 +204,8 @@ export default {
       this.step = 2;
     },
     next2() {
+      console.log("门店");
+      console.log(this.face);
       if (!this.one_class_val) {
         this.alertShow = true;
         this.modalInfo = "请选择分类";
@@ -219,6 +223,7 @@ export default {
         this.modalInfo = "请上传服务缩略图";
         return false;
       }
+
       this.step = 3;
     },
     finish() {
@@ -245,7 +250,7 @@ export default {
           params: {
             fw_mingzi: this.fw_name,
             sub_name: this.fw_short_info,
-            sub_count: this.fw_intr,
+            sub_content: this.fw_intr,
             fw_cid: this.one_class_val,
             fw_id: this.two_class_val,
             fw_face: this.face,
@@ -265,7 +270,7 @@ export default {
               title: "提示",
               content: "上传服务成功，请等待审核",
               onHide() {
-                _this.$router.push({
+                _this.$router.replace({
                   path: "/shanghu/me"
                 });
               }
@@ -274,6 +279,69 @@ export default {
             this.$vux.alert.show({
               title: "提示",
               content: "上传服务失败，请重新上传",
+              onHide() {
+                _this.$router.replace({
+                  path: "/shanghu/me/xmgl"
+                });
+              }
+            });
+          }
+        });
+    },
+    changeFw() {
+      var _this = this;
+      if (!this.youxiao || Number.isInteger(this.youxiao)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写正确有效期";
+        return false;
+      } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写原价";
+        return false;
+      } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写现价";
+        return false;
+      } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写结算价";
+        return false;
+      }
+      this.$axios
+        .get("/api/api/ShopFw/update_shop_fw", {
+          params: {
+            fw_mingzi: this.fw_name,
+            sub_name: this.fw_short_info,
+            sub_content: this.fw_intr,
+            fw_cid: this.one_class_val,
+            fw_id: this.two_class_val,
+            fw_face: this.face,
+            fw_img: this.tupian,
+            use_day: this.youxiao,
+            y_money: this.yuanjia,
+            money: this.xianjia,
+            j_money: this.jiesuanjia,
+            shop_id: 1,
+            id:_this.querys
+          }
+        })
+        .then(res => {
+          //   成功返回1不成功返回0
+          console.log(res);
+          if (res.data.status == 1) {
+            this.$vux.alert.show({
+              title: "提示",
+              content: "修改服务成功，请等待审核",
+              onHide() {
+                _this.$router.replace({
+                  path: "/shanghu/me"
+                });
+              }
+            });
+          } else if (res.data.status == 0) {
+            this.$vux.alert.replace({
+              title: "提示",
+              content: "修改服务失败，请重试",
               onHide() {
                 _this.$router.push({
                   path: "/shanghu/me/xmgl"

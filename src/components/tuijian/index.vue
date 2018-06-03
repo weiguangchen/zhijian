@@ -2,7 +2,7 @@
   <div class="tuijian">
     <Group>
       <Cell :title='info.fw_cid_name'>
-        <span class="right-icon">更多
+        <span class="right-icon" @click="more(info.fw_cid)">更多
           <i class="iconfont icon-jinru"></i>
         </span>
       </Cell>
@@ -25,12 +25,16 @@ export default {
   data() {
     return {};
   },
-  props:['fwInfo'],
   methods: {
     toDetail(id) {
       var _this = this;
       this.$router.push({
         path: "/serviceDetail/" + id
+      });
+    },
+    more(id){
+      this.$router.push({
+        path: "/serviceClass/" + id
       });
     }
   },

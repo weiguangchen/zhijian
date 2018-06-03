@@ -12,27 +12,7 @@
                     <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
                 </Swiper>
             </div>
-            <!-- <div class="classify-list">
-                <sticky>
-                    <div class="term">
-                        <div class="select-box">
-                            <span class="term-item">体育中心
-                                <span class="iconfont icon-zhankai1"></span>
-                            </span>
-                            <span class="term-item">智能排序
-                                <span class="iconfont icon-zhankai1"></span>
-                            </span>
-                            <span class="term-item">筛选
-                                <span class="iconfont icon-zhankai1"></span>
-                            </span>
-                        </div>
-                        <div class="term-box">
-
-                        </div>
-                    </div>
-                </sticky>
-                <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
-            </div> -->
+            
             <tuijian :info='item' v-for="(item,index) in serviceList" :key="index" v-if="item.list.length>0"></tuijian>
         </ViewBox>
         <Loading :show="loading"></Loading>

@@ -8,7 +8,8 @@
                         <Cell title='优惠下载查看' :is-link='true'></Cell>
                         <Cell title='活动验证' :is-link='true'></Cell>
                         <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'></Cell>
-                        <Cell title='订单管理' :is-link='true'></Cell>
+                        <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
+                        
                     </Group>
                 </div>
 

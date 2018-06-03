@@ -9,9 +9,7 @@
       </div>
       <div class="sp-info">
         <div class="top">{{fw_info.fw_mingzi}}</div>
-        <div class="bottom">
-          仅售298元，价值420元的内饰高位桑拿消毒除菌的套餐（SUV到店补15差价即可）
-        </div>
+        <div class="bottom">{{fw_info.sub_content}}</div>
       </div>
 
       <div class="comment">
@@ -19,7 +17,7 @@
         <span class="count">共{{fw_info.token_num}}个消费评价</span>
       </div>
 
-      <div class="address1">
+      <div class="address1" @click="toShop(fw_info.shop_id)">
         <div class="top">
           <div class="left">
             <div class="name">炫车豪庭汽车维修保养生活馆</div>
@@ -30,7 +28,7 @@
             </div>
           </div>
           <div class="right">
-            <span class="iconfont"></span>
+            <span class="iconfont icon-lianxifangshi"></span>
           </div>
         </div>
         <div class="bottom">
@@ -167,6 +165,9 @@ export default {
           _this.fw_info.fw_img = arr;
           console.log(res);
         });
+    },
+    toShop(id) {
+      this.$router.push("/shangpu/" + id);
     }
   },
   watch: {
@@ -268,9 +269,9 @@ export default {
   margin-bottom: 0.373333rem;
   .top {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     line-height: 0.453333rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.46rem;
     .left {
       flex: 1;
       .name {
@@ -278,7 +279,6 @@ export default {
         margin-bottom: 0.426667rem;
       }
       .info {
-        margin-bottom: 0.26rem;
         .rater {
           margin-right: 0.8rem;
         }
@@ -292,8 +292,13 @@ export default {
       }
     }
     .right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: none;
       width: 1.546667rem;
       border-left: 1px solid #7f7f7f;
+      @include font-dpr(25px);
     }
     .icon-weizhi1 {
       margin-right: 0.24rem;

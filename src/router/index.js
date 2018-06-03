@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-02 16:25:18
+ * @Last Modified time: 2018-06-03 15:02:20
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -27,7 +27,10 @@ import pingjias from '@/pages/shanghu/pingjias/index'
 import pingjiaList from '@/pages/shanghu/pingjias/pingjiaList'
 import jingying from '@/pages/shanghu/jingying/index'
 import tongji from '@/pages/shanghu/jingying/tongji'
+import orderGl from '@/pages/shanghu/jingying/orderlist'
 import shanghume from '@/pages/shanghu/me/index'
+import mendian from '@/pages/shanghu/me/mendian'
+import addFace from '@/pages/shanghu/me/addFace'
 import xmgl from '@/pages/shanghu/me/xmgl'
 import fwList from '@/pages/shanghu/me/fwList'
 import shangjia from '@/pages/shanghu/shangjia/index';
@@ -162,6 +165,10 @@ const router = new Router({
           component: tongji
         },
         {
+          path: 'jingying/orderGl',
+          component: orderGl
+        },
+        {
           path: 'me',
           component: shanghume
         },
@@ -172,6 +179,14 @@ const router = new Router({
         {
           path: 'me/fwList',
           component: fwList
+        },
+        {
+          path: 'me/mendian',
+          component: mendian
+        },
+        {
+          path: 'me/addFace',
+          component: addFace
         },
       ]
     },

@@ -39,9 +39,11 @@ export default {
       });
   },
   methods: {
-    get_fw_content(fwid){
-        
-    }  
+    get_fw_content(fwid) {
+      this.$router.push({
+        path: "/shanghu/pingjiaList/"+fwid
+      });
+    }
   },
   components: { bigTitle }
 };

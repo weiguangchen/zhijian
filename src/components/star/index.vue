@@ -15,7 +15,14 @@ export default {
       this.$emit('changeStar',v)
     }
   },
-  props: ["val","enable"],
+  props: {
+    val:{
+      default:0
+    },
+    enable:{
+      default:true
+    }
+  },
   components: {
     Rater
   }

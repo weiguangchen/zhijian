@@ -3,7 +3,7 @@
         <div class="pingjia">
             <div class="rater-box">
                 <img :src="orderDetail.fw_img" alt="" class="thumb">
-                <rater :val="star" @changeStar='changeStar'></rater>
+                <rater :val="star" @changeStar='changeStar' :enable='false'></rater>
             </div>
             <Group class="pingjia">
                 <XTextarea v-model="content" placeholder='请对本次服务进行点评，分享您的体验心得' :height='240'></XTextarea>
