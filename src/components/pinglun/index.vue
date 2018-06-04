@@ -6,7 +6,7 @@
         <span class="name">{{info.u_name}}</span>
         <span class="date">{{info.date}}</span>
       </div>
-      <rater val='4' class="rater"></rater>
+      <rater :val='info.star' class="rater"></rater>
       <div class="content">
         <div class="txt">{{info.content}}</div>
         <div class="imgs">
@@ -40,7 +40,9 @@ export default {
   components: {
     rater
   },
-  computed: {}
+  computed: {
+
+  }
 };
 </script>
 

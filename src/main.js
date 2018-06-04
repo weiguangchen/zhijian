@@ -9,6 +9,7 @@ Vue.prototype.$axios = axios;
 /* 引入微信jssdk */
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
+
 /* 引入flexible自适应 */
 import 'lib-flexible/flexible.js'
 

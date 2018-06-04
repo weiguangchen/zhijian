@@ -20,7 +20,7 @@
       <div class="address1" @click="toShop(fw_info.shop_id)">
         <div class="top">
           <div class="left">
-            <div class="name">炫车豪庭汽车维修保养生活馆</div>
+            <div class="name">{{fw_info.shop_name}}</div>
             <div class="info">
               <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
               <span class="count">28条</span>
@@ -57,8 +57,8 @@
           </span>
         </myTitle> -->
         <Group>
-          <Cell title='网友点评(28)'>
-            <span>更多</span>
+          <Cell :title="'网友点评('+fw_info.token_num+')'">
+            <span @click="more(fwId)">更多</span>
           </Cell>
         </Group>
         <!-- <div class="title">
@@ -66,8 +66,7 @@
                     <span class="iconfont icon-jinru"></span>
                 </div> -->
         <div class="list">
-          <pinglun></pinglun>
-          <pinglun></pinglun>
+          <pinglun :info='item' v-for="(item,index) in fw_info.token" :key="index"></pinglun>
         </div>
       </div>
 
@@ -145,7 +144,7 @@ export default {
         });
     },
     toDetail(id) {
-      this.$toDetail(id);
+      this.$router.replace("/serviceDetail/" + id);
     },
     get_fw_info() {
       var _this = this;
@@ -162,12 +161,16 @@ export default {
             arr.push(res.data[0].fw_img);
             res.data[0].fw_img = arr;
           }
+
+          _this.fw_info.token = res.data[0].token.slice(0,2);
           _this.fw_info.fw_img = arr;
-          console.log(res);
         });
     },
     toShop(id) {
       this.$router.push("/shangpu/" + id);
+    },
+    more(id) {
+      this.$router.push("/pinglun/" + id);
     }
   },
   watch: {
@@ -178,6 +181,11 @@ export default {
   computed: {
     fwId() {
       return this.$route.params.serviceId;
+    }
+  },
+  filters:{
+    hotPL(val){
+      return val.slice(0,2);
     }
   },
   components: {

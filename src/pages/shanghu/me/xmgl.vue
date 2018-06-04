@@ -33,11 +33,11 @@
                         </Group>
                     </div> -->
           <!-- <div class="form-group">
-                        <h2 class="sub-title">城市:</h2>
-                        <Group>
-                            <XInput v-model="pay_num"></XInput>
-                        </Group>
-                    </div> -->
+            <h2 class="sub-title">城市:</h2>
+            <Group>
+              <XInput v-model="pay_num"></XInput>
+            </Group>
+          </div> -->
           <div class="form-group">
             <h2 class="sub-title">分类:</h2>
             <Group class="reset-vux-input">
@@ -60,8 +60,11 @@
             <h2 class="sub-title">服务缩略图:</h2>
             <div class="uploadImage">
               <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
-              <img :src="imgs" alt="" class="thumb" v-if="system == 1">
-              <img :src="localData" alt="" v-else class="thumb">
+              <!-- 安卓预览图片 -->
+              <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
+              <!-- IOS预览图片 -->
+              <img :src="localData || tupian" alt="" v-else class="thumb">
+              
             </div>
           </div>
         </template>
@@ -128,7 +131,7 @@ export default {
       modalInfo: "",
 
       keyboardShow: false,
-      step: 1,
+      step: 2,
       imgs: "",
       localData: "",
       system: 1,
@@ -322,7 +325,7 @@ export default {
             money: this.xianjia,
             j_money: this.jiesuanjia,
             shop_id: 1,
-            id:_this.querys
+            id: _this.querys
           }
         })
         .then(res => {
@@ -401,8 +404,6 @@ export default {
         localId: _this.imgs[0].toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
         isShowProgressTips: 1, // 默认为1，显示进度提示
         success: function(res) {
-          console.log("上传返回值");
-          console.log(res);
           var serverId = res.serverId; // 返回图片的服务器端ID
           _this.$axios
             .get("/api/api/wechat/bcimg", {

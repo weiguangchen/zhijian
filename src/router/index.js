@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-03 15:02:20
+ * @Last Modified time: 2018-06-04 14:48:09
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -133,7 +133,7 @@ const router = new Router({
       name: 'serviceDetail',
       component: serviceDetail
     }, {
-      path: '/pinglun',
+      path: '/pinglun/:serviceId',
       name: 'pinglun',
       component: pinglun
     }, {
