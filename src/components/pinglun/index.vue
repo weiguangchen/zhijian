@@ -15,9 +15,17 @@
       </div>
       <div class="click">
         <span>浏览2059</span>
-        <span>132
-          <i class="iconfont icon-dianzan"></i>
+        <span>
+          <span @click="huifu(info.id)" v-if="shanghu&&!info.hf">回复</span>
+          <span>132
+            <i class="iconfont icon-dianzan"></i>
+          </span>
         </span>
+      </div>
+      <div class="huifu" v-if="info.hf">
+        <div class="sanjiao"></div>
+        <div class="tt">商家回复：</div>
+        <div class="hf-content">{{info.hf}}</div>
       </div>
     </div>
   </div>
@@ -29,7 +37,14 @@ export default {
   data() {
     return {};
   },
-  props: ["info"],
+  props: {
+    info: {
+      default: {}
+    },
+    shanghu: {
+      default: false
+    }
+  },
   created() {
     if (typeof this.info.img != "array") {
       var arr = [];
@@ -37,12 +52,20 @@ export default {
       this.info.img = arr;
     }
   },
+  methods: {
+    huifu(plId) {
+      this.$router.push({
+        path: "/huifupinglun",
+        query: {
+          plId
+        }
+      });
+    }
+  },
   components: {
     rater
   },
-  computed: {
-
-  }
+  computed: {}
 };
 </script>
 
@@ -96,7 +119,7 @@ export default {
         justify-content: space-between;
         img {
           width: 2.066667rem;
-          height: 1.786667rem;
+          height: 2.066667rem;
         }
       }
     }
@@ -107,6 +130,31 @@ export default {
       @include font-dpr(12px);
       color: #2b2b2b;
       opacity: 0.5;
+    }
+    .huifu {
+      margin-top: .4rem;
+      position: relative;
+      display: flex;
+      padding: 0.2rem;
+      background: #f1f2f6;
+      color: #a2a2a4;
+      line-height: .506667rem;
+      &::before {
+        content: "";
+         position: absolute;
+        top: -.266667rem;
+        left: 0.4rem;
+        width: 0;
+        height: 0;
+        border-bottom:.266667rem solid #f1f2f6;
+        border-left:.133333rem solid transparent;
+        border-right:.133333rem solid transparent;
+      }
+      .tt {
+        flex:none;
+        color: #2a2a2a;
+        @include font-dpr(12px);
+      }
     }
   }
 }

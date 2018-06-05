@@ -81,7 +81,8 @@ export default {
     line-height: 1;
     padding-bottom: -0.4rem;
     .two-item {
-      flex: 1;
+      width: 33%;
+      flex: none;
       display: inline-block;
       text-align: center;
       margin-bottom: 0.4rem;

@@ -82,38 +82,5 @@ export default {
 .ad {
   height: 2.4rem;
 }
-.classify-list {
-  .service {
-    margin-bottom: 0.133333rem;
-  }
-  .term {
-    position: relative;
-    height: 1.386667rem;
-    border-bottom: 1px solid #dfdfdf;
-    background: #ffffff;
-    color: #2b2b2b;
-    @include font-dpr(15px);
-    .select-box {
-      height: 100%;
-      display: flex;
-      .term-item {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-      }
-    }
-    .term-box {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      background: red;
-    }
 
-    .iconfont {
-      color: #b6b6b6;
-      @include font-dpr(20px);
-    }
-  }
-}
 </style>

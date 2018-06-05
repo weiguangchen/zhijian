@@ -34,7 +34,7 @@ export default {
     justify-content: space-between;
   }
   .item {
-      width: 25%;
+      width: 20%;
       
     display: flex;
     flex-direction: column;

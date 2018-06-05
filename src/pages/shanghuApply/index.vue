@@ -1,25 +1,34 @@
 <template>
   <div>
     <ViewBox class="shanghu-page">
-      <bigTitle title='新建项目'></bigTitle>
+      <bigTitle title='申请成为商户'></bigTitle>
       <div class="form-box">
         <template v-if="step == 1">
           <div class="form-group">
-            <h2 class="sub-title">服务名称</h2>
+            <h2 class="sub-title">店铺名称</h2>
             <Group class="reset-vux-input">
               <XInput v-model="fw_name"></XInput>
             </Group>
           </div>
           <div class="form-group">
-            <h2 class="sub-title">简短名称:
-              <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
-            </h2>
+            <h2 class="sub-title">联系电话</h2>
             <Group class="reset-vux-input">
               <XInput v-model="fw_short_info"></XInput>
             </Group>
           </div>
           <div class="form-group">
-            <h2 class="sub-title">服务介绍</h2>
+            <h2 class="sub-title">营业执照</h2>
+            <div class="uploadImage">
+              <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
+              <!-- 安卓预览图片 -->
+              <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
+              <!-- IOS预览图片 -->
+              <img :src="localData || tupian" alt="" v-else class="thumb">
+              
+            </div>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">服务</h2>
             <Group class="reset-vux-input">
               <XTextarea :max='50' v-model="fw_intr"></XTextarea>
             </Group>
@@ -41,7 +50,7 @@
           <div class="form-group">
             <h2 class="sub-title">分类:</h2>
             <Group class="reset-vux-input">
-              <Selector :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'></Selector>
+              <Selector :options='one_class' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'></Selector>
             </Group>
           </div>
           <div class="form-group">
@@ -64,7 +73,7 @@
               <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
               <!-- IOS预览图片 -->
               <img :src="localData || tupian" alt="" v-else class="thumb">
-
+              
             </div>
           </div>
         </template>
@@ -72,7 +81,7 @@
           <div class="form-group">
             <h2 class="sub-title">有效期(天):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="youxiao" :required='true'></XInput>
+              <XInput v-model="youxiao" type='number'></XInput>
             </Group>
           </div>
           <div class="form-group">
@@ -135,7 +144,7 @@ export default {
       imgs: "",
       localData: "",
       system: 1,
-      one_class_all: [],
+      one_class: [],
       two_class_all: [],
       two_class: [],
       faceList: [],
@@ -146,13 +155,13 @@ export default {
       // 第二步
       one_class_val: "",
       two_class_val: "",
-      face: [0, 1],
+      face: [],
       tupian: "",
       //   第三部
-      youxiao: 0,
-      yuanjia: 0,
-      xianjia: 0,
-      jiesuanjia: 0
+      youxiao: "",
+      yuanjia: "",
+      xianjia: "",
+      jiesuanjia: ""
     };
   },
   created() {
@@ -167,43 +176,27 @@ export default {
       .then(res => {
         console.log(res);
         _this.faceList = res.data.face;
-        _this.one_class_all = res.data.fw_class;
+        _this.one_class = res.data.fw_class;
         _this.two_class_all = res.data.fw;
       });
 
     if (this.querys) {
       this.getOldInfo().then(res => {
-        console.log("旧数据");
-        console.log(res.fw_face);
         // console.log('门店数组')
         // console.log(JSON.parse(res.fw_face))
-        this.fw_name = res.fw_mingzi;
-        this.fw_short_info = res.sub_name;
-        this.fw_intr = res.sub_content;
-        this.one_class_val = res.fw_cid;
-        this.two_class_val = res.fw_id;
-        var face = res.fw_face.map(item => {
-          return item.face_id;
-        });
-        this.face = face;
-        this.tupian = res.fw_img;
-        this.youxiao = res.use_day;
-        this.yuanjia = res.y_money;
-        this.xianjia = res.money;
-        this.jiesuanjia = res.j_money;
+        _this.fw_name = res.fw_mingzi;
+        _this.fw_short_info = res.sub_name;
+        _this.fw_intr = res.sub_content;
+        _this.one_class_val = res.fw_cid;
+        _this.two_class_val = res.fw_id;
+        _this.face = JSON.parse(res.fw_face);
+        _this.tupian = res.fw_img;
+        _this.youxiao = res.use_day;
+        _this.yuanjia = res.y_money;
+        _this.xianjia = res.money;
+        _this.jiesuanjia = res.j_money;
       });
     }
-  },
-  watch: {
-    two_class_val(newval) {
-      console.log("触发");
-      console.log(newval);
-      // this.two_class = this.two_class_all.filter(item => {
-      //   return item.fid == val;
-      // });
-      // console.log(this.one_class_all);
-    },
-    face(newval) {}
   },
   methods: {
     next1() {
@@ -237,183 +230,145 @@ export default {
         this.alertShow = true;
         this.modalInfo = "请请选择支持的门店";
         return false;
+      } else if (!this.tupian) {
+        this.alertShow = true;
+        this.modalInfo = "请上传服务缩略图";
+        return false;
       }
-      // else if (!this.tupian) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请上传服务缩略图";
-      //   return false;
-      // }
 
       this.step = 3;
     },
     finish() {
       var _this = this;
-      this.checkForm().then(
-        res => {
-          this.$axios
-            .get("/api/api/ShopFw/add_shop_fw", {
-              params: {
-                fw_mingzi: this.fw_name,
-                sub_name: this.fw_short_info,
-                sub_content: this.fw_intr,
-                fw_cid: this.one_class_val,
-                fw_id: this.two_class_val,
-                fw_face: this.face,
-                fw_img: this.tupian,
-                use_day: this.youxiao,
-                y_money: this.yuanjia,
-                money: this.xianjia,
-                j_money: this.jiesuanjia,
-                shop_id: 1
-              }
-            })
-            .then(res => {
-              //   成功返回1不成功返回0
-              console.log(res);
-              if (res.data.status == 1) {
-                this.$vux.alert.show({
-                  title: "提示",
-                  content: "上传服务成功，请等待审核",
-                  onHide() {
-                    _this.$router.replace({
-                      path: "/shanghu/me"
-                    });
-                  }
-                });
-              } else if (res.data.status == 0) {
-                this.$vux.alert.show({
-                  title: "提示",
-                  content: "上传服务失败，请重新上传",
-                  onHide() {
-                    _this.$router.replace({
-                      path: "/shanghu/me/xmgl"
-                    });
-                  }
+      if (!this.youxiao || Number.isInteger(this.youxiao)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写正确有效期";
+        return false;
+      } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写原价";
+        return false;
+      } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写现价";
+        return false;
+      } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写结算价";
+        return false;
+      }
+      this.$axios
+        .get("/api/api/ShopFw/add_shop_fw", {
+          params: {
+            fw_mingzi: this.fw_name,
+            sub_name: this.fw_short_info,
+            sub_content: this.fw_intr,
+            fw_cid: this.one_class_val,
+            fw_id: this.two_class_val,
+            fw_face: this.face,
+            fw_img: this.tupian,
+            use_day: this.youxiao,
+            y_money: this.yuanjia,
+            money: this.xianjia,
+            j_money: this.jiesuanjia,
+            shop_id: 1
+          }
+        })
+        .then(res => {
+          //   成功返回1不成功返回0
+          console.log(res);
+          if (res.data.status == 1) {
+            this.$vux.alert.show({
+              title: "提示",
+              content: "上传服务成功，请等待审核",
+              onHide() {
+                _this.$router.replace({
+                  path: "/shanghu/me"
                 });
               }
             });
-        },
-        err => {}
-      );
-      // if (!this.youxiao || Number.isInteger(this.youxiao)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写正确有效期";
-      //   return false;
-      // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写原价";
-      //   return false;
-      // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写现价";
-      //   return false;
-      // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写结算价";
-      //   return false;
-      // }
+          } else if (res.data.status == 0) {
+            this.$vux.alert.show({
+              title: "提示",
+              content: "上传服务失败，请重新上传",
+              onHide() {
+                _this.$router.replace({
+                  path: "/shanghu/me/xmgl"
+                });
+              }
+            });
+          }
+        });
     },
     changeFw() {
       var _this = this;
-      this.checkForm().then(
-        res => {
-          console.log("成功");
-          this.$axios
-            .get("/api/api/ShopFw/update_shop_fw", {
-              params: {
-                fw_mingzi: this.fw_name,
-                sub_name: this.fw_short_info,
-                sub_content: this.fw_intr,
-                fw_cid: this.one_class_val,
-                fw_id: this.two_class_val,
-                fw_face: this.face,
-                fw_img: this.tupian,
-                use_day: this.youxiao,
-                y_money: this.yuanjia,
-                money: this.xianjia,
-                j_money: this.jiesuanjia,
-                shop_id: 1,
-                id: _this.querys
-              }
-            })
-            .then(res => {
-              //   成功返回1不成功返回0
-              console.log(res);
-              if (res.data.status == 1) {
-                this.$vux.alert.show({
-                  title: "提示",
-                  content: "修改服务成功，请等待审核",
-                  onHide() {
-                    _this.$router.replace({
-                      path: "/shanghu/me"
-                    });
-                  }
-                });
-              } else if (res.data.status == 0) {
-                this.$vux.alert.replace({
-                  title: "提示",
-                  content: "修改服务失败，请重试",
-                  onHide() {
-                    _this.$router.push({
-                      path: "/shanghu/me/xmgl"
-                    });
-                  }
+      if (!this.youxiao || Number.isInteger(this.youxiao)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写正确有效期";
+        return false;
+      } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写原价";
+        return false;
+      } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写现价";
+        return false;
+      } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
+        this.alertShow = true;
+        this.modalInfo = "请填写结算价";
+        return false;
+      }
+      this.$axios
+        .get("/api/api/ShopFw/update_shop_fw", {
+          params: {
+            fw_mingzi: this.fw_name,
+            sub_name: this.fw_short_info,
+            sub_content: this.fw_intr,
+            fw_cid: this.one_class_val,
+            fw_id: this.two_class_val,
+            fw_face: this.face,
+            fw_img: this.tupian,
+            use_day: this.youxiao,
+            y_money: this.yuanjia,
+            money: this.xianjia,
+            j_money: this.jiesuanjia,
+            shop_id: 1,
+            id: _this.querys
+          }
+        })
+        .then(res => {
+          //   成功返回1不成功返回0
+          console.log(res);
+          if (res.data.status == 1) {
+            this.$vux.alert.show({
+              title: "提示",
+              content: "修改服务成功，请等待审核",
+              onHide() {
+                _this.$router.replace({
+                  path: "/shanghu/me"
                 });
               }
             });
-        },
-        err => {
-          console.log("失败");
-        }
-      );
-
-      // if (!this.youxiao || Number.isInteger(this.youxiao)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写正确有效期";
-      //   return false;
-      // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写原价";
-      //   return false;
-      // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写现价";
-      //   return false;
-      // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写结算价";
-      //   return false;
-      // }
-    },
-    checkForm() {
-      var _this = this;
-      return new Promise((resolve, reject) => {
-        if (!this.youxiao && !Number.isInteger(this.youxiao)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写正确有效期";
-          reject();
-        } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写原价";
-          reject();
-        } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写现价";
-          reject();
-        } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写结算价";
-          reject();
-        }
-        resolve();
-      });
+          } else if (res.data.status == 0) {
+            this.$vux.alert.replace({
+              title: "提示",
+              content: "修改服务失败，请重试",
+              onHide() {
+                _this.$router.push({
+                  path: "/shanghu/me/xmgl"
+                });
+              }
+            });
+          }
+        });
     },
     changeOneClass(val) {
       console.log(val);
       this.two_class = this.two_class_all.filter(item => {
         return item.fid == val;
       });
-      console.log(this.one_class_all);
+      console.log(this.one_class);
     },
     checkSystem() {
       var u = navigator.userAgent;
@@ -482,8 +437,8 @@ export default {
           }
         })
         .then(res => {
-          console.log(res.data.list[0]);
-          return res.data.list[0];
+          console.log(res.data);
+          return res.data[0];
         });
     }
   },

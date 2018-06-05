@@ -8,7 +8,8 @@
           <div class="fw_name">{{item.fw_mingzi}}</div>
           <div class="op-btn">
             <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.shop_fw_id)">编辑</XButton>
-            <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='xiajia(item.shop_fw_id)' v-if="item.status == 0">下架</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="xbtn" :disabled='true' v-if="item.status == 0">审核中</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='xiajia(item.shop_fw_id)' v-if="item.status == 1">下架</XButton>
             <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='shangjia(item.shop_fw_id)' v-if="item.status == 3">上架</XButton>
           </div>
         </div>

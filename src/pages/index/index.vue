@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-01 14:37:16
+ * @Last Modified time: 2018-06-05 15:16:08
  */
 <template>
   <div class="page">
@@ -13,6 +13,8 @@
           <XInput placeholder='请输入商家名或地点' class="search"></XInput>
         </div>
       </div>
+      <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
+      </iframe>
       <classify :classArr='classArr'></classify>
       <div class="huodong">
         <div class="item">
@@ -76,24 +78,17 @@ export default {
   },
   created() {
     var _this = this;
-
-    // var userId = this.$cookies.get("user");
-    // if (userId) {
-    //   console.log("存在cookie");
-    //   this.$axios
-    //     .get("/api/api/Show/get_user", {
-    //       params: {
-    //         id: userId
-    //       }
-    //     })
-    //     .then(res => {
-    //       console.log(res);
-    //       _this.SAVE_ID(userId);
-    //       _this.SAVE_USERINFO(res.data[0]);
-    //     });
-    // } else {
-    //   console.log("不存在cookie");
-    // }
+    window.addEventListener(
+      "message",
+      function(event) {
+        // 接收位置信息
+        console.log('腾讯地图')
+        var loc = event.data;
+        console.log("location", loc);
+      },
+      false
+    );
+   
 
     this.$axios.get("http://zj.daonian.cn/api/Show/one_class").then(res => {
       console.log(res);
@@ -117,6 +112,9 @@ export default {
   },
   methods: {
     ...mapMutations(["SAVE_ID", "SAVE_USERINFO"]),
+    getloc() {
+     
+    },
     changeItem(index) {
       this.activeItem = index;
     }

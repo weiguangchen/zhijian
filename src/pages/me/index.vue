@@ -73,6 +73,9 @@
             </div>
             <div class="oplist" v-if="id">
                 <Group>
+                    <Cell title='申请成为商户' link="shanghuApply">
+                        <span class="iconfont icon-jinru"></span>
+                    </Cell>
                     <Cell title='历史收藏'>
                         <span class="iconfont icon-jinru"></span>
                     </Cell>

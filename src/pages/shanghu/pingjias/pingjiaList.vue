@@ -1,59 +1,66 @@
 <template>
-    <div class="shanghu-page">
-        <ViewBox class="pingjia-detail">
-            <bigTitle title="消费评价详情" class="big-title"></bigTitle>
-            <div class="form-box">
-                <div class="total-info">
-                    <div class="thumb-wrap">
-                        <img :src="fw_img" alt="" class="thumb">
-                        <star :val='all' class="star"></star>
+    <!-- <div class="shanghu-page">
+        <ViewBox class="pingjia-detail"> -->
+    <Layout class="pingjia-detail">
+        <InfiniteScroll :callback="loadList" ref="infinitescroll" >
+            <div slot="list">
+                <bigTitle title="消费评价详情" class="big-title"></bigTitle>
+                <div class="form-box">
+                    <div class="total-info">
+                        <div class="thumb-wrap">
+                            <img :src="fw_img" alt="" class="thumb">
+                            <star :val='all' class="star"></star>
+                        </div>
+                        <div class="star-info">
+                            <div class="star-line">
+                                5星
+                                <starprogress :total='all_token' :num='starinfo.one' class="progress"></starprogress>{{starinfo.one}}
+                            </div>
+                            <div class="star-line">
+                                4星
+                                <starprogress :total='all_token' :num='starinfo.two' class="progress"></starprogress>{{starinfo.two}}
+                            </div>
+                            <div class="star-line">
+                                3星
+                                <starprogress :total='all_token' :num='starinfo.three' class="progress"></starprogress>{{starinfo.three}}
+                            </div>
+                            <div class="star-line">
+                                2星
+                                <starprogress :total='all_token' :num='starinfo.four' class="progress"></starprogress>{{starinfo.four}}
+                            </div>
+                            <div class="star-line">
+                                1星
+                                <starprogress :total='all_token' :num='starinfo.five' class="progress"></starprogress>{{starinfo.five}}
+                            </div>
+                        </div>
                     </div>
-                    <div class="star-info">
-                        <div class="star-line">
-                            5星
-                            <starprogress :total='all_token' :num='starinfo.one' class="progress"></starprogress>{{starinfo.one}}
-                        </div>
-                        <div class="star-line">
-                            4星
-                            <starprogress :total='all_token' :num='starinfo.two' class="progress"></starprogress>{{starinfo.two}}
-                        </div>
-                        <div class="star-line">
-                            3星
-                            <starprogress :total='all_token' :num='starinfo.three' class="progress"></starprogress>{{starinfo.three}}
-                        </div>
-                        <div class="star-line">
-                            2星
-                            <starprogress :total='all_token' :num='starinfo.four' class="progress"></starprogress>{{starinfo.four}}
-                        </div>
-                        <div class="star-line">
-                            1星
-                            <starprogress :total='all_token' :num='starinfo.five' class="progress"></starprogress>{{starinfo.five}}
-                        </div>
-                    </div>
-                </div>
-                <!-- <ButtonTab v-model="activeIndex">
+                    <!-- <ButtonTab v-model="activeIndex">
                     <ButtonTabItem>全部</ButtonTabItem>
                     <ButtonTabItem>差评</ButtonTabItem>
                 </ButtonTab> -->
-                <div class="pingjia-content">
-                    <!-- <template v-if="activeIndex == 0"> -->
-                        <pinglun v-for="(item,index) in list" :key="index" :info='item'></pinglun>
-                    <!-- </template>
-                    <template v-else-if="activeIndex == 1">
-                        <pinglun></pinglun>
-                        <pinglun></pinglun>
-                        
-                    </template> -->
-                </div>
+                    <div class="pingjia-content">
+                        <!-- <template v-if="activeIndex == 0"> -->
+                        <pinglun v-for="(item,index) in list" :key="index" :info='item' :shanghu='true'></pinglun>
+                    </div>
 
+                </div>
             </div>
 
-        </ViewBox>
-    </div>
+            <!-- 数据全部加载完毕显示 -->
+            <span slot="doneTip">暂无更多评论</span>
+            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+            <!-- <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" /> -->
+
+        </InfiniteScroll>
+    </Layout>
+    <!-- </ViewBox>
+    </div> -->
 </template>
 
 <script>
 import { ViewBox, ButtonTab, ButtonTabItem } from "vux";
+import { InfiniteScroll } from "vue-ydui/dist/lib.px/infinitescroll";
+import { Layout } from "vue-ydui/dist/lib.px/layout";
 import pinglun from "@/components/pinglun/index";
 import bigTitle from "@/components/bigTitle/index";
 import starprogress from "@/components/progress/index";
@@ -72,14 +79,27 @@ export default {
       fw_img: "",
       all_token: "",
       all: "",
-      list:[]
+      list: [],
+      p: 1
     };
   },
   created() {
-    this.getList();
+    var _this = this;
+    this.getInfo();
+    this.getList().then(res => {
+      console.log(this);
+      console.log(res)
+      _this.list = res.list;
+    });
   },
   methods: {
-    getList() {
+    loadList() {
+      console.log("到底了");
+      this.getList().then(res => {
+        this.list = this.list.concat(res.list);
+      });
+    },
+    getInfo() {
       var _this = this;
       this.$axios
         .get(this.API_URL + "/Api/Shop/fw_token", {
@@ -96,7 +116,27 @@ export default {
           _this.fw_img = data.img;
           _this.all_token = data.all_token;
           _this.all = data.all;
-          _this.list = data.list;
+        });
+    },
+    getList() {
+      var _this = this;
+      return this.$axios
+        .get(this.API_URL + "/Api/Shop/p_fw_token", {
+          params: {
+            fw_shop_id: _this.fwId,
+            num: 4,
+            p: _this.p
+          }
+        })
+        .then(({ data }) => {
+            console.log(data)
+          if (data.ok == 1) {
+            this.p++;
+          } else if (data.ok == 0) {
+            _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+          }
+          this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
+          return data;
         });
     }
   },
@@ -112,19 +152,23 @@ export default {
     ButtonTabItem,
     starprogress,
     star,
-    pinglun
+    pinglun,
+    InfiniteScroll,
+    Layout
   }
 };
 </script>
 
 <style lang='scss'>
 .pingjia-detail {
+    padding-bottom: 50px;
   .big-title {
     margin-bottom: 0.533333rem;
   }
   .total-info {
     display: flex;
     margin-bottom: 1.066667rem;
+    padding-left: .533333rem;
     .thumb-wrap {
       position: relative;
       margin-right: 0.24rem;
@@ -149,16 +193,15 @@ export default {
       }
     }
   }
-  .vux-button-group > a.vux-button-group-current{
-      background: #de3232;
+  .vux-button-group > a.vux-button-group-current {
+    background: #de3232;
   }
-  .vux-button-group > a.vux-button-tab-item-first:after{
-      border: 1px solid #de3232;
+  .vux-button-group > a.vux-button-tab-item-first:after {
+    border: 1px solid #de3232;
   }
 
-  .vux-button-group > a.vux-button-tab-item-last:after{
-      border: 1px solid #de3232;
-      
+  .vux-button-group > a.vux-button-tab-item-last:after {
+    border: 1px solid #de3232;
   }
 }
 </style>

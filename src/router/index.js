@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-04 14:48:09
+ * @Last Modified time: 2018-06-05 15:35:28
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -20,6 +20,9 @@ import orderDetail from '@/pages/orderList/orderDetail';
 import pingjia from '@/pages/pingjia/index';
 import agent from '@/pages/agent/index';
 import pinglun from '@/pages/pinglun/index';
+import shopCar from '@/pages/shopCar/index';
+
+import shanghuApply from '@/pages/shanghuApply/index';
 
 import shanghu from '@/pages/shanghu/index'
 import yanzheng from '@/pages/shanghu/yanzheng/index'
@@ -34,6 +37,7 @@ import addFace from '@/pages/shanghu/me/addFace'
 import xmgl from '@/pages/shanghu/me/xmgl'
 import fwList from '@/pages/shanghu/me/fwList'
 import shangjia from '@/pages/shanghu/shangjia/index';
+import huifupinglun from '@/components/huifupinglun/index';
 import logining from '@/pages/logining/index';
 Vue.use(Router)
 import store from '@/store/index';
@@ -73,7 +77,7 @@ const router = new Router({
         default: shangcheng,
         tab: tab
       }
-    },{
+    }, {
       path: '/shangpu/:shangpuId',
       name: 'shangpu',
       components: {
@@ -140,6 +144,20 @@ const router = new Router({
       path: '/shangjia',
       name: 'shangjia',
       component: shangjia
+    }, {
+      path: '/shanghuApply',
+      name: 'shanghuApply',
+      components: {
+        default: shanghuApply,
+        tab: tab
+      }
+    },{
+      path: '/shopCar',
+      name: 'shopCar',
+      components: {
+        default: shopCar,
+        // tab: tab
+      }
     },
     {
       path: '/shanghu',
@@ -189,6 +207,11 @@ const router = new Router({
           component: addFace
         },
       ]
+    },
+    {
+      path: '/huifupinglun',
+      name: 'huifupinglun',
+      component: huifupinglun
     },
     {
       path: '/logining',
@@ -255,7 +278,7 @@ router.beforeEach((to, from, next) => {
         next();
 
       });
-    }else{
+    } else {
       next();
     }
   } else {
