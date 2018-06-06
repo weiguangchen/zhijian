@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-05 15:16:08
+ * @Last Modified time: 2018-06-06 17:38:29
  */
 <template>
   <div class="page">
@@ -90,25 +90,25 @@ export default {
     );
    
 
-    this.$axios.get("http://zj.daonian.cn/api/Show/one_class").then(res => {
+    this.$axios.get(this.API_URL+"/api/Show/one_class").then(res => {
       console.log(res);
       _this.classArr = res.data.class;
       _this.listArr = res.data.info;
     });
 
-    this.$wx.ready(function() {
-      _this.$wx.getLocation({
-        type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-        success: function(res) {
-          var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-          var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-          var speed = res.speed; // 速度，以米/每秒计
-          var accuracy = res.accuracy; // 位置精度
-          console.log("地理位置:");
-          console.log(res);
-        }
-      });
-    });
+    // this.$wx.ready(function() {
+    //   _this.$wx.getLocation({
+    //     type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+    //     success: function(res) {
+    //       var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+    //       var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+    //       var speed = res.speed; // 速度，以米/每秒计
+    //       var accuracy = res.accuracy; // 位置精度
+    //       console.log("地理位置:");
+    //       console.log(res);
+    //     }
+    //   });
+    // });
   },
   methods: {
     ...mapMutations(["SAVE_ID", "SAVE_USERINFO"]),

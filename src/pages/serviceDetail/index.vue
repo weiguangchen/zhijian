@@ -72,20 +72,7 @@
 
       <div class="hot">
         <div class="title">小伙伴们还喜欢</div>
-        <div class="list">
-          <div class="item" v-for='(item,index) in fw_info.friend_like' :key='index' @click="toDetail(item.shop_fw_id)">
-            <img :src="item.fw_img" alt="" class="thumb">
-            <div class="intr">
-              <div class="tit">{{item.fw_mingzi}}</div>
-              <rater :val='item.token_pj' class="rater"></rater>
-              <div class="tip">
-                <span>{{item.fw_name}}</span>
-                <span>卫国道</span>
-                <span>12KM</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <friendLike :friendLike='fw_info.friend_like'></friendLike>
 
       </div>
 
@@ -108,6 +95,8 @@ import tuangou from "@/components/service/serviceTuan.vue";
 import myTitle from "@/components/title/index";
 import pinglun from "@/components/pinglun/index";
 import checkLogin from "@/mixins/checkLogin.js";
+import friendLike from "@/components/friendLike/index";
+
 export default {
   data() {
     return {
@@ -121,27 +110,48 @@ export default {
   methods: {
     buy() {
       var _this = this;
-      this.$axios
-        .get(this.API_URL + "/api/WxPay/zf", {
-          params: {
-            shop_fw_id: _this.fwId,
-            num: 1,
-            uid: _this.id
-          }
-        })
-        .then(res => {
-          return res.data;
-        })
-        .then(res => {
-          return _this.$axios.get(this.API_URL + "/api/WxPay/fs", {
+      if (this.id) {
+        this.$axios
+          .get(this.API_URL + "/api/WxPay/zf", {
             params: {
-              order_num: res
+              shop_fw_id: _this.fwId,
+              num: 1,
+              uid: _this.id
             }
+          })
+          .then(res => {
+            return res.data;
+          })
+          .then(res => {
+            return _this.$axios.get(this.API_URL + "/api/WxPay/fs", {
+              params: {
+                order_num: res
+              }
+            });
+          })
+          .then(res => {
+            console.log(res);
+            this.$vux.alert.show({
+              title: "提示",
+              content: "购买成功！",
+              onHide() {
+                _this.$router.push({
+                  path: "/me"
+                });
+              }
+            });
           });
-        })
-        .then(res => {
-          console.log(res);
+      } else {
+        this.$vux.alert.show({
+          title: "提示",
+          content: "请先登录",
+          onHide() {
+            _this.$router.push({
+              path: "/me"
+            });
+          }
         });
+      }
     },
     toDetail(id) {
       this.$router.replace("/serviceDetail/" + id);
@@ -197,7 +207,8 @@ export default {
     Cell,
     Group,
     myTitle,
-    pinglun
+    pinglun,
+    friendLike
   },
   mixins: [checkLogin]
 };
@@ -347,39 +358,6 @@ export default {
       background: #ffffff;
       height: 1.026667rem;
       padding: 0 0.4rem;
-    }
-    .list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      padding: 0 0.4rem;
-      background: #ffffff;
-    }
-    .item {
-      width: 4.24rem;
-      line-height: 1;
-      background: #ffffff;
-      padding-bottom: 0.426667rem;
-      .thumb {
-        width: 100%;
-        height: 2.426667rem;
-        margin-bottom: 0.133333rem;
-      }
-      .tit {
-        @include font-dpr(15px);
-        color: #2b2b2b;
-        margin-bottom: 0.213333rem;
-      }
-      .rater {
-        margin-bottom: 0.293333rem;
-      }
-      .tip {
-        display: flex;
-        justify-content: space-between;
-        color: #2b2b2b;
-        @include font-dpr(12px);
-        opacity: 0.5;
-      }
     }
   }
 

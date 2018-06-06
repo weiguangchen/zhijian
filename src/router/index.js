@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-05 15:35:28
+ * @Last Modified time: 2018-06-06 17:55:11
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -151,7 +151,7 @@ const router = new Router({
         default: shanghuApply,
         tab: tab
       }
-    },{
+    }, {
       path: '/shopCar',
       name: 'shopCar',
       components: {
@@ -262,27 +262,54 @@ function delParam(url, paramKey) {
 router.beforeEach((to, from, next) => {
   var id = store.state.id;
   var userId = VueCookies.get("user");
+
+  // 进入后台验证
+  if (/^\/shanghu/.test(to.fullPath)) {
+    // 判断是否是商户
+    if (store.state.userinfo.shop_status != 1) {
+      console.log('不是商户')
+      next({
+        path: '/'
+      });
+    } else {
+      console.log('是商户')
+      next();
+    }
+  }
+
+
   if (userId) {
     console.log("存在cookie");
-    if (!id) {
-      console.log('未登录')
-      axios.get(API_URL + '/api/Show/get_user', {
-        params: {
-          id: userId
-        }
-      }).then(res => {
-        console.log(res);
-        console.log(muta)
+    // if (!id) {
+    //   console.log('未登录')
+    // 每次进入页面重新拉取一下用户信息
+    axios.get(API_URL + '/api/Show/get_user', {
+      params: {
+        id: userId
+      }
+    }).then(res => {
+      console.log(res);
+      console.log(muta)
+      if (res.data[0].is_user == 1) {
         muta.SAVE_ID(store.state, userId);
         muta.SAVE_USERINFO(store.state, res.data[0]);
         next();
 
-      });
-    } else {
-      next();
-    }
+      } else {
+        VueCookies.delete('user');
+        muta.SAVE_ID(store.state, '');
+        muta.SAVE_USERINFO(store.state, {});
+        next('/me');
+      }
+
+
+    });
+    // } else {
+    //   next();
+    // }
   } else {
     console.log("不存在cookie");
+
     next();
 
   }

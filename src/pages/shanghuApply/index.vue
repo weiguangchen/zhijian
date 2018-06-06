@@ -7,15 +7,17 @@
           <div class="form-group">
             <h2 class="sub-title">店铺名称</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="fw_name"></XInput>
+              <XInput v-model="shop_name"></XInput>
             </Group>
           </div>
           <div class="form-group">
             <h2 class="sub-title">联系电话</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="fw_short_info"></XInput>
+              <XInput v-model="shop_phone"></XInput>
             </Group>
           </div>
+        </template>
+        <template v-else-if="step == 2">
           <div class="form-group">
             <h2 class="sub-title">营业执照</h2>
             <div class="uploadImage">
@@ -24,102 +26,26 @@
               <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
               <!-- IOS预览图片 -->
               <img :src="localData || tupian" alt="" v-else class="thumb">
-              
-            </div>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">服务</h2>
-            <Group class="reset-vux-input">
-              <XTextarea :max='50' v-model="fw_intr"></XTextarea>
-            </Group>
-          </div>
-        </template>
-        <template v-else-if="step == 2">
-          <!-- <div class="form-group">
-                        <h2 class="sub-title">标签:</h2>
-                        <Group>
-                            <XInput v-model="pay_num"></XInput>
-                        </Group>
-                    </div> -->
-          <!-- <div class="form-group">
-            <h2 class="sub-title">城市:</h2>
-            <Group>
-              <XInput v-model="pay_num"></XInput>
-            </Group>
-          </div> -->
-          <div class="form-group">
-            <h2 class="sub-title">分类:</h2>
-            <Group class="reset-vux-input">
-              <Selector :options='one_class' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'></Selector>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">子分类列表:</h2>
-            <Group class="reset-vux-input">
-              <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val"></Selector>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">支持门店:</h2>
-            <Checker type='checkbox' v-model="face" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-              <CheckerItem :value='item.id' v-for="(item,index) in faceList" :key="index">{{item.face_name}}</CheckerItem>
-            </Checker>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">服务缩略图:</h2>
-            <div class="uploadImage">
-              <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
-              <!-- 安卓预览图片 -->
-              <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
-              <!-- IOS预览图片 -->
-              <img :src="localData || tupian" alt="" v-else class="thumb">
-              
+
             </div>
           </div>
         </template>
-        <template v-else-if="step == 3">
-          <div class="form-group">
-            <h2 class="sub-title">有效期(天):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="youxiao" type='number'></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">原价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="yuanjia" type='number'></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">现价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="xianjia" type='number'></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">商户结算价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="jiesuanjia" type='number'></XInput>
-            </Group>
-          </div>
-        </template>
+        <!-- <template v-else-if="step == 3">
+          
+        </template> -->
         <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
         <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
-        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys">提交</XButton>
-        <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton>
+        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3">提交</XButton>
       </div>
 
     </ViewBox>
-    <Confirm v-model="alertShow">
-      {{modalInfo}}
-    </Confirm>
+
   </div>
 </template>
 
 <script>
 import {
   ViewBox,
-  Selector,
   Group,
   XButton,
   XInput,
@@ -130,9 +56,8 @@ import {
 } from "vux";
 import { KeyBoard } from "vue-ydui/dist/lib.px/keyboard";
 import bigTitle from "@/components/bigTitle/index";
-import shanghuSelect from "@/components/shanghu_form/face_select";
-import shanghuInput from "@/components/shanghu_form/input";
 import wxConfig from "@/mixins/wxConfig.js";
+import checkLogin from "@/mixins/checkLogin.js";
 export default {
   data() {
     return {
@@ -144,232 +69,93 @@ export default {
       imgs: "",
       localData: "",
       system: 1,
-      one_class: [],
-      two_class_all: [],
-      two_class: [],
-      faceList: [],
+     
       // 第一步
-      fw_name: "",
-      fw_short_info: "",
-      fw_intr: "",
+      shop_name: "",
+      shop_phone: "",
+
       // 第二步
-      one_class_val: "",
-      two_class_val: "",
-      face: [],
-      tupian: "",
+      tupian: ""
       //   第三部
-      youxiao: "",
-      yuanjia: "",
-      xianjia: "",
-      jiesuanjia: ""
     };
   },
   created() {
     var _this = this;
+    this.$eruda.init();
+    
     this.checkSystem();
     // this.$eruda.init();
 
-    this.$axios
-      .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: 1 }
-      })
-      .then(res => {
-        console.log(res);
-        _this.faceList = res.data.face;
-        _this.one_class = res.data.fw_class;
-        _this.two_class_all = res.data.fw;
-      });
 
-    if (this.querys) {
-      this.getOldInfo().then(res => {
-        // console.log('门店数组')
-        // console.log(JSON.parse(res.fw_face))
-        _this.fw_name = res.fw_mingzi;
-        _this.fw_short_info = res.sub_name;
-        _this.fw_intr = res.sub_content;
-        _this.one_class_val = res.fw_cid;
-        _this.two_class_val = res.fw_id;
-        _this.face = JSON.parse(res.fw_face);
-        _this.tupian = res.fw_img;
-        _this.youxiao = res.use_day;
-        _this.yuanjia = res.y_money;
-        _this.xianjia = res.money;
-        _this.jiesuanjia = res.j_money;
-      });
-    }
   },
   methods: {
     next1() {
-      if (!this.fw_name) {
-        this.alertShow = true;
-        this.modalInfo = "请填写服务名称";
+      if (!this.shop_name) {
+        this.$vux.alert.show({
+          title: "提示",
+          content: "请填写商铺名称!"
+        });
         return false;
-      } else if (!this.fw_short_info) {
-        this.alertShow = true;
-        this.modalInfo = "请填写简短名称";
-        return false;
-      } else if (!this.fw_intr) {
-        this.alertShow = true;
-        this.modalInfo = "请填写服务介绍";
+      } else if (!this.shop_phone) {
+        this.$vux.alert.show({
+          title: "提示",
+          content: "请填写商铺联系电话!"
+        });
         return false;
       }
       this.step = 2;
     },
     next2() {
-      console.log("门店");
-      console.log(this.face);
-      if (!this.one_class_val) {
-        this.alertShow = true;
-        this.modalInfo = "请选择分类";
-        return false;
-      } else if (!this.two_class_val) {
-        this.alertShow = true;
-        this.modalInfo = "请选择子分类";
-        return false;
-      } else if (this.face.length <= 0) {
-        this.alertShow = true;
-        this.modalInfo = "请请选择支持的门店";
-        return false;
-      } else if (!this.tupian) {
-        this.alertShow = true;
-        this.modalInfo = "请上传服务缩略图";
-        return false;
-      }
+      // if (!this.tupian) {
+      //   this.$vux.alert.show({
+      //     title: "提示",
+      //     content: "请上传营业执照!"
+      //   });
+      //   return false;
+      // }
 
       this.step = 3;
     },
     finish() {
       var _this = this;
-      if (!this.youxiao || Number.isInteger(this.youxiao)) {
-        this.alertShow = true;
-        this.modalInfo = "请填写正确有效期";
-        return false;
-      } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-        this.alertShow = true;
-        this.modalInfo = "请填写原价";
-        return false;
-      } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-        this.alertShow = true;
-        this.modalInfo = "请填写现价";
-        return false;
-      } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-        this.alertShow = true;
-        this.modalInfo = "请填写结算价";
-        return false;
-      }
+
       this.$axios
-        .get("/api/api/ShopFw/add_shop_fw", {
+        .get(this.API_URL + "/api/UserShow/add_shop", {
           params: {
-            fw_mingzi: this.fw_name,
-            sub_name: this.fw_short_info,
-            sub_content: this.fw_intr,
-            fw_cid: this.one_class_val,
-            fw_id: this.two_class_val,
-            fw_face: this.face,
-            fw_img: this.tupian,
-            use_day: this.youxiao,
-            y_money: this.yuanjia,
-            money: this.xianjia,
-            j_money: this.jiesuanjia,
-            shop_id: 1
+            shop_name: this.shop_name,
+            zj_img: this.tupian,
+            shop_phone: this.shop_phone,
+            user_id: this.id
           }
         })
         .then(res => {
           //   成功返回1不成功返回0
           console.log(res);
+          console.log(this.$router)
           if (res.data.status == 1) {
             this.$vux.alert.show({
               title: "提示",
-              content: "上传服务成功，请等待审核",
-              onHide() {
+              content: "申请商户成功，请等待审核!",
+              onHide(){
                 _this.$router.replace({
-                  path: "/shanghu/me"
-                });
+                  path:'/me'
+                })
               }
             });
           } else if (res.data.status == 0) {
             this.$vux.alert.show({
               title: "提示",
-              content: "上传服务失败，请重新上传",
-              onHide() {
+              content: "申请失败，请重试!",
+              onHide(){
                 _this.$router.replace({
-                  path: "/shanghu/me/xmgl"
-                });
+                  path:'/me'
+                })
               }
             });
           }
         });
     },
-    changeFw() {
-      var _this = this;
-      if (!this.youxiao || Number.isInteger(this.youxiao)) {
-        this.alertShow = true;
-        this.modalInfo = "请填写正确有效期";
-        return false;
-      } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-        this.alertShow = true;
-        this.modalInfo = "请填写原价";
-        return false;
-      } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-        this.alertShow = true;
-        this.modalInfo = "请填写现价";
-        return false;
-      } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-        this.alertShow = true;
-        this.modalInfo = "请填写结算价";
-        return false;
-      }
-      this.$axios
-        .get("/api/api/ShopFw/update_shop_fw", {
-          params: {
-            fw_mingzi: this.fw_name,
-            sub_name: this.fw_short_info,
-            sub_content: this.fw_intr,
-            fw_cid: this.one_class_val,
-            fw_id: this.two_class_val,
-            fw_face: this.face,
-            fw_img: this.tupian,
-            use_day: this.youxiao,
-            y_money: this.yuanjia,
-            money: this.xianjia,
-            j_money: this.jiesuanjia,
-            shop_id: 1,
-            id: _this.querys
-          }
-        })
-        .then(res => {
-          //   成功返回1不成功返回0
-          console.log(res);
-          if (res.data.status == 1) {
-            this.$vux.alert.show({
-              title: "提示",
-              content: "修改服务成功，请等待审核",
-              onHide() {
-                _this.$router.replace({
-                  path: "/shanghu/me"
-                });
-              }
-            });
-          } else if (res.data.status == 0) {
-            this.$vux.alert.replace({
-              title: "提示",
-              content: "修改服务失败，请重试",
-              onHide() {
-                _this.$router.push({
-                  path: "/shanghu/me/xmgl"
-                });
-              }
-            });
-          }
-        });
-    },
-    changeOneClass(val) {
-      console.log(val);
-      this.two_class = this.two_class_all.filter(item => {
-        return item.fid == val;
-      });
-      console.log(this.one_class);
-    },
+   
     checkSystem() {
       var u = navigator.userAgent;
       var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
@@ -415,7 +201,7 @@ export default {
         success: function(res) {
           var serverId = res.serverId; // 返回图片的服务器端ID
           _this.$axios
-            .get("/api/api/wechat/bcimg", {
+            .get(_this.API_URL+"/api/wechat/bcimg", {
               params: {
                 imgs: res.serverId
               }
@@ -426,34 +212,14 @@ export default {
             });
         }
       });
-    },
-    // 获取已有数据
-    getOldInfo() {
-      var _this = this;
-      return this.$axios
-        .get(this.API_URL + "/api/ShopFw/edit_fw", {
-          params: {
-            id: _this.querys
-          }
-        })
-        .then(res => {
-          console.log(res.data);
-          return res.data[0];
-        });
     }
+   
   },
-  computed: {
-    querys() {
-      return this.$route.query.fwId;
-    }
-  },
+  computed: {},
   components: {
     bigTitle,
     ViewBox,
-    Selector,
     Group,
-    shanghuSelect,
-    shanghuInput,
     XButton,
     XInput,
     Confirm,
@@ -462,7 +228,7 @@ export default {
     XTextarea,
     KeyBoard
   },
-  mixins: [wxConfig]
+  mixins: [wxConfig, checkLogin]
 };
 </script>
 

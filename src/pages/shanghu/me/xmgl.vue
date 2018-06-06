@@ -158,7 +158,7 @@ export default {
   created() {
     var _this = this;
     this.checkSystem();
-    // this.$eruda.init();
+    this.$eruda.init();
 
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
@@ -187,7 +187,7 @@ export default {
         });
         this.face = face;
         this.tupian = res.fw_img;
-        this.youxiao = res.use_day;
+        this.youxiao = parseInt(res.use_day);
         this.yuanjia = res.y_money;
         this.xianjia = res.money;
         this.jiesuanjia = res.j_money;
@@ -387,14 +387,20 @@ export default {
     },
     checkForm() {
       var _this = this;
+      console.log(this.youxiao)
+      console.log(typeof this.youxiao); 
+      console.log(Number.isInteger(12)); 
+      console.log(Number.isInteger(this.youxiao));      
+      console.log(!Number.isInteger(this.youxiao));
+
       return new Promise((resolve, reject) => {
-        if (!this.youxiao && !Number.isInteger(this.youxiao)) {
+        if (!Number.isInteger(this.youxiao)) {
           this.alertShow = true;
           this.modalInfo = "请填写正确有效期";
           reject();
         } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
           this.alertShow = true;
-          this.modalInfo = "请填写原价";
+          this.modalInfo = "原价";
           reject();
         } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
           this.alertShow = true;

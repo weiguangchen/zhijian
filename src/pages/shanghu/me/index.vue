@@ -7,9 +7,9 @@
                     <Group>
                         <Cell title='添加服务' :is-link='true' link='/shanghu/me/xmgl'></Cell>
                         <Cell title='管理服务' :is-link='true' link='/shanghu/me/fwList'></Cell>
-                        <Cell title='财务管理' :is-link='true'></Cell>
+                        <!-- <Cell title='财务管理' :is-link='true'></Cell> -->
                         <Cell title='门店管理' :is-link='true' link='/shanghu/me/mendian'></Cell>
-                        <Cell title='账户管理' :is-link='true'></Cell>
+                        <!-- <Cell title='账户管理' :is-link='true'></Cell> -->
                     </Group>
                 </div>
 

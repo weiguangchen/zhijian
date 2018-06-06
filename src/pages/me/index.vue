@@ -73,10 +73,16 @@
             </div>
             <div class="oplist" v-if="id">
                 <Group>
-                    <Cell title='申请成为商户' link="shanghuApply">
-                        <span class="iconfont icon-jinru"></span>
+                    <Cell title='申请成为商户' link="shanghuApply" v-if="userinfo.is_shop==0">
+                        <!-- <span class="iconfont icon-jinru"></span> -->
                     </Cell>
-                    <Cell title='历史收藏'>
+                    <Cell :title='shop_status' v-else-if='userinfo.shop_status == 0'>
+                        <!-- <span class="iconfont icon-jinru"></span> -->
+                    </Cell>
+                    <Cell :title='shop_status' v-else-if='userinfo.shop_status == 1' link='shanghu/me'>
+                        <!-- <span class="iconfont icon-jinru"></span> -->
+                    </Cell>
+                    <!-- <Cell title='历史收藏'>
                         <span class="iconfont icon-jinru"></span>
                     </Cell>
                     <Cell title='我的优惠券'>
@@ -87,7 +93,7 @@
                     </Cell>
                     <Cell title='我的二维码'>
                         <span class="iconfont icon-jinru"></span>
-                    </Cell>
+                    </Cell> -->
                 </Group>
             </div>
         </ViewBox>
@@ -103,7 +109,15 @@ export default {
     return {};
   },
   created() {},
-  computed: {},
+  computed: {
+      shop_status(){
+          if(this.userinfo.shop_status == 0){
+              return '等待审核中'
+          }else if(this.userinfo.shop_status == 1){
+              return '已成为商铺'
+          }
+      }
+  },
   methods: {
     login() {
       window.location.href =
