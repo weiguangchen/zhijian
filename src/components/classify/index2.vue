@@ -1,6 +1,6 @@
 <template>
     <div class="classify2">
-        <router-link :to="'/serviceList/'+item.id" v-for="(item,index) in classArr" :key="index" class="item"><img src="~img/public/smxc.png" alt="" class="img">
+        <router-link :to="'/serviceList/'+item.id" v-for="(item,index) in classArr" :key="index" class="item"><img :src="item.two_class_img" alt="" class="img">
             <div>{{item.fw_name}}</div>
         </router-link>
     </div>

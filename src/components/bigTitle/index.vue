@@ -1,7 +1,7 @@
 <template>
     <div class="big-title-box">
         <h1 class="big-title">{{title}}
-            <span class="iconfont icon-weibiaoti-" v-if="icon"></span>
+            <span class="iconfont icon-weibiaoti-" v-if="icon" @click='showPopup'></span>
         </h1>
     </div>
 </template>
@@ -17,6 +17,11 @@ export default {
     },
     icon: {
       default: true
+    }
+  },
+  methods: {
+    showPopup(){
+      this.$emit('showPopup',true);
     }
   },
   components: {}

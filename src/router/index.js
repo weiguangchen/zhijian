@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-06 17:55:11
+ * @Last Modified time: 2018-06-08 16:39:22
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -14,6 +14,7 @@ import shangpu from '@/pages/shangpu/index'
 import serviceClass from '@/pages/serviceClass/index';
 import serviceList from '@/pages/serviceList/index';
 import serviceDetail from "@/pages/serviceDetail/index";
+import queren from '@/pages/queren/index';
 import me from '@/pages/me/index';
 import orderList from '@/pages/orderList/index';
 import orderDetail from '@/pages/orderList/orderDetail';
@@ -22,10 +23,12 @@ import agent from '@/pages/agent/index';
 import pinglun from '@/pages/pinglun/index';
 import shopCar from '@/pages/shopCar/index';
 
-import shanghuApply from '@/pages/shanghuApply/index';
+import applyShanghu from '@/pages/shanghuApply/index';
 
 import shanghu from '@/pages/shanghu/index'
 import yanzheng from '@/pages/shanghu/yanzheng/index'
+import xfm from '@/pages/shanghu/yanzheng/xfm'
+import huodongyz from '@/pages/shanghu/yanzheng/huodong'
 import pingjias from '@/pages/shanghu/pingjias/index'
 import pingjiaList from '@/pages/shanghu/pingjias/pingjiaList'
 import jingying from '@/pages/shanghu/jingying/index'
@@ -43,29 +46,30 @@ Vue.use(Router)
 import store from '@/store/index';
 import muta from '@/store/mutations';
 import axios from "axios";
-import VueCookies from 'vue-cookies'
+import VueCookies from 'vue-cookie'
 import {
   API_URL
 } from '@/assets/js/global.js';
 const router = new Router({
   linkActiveClass: 'active-router',
+  mode:'history',
   routes: [{
       path: '/',
       redirect: '/index'
     }, {
       path: '/index',
       name: 'index',
-      beforeEnter: (to, from, next) => {
-        // if (to.path == '/index') {
-        //   next();
-        // }
-        if (getUrl('id')) {
-          VueCookies.set('user', getUrl('id'));
-          var url = delParam(window.location.href, 'id');
-          window.location.href = url;
-        }
-        next();
-      },
+      // beforeEnter: (to, from, next) => {
+      //   // if (to.path == '/index') {
+      //   //   next();
+      //   // }
+      //   if (getUrl('id')) {
+      //     VueCookies.set('user', getUrl('id'));
+      //     var url = delParam(window.location.href, 'id');
+      //     window.location.href = url;
+      //   }
+      //   next();
+      // },
       components: {
         default: index,
         tab: tab
@@ -76,7 +80,7 @@ const router = new Router({
       components: {
         default: shangcheng,
         tab: tab
-      }
+      },
     }, {
       path: '/shangpu/:shangpuId',
       name: 'shangpu',
@@ -120,6 +124,12 @@ const router = new Router({
         // tab: tab
       }
     }, {
+      path: '/queren',
+      name: 'queren',
+      components: {
+        default: queren,
+      }
+    }, {
       path: '/me/pingjia/:orderNum',
       name: 'pingjia',
       components: {
@@ -145,10 +155,10 @@ const router = new Router({
       name: 'shangjia',
       component: shangjia
     }, {
-      path: '/shanghuApply',
-      name: 'shanghuApply',
+      path: '/applyShanghu',
+      name: 'applyShanghu',
       components: {
-        default: shanghuApply,
+        default: applyShanghu,
         tab: tab
       }
     }, {
@@ -164,8 +174,19 @@ const router = new Router({
       component: shanghu,
       children: [{
           path: 'yanzheng',
-          component: yanzheng
+          component: yanzheng,
+          children: [{
+            path: 'xfm',
+            component: xfm
+          }, {
+            path: 'huodong',
+            component: huodongyz
+          }]
         },
+        // {
+        //   path: 'huodong',
+        //   component: huodongyz
+        // },
         {
           path: 'pingjias',
           component: pingjias
@@ -216,7 +237,7 @@ const router = new Router({
     {
       path: '/logining',
       name: 'logining',
-      component: logining
+      component: logining,
     }
   ]
 })
@@ -262,27 +283,20 @@ function delParam(url, paramKey) {
 router.beforeEach((to, from, next) => {
   var id = store.state.id;
   var userId = VueCookies.get("user");
-
-  // 进入后台验证
-  if (/^\/shanghu/.test(to.fullPath)) {
-    // 判断是否是商户
-    if (store.state.userinfo.shop_status != 1) {
-      console.log('不是商户')
-      next({
-        path: '/'
-      });
-    } else {
-      console.log('是商户')
-      next();
-    }
+  console.log('to:')
+  console.log(to)
+  if (to.query.id && /^\/logining/.test(to.fullPath)) {
+    VueCookies.set('user', to.query.id);
+    // window.location.href = '192.169.31.75:8081';
+    window.location.href = 'http://qd.daonian.cn/';
   }
 
-
-  if (userId) {
-    console.log("存在cookie");
-    // if (!id) {
-    //   console.log('未登录')
-    // 每次进入页面重新拉取一下用户信息
+  if (!userId) {
+    // 没有cookies
+    window.location.href =
+      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+  } else {
+    // 有cookies
     axios.get(API_URL + '/api/Show/get_user', {
       params: {
         id: userId
@@ -291,28 +305,75 @@ router.beforeEach((to, from, next) => {
       console.log(res);
       console.log(muta)
       if (res.data[0].is_user == 1) {
+        // 该用户有效
         muta.SAVE_ID(store.state, userId);
         muta.SAVE_USERINFO(store.state, res.data[0]);
         next();
 
       } else {
+        // 该用户无效
+        console.log('无效cookie，删除他')
         VueCookies.delete('user');
         muta.SAVE_ID(store.state, '');
         muta.SAVE_USERINFO(store.state, {});
-        next('/me');
+        next('/index');
       }
-
-
     });
-    // } else {
-    //   next();
-    // }
-  } else {
-    console.log("不存在cookie");
-
-    next();
-
   }
+
+
+
+
+  // 进入后台验证
+  // if (/^\/shanghu/.test(to.fullPath)) {
+  //   // 判断是否是商户
+  //   if (store.state.userinfo.shop_status != 1) {
+  //     console.log('不是商户')
+  //     next({
+  //       path: '/'
+  //     });
+  //   } else {
+  //     console.log('是商户')
+  //     next();
+  //   }
+  // }
+
+
+  // if (userId) {
+  //   console.log("存在cookie");
+  //   // if (!id) {
+  //   //   console.log('未登录')
+  //   // 每次进入页面重新拉取一下用户信息
+  //   axios.get(API_URL + '/api/Show/get_user', {
+  //     params: {
+  //       id: userId
+  //     }
+  //   }).then(res => {
+  //     console.log(res);
+  //     console.log(muta)
+  //     if (res.data[0].is_user == 1) {
+  //       muta.SAVE_ID(store.state, userId);
+  //       muta.SAVE_USERINFO(store.state, res.data[0]);
+  //       next();
+
+  //     } else {
+  //       VueCookies.delete('user');
+  //       muta.SAVE_ID(store.state, '');
+  //       muta.SAVE_USERINFO(store.state, {});
+  //       next('/me');
+  //     }
+
+
+  //   });
+  //   // } else {
+  //   //   next();
+  //   // }
+  // } else {
+  //   console.log("不存在cookie");
+
+  //   next();
+
+  // }
 
 })
 

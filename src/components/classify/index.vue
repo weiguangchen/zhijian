@@ -5,7 +5,7 @@
         <!-- <a href="" class="item" v-for="(item,index) in classArr" :key="index"><img src="~img/public/smxc.png" alt="" class="img">
             <div>{{item.class_name}}</div>
         </a> -->
-        <router-link :to="'/serviceClass/'+item.id" v-for="(item,index) in classArr" :key="index" class="item"><img src="~img/public/smxc.png" alt="" class="img">
+        <router-link :to="'/serviceClass/'+item.id" v-for="(item,index) in classArr" :key="index" class="item"><img :src="item.one_class_img" alt="" class="img">
             <div>{{item.class_name}}</div>
         </router-link>
         <!-- <a href="" class="item"><img src="~img/public/qcmr.png" alt="" class="img">

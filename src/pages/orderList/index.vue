@@ -1,47 +1,47 @@
 <template>
-    <div class="page">
-        <ViewBox v-if="orderList.length>0">
-            <div class="order-list">
-                <div class="order-item" v-for="(item,index) in orderList" :key="index">
-                    <div class="title">
-                        <span class="shop-name">
-                            <i class="iconfont icon-dianpu"></i>{{item.shop_name}}
-                            <i class="iconfont icon-jinru"></i>
-                        </span>
-                        <span class="status" v-if="item.status == 0">等待付款</span>
-                        <span class="status" v-else-if="item.status == 1">未使用</span>
-                        <span class="iconfont icon-lajixiang" v-else-if="item.status == 2"></span>
-                        <span class="status" v-else-if="item.status == 3">申请退款中</span>
-                        <span class="status" v-else-if="item.status == 4">已退款</span>
-                        <span class="status" v-else-if="item.status == 5">已过期</span>
-                    </div>
-                    <div class="content" @click="toOrderDetail(item.order_num)">
-                        <img :src="item.fw_img" alt="" class="thumb">
-                        <div class="text">{{item.fw_mingzi}}</div>
-                    </div>
-                    <div class="price">
-                        <span class="count">共1件商品</span>
-                        <span>需付款：¥{{item.order_price}}</span>
-                    </div>
-                    <div class="xbtn">
-                        <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 0">去支付</XButton>
-                        <template v-if="item.status == 1">
-                            <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
-                            <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(item.order_num)">去评价</XButton>
-                        </template>
-                        <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 2">再次购买</XButton>
-                        <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="item.status == 3">退款中</XButton>
-                        <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 4">再次购买</XButton>
-                        <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 5">再次购买</XButton>
-                    </div>
-                </div>
-            </div>
-
-        </ViewBox>
-        <div v-else>
-            暂无订单
+  <div class="page">
+    <ViewBox v-if="orderList.length>0">
+      <div class="order-list">
+        <div class="order-item" v-for="(item,index) in orderList" :key="index">
+          <div class="title">
+            <span class="shop-name">
+              <i class="iconfont icon-dianpu"></i>{{item.shop_name}}
+              <i class="iconfont icon-jinru"></i>
+            </span>
+            <span class="status" v-if="item.status == 0">等待付款</span>
+            <span class="status" v-else-if="item.status == 1">未使用</span>
+            <span class="iconfont icon-lajixiang" v-else-if="item.status == 2"></span>
+            <span class="status" v-else-if="item.status == 3">申请退款中</span>
+            <span class="status" v-else-if="item.status == 4">已退款</span>
+            <span class="status" v-else-if="item.status == 5">已过期</span>
+          </div>
+          <div class="content" @click="toOrderDetail(item.order_num)">
+            <img :src="item.fw_img" alt="" class="thumb">
+            <div class="text">{{item.fw_mingzi}}</div>
+          </div>
+          <div class="price">
+            <span class="count">共1件商品</span>
+            <span>需付款：¥{{item.order_price}}</span>
+          </div>
+          <div class="xbtn">
+            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 0">去支付</XButton>
+            <template v-if="item.status == 1">
+              <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(item.order_num)">去评价</XButton>
+            </template>
+            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 2">再次购买</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="item.status == 3">退款中</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 4">再次购买</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 5">再次购买</XButton>
+          </div>
         </div>
+      </div>
+
+    </ViewBox>
+    <div v-else>
+      暂无订单
     </div>
+  </div>
 </template>
 
 <script>
@@ -56,10 +56,23 @@ export default {
   },
   created() {
     this.resetList();
+      console.log("orderStatus:" + this.orderStatus);
+    
+    if (this.orderStatus == 6) {
+      document.title = "全部订单";
+    }else if(this.orderStatus == 2){
+      document.title = "已完成订单";
+    }else if(this.orderStatus == 1){
+      document.title = "未使用订单";
+    }else if(this.orderStatus == 0){
+      document.title = "未付款订单";
+    }
+    
   },
   watch: {
-    $route() {
-      this.resetList();
+    $route(to, from) {
+      console.log(to);
+      // this.resetList();
     }
   },
   components: {

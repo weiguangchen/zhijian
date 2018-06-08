@@ -51,6 +51,7 @@ export default {
     width: 100%;
     height: 50px;
     display: flex;
+    z-index: 99999;
     .tabbar-item{
         display: flex;
         flex-direction: column;

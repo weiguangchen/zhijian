@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-06 17:38:29
+ * @Last Modified time: 2018-06-08 12:39:17
  */
 <template>
   <div class="page">
@@ -10,7 +10,8 @@
       <div class="top-ad">
         <div class="top-input">
           <span class="add">天津</span>
-          <XInput placeholder='请输入商家名或地点' class="search"></XInput>
+            <input placeholder='请输入商家名或地点' class="search"/>
+          
         </div>
       </div>
       <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
@@ -60,7 +61,7 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
-import { ViewBox, Tabbar, TabbarItem, Tab, TabItem, Sticky, XInput } from "vux";
+import { ViewBox, Tabbar, TabbarItem, Tab, TabItem, Sticky, XInput,Group } from "vux";
 import service from "@/components/service/service";
 import classify from "@/components/classify/index";
 import tuijian from "@/components/tuijian/index";
@@ -154,10 +155,12 @@ export default {
       line-height: 1;
     }
     .search {
+      padding-left: .266667rem;
       flex: 1;
       height: 0.693333rem;
       border: 1px solid #000000;
       border-radius: 0.346667rem;
+      outline: none;
       @include font-dpr(12px);
     }
   }

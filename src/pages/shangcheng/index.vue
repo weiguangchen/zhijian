@@ -3,7 +3,7 @@
     <ViewBox class="shangcheng">
       <div class="top-input">
         <span class="add">天津</span>
-        <XInput placeholder='请输入商家名或地点' class="search"></XInput>
+        <input placeholder='请输入商家名或地点' class="search"/>
       </div>
       <ScrollTab class="ScrollTab">
         <ScrollTabPanel :label="item.class_name" v-for="(item,index) in listArr" :key="index">
@@ -56,6 +56,7 @@ export default {
 }
 .shangcheng {
   .top-input {
+    box-sizing: border-box;
     height: 1.2rem;
     display: flex;
     align-items: center;
@@ -67,6 +68,7 @@ export default {
       line-height: 1;
     }
     .search {
+      padding-left: .266667rem;
       flex: 1;
       height: 0.693333rem;
       border: 1px solid #000000;

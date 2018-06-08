@@ -49,7 +49,7 @@ export default {
   created() {
     var _this = this;
     this.checkSystem();
-    this.$eruda.init();
+    // this.$eruda.init();
     this.$axios
       .get(this.API_URL + "/Api/UserShow/order_content", {
         params: {

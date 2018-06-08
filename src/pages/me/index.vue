@@ -73,16 +73,13 @@
             </div>
             <div class="oplist" v-if="id">
                 <Group>
-                    <Cell title='申请成为商户' link="shanghuApply" v-if="userinfo.is_shop==0">
-                        <!-- <span class="iconfont icon-jinru"></span> -->
+                    <Cell title='申请成为商户' link="applyShanghu"  :is-link='true' v-if="userinfo.is_shop==0">
                     </Cell>
                     <Cell :title='shop_status' v-else-if='userinfo.shop_status == 0'>
-                        <!-- <span class="iconfont icon-jinru"></span> -->
                     </Cell>
                     <Cell :title='shop_status' v-else-if='userinfo.shop_status == 1' link='shanghu/me'>
-                        <!-- <span class="iconfont icon-jinru"></span> -->
                     </Cell>
-                    <!-- <Cell title='历史收藏'>
+                    <Cell title='历史收藏'>
                         <span class="iconfont icon-jinru"></span>
                     </Cell>
                     <Cell title='我的优惠券'>
@@ -93,7 +90,7 @@
                     </Cell>
                     <Cell title='我的二维码'>
                         <span class="iconfont icon-jinru"></span>
-                    </Cell> -->
+                    </Cell>
                 </Group>
             </div>
         </ViewBox>
@@ -121,7 +118,7 @@ export default {
   methods: {
     login() {
       window.location.href =
-        "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa9ee7e36e84d8478&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+        "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
     },
     toOrderList(status) {
       this.$router.push("/me/orderList/" + status);

@@ -14,7 +14,7 @@
         </TabbarItem>
     </Tabbar> -->
      <div class="my-tabbar">
-        <router-link class="tabbar-item" to="/shanghu/yanzheng">
+        <router-link class="tabbar-item" to="/shanghu/yanzheng/xfm">
             <i class="iconfont icon-shouye"></i><div>验证</div>
         </router-link>
         <router-link class="tabbar-item" to="/shanghu/pingjias">
@@ -51,6 +51,7 @@ export default {
     width: 100%;
     height: 50px;
     display: flex;
+     z-index: 99999;
     .tabbar-item{
         display: flex;
         flex-direction: column;

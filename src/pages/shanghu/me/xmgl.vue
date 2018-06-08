@@ -158,7 +158,7 @@ export default {
   created() {
     var _this = this;
     this.checkSystem();
-    this.$eruda.init();
+    // this.$eruda.init();
 
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {

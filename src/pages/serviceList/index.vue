@@ -1,52 +1,65 @@
 <template>
-    <div class="page">
-        <ViewBox>
-            <XHeader title='豪景国际大厦' left-options.showBack='false'>
-                <span class="iconfont icon-shangmenxichesousuo" slot="right"></span>
-            </XHeader>
-            <div class="ad">
-                <Swiper :aspect-ratio='0.24'>
-                    <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-                    <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-                    <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-                </Swiper>
-            </div>
-            <div class="classify-list">
-                <sticky>
-                    <div class="term">
-                        <div class="select-box">
-                            <span class="term-item">体育中心
-                                <span class="iconfont icon-zhankai1"></span>
-                            </span>
-                            <span class="term-item">智能排序
-                                <span class="iconfont icon-zhankai1"></span>
-                            </span>
-                            <span class="term-item">筛选
-                                <span class="iconfont icon-zhankai1"></span>
-                            </span>
-                        </div>
-                        <div class="term-box">
+  <!-- <ViewBox>
+      
+    </ViewBox>
+    <Loading :show="loading"></Loading> -->
+  <div class="page">
 
-                        </div>
-                    </div>
-                </sticky>
-                <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
-            </div>
+    <Layout>
+      <InfiniteScroll ref="infinitescroll">
+        <div slot="list">
+          <XHeader title='豪景国际大厦' left-options.showBack='false'>
+            <span class="iconfont icon-shangmenxichesousuo" slot="right"></span>
+          </XHeader>
+          <div class="ad">
+            <Swiper :aspect-ratio='0.24'>
+              <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
+              <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
+              <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
+            </Swiper>
+          </div>
+          <div class="classify-list">
+            <sticky>
+              <div class="term">
+                <div class="select-box">
+                  <span class="term-item">体育中心
+                    <span class="iconfont icon-zhankai1"></span>
+                  </span>
+                  <span class="term-item">智能排序
+                    <span class="iconfont icon-zhankai1"></span>
+                  </span>
+                  <span class="term-item">筛选
+                    <span class="iconfont icon-zhankai1"></span>
+                  </span>
+                </div>
+                <div class="term-box">
 
-        </ViewBox>
-        <Loading :show="loading"></Loading>
-    </div>
+                </div>
+              </div>
+            </sticky>
+            <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
+          </div>
+        </div>
+
+        <span slot="doneTip">暂无更多评论</span>
+      </InfiniteScroll>
+    </Layout>
+  </div>
+
 </template>
 
 <script>
 import service from "@/components/service/service";
 import { ViewBox, XHeader, Swiper, SwiperItem, Sticky, Loading } from "vux";
+import { InfiniteScroll } from "vue-ydui/dist/lib.px/infinitescroll";
+import { Layout } from "vue-ydui/dist/lib.px/layout";
 export default {
   data() {
     return {
+      loading: false,
       classArr: [],
       serviceList: [],
-      loading: false
+      p: 1
     };
   },
   components: {
@@ -56,33 +69,38 @@ export default {
     ViewBox,
     service,
     Sticky,
-    Loading
+    Loading,
+    InfiniteScroll,
+    Layout
   },
   created() {
-    this.loading = true;
     var _this = this;
-    console.log("classid" + this.classId);
-    this.$axios
-      .get(_this.API_URL + "/api/Show/two_class", {
-        params: {
-          fid: _this.classId
-        }
-      })
-      .then(res => {
-        _this.classArr = res.data.class;
-        _this.serviceList = res.data.info;
-        _this.loading = false;
-      });
-    // this.$axios
-    //   .get(_this.API_URL + "/api/Show/one_fw", {
-    //     params: {
-    //       fw_cid: _this.classId
-    //     }
-    //   })
-    //   .then(res => {
-    //       _this.serviceList = res.data;
-    //     console.log(res);
-    //   });
+    this.get_fw().then(res => {
+      _this.serviceList = res.list;
+    });
+  },
+  methods: {
+    get_fw() {
+      var _this = this;
+      return this.$axios
+        .get(_this.API_URL + "/api/Show/two_fw", {
+          params: {
+            fw_id: _this.classId,
+            num: 8,
+            p: _this.p
+          }
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.ok == 1) {
+            _this.p++;
+          } else if (data.ok == 0) {
+            _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+          }
+          _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
+          return data;
+        });
+    }
   },
   computed: {
     classId() {

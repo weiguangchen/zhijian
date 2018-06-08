@@ -1,5 +1,5 @@
 <template>
-    <Rater :font-size='8' :value='val' :margin='8' :active-color='starColor' class="rater" star='<span class="iconfont icon-shoucang"></span>' :disabled='enable' @input='change'></Rater>
+    <Rater :font-size='8' :value='val' :margin='10' :active-color='starColor' class="rater" star='<span class="iconfont icon-shoucang"></span>' :disabled='enable' @input='change'></Rater>
 </template>
 
 <script>

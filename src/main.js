@@ -10,6 +10,8 @@ Vue.prototype.$axios = axios;
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
 
+import VueHead from 'vue-head'
+Vue.use(VueHead)
 /* 引入flexible自适应 */
 import 'lib-flexible/flexible.js'
 
@@ -26,8 +28,9 @@ Vue.prototype.$cookies = VueCookies;
 import globaljs from "@/assets/js/global.js";
 Vue.use(globaljs);
 
-import  { AlertPlugin } from 'vux'
+import  { AlertPlugin,ConfirmPlugin } from 'vux'
 Vue.use(AlertPlugin)
+Vue.use(ConfirmPlugin)
 
 import 'babel-polyfill'
 /* vux组件 */

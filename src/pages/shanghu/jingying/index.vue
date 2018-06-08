@@ -14,6 +14,7 @@
                 </div>
 
             </div>
+            <Popup></Popup>
         </ViewBox>
     </div>
 </template>
@@ -23,6 +24,7 @@ import { ViewBox, Selector, Group, XButton, XInput, Confirm, Cell } from "vux";
 import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
+import {Popup} from 'vue-ydui/dist/lib.px/popup';
 export default {
   data() {
     return {
@@ -45,7 +47,8 @@ export default {
     XButton,
     XInput,
     Confirm,
-    Cell
+    Cell,
+    Popup
   }
 };
 </script>

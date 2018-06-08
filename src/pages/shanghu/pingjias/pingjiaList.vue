@@ -1,60 +1,55 @@
 <template>
-    <!-- <div class="shanghu-page">
-        <ViewBox class="pingjia-detail"> -->
-    <Layout class="pingjia-detail">
-        <InfiniteScroll :callback="loadList" ref="infinitescroll" >
-            <div slot="list">
-                <bigTitle title="消费评价详情" class="big-title"></bigTitle>
-                <div class="form-box">
-                    <div class="total-info">
-                        <div class="thumb-wrap">
-                            <img :src="fw_img" alt="" class="thumb">
-                            <star :val='all' class="star"></star>
-                        </div>
-                        <div class="star-info">
-                            <div class="star-line">
-                                5星
-                                <starprogress :total='all_token' :num='starinfo.one' class="progress"></starprogress>{{starinfo.one}}
-                            </div>
-                            <div class="star-line">
-                                4星
-                                <starprogress :total='all_token' :num='starinfo.two' class="progress"></starprogress>{{starinfo.two}}
-                            </div>
-                            <div class="star-line">
-                                3星
-                                <starprogress :total='all_token' :num='starinfo.three' class="progress"></starprogress>{{starinfo.three}}
-                            </div>
-                            <div class="star-line">
-                                2星
-                                <starprogress :total='all_token' :num='starinfo.four' class="progress"></starprogress>{{starinfo.four}}
-                            </div>
-                            <div class="star-line">
-                                1星
-                                <starprogress :total='all_token' :num='starinfo.five' class="progress"></starprogress>{{starinfo.five}}
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <ButtonTab v-model="activeIndex">
-                    <ButtonTabItem>全部</ButtonTabItem>
-                    <ButtonTabItem>差评</ButtonTabItem>
-                </ButtonTab> -->
-                    <div class="pingjia-content">
-                        <!-- <template v-if="activeIndex == 0"> -->
-                        <pinglun v-for="(item,index) in list" :key="index" :info='item' :shanghu='true'></pinglun>
-                    </div>
 
-                </div>
+  <Layout class="pingjia-detail">
+    <InfiniteScroll :callback="loadList" ref="infinitescroll">
+      <div slot="list">
+        <bigTitle title="消费评价详情" class="big-title"></bigTitle>
+        <div class="form-box">
+          <div class="total-info">
+            <div class="thumb-wrap">
+              <img :src="fw_img" alt="" class="thumb">
+              <star :val='all' class="star"></star>
             </div>
+            <div class="star-info">
+              <div class="star-line">
+                5星
+                <starprogress :total='all_token' :num='starinfo.one' class="progress"></starprogress>{{starinfo.one}}
+              </div>
+              <div class="star-line">
+                4星
+                <starprogress :total='all_token' :num='starinfo.two' class="progress"></starprogress>{{starinfo.two}}
+              </div>
+              <div class="star-line">
+                3星
+                <starprogress :total='all_token' :num='starinfo.three' class="progress"></starprogress>{{starinfo.three}}
+              </div>
+              <div class="star-line">
+                2星
+                <starprogress :total='all_token' :num='starinfo.four' class="progress"></starprogress>{{starinfo.four}}
+              </div>
+              <div class="star-line">
+                1星
+                <starprogress :total='all_token' :num='starinfo.five' class="progress"></starprogress>{{starinfo.five}}
+              </div>
+            </div>
+          </div>
 
-            <!-- 数据全部加载完毕显示 -->
-            <span slot="doneTip">暂无更多评论</span>
-            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
-            <!-- <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" /> -->
+          <div class="pingjia-content">
 
-        </InfiniteScroll>
-    </Layout>
-    <!-- </ViewBox>
-    </div> -->
+            <pinglun v-for="(item,index) in list" :key="index" :info='item' :shanghu='true'></pinglun>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 数据全部加载完毕显示 -->
+      <span slot="doneTip">暂无更多评论</span>
+      <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+      <!-- <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" /> -->
+
+    </InfiniteScroll>
+  </Layout>
+
 </template>
 
 <script>
@@ -88,7 +83,7 @@ export default {
     this.getInfo();
     this.getList().then(res => {
       console.log(this);
-      console.log(res)
+      console.log(res);
       _this.list = res.list;
     });
   },
@@ -129,7 +124,7 @@ export default {
           }
         })
         .then(({ data }) => {
-            console.log(data)
+          console.log(data);
           if (data.ok == 1) {
             this.p++;
           } else if (data.ok == 0) {
@@ -161,14 +156,14 @@ export default {
 
 <style lang='scss'>
 .pingjia-detail {
-    padding-bottom: 50px;
+  padding-bottom: 50px;
   .big-title {
     margin-bottom: 0.533333rem;
   }
   .total-info {
     display: flex;
     margin-bottom: 1.066667rem;
-    padding-left: .533333rem;
+    padding-left: 0.533333rem;
     .thumb-wrap {
       position: relative;
       margin-right: 0.24rem;

@@ -8,7 +8,9 @@
         </Swiper>
       </div>
       <div class="sp-info">
-        <div class="top">{{fw_info.fw_mingzi}}</div>
+        <div class="top">
+          <span class="price">
+            <span class="num">{{fw_info.money}}</span>元</span>{{fw_info.fw_mingzi}}</div>
         <div class="bottom">{{fw_info.sub_content}}</div>
       </div>
 
@@ -77,11 +79,23 @@
       </div>
 
       <div class="buy-btn">
-        <div class="price">
-          <span>
+        <div class="opbtn">
+          <!-- <span>
             <i>￥</i>{{fw_info.money}}
             <sup>￥{{fw_info.y_money}}</sup>
-          </span>
+          </span> -->
+          <div class="op-item" @click="toShop(fw_info.shop_id)">
+            <i class="iconfont icon-dianpu"></i>
+            <div>店铺</div>
+          </div>
+          <div class="op-item">
+            <i class="iconfont icon-shoucangweixuan"></i>
+            <div>收藏</div>
+          </div>
+          <!-- <div class="op-item">
+            <i class="iconfont icon-dianpu"></i>
+            <div>购物车</div>
+          </div> -->
         </div>
         <div class="buy" @click="buy">立即购买</div>
       </div>
@@ -110,37 +124,14 @@ export default {
   methods: {
     buy() {
       var _this = this;
+
       if (this.id) {
-        this.$axios
-          .get(this.API_URL + "/api/WxPay/zf", {
-            params: {
-              shop_fw_id: _this.fwId,
-              num: 1,
-              uid: _this.id
-            }
-          })
-          .then(res => {
-            return res.data;
-          })
-          .then(res => {
-            return _this.$axios.get(this.API_URL + "/api/WxPay/fs", {
-              params: {
-                order_num: res
-              }
-            });
-          })
-          .then(res => {
-            console.log(res);
-            this.$vux.alert.show({
-              title: "提示",
-              content: "购买成功！",
-              onHide() {
-                _this.$router.push({
-                  path: "/me"
-                });
-              }
-            });
-          });
+        this.$router.push({
+          path: "/queren",
+          query: {
+            serviceId: _this.fwId
+          }
+        });
       } else {
         this.$vux.alert.show({
           title: "提示",
@@ -237,6 +228,14 @@ export default {
     border-bottom: 1px solid #dfdfdf;
     line-height: 1;
     color: #2b2b2b;
+    .top {
+      .price {
+        margin-right: 0.213333rem;
+      }
+      .num {
+        color: #e13131;
+      }
+    }
     .top,
     .middle,
     .bottom {
@@ -371,13 +370,15 @@ export default {
     display: flex;
     box-shadow: 0 0 9px 1px rgba(#000000, 0.57);
     .price,
-    .buy {
-      flex: 1;
+    .buy,
+    .opbtn {
       display: flex;
       justify-content: center;
       align-items: center;
     }
     .price {
+      flex: none;
+      width: 5.333333rem;
       line-height: 1;
       background: #dedede;
       @include font-dpr(30px);
@@ -393,7 +394,22 @@ export default {
         @include font-dpr(13px);
       }
     }
+    .opbtn {
+      background: #dedede;
+      flex: 1;
+      .op-item {
+        flex: 1;
+        text-align: center;
+        .iconfont {
+          display: inline-block;
+          @include font-dpr(16px);
+          margin-bottom: 0.133333rem;
+        }
+      }
+    }
     .buy {
+      width: 4.666667rem;
+      flex: none;
       background: #ff1b36;
       color: #ffffff;
       @include font-dpr(18px);

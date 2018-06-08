@@ -2,17 +2,20 @@
   <div class="page">
     <div class="order-detail">
       <div class="order-time">
-        <span>未付款订单</span>
-        <span>剩余：20小时59分钟</span>
+        <span v-if="orderDetail.status == 1">未使用订单</span>
+        <span v-else-if="orderDetail.status == 0">未付款订单</span>
+        <span v-else-if="orderDetail.status == 2">已完成订单</span>
+
+        <!-- <span>剩余：20小时59分钟</span> -->
       </div>
-      <div class="address">
+      <!-- <div class="address">
         <div class="shr">
           <span class="sh-user">
             <i class="iconfont icon-weizhi1"></i>孙宇</span>
           <span class="sh-phone">18701032977</span>
         </div>
         <div class="add">地址：天津市河东区十一经路卓越大厦1号楼天津市河东区十一经路卓越大厦1号楼</div>
-      </div>
+      </div> -->
       <div class="order-item">
         <div class="title">
           <span class="shop-name">
@@ -34,15 +37,20 @@
         <div>下单时间：{{orderDetail.data}}</div>
       </div>
       <div class="xbtn">
-        <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 0">去支付</XButton>
-        <template v-if="orderDetail.status == 1">
-          <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
-          <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(orderDetail.order_num)">去评价</XButton>
-        </template>
-        <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 2">再次购买</XButton>
-        <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="orderDetail.status == 3">退款中</XButton>
-        <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 4">再次购买</XButton>
-        <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 5">再次购买</XButton>
+        <span v-if="orderDetail.status ==1">消费码：{{orderDetail.pay_num}}</span>
+        <span v-else></span>
+        <div>
+          <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 0">去支付</XButton>
+          <template v-if="orderDetail.status == 1">
+            <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(orderDetail.order_num)">去评价</XButton>
+          </template>
+          <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 2">再次购买</XButton>
+          <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="orderDetail.status == 3">退款中</XButton>
+          <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 4">再次购买</XButton>
+          <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 5">再次购买</XButton>
+        </div>
+
       </div>
     </div>
 
@@ -205,9 +213,9 @@ export default {
   .xbtn {
     height: 1.4rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content:space-between;
     align-items: center;
-    padding-right: 0.4rem;
+    padding:0 0.4rem;
     background: #ffffff;
     .btn {
       margin: 0 0 0 0.266667rem;
