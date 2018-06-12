@@ -1,12 +1,7 @@
 <template>
-  <!-- <ViewBox>
-      
-    </ViewBox>
-    <Loading :show="loading"></Loading> -->
   <div class="page">
-
     <Layout>
-      <InfiniteScroll ref="infinitescroll">
+      <InfiniteScroll ref="infinitescroll" :callback="loadList" >
         <div slot="list">
           <XHeader title='豪景国际大厦' left-options.showBack='false'>
             <span class="iconfont icon-shangmenxichesousuo" slot="right"></span>
@@ -24,6 +19,7 @@
                 <div class="select-box">
                   <span class="term-item">体育中心
                     <span class="iconfont icon-zhankai1"></span>
+                    
                   </span>
                   <span class="term-item">智能排序
                     <span class="iconfont icon-zhankai1"></span>
@@ -50,7 +46,7 @@
 
 <script>
 import service from "@/components/service/service";
-import { ViewBox, XHeader, Swiper, SwiperItem, Sticky, Loading } from "vux";
+import { ViewBox, XHeader, Swiper, SwiperItem, Sticky, Loading,Selector,Group } from "vux";
 import { InfiniteScroll } from "vue-ydui/dist/lib.px/infinitescroll";
 import { Layout } from "vue-ydui/dist/lib.px/layout";
 export default {
@@ -71,9 +67,12 @@ export default {
     Sticky,
     Loading,
     InfiniteScroll,
-    Layout
+    Layout,
+    Selector,
+    Group
   },
   created() {
+    document.title = "服务列表";
     var _this = this;
     this.get_fw().then(res => {
       _this.serviceList = res.list;
@@ -100,7 +99,8 @@ export default {
           _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
           return data;
         });
-    }
+    },
+    loadList(){}
   },
   computed: {
     classId() {

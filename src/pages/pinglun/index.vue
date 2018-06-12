@@ -53,6 +53,7 @@ export default {
     };
   },
   created() {
+    document.title = "全部评论";
     var _this = this;
     this.get_all_pl().then(res => {
       _this.list = res.list;

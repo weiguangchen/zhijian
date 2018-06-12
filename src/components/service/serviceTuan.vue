@@ -1,14 +1,15 @@
 <template>
-  <div class="serviceTuan">
-    <img src="~img/index/avatar.png" alt="" class="img">
+  <div class="serviceTuan" @click="toDetail(info.shop_fw_id)">
+    <img :src="info.fw_img" alt="" class="img">
     <div class="info">
-      <div class="top">炫车豪庭汽车维护中心</div>
+      <div class="top">{{info.fw_mingzi}}</div>
       <div class="middle">
-       <span class="now">￥298</span>
-       <span class="old"><span class="t">原价</span>￥580</span>
+        <span class="now">￥{{info.money}}</span>
+        <span class="old">
+          <span class="t">原价</span>￥{{info.y_money}}</span>
       </div>
       <div class="bottom">
-        <span>已售44</span>
+        <span>已售{{info.buy_number}}</span>
       </div>
     </div>
   </div>
@@ -18,11 +19,19 @@
 import { Rater } from "vux";
 export default {
   data() {
-    return {
-      val: 3,
-      fontSize:18
-    };
+    return {};
   },
+  methods: {
+    toDetail(id) {
+      this.$router.push({
+        path: "/serviceDetail",
+        params: {
+          serviceId: id
+        }
+      });
+    }
+  },
+  props: ["info"],
   components: {
     Rater
   }
@@ -50,20 +59,20 @@ export default {
       line-height: 0.773333rem;
       color: #2b2b2b;
     }
-    .middle{
-        .now{
-            @include font-dpr(24px);
-            color:#de3232;
-            margin-right: .293333rem;
+    .middle {
+      .now {
+        @include font-dpr(24px);
+        color: #de3232;
+        margin-right: 0.293333rem;
+      }
+      .old {
+        @include font-dpr(17px);
+        opacity: 0.5;
+        color: #0f0f0f;
+        .t {
+          @include font-dpr(12px);
         }
-        .old{
-            @include font-dpr(17px);
-            opacity: .5;
-            color: #0f0f0f;
-            .t{
-                @include font-dpr(12px);
-            }
-        }
+      }
     }
     .bottom {
       display: flex;

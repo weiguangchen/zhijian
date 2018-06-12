@@ -10,6 +10,7 @@ export default {
     return {};
   },
   created() {
+    document.title = "登录中";
     // if (!this.$cookie.get("user")) {
     //   let ua = window.navigator.userAgent.toLowerCase();
     //   if (ua.match(/MicroMessenger/i) == "micromessenger") {

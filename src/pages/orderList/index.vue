@@ -1,6 +1,6 @@
 <template>
-  <div class="page">
-    <ViewBox v-if="orderList.length>0">
+  <div class="page order-list-box">
+    <!-- <ViewBox v-if="orderList.length>0">
       <div class="order-list">
         <div class="order-item" v-for="(item,index) in orderList" :key="index">
           <div class="title">
@@ -37,14 +37,53 @@
         </div>
       </div>
 
-    </ViewBox>
-    <div v-else>
-      暂无订单
-    </div>
+    </ViewBox> -->
+    <Layout>
+      <InfiniteScroll :callback="loadList" ref="infinitescroll">
+        <div class="order-list" slot="list">
+          <div class="order-item" v-for="(item,index) in orderList" :key="index">
+            <div class="title">
+              <span class="shop-name">
+                <i class="iconfont icon-dianpu"></i>{{item.shop_name}}
+                <i class="iconfont icon-jinru"></i>
+              </span>
+              <span class="status" v-if="item.status == 0">等待付款</span>
+              <span class="status" v-else-if="item.status == 1">未使用</span>
+              <span class="iconfont icon-lajixiang" v-else-if="item.status == 2"></span>
+              <span class="status" v-else-if="item.status == 3">申请退款中</span>
+              <span class="status" v-else-if="item.status == 4">已退款</span>
+              <span class="status" v-else-if="item.status == 5">已过期</span>
+            </div>
+            <div class="content" @click="toOrderDetail(item.order_num)">
+              <img :src="item.fw_img" alt="" class="thumb">
+              <div class="text">{{item.fw_mingzi}}</div>
+            </div>
+            <div class="price">
+              <span class="count">共1件商品</span>
+              <span>需付款：¥{{item.order_price}}</span>
+            </div>
+            <div class="xbtn">
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 0">去支付</XButton>
+              <template v-if="item.status == 1">
+                <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
+                <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(item.order_num)">去评价</XButton>
+              </template>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 2">再次购买</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="item.status == 3">退款中</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 4">再次购买</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 5">再次购买</XButton>
+            </div>
+          </div>
+        </div>
+        <span slot="doneTip">暂无更多订单</span>
+      </InfiniteScroll>
+    </Layout>
   </div>
 </template>
 
 <script>
+import { InfiniteScroll } from "vue-ydui/dist/lib.px/infinitescroll";
+import { Layout } from "vue-ydui/dist/lib.px/layout";
 import checkLogin from "@/mixins/checkLogin.js";
 import { XButton, ViewBox } from "vux";
 export default {
@@ -56,18 +95,21 @@ export default {
   },
   created() {
     this.resetList();
-      console.log("orderStatus:" + this.orderStatus);
-    
+    console.log("orderStatus:" + this.orderStatus);
+
     if (this.orderStatus == 6) {
       document.title = "全部订单";
-    }else if(this.orderStatus == 2){
+    } else if (this.orderStatus == 2) {
       document.title = "已完成订单";
-    }else if(this.orderStatus == 1){
+    } else if (this.orderStatus == 1) {
       document.title = "未使用订单";
-    }else if(this.orderStatus == 0){
+    } else if (this.orderStatus == 0) {
       document.title = "未付款订单";
+    } else if (this.orderStatus == 2) {
+      document.title = "未评论订单";
+    } else if (this.orderStatus == 7) {
+      document.title = "已评论订单";
     }
-    
   },
   watch: {
     $route(to, from) {
@@ -77,7 +119,9 @@ export default {
   },
   components: {
     XButton,
-    ViewBox
+    ViewBox,
+    InfiniteScroll,
+    Layout
   },
   methods: {
     toOrderDetail(order_num) {
@@ -91,10 +135,17 @@ export default {
             uid: _this.id,
             status: _this.orderStatus,
             num: 8,
-            p: 1
+            p: _this.p
           }
         })
         .then(({ data }) => {
+          console.log(this);
+          if (data.ok == 1) {
+            _this.p++;
+          } else if (data.ok == 0) {
+            _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+          }
+          _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
           return data;
         });
     },
@@ -111,6 +162,12 @@ export default {
     pingjia(orderId) {
       console.log(orderId);
       this.$router.push("/me/pingjia/" + orderId);
+    },
+    loadList() {
+      console.log("到底了");
+      this.getOrderList().then(res => {
+        this.orderList = this.orderList.concat(res.list);
+      });
     }
   },
   computed: {
@@ -123,6 +180,10 @@ export default {
 </script>
 
 <style lang='scss'>
+.order-list-box{
+  box-sizing:border-box; 
+  padding-bottom: 50px;
+}
 .order-list {
   .order-item {
     background: #ffffff;

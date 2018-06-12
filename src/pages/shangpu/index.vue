@@ -10,7 +10,7 @@
       </div>
 
       <div class="sp-info1">
-        <div class="top">炫车豪庭汽车维修保养生活馆
+        <div class="top">{{shopInfo.shop_name}}
           <span class="iconfont icon-shoucang"></span>
         </div>
         <div class="middle">
@@ -50,26 +50,27 @@
           </div>
         </div>
         <div class="right">
-          <span class="iconfont icon-lianxifangshi"></span>
+          <span class="iconfont icon-lianxifangshi" v-if="shopInfo.shop_phone != 0"></span>
         </div>
       </div>
 
       <div class="tuangou">
         <div class="tit">
-          <span class="left"><img src="~img/shangpu/tuangou.png" alt="" class="icon">服务(5)</span>
-          <span class="right">
+          <span class="left">
+            <!-- <img src="~img/shangpu/tuangou.png" alt="" class="icon"> -->
+            服务({{shopInfo.fw.length}})
+          </span>
+          <!-- <span class="right">
             <i class="iconfont icon-dui">随时退</i>
             <i class="iconfont icon-dui">过期退</i>
-          </span>
+          </span> -->
         </div>
         <div class="list">
-          <tuangou></tuangou>
-          <tuangou></tuangou>
-          <tuangou></tuangou>
+          <tuangou v-for="(item,index) in shopInfo.fw" :key="index" :info='item'></tuangou>
         </div>
       </div>
 
-      <div class="pingjia">
+      <!-- <div class="pingjia">
         <div class="title">
           <div class="left">网友点评(28)</div>
           <span class="iconfont icon-jinru"></span>
@@ -173,7 +174,7 @@
           </div>
         </div>
 
-      </div>
+      </div> -->
     </ViewBox>
   </div>
 </template>
@@ -184,8 +185,27 @@ import tuangou from "@/components/service/serviceTuan.vue";
 export default {
   data() {
     return {
-      val: 3
+      val: 3,
+      shopInfo: ""
     };
+  },
+  created() {
+    var _this = this;
+    this.$axios
+      .get(this.API_URL + "/Api/Show/get_shop", {
+        params: {
+          shop_id: _this.shopId
+        }
+      })
+      .then(({ data }) => {
+        console.log(data);
+        _this.shopInfo = data[0];
+      });
+  },
+  computed: {
+    shopId() {
+      return this.$route.params.shangpuId;
+    }
   },
   components: {
     ViewBox,

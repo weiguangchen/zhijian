@@ -4,7 +4,7 @@
             <XHeader title='豪景国际大厦' left-options.showBack='false'>
                 <span class="iconfont icon-shangmenxichesousuo" slot="right"></span>
             </XHeader>
-            <classify :classArr='classArr'></classify>
+            <classify :classArr='classArr' v-if="classArr.length"></classify>
             <div class="ad">
                 <Swiper :aspect-ratio='0.24'>
                     <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
@@ -43,7 +43,8 @@ export default {
     Sticky,
     Loading
   },
-  created() {      
+  created() {     
+    document.title = "分类"; 
     this.loading = true;
     var _this = this;
     console.log("classid" + this.classId);
@@ -54,6 +55,7 @@ export default {
         }
       })
       .then(res => {
+        console.log('二级类')
         _this.classArr = res.data.class;
         _this.serviceList = res.data.info;
         _this.loading = false;

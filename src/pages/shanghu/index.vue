@@ -14,6 +14,8 @@ import tabbar from '@/components/tab/shangHuTab';
 
      }
    },
+   created () {
+   },
    components: {
        tabbar
    }

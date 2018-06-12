@@ -1,28 +1,53 @@
 <template>
-    <div class="classify2">
-        <router-link :to="'/serviceList/'+item.id" v-for="(item,index) in classArr" :key="index" class="item"><img :src="item.two_class_img" alt="" class="img">
-            <div>{{item.fw_name}}</div>
+
+  <Swiper class="x-swiper">
+    <SwiperItem v-for="(item,index) in newClass" :key="index">
+      <div class="classify2">
+        <router-link :to="'/serviceList/'+item1.id" v-for="(item1,index1) in item" :key="index1" class="item"><img :src="item1.two_class_img" alt="" class="img">
+          <div>{{item1.fw_name}}</div>
         </router-link>
-    </div>
+      </div>
+
+    </SwiperItem>
+  </Swiper>
+
 </template>
 
 <script>
+import { Swiper, SwiperItem } from "vux";
+
 export default {
   data() {
-    return {};
+    return {
+      page: 1,
+      newClass: []
+    };
   },
   props: ["classArr"],
-  components: {}
+  created() {
+    this.page = Math.round(this.classArr.length / 8);
+    for (let i = 0; i < this.page; i++) {
+      this.newClass.push(this.classArr.slice(i * 8, (i + 1) * 8));
+    }
+    console.log(this.newClass)
+  },
+  components: {
+    Swiper,
+    SwiperItem
+  }
 };
 </script>
 
 <style lang='scss'>
+.x-swiper {
+  margin-bottom: $bot;
+}
 .classify2 {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   //   flex-direction: column;
-//   justify-content: space-between;
+  //   justify-content: space-between;
   background: #ffffff;
   padding: 0.533333rem 0.586667rem;
   height: 5.253333rem;
@@ -34,8 +59,8 @@ export default {
     justify-content: space-between;
   }
   .item {
-      width: 20%;
-      
+    width: 20%;
+
     display: flex;
     flex-direction: column;
     align-items: center;

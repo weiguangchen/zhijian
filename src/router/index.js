@@ -2,10 +2,12 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-08 16:39:22
+ * @Last Modified time: 2018-06-12 16:38:21
  */
 import Vue from 'vue'
 import Router from 'vue-router'
+Vue.use(Router)
+// 前台
 import tab from '@/components/tab/tab';
 import tab2 from '@/components/tab/shangHuTab';
 import index from '@/pages/index/index'
@@ -16,6 +18,7 @@ import serviceList from '@/pages/serviceList/index';
 import serviceDetail from "@/pages/serviceDetail/index";
 import queren from '@/pages/queren/index';
 import me from '@/pages/me/index';
+import youhuijuan from '@/pages/youhuijuan/index';
 import orderList from '@/pages/orderList/index';
 import orderDetail from '@/pages/orderList/orderDetail';
 import pingjia from '@/pages/pingjia/index';
@@ -24,7 +27,7 @@ import pinglun from '@/pages/pinglun/index';
 import shopCar from '@/pages/shopCar/index';
 
 import applyShanghu from '@/pages/shanghuApply/index';
-
+// 商户后台
 import shanghu from '@/pages/shanghu/index'
 import yanzheng from '@/pages/shanghu/yanzheng/index'
 import xfm from '@/pages/shanghu/yanzheng/xfm'
@@ -42,7 +45,8 @@ import fwList from '@/pages/shanghu/me/fwList'
 import shangjia from '@/pages/shanghu/shangjia/index';
 import huifupinglun from '@/components/huifupinglun/index';
 import logining from '@/pages/logining/index';
-Vue.use(Router)
+
+// 插件
 import store from '@/store/index';
 import muta from '@/store/mutations';
 import axios from "axios";
@@ -50,197 +54,7 @@ import VueCookies from 'vue-cookie'
 import {
   API_URL
 } from '@/assets/js/global.js';
-const router = new Router({
-  linkActiveClass: 'active-router',
-  mode:'history',
-  routes: [{
-      path: '/',
-      redirect: '/index'
-    }, {
-      path: '/index',
-      name: 'index',
-      // beforeEnter: (to, from, next) => {
-      //   // if (to.path == '/index') {
-      //   //   next();
-      //   // }
-      //   if (getUrl('id')) {
-      //     VueCookies.set('user', getUrl('id'));
-      //     var url = delParam(window.location.href, 'id');
-      //     window.location.href = url;
-      //   }
-      //   next();
-      // },
-      components: {
-        default: index,
-        tab: tab
-      }
-    }, {
-      path: '/shop',
-      name: 'shangcheng',
-      components: {
-        default: shangcheng,
-        tab: tab
-      },
-    }, {
-      path: '/shangpu/:shangpuId',
-      name: 'shangpu',
-      components: {
-        default: shangpu,
-        tab: tab
-      }
-    }, {
-      path: '/serviceClass/:classId',
-      name: 'serviceClass',
-      components: {
-        default: serviceClass,
-        tab: tab
-      }
-    }, {
-      path: '/serviceList/:classId',
-      name: 'serviceList',
-      components: {
-        default: serviceList,
-        tab: tab
-      }
-    }, {
-      path: '/me',
-      name: 'me',
-      components: {
-        default: me,
-        tab: tab
-      }
-    }, {
-      path: '/me/orderList/:orderStatus',
-      name: 'orderList',
-      components: {
-        default: orderList,
-        tab: tab
-      }
-    }, {
-      path: '/me/orderDetail/:orderNum',
-      name: 'orderList',
-      components: {
-        default: orderDetail,
-        // tab: tab
-      }
-    }, {
-      path: '/queren',
-      name: 'queren',
-      components: {
-        default: queren,
-      }
-    }, {
-      path: '/me/pingjia/:orderNum',
-      name: 'pingjia',
-      components: {
-        default: pingjia,
-      }
-    }, {
-      path: '/agent',
-      name: 'agent',
-      components: {
-        default: agent,
-        tab: tab
-      }
-    }, {
-      path: '/serviceDetail/:serviceId',
-      name: 'serviceDetail',
-      component: serviceDetail
-    }, {
-      path: '/pinglun/:serviceId',
-      name: 'pinglun',
-      component: pinglun
-    }, {
-      path: '/shangjia',
-      name: 'shangjia',
-      component: shangjia
-    }, {
-      path: '/applyShanghu',
-      name: 'applyShanghu',
-      components: {
-        default: applyShanghu,
-        tab: tab
-      }
-    }, {
-      path: '/shopCar',
-      name: 'shopCar',
-      components: {
-        default: shopCar,
-        // tab: tab
-      }
-    },
-    {
-      path: '/shanghu',
-      component: shanghu,
-      children: [{
-          path: 'yanzheng',
-          component: yanzheng,
-          children: [{
-            path: 'xfm',
-            component: xfm
-          }, {
-            path: 'huodong',
-            component: huodongyz
-          }]
-        },
-        // {
-        //   path: 'huodong',
-        //   component: huodongyz
-        // },
-        {
-          path: 'pingjias',
-          component: pingjias
-        },
-        {
-          path: 'pingjiaList/:pingjiaId',
-          component: pingjiaList
-        },
-        {
-          path: 'jingying',
-          component: jingying
-        },
-        {
-          path: 'jingying/tongji',
-          component: tongji
-        },
-        {
-          path: 'jingying/orderGl',
-          component: orderGl
-        },
-        {
-          path: 'me',
-          component: shanghume
-        },
-        {
-          path: 'me/xmgl',
-          component: xmgl
-        },
-        {
-          path: 'me/fwList',
-          component: fwList
-        },
-        {
-          path: 'me/mendian',
-          component: mendian
-        },
-        {
-          path: 'me/addFace',
-          component: addFace
-        },
-      ]
-    },
-    {
-      path: '/huifupinglun',
-      name: 'huifupinglun',
-      component: huifupinglun
-    },
-    {
-      path: '/logining',
-      name: 'logining',
-      component: logining,
-    }
-  ]
-})
+
 
 
 
@@ -253,7 +67,6 @@ function getUrl(para) {
   }
   return '';
 }
-
 
 function delParam(url, paramKey) {
   var urlParam = url.substr(url.indexOf("?") + 1);
@@ -279,16 +92,257 @@ function delParam(url, paramKey) {
   return url;
 }
 
+
+
+
+export const defaultRouterMaps = [{
+    path: '/',
+    redirect: '/index'
+  }, {
+    path: '/index',
+    name: 'index',
+    components: {
+      default: index,
+      tab: tab
+    }
+  }, {
+    path: '/shop',
+    name: 'shangcheng',
+    components: {
+      default: shangcheng,
+      tab: tab
+    },
+  }, {
+    path: '/faxian',
+    name: 'faxian',
+    components: {
+      tab: tab
+    },
+  }, {
+    path: '/shangpu/:shangpuId',
+    name: 'shangpu',
+    components: {
+      default: shangpu,
+      tab: tab
+    }
+  }, {
+    path: '/serviceClass/:classId',
+    name: 'serviceClass',
+    components: {
+      default: serviceClass,
+      tab: tab
+    }
+  }, {
+    path: '/serviceList/:classId',
+    name: 'serviceList',
+    components: {
+      default: serviceList,
+      tab: tab
+    }
+  }, {
+    path: '/me',
+    name: 'me',
+    components: {
+      default: me,
+      tab: tab
+    }
+  }, {
+    path: '/youhuijuan',
+    name: 'youhuijuan',
+    components: {
+      default: youhuijuan,
+    }
+  }, {
+    path: '/me/orderList/:orderStatus',
+    name: 'orderList',
+    components: {
+      default: orderList,
+      tab: tab
+    }
+  }, {
+    path: '/me/orderDetail/:orderNum',
+    name: 'orderList',
+    components: {
+      default: orderDetail,
+      // tab: tab
+    }
+  }, {
+    path: '/queren',
+    name: 'queren',
+    components: {
+      default: queren,
+    }
+  }, {
+    path: '/me/pingjia/:orderNum',
+    name: 'pingjia',
+    components: {
+      default: pingjia,
+    }
+  }, {
+    path: '/agent',
+    name: 'agent',
+    components: {
+      default: agent,
+      tab: tab
+    }
+  }, {
+    path: '/serviceDetail/:serviceId',
+    name: 'serviceDetail',
+    component: serviceDetail
+  }, {
+    path: '/pinglun/:serviceId',
+    name: 'pinglun',
+    component: pinglun
+  }, {
+    path: '/shangjia',
+    name: 'shangjia',
+    component: shangjia
+  }, {
+    path: '/applyShanghu',
+    name: 'applyShanghu',
+    components: {
+      default: applyShanghu,
+      tab: tab
+    }
+  }, {
+    path: '/shopCar',
+    name: 'shopCar',
+    components: {
+      default: shopCar,
+      // tab: tab
+    }
+  },
+  {
+    path: '/huifupinglun',
+    name: 'huifupinglun',
+    component: huifupinglun
+  },
+  {
+    path: '/logining',
+    name: 'logining',
+    component: logining,
+  }
+]
+
+export const asyncRouterMaps = [{
+  path: '/shanghu',
+  component: shanghu,
+  meta: {
+    role: ['shanghu']
+  },
+  children: [{
+      path: 'yanzheng',
+      component: yanzheng,
+      meta: {
+        role: ['shanghu']
+      },
+      children: [{
+        path: 'xfm',
+        component: xfm,
+        meta: {
+          role: ['shanghu']
+        },
+      }, {
+        path: 'huodong',
+        component: huodongyz,
+        meta: {
+          role: ['shanghu']
+        },
+      }]
+    },
+    {
+      path: 'pingjias',
+      component: pingjias,
+      meta: {
+        role: ['shanghu']
+      },
+    },
+    {
+      path: 'pingjiaList/:pingjiaId',
+      component: pingjiaList,
+      meta: {
+        role: ['shanghu']
+      },
+    },
+    {
+      path: 'jingying',
+      component: jingying,
+      meta: {
+        role: ['shanghu']
+      },
+    },
+    {
+      path: 'jingying/tongji',
+      component: tongji,
+      meta: {
+        role: ['shanghu']
+      }
+    },
+    {
+      path: 'jingying/orderGl',
+      component: orderGl,
+      meta: {
+        role: ['shanghu']
+      }
+    },
+    {
+      path: 'me',
+      component: shanghume,
+      meta: {
+        role: ['shanghu']
+      }
+    },
+    {
+      path: 'me/xmgl',
+      component: xmgl,
+      meta: {
+        role: ['shanghu']
+      }
+    },
+    {
+      path: 'me/fwList',
+      component: fwList,
+      meta: {
+        role: ['shanghu']
+      }
+    },
+    {
+      path: 'me/mendian',
+      component: mendian,
+      meta: {
+        role: ['shanghu']
+      }
+    },
+    {
+      path: 'me/addFace',
+      component: addFace,
+      meta: {
+        role: ['shanghu']
+      }
+    },
+  ]
+}, {
+  path: '*',
+  redirect: '/404',
+  hidden: true
+}]
+
+
+const router = new Router({
+  linkActiveClass: 'active-router',
+  mode: 'history',
+  routes: defaultRouterMaps
+})
+
 // 进入每个url时判断是否登录
 router.beforeEach((to, from, next) => {
   var id = store.state.id;
   var userId = VueCookies.get("user");
-  console.log('to:')
-  console.log(to)
+
   if (to.query.id && /^\/logining/.test(to.fullPath)) {
     VueCookies.set('user', to.query.id);
-    // window.location.href = '192.169.31.75:8081';
-    window.location.href = 'http://qd.daonian.cn/';
+    window.location.href = 'http://192.168.31.75:8081/';
+    // window.location.href = 'http://qd.daonian.cn/';
   }
 
   if (!userId) {
@@ -302,8 +356,7 @@ router.beforeEach((to, from, next) => {
         id: userId
       }
     }).then(res => {
-      console.log(res);
-      console.log(muta)
+
       if (res.data[0].is_user == 1) {
         // 该用户有效
         muta.SAVE_ID(store.state, userId);
@@ -312,7 +365,7 @@ router.beforeEach((to, from, next) => {
 
       } else {
         // 该用户无效
-        console.log('无效cookie，删除他')
+        console.log('无效cookie，删除')
         VueCookies.delete('user');
         muta.SAVE_ID(store.state, '');
         muta.SAVE_USERINFO(store.state, {});
@@ -330,7 +383,8 @@ router.beforeEach((to, from, next) => {
   //   if (store.state.userinfo.shop_status != 1) {
   //     console.log('不是商户')
   //     next({
-  //       path: '/'
+  //       path: '/',
+  //       replace:true
   //     });
   //   } else {
   //     console.log('是商户')
@@ -339,41 +393,6 @@ router.beforeEach((to, from, next) => {
   // }
 
 
-  // if (userId) {
-  //   console.log("存在cookie");
-  //   // if (!id) {
-  //   //   console.log('未登录')
-  //   // 每次进入页面重新拉取一下用户信息
-  //   axios.get(API_URL + '/api/Show/get_user', {
-  //     params: {
-  //       id: userId
-  //     }
-  //   }).then(res => {
-  //     console.log(res);
-  //     console.log(muta)
-  //     if (res.data[0].is_user == 1) {
-  //       muta.SAVE_ID(store.state, userId);
-  //       muta.SAVE_USERINFO(store.state, res.data[0]);
-  //       next();
-
-  //     } else {
-  //       VueCookies.delete('user');
-  //       muta.SAVE_ID(store.state, '');
-  //       muta.SAVE_USERINFO(store.state, {});
-  //       next('/me');
-  //     }
-
-
-  //   });
-  //   // } else {
-  //   //   next();
-  //   // }
-  // } else {
-  //   console.log("不存在cookie");
-
-  //   next();
-
-  // }
 
 })
 

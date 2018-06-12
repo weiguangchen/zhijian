@@ -1,5 +1,9 @@
 const state = {
     id:'',
-    userinfo:{}
+    userinfo:{},
+    address:{},
+
+    routers:[],
+    addRouters:[]
 }
 export default state;

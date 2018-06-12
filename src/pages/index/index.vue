@@ -2,23 +2,28 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-08 12:39:17
+ * @Last Modified time: 2018-06-12 17:48:55
  */
 <template>
   <div class="page">
     <ViewBox>
       <div class="top-ad">
         <div class="top-input">
-          <span class="add">天津</span>
-            <input placeholder='请输入商家名或地点' class="search"/>
-          
+          <span class="add" v-if="address">{{address.city}}</span>
+          <input placeholder='请输入商家名或地点' class="search" />
+
         </div>
       </div>
       <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
       </iframe>
-      <classify :classArr='classArr'></classify>
+      <classify :classArr='classArr' v-if="classArr.length"></classify>
       <div class="huodong">
-        <div class="item">
+        <Swiper :aspect-ratio='0.31'>
+          <SwiperItem>
+            <img src="~img/index/banner.png" alt="">
+          </SwiperItem>
+        </Swiper>
+        <!-- <div class="item">
           <img src="~img/index/huodong1.png" alt="">
         </div>
         <div class="item">
@@ -26,7 +31,7 @@
         </div>
         <div class="item">
           <img src="~img/index/huodong1.png" alt="">
-        </div>
+        </div> -->
       </div>
       <div class="huodong-list">
         <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
@@ -61,11 +66,21 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
-import { ViewBox, Tabbar, TabbarItem, Tab, TabItem, Sticky, XInput,Group } from "vux";
+import {
+  ViewBox,
+  Tabbar,
+  TabbarItem,
+  Tab,
+  TabItem,
+  Sticky,
+  XInput,
+  Group,
+  Swiper,
+  SwiperItem
+} from "vux";
 import service from "@/components/service/service";
 import classify from "@/components/classify/index";
 import tuijian from "@/components/tuijian/index";
-
 import wxConfig from "@/mixins/wxConfig.js";
 
 export default {
@@ -78,20 +93,21 @@ export default {
     };
   },
   created() {
+    document.title = "首页";
     var _this = this;
     window.addEventListener(
       "message",
       function(event) {
         // 接收位置信息
-        console.log('腾讯地图')
+        console.log("腾讯地图");
         var loc = event.data;
+        _this.SAVE_ADDRESS(loc);
         console.log("location", loc);
       },
       false
     );
-   
 
-    this.$axios.get(this.API_URL+"/api/Show/one_class").then(res => {
+    this.$axios.get(this.API_URL + "/api/Show/one_class").then(res => {
       console.log(res);
       _this.classArr = res.data.class;
       _this.listArr = res.data.info;
@@ -112,15 +128,15 @@ export default {
     // });
   },
   methods: {
-    ...mapMutations(["SAVE_ID", "SAVE_USERINFO"]),
-    getloc() {
-     
-    },
+    ...mapMutations(["SAVE_ID", "SAVE_USERINFO","SAVE_ADDRESS"]),
+    getloc() {},
     changeItem(index) {
       this.activeItem = index;
-    }
+    },
+   
   },
   computed: {
+    ...mapState(['address']),
     ifContentShow() {}
   },
   components: {
@@ -133,7 +149,9 @@ export default {
     classify,
     Sticky,
     tuijian,
-    XInput
+    XInput,
+    Swiper,
+    SwiperItem
   },
   mixins: [wxConfig]
 };
@@ -155,7 +173,7 @@ export default {
       line-height: 1;
     }
     .search {
-      padding-left: .266667rem;
+      padding-left: 0.266667rem;
       flex: 1;
       height: 0.693333rem;
       border: 1px solid #000000;
@@ -167,20 +185,21 @@ export default {
 }
 
 .huodong {
-  display: flex;
-  justify-content: space-between;
-  box-sizing: border-box;
-  padding: 1.56rem 0.4rem 0;
-  height: 3.52rem;
-  background: url(~img/index/huodong-bg.png) no-repeat;
-  background-color: #ffffff;
-  background-size: 6.533333rem;
-  background-position: 50% -0.133333rem;
-  border-bottom: 1px solid #dfdfdf;
-  .item {
-    height: 1.6rem;
-    width: 2.666667rem;
-  }
+  // display: flex;
+  // justify-content: space-between;
+  // box-sizing: border-box;
+  padding: 0.16rem 0.4rem 0;
+  background: #ffffff;
+  // height: 3.52rem;
+  // background: url(~img/index/huodong-bg.png) no-repeat;
+  // background-color: #ffffff;
+  // background-size: 6.533333rem;
+  // background-position: 50% -0.133333rem;
+  // border-bottom: 1px solid #dfdfdf;
+  // .item {
+  //   height: 1.6rem;
+  //   width: 2.666667rem;
+  // }
 }
 
 .huodong-list {

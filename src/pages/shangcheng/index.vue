@@ -30,6 +30,7 @@ export default {
     };
   },
   created() {
+    document.title = "商城";
     var _this = this;
     this.$axios.get(this.API_URL + "/api/Show/ot_class").then(({ data }) => {
       _this.listArr = data;
@@ -53,6 +54,9 @@ export default {
 .ScrollTab {
   margin-top: 1.2rem;
   padding-bottom: 50px;
+  .yd-scrolltab-title{
+    overflow-y: hidden;
+  }
 }
 .shangcheng {
   .top-input {
@@ -78,6 +82,7 @@ export default {
   }
   .class-wrap {
     display: flex;
+    flex-wrap: wrap;
     padding: 0.24rem;
     background: #ffffff;
     line-height: 1;

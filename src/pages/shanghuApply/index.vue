@@ -30,20 +30,26 @@
             </div>
           </div>
         </template>
-        <!-- <template v-else-if="step == 3">
-          
-        </template> -->
+        <template v-else-if="step == 3">
+          <div class="form-group">
+            <h2 class="sub-title">商铺地址</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="map.poiaddress" @on-focus='mapShow = true'></XInput>
+            </Group>
+          </div>
+        </template>
         <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
         <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
         <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3">提交</XButton>
       </div>
-
+      <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
     </ViewBox>
 
   </div>
 </template>
 
 <script>
+import myMap from "@/components/map/index";
 import {
   ViewBox,
   Group,
@@ -63,29 +69,29 @@ export default {
     return {
       alertShow: false,
       modalInfo: "",
+      mapShow: false,
 
-      keyboardShow: false,
       step: 1,
       imgs: "",
       localData: "",
       system: 1,
-     
+
       // 第一步
       shop_name: "",
       shop_phone: "",
 
       // 第二步
-      tupian: ""
+      tupian: "",
       //   第三部
+      map: ""
     };
   },
   created() {
+    document.title = "申请商户";
     var _this = this;
     // this.$eruda.init();
-    
+
     this.checkSystem();
-
-
   },
   methods: {
     next1() {
@@ -123,6 +129,9 @@ export default {
           params: {
             shop_name: this.shop_name,
             zj_img: this.tupian,
+            jd: this.map.lat,
+            wd: this.map.lng,
+            adress:this.map.poiaddress,
             shop_phone: this.shop_phone,
             user_id: this.id
           }
@@ -130,31 +139,34 @@ export default {
         .then(res => {
           //   成功返回1不成功返回0
           console.log(res);
-          console.log(this.$router)
+          console.log(this.$router);
           if (res.data.status == 1) {
             this.$vux.alert.show({
               title: "提示",
               content: "申请商户成功，请等待审核!",
-              onHide(){
+              onHide() {
                 _this.$router.replace({
-                  path:'/me'
-                })
+                  path: "/me"
+                });
               }
             });
           } else if (res.data.status == 0) {
             this.$vux.alert.show({
               title: "提示",
               content: "申请失败，请重试!",
-              onHide(){
+              onHide() {
                 _this.$router.replace({
-                  path:'/me'
-                })
+                  path: "/me"
+                });
               }
             });
           }
         });
     },
-   
+    finishAdd(val) {
+      this.mapShow = false;
+      this.map = val;
+    },
     checkSystem() {
       var u = navigator.userAgent;
       var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
@@ -200,7 +212,7 @@ export default {
         success: function(res) {
           var serverId = res.serverId; // 返回图片的服务器端ID
           _this.$axios
-            .get(_this.API_URL+"/api/wechat/bcimg", {
+            .get(_this.API_URL + "/api/wechat/bcimg", {
               params: {
                 imgs: res.serverId
               }
@@ -212,7 +224,6 @@ export default {
         }
       });
     }
-   
   },
   computed: {},
   components: {
@@ -225,7 +236,8 @@ export default {
     Checker,
     CheckerItem,
     XTextarea,
-    KeyBoard
+    KeyBoard,
+    myMap
   },
   mixins: [wxConfig, checkLogin]
 };

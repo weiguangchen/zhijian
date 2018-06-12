@@ -48,7 +48,7 @@ export default {
   },
   created() {
     var _this = this;
-    this.$eruda.init();
+    // this.$eruda.init();
     this.checkSystem();
     this.$axios
       .get("/api/api/wechat/sharewx", {

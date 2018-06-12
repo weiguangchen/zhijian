@@ -79,17 +79,11 @@
                     </Cell>
                     <Cell :title='shop_status' v-else-if='userinfo.shop_status == 1' link='shanghu/me'>
                     </Cell>
-                    <Cell title='历史收藏'>
-                        <span class="iconfont icon-jinru"></span>
+                    <!-- <Cell title='历史收藏'>
+                    </Cell> -->
+                    <Cell title='我的优惠券' link='youhuijuan'>
                     </Cell>
-                    <Cell title='我的优惠券'>
-                        <span class="iconfont icon-jinru"></span>
-                    </Cell>
-                    <Cell title='待评价服务'>
-                        <span class="iconfont icon-jinru"></span>
-                    </Cell>
-                    <Cell title='我的二维码'>
-                        <span class="iconfont icon-jinru"></span>
+                    <Cell title='待评价服务' link='me/orderList/7'>
                     </Cell>
                 </Group>
             </div>

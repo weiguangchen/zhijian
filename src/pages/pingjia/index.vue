@@ -1,30 +1,30 @@
 <template>
-    <div class="page">
-        <div class="pingjia">
-            <div class="rater-box">
-                <img :src="orderDetail.fw_img" alt="" class="thumb">
-                <rater :val="star" @changeStar='changeStar' :enable='false'></rater>
-            </div>
-            <Group class="pingjia">
-                <XTextarea v-model="content" placeholder='请对本次服务进行点评，分享您的体验心得' :height='240'></XTextarea>
-            </Group>
-            <div class="uploadImage">
-                <div class="upload-btn" @click="chooseImg">
-                    <img src="~img/public/uploadImgBtn.png" alt="" class="img">
-                </div>
-                <template v-if="imgs">
-                    <img :src="imgs" alt="" class="thumb" v-if="system == 1">
-                    <img :src="localData" alt="" v-else class="thumb">
-                </template>
-
-            </div>
-            <div class="btn-box">
-                <span class="l-btn"></span>
-                <span class="submit-btn" @click="submit">提交评价</span>
-            </div>
+  <div class="page">
+    <div class="pingjia">
+      <div class="rater-box">
+        <img :src="orderDetail.fw_img" alt="" class="thumb">
+        <rater :val="star" @changeStar='changeStar' :enable='false'></rater>
+      </div>
+      <Group class="pingjia">
+        <XTextarea v-model="content" placeholder='请对本次服务进行点评，分享您的体验心得' :height='240'></XTextarea>
+      </Group>
+      <div class="uploadImage">
+        <div class="upload-btn" @click="chooseImg">
+          <img src="~img/public/uploadImgBtn.png" alt="" class="img">
         </div>
+        <template v-if="imgs">
+          <img :src="imgs" alt="" class="thumb" v-if="system == 1">
+          <img :src="localData" alt="" v-else class="thumb">
+        </template>
 
+      </div>
+      <div class="btn-box">
+        <span class="l-btn"></span>
+        <span class="submit-btn" @click="submit">提交评价</span>
+      </div>
     </div>
+
+  </div>
 </template>
 
 <script>
@@ -39,7 +39,7 @@ export default {
       orderDetail: {},
       system: 1,
 
-      star: 1,
+      star: 0,
       content: "",
       tupian: "",
       localData: "",
@@ -47,6 +47,7 @@ export default {
     };
   },
   created() {
+    document.title = "评价";
     var _this = this;
     this.checkSystem();
     // this.$eruda.init();
@@ -81,27 +82,27 @@ export default {
           }
         })
         .then(res => {
-        //   if (res.data.status == 1) {
-        //     this.$vux.alert.show({
-        //       title: "提示",
-        //       content: "谢谢评论",
-        //       onHide() {
-        //         _this.$router.push({
-        //           path: "/me/orderList/6"
-        //         });
-        //       }
-        //     });
-        //   } else if (res.data.status == 0) {
-        //     this.$vux.alert.show({
-        //       title: "提示",
-        //       content: "评论失败了",
-        //       onHide() {
-        //         _this.$router.push({
-        //           path: "/me/orderList/6"
-        //         });
-        //       }
-        //     });
-        //   }
+          if (res.data.status == 1) {
+            this.$vux.alert.show({
+              title: "提示",
+              content: "谢谢评论",
+              onHide() {
+                _this.$router.replace({
+                  path: "/me/orderList/6"
+                });
+              }
+            });
+          } else if (res.data.status == 0) {
+            this.$vux.alert.show({
+              title: "提示",
+              content: "评论失败了",
+              onHide() {
+                _this.$router.replace({
+                  path: "/me/orderList/6"
+                });
+              }
+            });
+          }
           console.log(res);
         });
     },

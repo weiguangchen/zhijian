@@ -38,8 +38,9 @@ export default {
     };
   },
   created() {
+    document.title = "确认订单";
     this.get_fw_info();
-    this.$eruda.init();
+    // this.$eruda.init();
   },
   methods: {
     openMap() {

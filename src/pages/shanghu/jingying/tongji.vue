@@ -52,7 +52,7 @@ export default {
         _this.list = res.data;
       });
   },
-  components: { bigTitle }
+  components: { bigTitle },
 };
 </script>
 

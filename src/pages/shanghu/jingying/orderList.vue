@@ -69,7 +69,7 @@ export default {
         _this.list = data.list;
       });
   },
-  components: { bigTitle, ViewBox }
+  components: { bigTitle, ViewBox },
 };
 </script>
 

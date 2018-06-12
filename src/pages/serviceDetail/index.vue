@@ -29,9 +29,9 @@
               <span class="juli">5.5KM</span>
             </div>
           </div>
-          <div class="right">
+          <!-- <div class="right">
             <span class="iconfont icon-lianxifangshi"></span>
-          </div>
+          </div> -->
         </div>
         <div class="bottom">
           <span class="iconfont icon-weizhi1"></span>
@@ -119,6 +119,7 @@ export default {
     };
   },
   created() {
+    document.title = "服务详情";
     this.get_fw_info();
   },
   methods: {
