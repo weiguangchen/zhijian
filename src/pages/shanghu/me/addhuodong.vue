@@ -163,6 +163,8 @@ export default {
     };
   },
   created() {
+    this.$eruda.init();
+      
     var _this = this;
     this.$emit("showPopup", false);
 
