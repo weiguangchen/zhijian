@@ -1,21 +1,21 @@
 <template>
-    <div class="shanghu-page add-face">
-        <bigTitle title='添加门店'></bigTitle>
-        <div class="form-box">
-            <h2 class="sub-title">门店名称:</h2>
-            <Group class="reset-vux-input">
-                <XInput v-model="face_name"></XInput>
-            </Group>
-            <h2 class="sub-title">门店位置:</h2>
-            <Group class="reset-vux-input">
-                <XInput v-model="loc.poiaddress" @click.native='selectAdd'></XInput>
-            </Group>
-            <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
-            <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='finishBtn'>增加门店</XButton>
-            <XButton type='warn' class="xbtn" @click.native='change_face' v-else :disabled='finishBtn'>提交修改</XButton>
-        </div>
-
+  <div class="shanghu-page add-face">
+    <bigTitle title='添加门店' @showPopup='showPopup'></bigTitle>
+    <div class="form-box">
+      <h2 class="sub-title">门店名称:</h2>
+      <Group class="reset-vux-input">
+        <XInput v-model="face_name"></XInput>
+      </Group>
+      <h2 class="sub-title">门店位置:</h2>
+      <Group class="reset-vux-input">
+        <XInput v-model="loc.poiaddress" @click.native='selectAdd'></XInput>
+      </Group>
+      <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
+      <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='finishBtn'>增加门店</XButton>
+      <XButton type='warn' class="xbtn" @click.native='change_face' v-else :disabled='finishBtn'>提交修改</XButton>
     </div>
+
+  </div>
 </template>
 
 <script>
@@ -34,6 +34,7 @@ export default {
   },
   created() {
     var _this = this;
+    this.$emit("showPopup", false);
     if (this.faceId) {
       this.$axios
         .get(this.API_URL + "/Api/Shop/face_edit", {
@@ -48,6 +49,9 @@ export default {
     }
   },
   methods: {
+    showPopup(val) {
+      this.$emit("showPopup", val);
+    },
     add_face() {
       var _this = this;
       console.log("提交");

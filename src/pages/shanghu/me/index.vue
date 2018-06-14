@@ -1,29 +1,20 @@
 <template>
     <div class="shanghu-page">
         <ViewBox>
-            <bigTitle title='个人中心' :icon='false'></bigTitle>
+            <bigTitle title='个人中心' @showPopup='showPopup'></bigTitle>
             <div class="my-form">
                 <div class="form-box">
                     <Group>
                         <Cell title='添加服务' :is-link='true' link='/shanghu/me/xmgl'></Cell>
                         <Cell title='管理服务' :is-link='true' link='/shanghu/me/fwList'></Cell>
-                        <!-- <Cell title='财务管理' :is-link='true'></Cell> -->
+                        <Cell title='添加活动' :is-link='true' link='/shanghu/me/addhuodong'></Cell>
                         <Cell title='门店管理' :is-link='true' link='/shanghu/me/mendian'></Cell>
-                        <!-- <Cell title='账户管理' :is-link='true'></Cell> -->
                     </Group>
                 </div>
 
             </div>
         </ViewBox>
-        <Popup position='right' v-model="popupShow">
-            <div class="popup-list">
-                <Cell title='项目管理'></Cell>
-                <Cell title='财务管理'></Cell>
-                <Cell title='门店管理'></Cell>
-                <Cell title='账户管理'></Cell>
-                <Cell title='外卖预定管理'></Cell>
-            </div>
-        </Popup>
+
     </div>
 </template>
 
@@ -42,12 +33,17 @@ export default {
       face_id: "",
       faceList: [],
       alertShow: false,
-      xiaofeijuan: "",
-      popupShow: false
+      xiaofeijuan: ""
     };
   },
-  created() {},
-  methods: {},
+  created() {
+    this.$emit("showPopup", false);
+  },
+  methods: {
+    showPopup(val) {
+      this.$emit("showPopup", val);
+    }
+  },
   components: {
     bigTitle,
     ViewBox,

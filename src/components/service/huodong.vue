@@ -1,18 +1,18 @@
 <template>
-  <div class="serviceTuan" @click="toDetail(info.shop_fw_id)">
-    <img :src="info.fw_img" alt="" class="img">
-    <div class="info">
-      <div class="top">{{info.fw_mingzi}}</div>
-      <div class="middle">
-        <span class="now">￥{{info.money}}</span>
-        <span class="old">
-          <span class="t">原价</span>￥{{info.y_money}}</span>
-      </div>
-      <div class="bottom">
-        <span>已售{{info.buy_number}}</span>
-      </div>
+    <div class="serviceTuan" @click="toDetail(info.bk_id)">
+        <img :src="info.card_img" alt="" class="img">
+        <div class="info">
+            <div class="top">{{info.card_name}}</div>
+            <div class="middle">
+                <span class="now">￥{{info.card_money}}</span>
+                <span class="old">
+                    <span class="t">原价</span>￥{{info.card_ymoney}}</span>
+            </div>
+            <div class="bottom">
+                <!-- <span>已售{{info.buy_number}}</span> -->
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -24,9 +24,9 @@ export default {
   methods: {
     toDetail(id) {
       this.$router.push({
-        name:'serviceDetail',
+        name: "huodongDetail",
         params: {
-          serviceId: id
+          huodongId: id
         }
       });
     }

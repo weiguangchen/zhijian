@@ -1,7 +1,7 @@
 <template>
   <div>
     <ViewBox class="shanghu-page">
-      <bigTitle title='新建项目'></bigTitle>
+      <bigTitle title='新建项目' @showPopup='showPopup'></bigTitle>
       <div class="form-box">
         <template v-if="step == 1">
           <div class="form-group">
@@ -66,6 +66,7 @@
               <img :src="localData || tupian" alt="" v-else class="thumb">
 
             </div>
+
           </div>
         </template>
         <template v-else-if="step == 3">
@@ -157,6 +158,7 @@ export default {
   },
   created() {
     var _this = this;
+    this.$emit("showPopup", false);
     this.checkSystem();
     // this.$eruda.init();
 
@@ -206,6 +208,9 @@ export default {
     face(newval) {}
   },
   methods: {
+    showPopup(val) {
+      this.$emit("showPopup", val);
+    },
     next1() {
       if (!this.fw_name) {
         this.alertShow = true;
@@ -251,7 +256,7 @@ export default {
       this.checkForm().then(
         res => {
           this.$axios
-            .get("/api/api/ShopFw/add_shop_fw", {
+            .get(_this.API_URL+"/api/ShopFw/add_shop_fw", {
               params: {
                 fw_mingzi: this.fw_name,
                 sub_name: this.fw_short_info,
@@ -319,7 +324,7 @@ export default {
         res => {
           console.log("成功");
           this.$axios
-            .get("/api/api/ShopFw/update_shop_fw", {
+            .get(_this.API_URL+"/api/ShopFw/update_shop_fw", {
               params: {
                 fw_mingzi: this.fw_name,
                 sub_name: this.fw_short_info,
@@ -387,30 +392,30 @@ export default {
     },
     checkForm() {
       var _this = this;
-      console.log(this.youxiao)
-      console.log(typeof this.youxiao); 
-      console.log(Number.isInteger(12)); 
-      console.log(Number.isInteger(this.youxiao));      
+      console.log(this.youxiao);
+      console.log(typeof this.youxiao);
+      console.log(Number.isInteger(12));
+      console.log(Number.isInteger(this.youxiao));
       console.log(!Number.isInteger(this.youxiao));
 
       return new Promise((resolve, reject) => {
-        if (!Number.isInteger(this.youxiao)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写正确有效期";
-          reject();
-        } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-          this.alertShow = true;
-          this.modalInfo = "原价";
-          reject();
-        } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写现价";
-          reject();
-        } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写结算价";
-          reject();
-        }
+        // if (!Number.isInteger(this.youxiao)) {
+        //   this.alertShow = true;
+        //   this.modalInfo = "请填写正确有效期";
+        //   reject();
+        // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
+        //   this.alertShow = true;
+        //   this.modalInfo = "原价";
+        //   reject();
+        // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
+        //   this.alertShow = true;
+        //   this.modalInfo = "请填写现价";
+        //   reject();
+        // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
+        //   this.alertShow = true;
+        //   this.modalInfo = "请填写结算价";
+        //   reject();
+        // }
         resolve();
       });
     },

@@ -23,7 +23,7 @@
         <router-link class="tabbar-item" to="/shanghu/jingying">
             <i class="iconfont icon-faxian"></i><div>经营</div>
         </router-link>
-        <router-link class="tabbar-item" to="/shanghu/me">
+        <router-link class="tabbar-item" to="/shanghu/me/index">
             <i class="iconfont icon-wode"></i><div>我的</div>
         </router-link>
     </div>

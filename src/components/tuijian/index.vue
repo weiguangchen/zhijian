@@ -13,6 +13,8 @@
           <img :src="item.fw_img" alt="" class="img">
         </div>
         <div class="name">{{item.fw_mingzi}}</div>
+        <div class="price"><span class="num">{{item.money}}</span>元</div>
+        <div class="shop"><i class="iconfont icon-dianpu"></i>{{item.shop_name}}</div>
       </div>
 
     </div>
@@ -60,26 +62,48 @@ export default {
       border-bottom: none;
     }
   }
+  .vux-label{
+    line-height: 1;
+    padding-left: .186667rem;
+    @include font-dpr(14px);
+    border-left: .066667rem solid #df3333;
+  }
 }
 .tuijian-list {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   padding-bottom: 0.133333rem;
+  @include font-dpr(14px);
   .tuijian-item {
     margin: 0 .32rem;
     overflow: hidden;
     border-radius: 0.133333rem;
     width: 2.666667rem;
     flex: none;
+    line-height: .533333rem;
     .img {
       width: 100%;
       height: 2.666667rem;
       overflow: hidden;
       margin-bottom: 0.066667rem;
     }
-    .name {
-      padding-left: 0.106667rem;
+    .name,.price,.shop{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+ 
+    .price{
+      .num{
+        color:#de3230;
+      }
+    }
+    .shop{
+      color: #aaaaaa;
+      .iconfont{
+        margin-right: .133333rem;
+      }
     }
   }
 }

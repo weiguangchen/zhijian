@@ -9,7 +9,7 @@ export default {
     this.$axios
       .get(_this.API_URL+"/api/wechat/sharewx", {
         params: {
-          url: window.location.href.split('#')[0]
+          url: window.location.href
         }
       })
       .then(res => {

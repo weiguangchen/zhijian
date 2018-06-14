@@ -1,6 +1,6 @@
 <template>
 
-  <Swiper class="x-swiper">
+  <Swiper class="x-swiper" :aspect-ratio='0.54' dots-position='center' :show-dots='page>1?true:false'>
     <SwiperItem v-for="(item,index) in newClass" :key="index">
       <div class="classify2">
         <router-link :to="'/serviceList/'+item1.id" v-for="(item1,index1) in item" :key="index1" class="item"><img :src="item1.two_class_img" alt="" class="img">
@@ -50,7 +50,7 @@ export default {
   //   justify-content: space-between;
   background: #ffffff;
   padding: 0.533333rem 0.586667rem;
-  height: 5.253333rem;
+  height: 5.4rem;
   box-sizing: border-box;
   margin-bottom: 0.24rem;
   .line {

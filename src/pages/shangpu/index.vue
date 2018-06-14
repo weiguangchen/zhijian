@@ -50,13 +50,29 @@
           </div>
         </div>
         <div class="right">
-          <span class="iconfont icon-lianxifangshi" v-if="shopInfo.shop_phone != 0"></span>
+          <span class="iconfont icon-lianxifangshi" v-if="shopInfo.shop_phone == 0"></span>
         </div>
       </div>
 
       <div class="tuangou">
         <div class="tit">
-          <span class="left">
+          <span class="left" v-if="huodong">
+            <!-- <img src="~img/shangpu/tuangou.png" alt="" class="icon"> -->
+            活动({{huodong.length}})
+          </span>
+          <!-- <span class="right">
+            <i class="iconfont icon-dui">随时退</i>
+            <i class="iconfont icon-dui">过期退</i>
+          </span> -->
+        </div>
+        <div class="list">
+          <huodong v-for="(item,index) in huodong" :key="index" :info='item'></huodong>
+        </div>
+      </div>
+
+      <div class="tuangou">
+        <div class="tit">
+          <span class="left" v-if="shopInfo.fw">
             <!-- <img src="~img/shangpu/tuangou.png" alt="" class="icon"> -->
             服务({{shopInfo.fw.length}})
           </span>
@@ -182,11 +198,13 @@
 import { Swiper, SwiperItem, ViewBox, Cell, Group } from "vux";
 import rater from "@/components/star/index";
 import tuangou from "@/components/service/serviceTuan.vue";
+import huodong from "@/components/service/huodong.vue";
 export default {
   data() {
     return {
       val: 3,
-      shopInfo: ""
+      shopInfo: "",
+      huodong:[]
     };
   },
   created() {
@@ -201,6 +219,17 @@ export default {
         console.log(data);
         _this.shopInfo = data[0];
       });
+// 获取所有活动
+      this.$axios
+      .get(this.API_URL + "/Api/Show/get_card", {
+        params: {
+          shop_id: _this.shopId
+        }
+      })
+      .then(({ data }) => {
+        console.log(data);
+        _this.huodong = data;
+      });
   },
   computed: {
     shopId() {
@@ -214,7 +243,8 @@ export default {
     rater,
     tuangou,
     Cell,
-    Group
+    Group,
+    huodong
   }
 };
 </script>

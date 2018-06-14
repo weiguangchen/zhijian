@@ -2,28 +2,28 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-12 17:48:55
+ * @Last Modified time: 2018-06-13 11:38:57
  */
 <template>
-  <div class="page">
-    <ViewBox>
-      <div class="top-ad">
-        <div class="top-input">
-          <span class="add" v-if="address">{{address.city}}</span>
-          <input placeholder='请输入商家名或地点' class="search" />
-
+  <keep-alive>
+    <div class="page">
+      <ViewBox>
+        <div class="top-ad">
+          <div class="top-input">
+            <span class="add" v-if="address">{{address.city}}</span>
+            <input placeholder='请输入商家名或地点' class="search" />
+          </div>
         </div>
-      </div>
-      <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
-      </iframe>
-      <classify :classArr='classArr' v-if="classArr.length"></classify>
-      <div class="huodong">
-        <Swiper :aspect-ratio='0.31'>
-          <SwiperItem>
-            <img src="~img/index/banner.png" alt="">
-          </SwiperItem>
-        </Swiper>
-        <!-- <div class="item">
+        <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
+        </iframe>
+        <classify :classArr='classArr' v-if="classArr.length"></classify>
+        <div class="huodong">
+          <Swiper :aspect-ratio='0.31'>
+            <SwiperItem>
+              <img src="~img/index/banner.png" alt="">
+            </SwiperItem>
+          </Swiper>
+          <!-- <div class="item">
           <img src="~img/index/huodong1.png" alt="">
         </div>
         <div class="item">
@@ -32,18 +32,18 @@
         <div class="item">
           <img src="~img/index/huodong1.png" alt="">
         </div> -->
-      </div>
-      <div class="huodong-list">
-        <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
-        <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
-        <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
-        <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
-      </div>
+        </div>
+        <div class="huodong-list">
+          <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
+          <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
+          <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
+          <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
+        </div>
 
-      <tuijian :info='item' v-for="(item,index) in listArr" :key="index" v-if="item.list.length>0"></tuijian>
+        <tuijian :info='item' v-for="(item,index) in listArr" :key="index" v-if="item.list.length>0"></tuijian>
 
-      <!-- <div class="server-list"> -->
-      <!-- <Sticky>
+        <!-- <div class="server-list"> -->
+        <!-- <Sticky>
           <div class="tit-list">
             <Tab v-model="selectedTab">
               <Tab-item v-for="(item,index) in classArr" :key="index" @on-item-click='changeItem(index)'>{{item.class_name}}</Tab-item>
@@ -51,17 +51,18 @@
           </div>
         </Sticky> -->
 
-      <!-- <div class="list-content"> -->
-      <!-- <div class="content" v-for="(item,index) in classArr" :key='index' v-show='selectedTab == index'>
+        <!-- <div class="list-content"> -->
+        <!-- <div class="content" v-for="(item,index) in classArr" :key='index' v-show='selectedTab == index'>
             <service v-for="(item,index) in listArr['list'+item.id]" :key="index" :fwInfo='item'></service>
           </div> -->
 
-      <!-- </div> -->
-      <!-- </div> -->
+        <!-- </div> -->
+        <!-- </div> -->
 
-    </ViewBox>
+      </ViewBox>
 
-  </div>
+    </div>
+  </keep-alive>
 </template>
 
 <script>
@@ -127,16 +128,18 @@ export default {
     //   });
     // });
   },
+  activated(){
+    
+  },
   methods: {
-    ...mapMutations(["SAVE_ID", "SAVE_USERINFO","SAVE_ADDRESS"]),
+    ...mapMutations(["SAVE_ID", "SAVE_USERINFO", "SAVE_ADDRESS"]),
     getloc() {},
     changeItem(index) {
       this.activeItem = index;
-    },
-   
+    }
   },
   computed: {
-    ...mapState(['address']),
+    ...mapState(["address"]),
     ifContentShow() {}
   },
   components: {

@@ -14,7 +14,6 @@
                         <img :src="userinfo.headimgurl" alt="" class="avatar">
                         <div class="name">{{userinfo.nickname}}</div>
                         <div class="level">普通会员</div>
-
                     </div>
                     <div class="num-info">
                         <div class="num">

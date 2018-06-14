@@ -1,23 +1,23 @@
 <template>
-    <div class="face-list">
-        <ViewBox class="shanghu-page">
-            <bigTitle title="门店管理" class="big-title"></bigTitle>
-            <div class="form-box">
-                <div v-for="(item,index) in faceList" :key="index" class="face-item">
-                    <div class="tit">门店名称：</div>
-                    <div class="face_name">{{item.face_name}}</div>
-                    <div class="op-btn">
-                        <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.id)">编辑</XButton>
-                        <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='deleteFace(item.id)' v-if="item.face_status == 1">停用</XButton>
-                        <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='startFace(item.id)' v-else>启用</XButton>
-                    </div>
-                </div>
-                <XButton type='warn' @click.native="add_face">添加门店</XButton>
+  <div class="face-list">
+    <ViewBox class="shanghu-page">
+      <bigTitle title="门店管理" class="big-title" @showPopup='showPopup'></bigTitle>
+      <div class="form-box">
+        <div v-for="(item,index) in faceList" :key="index" class="face-item">
+          <div class="tit">门店名称：</div>
+          <div class="face_name">{{item.face_name}}</div>
+          <div class="op-btn">
+            <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.id)">编辑</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='deleteFace(item.id)' v-if="item.face_status == 1">停用</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='startFace(item.id)' v-else>启用</XButton>
+          </div>
+        </div>
+        <XButton type='warn' @click.native="add_face">添加门店</XButton>
 
-            </div>
+      </div>
 
-        </ViewBox>
-    </div>
+    </ViewBox>
+  </div>
 </template>
 
 <script>
@@ -30,9 +30,13 @@ export default {
     };
   },
   created() {
+    this.$emit("showPopup", false);
     this.get_face();
   },
   methods: {
+    showPopup(val) {
+      this.$emit("showPopup", val);
+    },
     deleteFace(id) {
       var _this = this;
       this.$axios
@@ -67,16 +71,14 @@ export default {
           }
         });
     },
-    startFace(id){
-
-    },
+    startFace(id) {},
     toChange(id) {
-        this.$router.push({
-            path:'/shanghu/me/addFace',
-            query:{
-                faceId:id
-            }
-        })
+      this.$router.push({
+        path: "/shanghu/me/addFace",
+        query: {
+          faceId: id
+        }
+      });
     },
     add_face() {
       this.$router.push("/shanghu/me/addFace");

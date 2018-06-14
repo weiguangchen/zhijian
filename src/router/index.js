@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-12 16:38:21
+ * @Last Modified time: 2018-06-14 18:34:06
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -16,6 +16,7 @@ import shangpu from '@/pages/shangpu/index'
 import serviceClass from '@/pages/serviceClass/index';
 import serviceList from '@/pages/serviceList/index';
 import serviceDetail from "@/pages/serviceDetail/index";
+import huodongDetail from "@/pages/serviceDetail/huodong";
 import queren from '@/pages/queren/index';
 import me from '@/pages/me/index';
 import youhuijuan from '@/pages/youhuijuan/index';
@@ -37,11 +38,16 @@ import pingjiaList from '@/pages/shanghu/pingjias/pingjiaList'
 import jingying from '@/pages/shanghu/jingying/index'
 import tongji from '@/pages/shanghu/jingying/tongji'
 import orderGl from '@/pages/shanghu/jingying/orderlist'
-import shanghume from '@/pages/shanghu/me/index'
+// 商户后台/我的
+import shanghume from '@/pages/shanghu/me/index1'
+import shanghumeindex from '@/pages/shanghu/me/index'
 import mendian from '@/pages/shanghu/me/mendian'
 import addFace from '@/pages/shanghu/me/addFace'
 import xmgl from '@/pages/shanghu/me/xmgl'
 import fwList from '@/pages/shanghu/me/fwList'
+import addhuodong from '@/pages/shanghu/me/addhuodong'
+
+
 import shangjia from '@/pages/shanghu/shangjia/index';
 import huifupinglun from '@/components/huifupinglun/index';
 import logining from '@/pages/logining/index';
@@ -189,6 +195,10 @@ export const defaultRouterMaps = [{
     path: '/serviceDetail/:serviceId',
     name: 'serviceDetail',
     component: serviceDetail
+  },{
+    path: '/huodongDetail/:huodongId',
+    name: 'huodongDetail',
+    component: huodongDetail
   }, {
     path: '/pinglun/:serviceId',
     name: 'pinglun',
@@ -221,6 +231,130 @@ export const defaultRouterMaps = [{
     path: '/logining',
     name: 'logining',
     component: logining,
+  },
+  {
+    path: '/shanghu',
+    component: shanghu,
+    name:'shanghu',
+    // meta: {
+    //   role: ['shanghu']
+    // },
+    children: [{
+        path: 'yanzheng',
+        component: yanzheng,
+        name:'yanzheng',
+        // meta: {
+        //   role: ['shanghu']
+        // },
+        children: [{
+          path: 'xfm',
+          name:'yanzhengxfm',
+          component: xfm,
+          meta: {
+            role: ['shanghu']
+          },
+        }, {
+          path: 'huodong',
+          name:'yanzhenghuodong',
+          component: huodongyz,
+          meta: {
+            role: ['shanghu']
+          },
+        }]
+      },
+      {
+        path: 'pingjias',
+        name:'pingjias',
+        component: pingjias,
+        // meta: {
+        //   role: ['shanghu']
+        // },
+      },
+      {
+        path: 'pingjiaList/:pingjiaId',
+        name:'pingjiaList',
+        component: pingjiaList,
+        // meta: {
+        //   role: ['shanghu']
+        // },
+      },
+      {
+        path: 'jingying',
+        name:'jingying',
+        component: jingying,
+        // meta: {
+        //   role: ['shanghu']
+        // },
+      },
+      {
+        path: 'jingying/tongji',
+        name:'tongji',
+        component: tongji,
+        // meta: {
+        //   role: ['shanghu']
+        // }
+      },
+      {
+        path: 'jingying/orderGl',
+        name:'orderGl',
+        component: orderGl,
+        // meta: {
+        //   role: ['shanghu']
+        // }
+      },
+      {
+        path: 'me',
+        name:'shanghume',
+        component: shanghume,
+        // meta: {
+        //   role: ['shanghu']
+        // },
+        children: [{
+          path: 'index',
+          name:'shanghumeindex',
+          component: shanghumeindex,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        },{
+          path: 'xmgl',
+          name:'shanghumexmgl',
+          component: xmgl,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        },{
+          path: 'fwList',
+          name:'shanghumefwlist',
+          component: fwList,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        },{
+          path: 'mendian',
+          name:'shanghumemendian',
+          component: mendian,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        },{
+          path: 'addhuodong',
+          name:'shanghumeaddhuodong',
+          component: addhuodong,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        },{
+          path: 'addFace',
+          name:'shanghumeaddface',
+          component: addFace,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        }],
+
+      }
+    ]
   }
 ]
 
@@ -341,38 +475,40 @@ router.beforeEach((to, from, next) => {
 
   if (to.query.id && /^\/logining/.test(to.fullPath)) {
     VueCookies.set('user', to.query.id);
-    window.location.href = 'http://192.168.31.75:8081/';
-    // window.location.href = 'http://qd.daonian.cn/';
+    // window.location.href = 'http://192.168.31.75:8081/';
+    window.location.href = 'http://qd.daonian.cn/';
   }
 
-  if (!userId) {
-    // 没有cookies
-    window.location.href =
-      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-  } else {
-    // 有cookies
-    axios.get(API_URL + '/api/Show/get_user', {
-      params: {
-        id: userId
-      }
-    }).then(res => {
+  // if (!/^\/shanghu/.test(to.fullPath)) {
+    if (!userId) {
+      // 没有cookies
+      window.location.href =
+        "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+    } else {
+      // 有cookies
+      axios.get(API_URL + '/api/Show/get_user', {
+        params: {
+          id: userId
+        }
+      }).then(res => {
+        if (res.data[0].is_user == 1) {
+          // 该用户有效
+          muta.SAVE_ID(store.state, userId);
+          muta.SAVE_USERINFO(store.state, res.data[0]);
+          next();
 
-      if (res.data[0].is_user == 1) {
-        // 该用户有效
-        muta.SAVE_ID(store.state, userId);
-        muta.SAVE_USERINFO(store.state, res.data[0]);
-        next();
-
-      } else {
-        // 该用户无效
-        console.log('无效cookie，删除')
-        VueCookies.delete('user');
-        muta.SAVE_ID(store.state, '');
-        muta.SAVE_USERINFO(store.state, {});
-        next('/index');
-      }
-    });
-  }
+        } else {
+          // 该用户无效
+          console.log('无效cookie，删除')
+          VueCookies.delete('user');
+          muta.SAVE_ID(store.state, '');
+          muta.SAVE_USERINFO(store.state, {});
+          next('/index');
+        }
+      });
+    }
+  // }
+  // next();
 
 
 

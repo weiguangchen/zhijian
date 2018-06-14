@@ -50,6 +50,7 @@ import { ViewBox, XHeader, Swiper, SwiperItem, Sticky, Loading,Selector,Group } 
 import { InfiniteScroll } from "vue-ydui/dist/lib.px/infinitescroll";
 import { Layout } from "vue-ydui/dist/lib.px/layout";
 export default {
+  name:'service-list',
   data() {
     return {
       loading: false,
