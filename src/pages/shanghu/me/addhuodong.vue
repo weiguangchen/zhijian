@@ -53,7 +53,7 @@
                 </div>
                 <div class="form-group">
                     <h2 class="sub-title">支持门店:</h2>
-                    <Checker type='checkbox' v-model="faceLVal" class="check-box" default-item-class="demo1-item" selected-item-class="demo1-item-selected icon-duigou iconfont">
+                    <Checker type='checkbox' v-model="faceLVal" class="check-box" default-item-class="checker-item" selected-item-class="checker-item-selected icon-duigou iconfont">
                         <div class="check-item" v-for="(item,index) in face_list" :key="index">
                             <CheckerItem :value='item.id'></CheckerItem>
                             {{item.face_name}}
@@ -63,7 +63,7 @@
                 </div>
                 <div class="form-group">
                     <h2 class="sub-title">图文详情:</h2>
-                    <Checker type='radio' v-model="detail" :radio-required='true' class="check-box" default-item-class="demo1-item" selected-item-class="demo1-item-selected icon-duigou iconfont">
+                    <Checker type='radio' v-model="detail" :radio-required='true' class="check-box" default-item-class="checker-item " selected-item-class="checker-item-selected icon-duigou iconfont">
                         <div class="check-item" v-for="(item,index) in detail_list" :key="index">
                             <CheckerItem :value='item.id'></CheckerItem>
                             {{item.hd_content_name}}(预览)
@@ -164,7 +164,7 @@ export default {
   },
   created() {
     this.$eruda.init();
-      
+    this.checkSystem();
     var _this = this;
     this.$emit("showPopup", false);
 
@@ -380,7 +380,7 @@ export default {
         success: function(res) {
           var serverId = res.serverId; // 返回图片的服务器端ID
           _this.$axios
-            .get("/api/api/wechat/bcimg", {
+            .get(_this.API_URL+"/api/wechat/bcimg", {
               params: {
                 imgs: res.serverId
               }
@@ -430,7 +430,7 @@ export default {
     KeyBoard,
     XNumber
   },
-  mixins: [wxConfig, checkLogin]
+  mixins: [checkLogin]
 };
 </script>
 
@@ -479,11 +479,11 @@ export default {
       border-radius: 50%;
       margin-right: 0.213333rem;
     }
-    .demo1-item {
+    .checker-item {
       @extend %checker;
       border: 1px solid #000000;
     }
-    .demo1-item-selected {
+    .checker-item-selected {
       position: relative;
       color: #df3331;
       &::before {

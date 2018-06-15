@@ -8,7 +8,9 @@ const mutations = {
   SAVE_ADDRESS: (state, preload) => {
     state.address = preload;
   },
-
+  SET_ENTRYURL: (state, preload) => {
+    state.entryUrl = preload;
+  },
 }
 
 export default mutations;

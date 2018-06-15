@@ -173,28 +173,28 @@ export default {
         _this.two_class_all = res.data.fw;
       });
 
-    // if (this.querys) {
-    //   this.getOldInfo().then(res => {
-    //     console.log("旧数据");
-    //     console.log(res.fw_face);
-    //     // console.log('门店数组')
-    //     // console.log(JSON.parse(res.fw_face))
-    //     this.fw_name = res.fw_mingzi;
-    //     this.fw_short_info = res.sub_name;
-    //     this.fw_intr = res.sub_content;
-    //     this.one_class_val = res.fw_cid;
-    //     this.two_class_val = res.fw_id;
-    //     var face = res.fw_face.map(item => {
-    //       return item.face_id;
-    //     });
-    //     this.face = face;
-    //     this.tupian = res.fw_img;
-    //     this.youxiao = parseInt(res.use_day);
-    //     this.yuanjia = res.y_money;
-    //     this.xianjia = res.money;
-    //     this.jiesuanjia = res.j_money;
-    //   });
-    // }
+    if (this.querys) {
+      this.getOldInfo().then(res => {
+        console.log("旧数据");
+        console.log(res.fw_face);
+        // console.log('门店数组')
+        // console.log(JSON.parse(res.fw_face))
+        this.fw_name = res.fw_mingzi;
+        this.fw_short_info = res.sub_name;
+        this.fw_intr = res.sub_content;
+        this.one_class_val = res.fw_cid;
+        this.two_class_val = res.fw_id;
+        var face = res.fw_face.map(item => {
+          return item.face_id;
+        });
+        this.face = face;
+        this.tupian = res.fw_img;
+        this.youxiao = parseInt(res.use_day);
+        this.yuanjia = res.y_money;
+        this.xianjia = res.money;
+        this.jiesuanjia = res.j_money;
+      });
+    }
   },
   watch: {
     two_class_val(newval) {
@@ -318,78 +318,78 @@ export default {
       //   return false;
       // }
     },
-    // changeFw() {
-    //   var _this = this;
-    //   this.checkForm().then(
-    //     res => {
-    //       console.log("成功");
-    //       this.$axios
-    //         .get(_this.API_URL+"/api/ShopFw/update_shop_fw", {
-    //           params: {
-    //             fw_mingzi: this.fw_name,
-    //             sub_name: this.fw_short_info,
-    //             sub_content: this.fw_intr,
-    //             fw_cid: this.one_class_val,
-    //             fw_id: this.two_class_val,
-    //             fw_face: this.face,
-    //             fw_img: this.tupian,
-    //             use_day: this.youxiao,
-    //             y_money: this.yuanjia,
-    //             money: this.xianjia,
-    //             j_money: this.jiesuanjia,
-    //             shop_id: 1,
-    //             id: _this.querys
-    //           }
-    //         })
-    //         .then(res => {
-    //           //   成功返回1不成功返回0
-    //           console.log(res);
-    //           if (res.data.status == 1) {
-    //             this.$vux.alert.show({
-    //               title: "提示",
-    //               content: "修改服务成功，请等待审核",
-    //               onHide() {
-    //                 _this.$router.replace({
-    //                   path: "/shanghu/me"
-    //                 });
-    //               }
-    //             });
-    //           } else if (res.data.status == 0) {
-    //             this.$vux.alert.replace({
-    //               title: "提示",
-    //               content: "修改服务失败，请重试",
-    //               onHide() {
-    //                 _this.$router.push({
-    //                   path: "/shanghu/me/xmgl"
-    //                 });
-    //               }
-    //             });
-    //           }
-    //         });
-    //     },
-    //     err => {
-    //       console.log("失败");
-    //     }
-    //   );
+    changeFw() {
+      var _this = this;
+      this.checkForm().then(
+        res => {
+          console.log("成功");
+          this.$axios
+            .get(_this.API_URL+"/api/ShopFw/update_shop_fw", {
+              params: {
+                fw_mingzi: this.fw_name,
+                sub_name: this.fw_short_info,
+                sub_content: this.fw_intr,
+                fw_cid: this.one_class_val,
+                fw_id: this.two_class_val,
+                fw_face: this.face,
+                fw_img: this.tupian,
+                use_day: this.youxiao,
+                y_money: this.yuanjia,
+                money: this.xianjia,
+                j_money: this.jiesuanjia,
+                shop_id: 1,
+                id: _this.querys
+              }
+            })
+            .then(res => {
+              //   成功返回1不成功返回0
+              console.log(res);
+              if (res.data.status == 1) {
+                this.$vux.alert.show({
+                  title: "提示",
+                  content: "修改服务成功，请等待审核",
+                  onHide() {
+                    _this.$router.replace({
+                      path: "/shanghu/me"
+                    });
+                  }
+                });
+              } else if (res.data.status == 0) {
+                this.$vux.alert.replace({
+                  title: "提示",
+                  content: "修改服务失败，请重试",
+                  onHide() {
+                    _this.$router.push({
+                      path: "/shanghu/me/xmgl"
+                    });
+                  }
+                });
+              }
+            });
+        },
+        err => {
+          console.log("失败");
+        }
+      );
 
-    //   // if (!this.youxiao || Number.isInteger(this.youxiao)) {
-    //   //   this.alertShow = true;
-    //   //   this.modalInfo = "请填写正确有效期";
-    //   //   return false;
-    //   // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-    //   //   this.alertShow = true;
-    //   //   this.modalInfo = "请填写原价";
-    //   //   return false;
-    //   // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-    //   //   this.alertShow = true;
-    //   //   this.modalInfo = "请填写现价";
-    //   //   return false;
-    //   // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-    //   //   this.alertShow = true;
-    //   //   this.modalInfo = "请填写结算价";
-    //   //   return false;
-    //   // }
-    // },
+      // if (!this.youxiao || Number.isInteger(this.youxiao)) {
+      //   this.alertShow = true;
+      //   this.modalInfo = "请填写正确有效期";
+      //   return false;
+      // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
+      //   this.alertShow = true;
+      //   this.modalInfo = "请填写原价";
+      //   return false;
+      // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
+      //   this.alertShow = true;
+      //   this.modalInfo = "请填写现价";
+      //   return false;
+      // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
+      //   this.alertShow = true;
+      //   this.modalInfo = "请填写结算价";
+      //   return false;
+      // }
+    },
     checkForm() {
       var _this = this;
       console.log(this.youxiao);
@@ -484,19 +484,19 @@ export default {
       });
     },
     // 获取已有数据
-    // getOldInfo() {
-    //   var _this = this;
-    //   return this.$axios
-    //     .get(this.API_URL + "/api/ShopFw/edit_fw", {
-    //       params: {
-    //         id: _this.querys
-    //       }
-    //     })
-    //     .then(res => {
-    //       console.log(res.data.list[0]);
-    //       return res.data.list[0];
-    //     });
-    // }
+    getOldInfo() {
+      var _this = this;
+      return this.$axios
+        .get(this.API_URL + "/api/ShopFw/edit_fw", {
+          params: {
+            id: _this.querys
+          }
+        })
+        .then(res => {
+          console.log(res.data.list[0]);
+          return res.data.list[0];
+        });
+    }
   },
   computed: {
     querys() {

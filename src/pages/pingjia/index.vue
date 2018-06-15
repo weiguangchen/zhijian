@@ -182,7 +182,7 @@ export default {
       return this.$route.params.orderNum;
     }
   },
-  mixins: [wxConfig, checkLogin]
+  mixins: [checkLogin]
 };
 </script>
 

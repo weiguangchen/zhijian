@@ -28,10 +28,11 @@ Vue.prototype.$cookies = VueCookies;
 import globaljs from "@/assets/js/global.js";
 Vue.use(globaljs);
 
-import  { AlertPlugin,ConfirmPlugin } from 'vux'
+import  { AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin  } from 'vux'
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
-
+Vue.use(LoadingPlugin)
+Vue.use(ToastPlugin)
 import 'babel-polyfill'
 /* vux组件 */
 // import { Tabbar, TabbarItem } from 'vux'

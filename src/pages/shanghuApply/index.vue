@@ -239,7 +239,7 @@ export default {
     KeyBoard,
     myMap
   },
-  mixins: [wxConfig, checkLogin]
+  mixins: [checkLogin]
 };
 </script>
 

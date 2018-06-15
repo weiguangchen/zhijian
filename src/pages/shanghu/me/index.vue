@@ -20,7 +20,6 @@
 
 <script>
 import { Popup } from "vue-ydui/dist/lib.px/popup";
-/* 使用px：import {ActionSheet} from 'vue-ydui/dist/lib.px/actionsheet'; */
 
 import { ViewBox, Selector, Group, XButton, XInput, Confirm, Cell } from "vux";
 import bigTitle from "@/components/bigTitle/index";

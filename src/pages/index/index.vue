@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-13 11:38:57
+ * @Last Modified time: 2018-06-15 13:10:04
  */
 <template>
   <keep-alive>
@@ -156,7 +156,7 @@ export default {
     Swiper,
     SwiperItem
   },
-  mixins: [wxConfig]
+  mixins: []
 };
 </script>
 

@@ -143,7 +143,7 @@ export default {
       }
     }
   },
-  mixins: [wxConfig]
+  mixins: []
 };
 </script>
 
