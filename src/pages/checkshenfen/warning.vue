@@ -1,11 +1,11 @@
 <template>
-    <div>
-        <h1>提示</h1>
+    <div class="warning">
+        <h1 class="title">提示</h1>
         <div class="content">
             抱歉，确认信息失败<br/> 加盟商信息与该手机号码不匹配
             <br/> 请联系您的代理商
         </div>
-        <XButton @click.native='queren'>点击返回公众号 ({time}s)</XButton>
+        <XButton @click.native='queren' class="xbtn" type='warn'>点击返回公众号 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{time}}s)</XButton>
     </div>
 </template>
 
@@ -25,8 +25,9 @@ export default {
       this.$router.replace("/index");
     },
     djs() {
-      setTimeout(() => {
-        this.time--;
+      var _this = this;
+      setInterval(() => {
+        this.time = this.time-1;
         if (this.time <= 0) {
           this.$router.replace("/index");
         }
@@ -40,4 +41,17 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.warning{
+  padding: 1.2rem .4rem;
+  @include font-dpr(17px);
+  line-height: .88rem;
+  .title{
+    @include font-dpr(33px);
+    font-weight: bold;
+    margin-bottom: 1.6rem;
+  }
+  .xbtn{
+    margin-top: 1.333333rem;
+  }
+}
 </style>

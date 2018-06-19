@@ -1,32 +1,32 @@
 <template>
-  <div class="page queren">
-    <div class="fw_info">
-      <img :src="fwInfo.fw_img" alt="" class="thumb">
-      <div class="fw_txt">
-        <div class="fw_name">{{fwInfo.fw_mingzi}}</div>
-        <div class="fw_content">{{fwInfo.sub_content}}</div>
-      </div>
+    <div class="page queren">
+        <div class="fw_info">
+            <img :src="huodongInfo.card_img" alt="" class="thumb">
+            <div class="fw_txt">
+                <div class="fw_name">{{huodongInfo.card_name}}</div>
+                <div class="fw_content">{{huodongInfo.card_subname}}</div>
+            </div>
+        </div>
+        <div class="fw_num">
+            <Group>
+                <XNumber title='购买数量' :min='1' v-model="num"></XNumber>
+                <Cell title='总价' :value='money'></Cell>
+            </Group>
+        </div>
+        <div class="fw_time">
+            <Group>
+                <XInput title='联系人' v-model="lianxiren"></XInput>
+            </Group>
+            <Group>
+                <XInput title='联系电话' v-model="phone"></XInput>
+            </Group>
+            <!-- <Group>
+                <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress"></XInput>
+            </Group> -->
+        </div>
+        <XButton class="xbtn" type='warn' @click.native='buy'>结算</XButton>
+        <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
     </div>
-    <div class="fw_num">
-      <Group>
-        <XNumber title='购买数量' :min='1' v-model="num"></XNumber>
-        <Cell title='总价' :value='money'></Cell>
-      </Group>
-    </div>
-    <div class="fw_time">
-      <Group>
-        <XInput title='联系人' v-model="lianxiren"></XInput>
-      </Group>
-      <Group>
-        <XInput title='联系电话' v-model="phone"></XInput>
-      </Group>
-      <Group>
-        <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress"></XInput>
-      </Group>
-    </div>
-    <XButton class="xbtn" type='warn' @click.native='buy'>结算</XButton>
-    <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
-  </div>
 </template>
 
 <script>
@@ -36,7 +36,7 @@ import checkLogin from "@/mixins/checkLogin.js";
 export default {
   data() {
     return {
-      fwInfo: {},
+      huodongInfo: {},
       num: 1,
       mapInfo: "",
       mapShow: false,
@@ -73,25 +73,19 @@ export default {
             position: "middle"
           });
           return false;
-        } else if (!this.mapInfo) {
-          this.$vux.toast.show({
-            text: "请选择收货地址",
-            position: "middle"
-          });
-          return false;
         } else {
           this.$vux.confirm.show({
             title: "提示",
-            content: "是否购买该服务？",
+            content: "是否购买该活动？",
             onCancel() {},
             onConfirm() {
               _this.$axios
-                .get(_this.API_URL + "/api/WxPay/pay", {
+                .get(_this.API_URL + "/api/BkPay/pay", {
                   params: {
-                    shop_fw_id: _this.serviceId,
-                    num: _this.num,
+                    bk_id: _this.huodongId,
+                    // num: _this.num,
                     uid: _this.id,
-                    address: _this.mapInfo.poiaddress,
+                    // address: _this.mapInfo.poiaddress,
                     dianhua: _this.phone,
                     xingming: _this.lianxiren
                   }
@@ -115,7 +109,7 @@ export default {
                 .then(res => {
                   console.log("支付成功回调");
                   console.log(res);
-                  return _this.$axios.get(_this.API_URL + "/api/WxPay/fs", {
+                  return _this.$axios.get(_this.API_URL + "/api/BkPay/fs", {
                     params: {
                       order_num: _this.orderNum
                     }
@@ -126,10 +120,10 @@ export default {
                   console.log(res);
                   _this.$vux.alert.show({
                     title: "提示",
-                    content: "购买成功,请在我的订单中查看消费码！",
+                    content: "购买成功,请在我的优惠券中查看！",
                     onHide() {
                       _this.$router.push({
-                        path: "/me"
+                        path: "/youhuijuan"
                       });
                     }
                   });
@@ -152,22 +146,23 @@ export default {
     get_fw_info() {
       var _this = this;
       this.$axios
-        .get(_this.API_URL + "/Api/WxPay/yes_order", {
+        .get(_this.API_URL + "/Api/Show/get_hd_content", {
           params: {
-            id: _this.serviceId
+            id: _this.huodongId
           }
         })
         .then(({ data }) => {
-          _this.fwInfo = data[0];
+          console.log(data);
+          _this.huodongInfo = data[0];
         });
     }
   },
   computed: {
-    serviceId() {
-      return this.$route.query.serviceId;
+    huodongId() {
+      return this.$route.query.huodongId;
     },
     money() {
-      return `${this.num * this.fwInfo.money}元`;
+      return `${this.num * this.huodongInfo.card_money}元`;
     }
   },
   components: {

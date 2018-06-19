@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-15 13:10:04
+ * @Last Modified time: 2018-06-19 14:29:25
  */
 <template>
   <keep-alive>
@@ -82,7 +82,6 @@ import {
 import service from "@/components/service/service";
 import classify from "@/components/classify/index";
 import tuijian from "@/components/tuijian/index";
-import wxConfig from "@/mixins/wxConfig.js";
 
 export default {
   data() {
@@ -156,7 +155,6 @@ export default {
     Swiper,
     SwiperItem
   },
-  mixins: []
 };
 </script>
 

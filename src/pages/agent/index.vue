@@ -11,10 +11,11 @@
                 </div>
                 <div class="me-info">
                     <div class="avatar-box">
-                        <img src="~img/me/avatar.png" alt="" class="avatar">
-                        <div class="name">春天的小树苗</div>
-                        <div class="level">股东代理</div>
-
+                        <img :src="userinfo.headimgurl" alt="" class="avatar">
+                        <div class="name">{{userinfo.nickname}}</div>
+                        <div class="level" v-if="userinfo.dl[0].dl_jb == 1">股东代理</div>
+                        <div class="level" v-else-if="userinfo.dl[0].dl_jb == 2">市级代理</div>
+                        <div class="level" v-else-if="userinfo.dl[0].dl_jb == 3">区级代理</div>
                     </div>
                     <div class="num-info">
                         <div class="num">
@@ -33,19 +34,19 @@
             <div class="order-term">
                 <div class="title">我的订单</div>
                 <div class="order-terms">
-                    <div class="order-term-item">
+                    <div class="order-term-item" v-if="userinfo.dl[0].dl_jb == 1">
                         <div class="icon">
                             <span class="iconfont icon-shijidaili"></span>
                         </div>
                         <div class="text">市级代理</div>
                     </div>
-                    <div class="order-term-item">
+                    <div class="order-term-item" v-if="userinfo.dl[0].dl_jb == 1||userinfo.dl[0].dl_jb == 2">
                         <div class="icon">
                             <span class="iconfont icon-quxiandaili"></span>
                         </div>
                         <div class="text">区县代理</div>
                     </div>
-                    <div class="order-term-item">
+                    <div class="order-term-item" v-if="userinfo.dl[0].dl_jb == 1||userinfo.dl[0].dl_jb == 2||userinfo.dl[0].dl_jb == 3">
                         <div class="icon">
                             <span class="iconfont icon-jiamengshang"></span>
                         </div>
@@ -83,11 +84,14 @@
 
 <script>
 import { XButton, Group, Cell, ViewBox } from "vux";
+import checkLogin from "@/mixins/checkLogin.js";
 export default {
   data() {
     return {};
   },
-  components: { XButton, Group, Cell, ViewBox }
+  beforeRouteEnter() {},
+  components: { XButton, Group, Cell, ViewBox },
+  mixins: [checkLogin]
 };
 </script>
 

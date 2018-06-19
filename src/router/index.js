@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-15 15:42:07
+ * @Last Modified time: 2018-06-19 16:22:59
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -18,6 +18,7 @@ import serviceList from '@/pages/serviceList/index';
 import serviceDetail from "@/pages/serviceDetail/index";
 import huodongDetail from "@/pages/serviceDetail/huodong";
 import queren from '@/pages/queren/index';
+import huodongqueren from '@/pages/queren/huodong';
 import me from '@/pages/me/index';
 import youhuijuan from '@/pages/youhuijuan/index';
 import orderList from '@/pages/orderList/index';
@@ -49,6 +50,8 @@ import xmgl from '@/pages/shanghu/me/xmgl'
 import bianjiFw from '@/pages/shanghu/me/bianjiFw'
 import fwList from '@/pages/shanghu/me/fwList'
 import addhuodong from '@/pages/shanghu/me/addhuodong'
+import account from '@/pages/shanghu/me/account'
+import setAuthority from '@/pages/shanghu/me/authority'
 
 
 import shangjia from '@/pages/shanghu/shangjia/index';
@@ -211,6 +214,12 @@ export const defaultRouterMaps = [{
       default: queren,
     }
   }, {
+    path: '/huodongqueren',
+    name: 'queren',
+    components: {
+      default: huodongqueren,
+    }
+  }, {
     path: '/me/pingjia/:orderNum',
     name: 'pingjia',
     components: {
@@ -268,11 +277,11 @@ export const defaultRouterMaps = [{
     path: '/checkshenfen',
     name: 'checkshenfen',
     component: checkshenfen,
-    children:[{
-      path:'warning',
-      name:'checkwarning',
-      component:checkwarning
-    }]
+  },
+  {
+    path: '/warning',
+    name: 'checkwarning',
+    component: checkwarning
   },
   {
     path: '/shanghu',
@@ -400,6 +409,20 @@ export const defaultRouterMaps = [{
           // meta: {
           //   role: ['shanghu']
           // }
+        }, {
+          path: 'account',      
+          name: 'account',
+          component: account,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        }, {
+          path: 'setAuthority',      
+          name: 'setAuthority',
+          component: setAuthority,
+          // meta: {
+          //   role: ['shanghu']
+          // }
         }],
 
       }
@@ -519,10 +542,10 @@ const router = new Router({
 
 // 进入每个url时判断是否登录
 router.beforeEach((to, from, next) => {
-
   var id = store.state.id;
   var userinfo = store.state.userinfo;
-  var userId = VueCookies.get("user");
+
+
   // 判断设备授权jssdk
   if (window.__wxjs_is_wkwebview) {
     // ios微信
@@ -540,15 +563,18 @@ router.beforeEach((to, from, next) => {
   // 授权登录回调
   if (to.query.id && /^\/logining/.test(to.fullPath)) {
     VueCookies.set('user', to.query.id);
+    var url = VueCookies.get('enterBeforeUrl');
+    // VueCookies.set('enterBeforeUrl','');
+    console.log('进入地址:' + url)
+    // router.push(url);
     // window.location.href = 'http://192.168.31.75:8081/';
-    window.location.href = VueCookies.get('enter_url');
     // window.location.href = 'http://qd.daonian.cn';
   }
 
 
-  // if (!/^\/shanghu/.test(to.fullPath)) {
+  var userId = VueCookies.get("user");
   if (!userId) {
-    VueCookies.set('enter_url', window.location.href);
+    VueCookies.set('enterBeforeUrl', to.fullPath);
     // 没有cookies
     window.location.href =
       "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
@@ -560,6 +586,8 @@ router.beforeEach((to, from, next) => {
         id: userId
       }
     }).then(res => {
+      console.log('获取信息')
+      console.log(res)
       if (res.data[0].is_user == 1) {
         // 该用户有效
         muta.SAVE_ID(store.state, userId);
@@ -574,48 +602,49 @@ router.beforeEach((to, from, next) => {
         muta.SAVE_USERINFO(store.state, {});
         next('/index');
       }
-    }).then(res => {
-      if (/^\/agent/.test(to.fullPath)) {
-        // 进入代理商页
-        if (store.state.userinfo.is_dl == 1) {
-          // 是分销商
-          next('/agent')
-        } else {
-          // 不是代理商
-          if (!store.state.uphone) {
-            // 未验证手机号
-            next('/checkshenfen?checkType=daili');
-          } else {
-            // 已验证手机号
-            next('/index')
-          }
-
-        }
-      }
     })
+    .then(res => {
+      console.log('判断代理商')
+      next();
+      // if (/^\/agent/.test(to.fullPath)) {
+      //   console.log('1')
+      //   // 进入代理商页
+      //   if (store.state.userinfo.is_dl == 1) {
+      //     console.log('2')          
+      //     // 是分销商
+      //     next()
+      //   } else {
+      //     console.log('3')                  
+      //     next('/checkshenfen?checkType=daili');
 
 
+      //   }
+      // }
 
+
+      // console.log('判断商户')
+      // if (/^\/shanghu/.test(to.fullPath)) {
+      //   console.log('1')
+      //   // 进入商户页
+      //   if (store.state.userinfo.is_shop == 1) {
+      //     console.log('2')          
+      //     // 是商户
+      //     next('/shanghu/me/index')
+      //   } else {
+      //     // 不是商户
+      //     console.log('3')                  
+      //     next('/index');
+
+      //   }
+      // }
+    })
   }
 
 
 
 
 
-  // 进入后台验证
-  // if (/^\/shanghu/.test(to.fullPath)) {
-  //   // 判断是否是商户
-  //   if (store.state.userinfo.shop_status != 1) {
-  //     console.log('不是商户')
-  //     next({
-  //       path: '/',
-  //       replace:true
-  //     });
-  //   } else {
-  //     console.log('是商户')
-  //     next();
-  //   }
-  // }
+
 
 
 

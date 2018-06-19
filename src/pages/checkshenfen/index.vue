@@ -1,29 +1,29 @@
 <template>
-    <div class="shanghu-page">
-        <bigTitle title="确认身份" :icon='false'></bigTitle>
-        <div class="my-form">
-            <div class="form-box">
+  <div class="shanghu-page">
+    <bigTitle title="确认身份" :icon='false'></bigTitle>
+    <div class="my-form">
+      <div class="form-box">
 
-                <CellGroup>
-                    <CellItem>
-                        <input type="text" slot="right" placeholder="请输入手机号码" v-model="phone">
-                        <!-- ↓↓关键代码是这里↓↓ -->
-                        <SendCode slot="right" v-model="start1" @click.native="sendCode1" type="warning"></SendCode>
-                        <!-- ↑↑关键代码是这里↑↑ -->
+        <CellGroup>
+          <CellItem>
+            <input type="text" slot="right" placeholder="请输入手机号码" v-model="phone">
+            <!-- ↓↓关键代码是这里↓↓ -->
+            <SendCode slot="right" v-model="start1" @click.native="sendCode1" type="warning"></SendCode>
+            <!-- ↑↑关键代码是这里↑↑ -->
 
-                    </CellItem>
-                    <CellItem>
-                        <span slot="left">验证码：</span>
-                        <input slot="right" type="number" placeholder="请输入验证码">
+          </CellItem>
+          <CellItem>
+            <span slot="left">验证码：</span>
+            <input slot="right" type="number" placeholder="请输入验证码" v-model="code">
 
-                    </CellItem>
-                </CellGroup>
-                <XButton type='warn' class="xbtn" @click.native="yanzheng">确认</XButton>
-            </div>
-
-        </div>
+          </CellItem>
+        </CellGroup>
+        <XButton type='warn' class="xbtn" @click.native="yanzheng">确认</XButton>
+      </div>
 
     </div>
+
+  </div>
 
 </template>
 
@@ -37,7 +37,9 @@ export default {
   data() {
     return {
       start1: false,
-      phone: ""
+      phone: "",
+      code: "",
+      yzm: ""
     };
   },
   components: {
@@ -54,7 +56,7 @@ export default {
         text: "发送中"
       });
       const params = {
-        moblie: _this.phone
+        mobile: _this.phone
       };
       this.$axios
         .get(_this.API_URL + "/Api/UserShow/fsyzm", {
@@ -68,24 +70,44 @@ export default {
             position: "middle"
           });
           console.log(data);
+          _this.yzm = data.code;
         });
     },
     yanzheng() {
       var _this = this;
-      const params = {
-        uphone: _this.phone,
-        id: _this.id
-      };
-      this.$axios
-        .get(_this.API_URL + "/Api/UserShow/yzm_ok", {
-          params
-        })
-        .then(({ data }) => {
-          console.log(data);
+
+      if (this.yzm != this.code) {
+        this.$vux.toast.show({
+          text: "请输入正确验证码",
+          position: "middle"
         });
+        return false;
+      } else {
+        this.$axios
+          .get(_this.API_URL + "/Api/UserShow/yzm_ok", {
+            params: {
+              uphone: _this.phone,
+              id: _this.id
+            }
+          })
+          .then(({ data }) => {
+            console.log(data);
+            if(data.status ==1 ){
+              _this.$vux.modal.show({
+                title:'提示',
+                content:'身份验证成功！',
+                onHide(){
+                  _this.$router.replace('/agent');
+                }
+              })
+            }else{
+              _this.$router.replace('/warning');
+            }
+          });
+      }
     }
   },
-  mixin: [checkLogin]
+  mixins: [checkLogin]
 };
 </script>
 

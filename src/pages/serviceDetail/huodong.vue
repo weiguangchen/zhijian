@@ -1,97 +1,97 @@
 <template>
-    <div class="page">
-        <ViewBox class="service-detail">
-            <div class="banner">
-                <div class="share"></div>
-                <Swiper height='5.12rem'>
-                    <!-- <SwiperItem v-for="(item,index) in huodong_info.cardImg" :key="index"><img :src="item" alt=""></SwiperItem> -->
-                </Swiper>
-            </div>
-            <div class="sp-info">
-                <div class="top">
-                    <span class="price">
-                        <span class="num">{{huodong_info.card_money}}</span>元</span>{{huodong_info.card_name}}</div>
-                <div class="bottom">{{huodong_info.card_subname}}</div>
-            </div>
+  <div class="page">
+    <ViewBox class="service-detail">
+      <div class="banner">
+        <div class="share"></div>
+        <Swiper height='5.12rem'>
+          <!-- <SwiperItem v-for="(item,index) in huodong_info.cardImg" :key="index"><img :src="item" alt=""></SwiperItem> -->
+        </Swiper>
+      </div>
+      <div class="sp-info">
+        <div class="top">
+          <span class="price">
+            <span class="num">{{huodong_info.card_money}}</span>元</span>{{huodong_info.card_name}}</div>
+        <div class="bottom">{{huodong_info.card_subname}}</div>
+      </div>
 
-            <!-- <div class="comment">
+      <!-- <div class="comment">
                 <span class="iconfont icon-fuwuxiangqingzan">好评率97%</span>
                 <span class="count">共{{fw_info.token_num}}个消费评价</span>
             </div> -->
 
-            <div class="address1" @click="toShop(huodong_info.shop[0].id)">
-                <div class="top">
-                    <div class="left">
-                        <div class="name">{{huodong_info.shop[0].shop_name}}</div>
-                        <!-- <div class="info">
+      <div class="address1" @click="toShop(huodong_info.shop[0].id)">
+        <div class="top">
+          <div class="left">
+            <div class="name">{{huodong_info.shop[0].shop_name}}</div>
+            <!-- <div class="info">
                             <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
                             <span class="count">28条</span>
                             <span class="juli">5.5KM</span>
                         </div> -->
-                    </div>
-                    <!-- <div class="right">
+          </div>
+          <!-- <div class="right">
                         <span class="iconfont icon-lianxifangshi"></span>
                     </div> -->
-                </div>
-                <!-- <div class="bottom">
+        </div>
+        <!-- <div class="bottom">
                     <span class="iconfont icon-weizhi1"></span>
                     <span class="txt">卫国道泰兴路益寿东里37号楼底商（近仁爱医院）</span>
                 </div> -->
-            </div>
+      </div>
 
-            <div class="detail">
-                <myTitle>
-                    <span>服务详情</span>
-                    <span slot="right">更多图文详情
-                        <i class="iconfont icon-jinru"></i>
-                    </span>
-                </myTitle>
-                <div class="content" v-if="huodong_info.content[0].hd_content" v-html="huodong_info.content[0].hd_content">
+      <div class="detail">
+        <myTitle>
+          <span>服务详情</span>
+          <span slot="right">更多图文详情
+            <i class="iconfont icon-jinru"></i>
+          </span>
+        </myTitle>
+        <div class="content" v-if="huodong_info.content[0].hd_content" v-html="huodong_info.content[0].hd_content">
 
-                </div>
-            </div>
+        </div>
+      </div>
 
-            <!-- <div class="pingjia">
-                <Group>
-                    <Cell :title="'网友点评('+fw_info.token_num+')'">
-                        <span @click="more(fwId)">更多</span>
-                    </Cell>
-                </Group>
+      <!-- <div class="pingjia">
+        <Group>
+          <Cell :title="'网友点评('+fw_info.token_num+')'">
+            <span @click="more(fwId)">更多</span>
+          </Cell>
+        </Group>
 
-                <div class="list">
-                    <pinglun :info='item' v-for="(item,index) in fw_info.token" :key="index"></pinglun>
-                </div>
-            </div> -->
+        <div class="list">
+          <pinglun :info='item' v-for="(item,index) in fw_info.token" :key="index"></pinglun>
+        </div>
+      </div>
 
-            <!-- <div class="hot">
-                <div class="title">小伙伴们还喜欢</div>
-                <friendLike :friendLike='fw_info.friend_like'></friendLike>
+      <div class="hot">
+        <div class="title">小伙伴们还喜欢</div>
+        <friendLike :friendLike='fw_info.friend_like'></friendLike>
 
-            </div> -->
+      </div> -->
 
-            <div class="buy-btn">
-                <div class="opbtn">
-                    <!-- <span>
+      <div class="buy-btn">
+        <div class="opbtn">
+          <!-- <span>
             <i>￥</i>{{fw_info.money}}
             <sup>￥{{fw_info.y_money}}</sup>
           </span> -->
-                    <div class="op-item" @click="toShop(huodong_info.shop[0].id)">
-                        <i class="iconfont icon-dianpu"></i>
-                        <div>店铺</div>
-                    </div>
-                    <div class="op-item">
-                        <i class="iconfont icon-shoucangweixuan"></i>
-                        <div>收藏</div>
-                    </div>
-                    <!-- <div class="op-item">
+          <div class="op-item" @click="toShop(huodong_info.shop[0].id)">
+            <i class="iconfont icon-dianpu"></i>
+            <div>店铺</div>
+          </div>
+          <div class="op-item">
+            <i class="iconfont icon-shoucangweixuan"></i>
+            <div>收藏</div>
+          </div>
+          <!-- <div class="op-item">
             <i class="iconfont icon-dianpu"></i>
             <div>购物车</div>
           </div> -->
-                </div>
-                <div class="buy" @click="buy">立即购买</div>
-            </div>
-        </ViewBox>
-    </div>
+        </div>
+        <div class="buy" @click="buy">立即购买</div>
+      </div>
+    </ViewBox>
+  </div>
 </template>
 <script>
 import { Swiper, SwiperItem, ViewBox, Cell, Group } from "vux";
@@ -106,41 +106,36 @@ export default {
   data() {
     return {
       enable: true,
-      fw_info: {},
       huodong_info: {}
     };
   },
   created() {
     document.title = "活动详情";
-    this.get_fw_info();
+    this.get_hd_info();
   },
   methods: {
     buy() {
       var _this = this;
-
-    //   if (this.id) {
-    //     this.$router.push({
-    //       path: "/queren",
-    //       query: {
-    //         serviceId: _this.fwId
-    //       }
-    //     });
-    //   } else {
-    //     this.$vux.alert.show({
-    //       title: "提示",
-    //       content: "请先登录",
-    //       onHide() {
-    //         _this.$router.push({
-    //           path: "/me"
-    //         });
-    //       }
-    //     });
-    //   }
+      if (this.id) {
+        this.$router.push({
+          path: "/huodongqueren",
+          query: {
+            huodongId: _this.huodongId
+          }
+        });
+      } else {
+        this.$vux.alert.show({
+          title: "提示",
+          content: "请先登录",
+          onHide() {
+            _this.$router.push({
+              path: "/index"
+            });
+          }
+        });
+      }
     },
-    toDetail(id) {
-      this.$router.replace("/serviceDetail/" + id);
-    },
-    get_fw_info() {
+    get_hd_info() {
       var _this = this;
       this.$axios
         .get(_this.API_URL + "/Api/Show/get_hd_content", {
@@ -162,7 +157,7 @@ export default {
   },
   watch: {
     $route() {
-      this.get_fw_info();
+      this.get_hd_info();
     }
   },
   computed: {
@@ -170,11 +165,7 @@ export default {
       return this.$route.params.huodongId;
     }
   },
-  filters: {
-    hotPL(val) {
-      return val.slice(0, 2);
-    }
-  },
+ 
   components: {
     ViewBox,
     Swiper,
