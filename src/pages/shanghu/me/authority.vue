@@ -1,40 +1,38 @@
 <template>
     <div class="authority shanghu-page">
-        <bigTitle title='设置权限' @showPopup='showPopup'></bigTitle>{{tabbar}}
-        <CheckBoxGroup v-model="tabbar" class="checker-box">
-            <div v-for="(item,index) in authList" :key="index">
-                <CheckBox :val='item.id' shape="circle" class="check-title" data-id='1'>{{item.name}}</CheckBox>
-                <CheckBoxGroup v-model="formatModel(item.id)" class="son-box">
-                    <CheckBox shape="circle" val='11' :disabled='tabbar1ed' v-for="(son,index1) in item.son" :key="index1">{{son.name}}</CheckBox>
+        <bigTitle title='设置权限' @showPopup='showPopup'></bigTitle>
+        <div class="checker-box">
+            <!-- <checkItem :check='item' @changeCheck='changeCheck' v-for="(item,index) in authList" :key="index"></checkItem> -->
+            <CheckBoxGroup v-model="tabbar">
+                <CheckBox shape="circle" :val='1' class="check-title">验证管理</CheckBox>
+                <CheckBoxGroup v-model="tabbar1" class="son-box">
+                    <CheckBox shape="circle" :val='11'>验证消费券</CheckBox>
+                    <CheckBox shape="circle" :val='12'>验证优惠码</CheckBox>
+                    <CheckBox shape="circle" :val='13'>验证活动报名</CheckBox>
                 </CheckBoxGroup>
-            </div>
-            <!-- <CheckBox val='1' shape="circle" class="check-title" data-id='1'>验证管理</CheckBox>
-            <CheckBoxGroup v-model="tabbar1" class="son-box">
-                <CheckBox shape="circle" val='11' :disabled='tabbar1ed'>验证消费券</CheckBox>
-                <CheckBox shape="circle" val='12' :disabled='tabbar1ed'>验证优惠券</CheckBox>
-                <CheckBox shape="circle" val='13' :disabled='tabbar1ed'>验证活动报名</CheckBox>
+                <CheckBox shape="circle" :val='2' class="check-title">评价管理</CheckBox>
+                <CheckBoxGroup v-model="tabbar2" class="son-box">
+                    <CheckBox shape="circle" :val='21'>消费评价</CheckBox>
+                    <CheckBox shape="circle" :val='22'>优惠券点评</CheckBox>
+                    <CheckBox shape="circle" :val='23'>活动点评</CheckBox>
+                </CheckBoxGroup>
+                <CheckBox shape="circle" :val='3' class="check-title">经营管理</CheckBox>
+                <CheckBoxGroup v-model="tabbar3" class="son-box">
+                    <CheckBox shape="circle" :val='31'>活动统计</CheckBox>
+                    <CheckBox shape="circle" :val='32'>消费统计</CheckBox>
+                    <CheckBox shape="circle" :val='33'>订单管理</CheckBox>
+                </CheckBoxGroup>
+                <CheckBox shape="circle" :val='4' class="check-title">商戶中心</CheckBox>
+                <CheckBoxGroup v-model="tabbar4" class="son-box">
+                    <CheckBox shape="circle" :val='41'>项目管理</CheckBox>
+                    <CheckBox shape="circle" :val='42'>新建项目</CheckBox>
+                    <CheckBox shape="circle" :val='43'>门店管理</CheckBox>
+                    <CheckBox shape="circle" :val='44'>账户管理</CheckBox>
+                    <CheckBox shape="circle" :val='45'>财务管理</CheckBox>
+                </CheckBoxGroup>
             </CheckBoxGroup>
-            <CheckBox val='2' shape="circle" class="check-title" data-id='2'>评价管理</CheckBox>
-            <CheckBoxGroup v-model="tabbar2" class="son-box">
-                <CheckBox shape="circle" val='21' :disabled='tabbar2ed'>消费评价</CheckBox>
-                <CheckBox shape="circle" val='22' :disabled='tabbar2ed'>优惠券点评</CheckBox>
-                <CheckBox shape="circle" val='23' :disabled='tabbar2ed'>活动点评</CheckBox>
-            </CheckBoxGroup>
-            <CheckBox val='3' shape="circle" class="check-title" data-id='3'>经营管理</CheckBox>
-            <CheckBoxGroup v-model="tabbar3" class="son-box">
-                <CheckBox shape="circle" val='31' :disabled='tabbar3ed'>活动统计</CheckBox>
-                <CheckBox shape="circle" val='32' :disabled='tabbar3ed'>消费统计</CheckBox>
-                <CheckBox shape="circle" val='33' :disabled='tabbar3ed'>订单管理</CheckBox>
-            </CheckBoxGroup>
-            <CheckBox val='4' shape="circle" class="check-title" data-id='4'>商户中心</CheckBox>
-            <CheckBoxGroup v-model="tabbar4" class="son-box">
-                <CheckBox shape="circle" val='41' :disabled='tabbar4ed'>项目管理</CheckBox>
-                <CheckBox shape="circle" val='42' :disabled='tabbar4ed'>新建项目</CheckBox>
-                <CheckBox shape="circle" val='43' :disabled='tabbar4ed'>门店管理</CheckBox>
-                <CheckBox shape="circle" val='44' :disabled='tabbar4ed'>账户管理</CheckBox>
-                <CheckBox shape="circle" val='45' :disabled='tabbar4ed'>财务管理</CheckBox>
-            </CheckBoxGroup> -->
-        </CheckBoxGroup>
+        </div>
+
         <div class="xbtn">
             <XButton type='warn' @click.native='submit'>提交</XButton>
         </div>
@@ -47,6 +45,8 @@ import bigTitle from "@/components/bigTitle/index";
 import { XButton } from "vux";
 import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.rem/checkbox";
 import authList from "./authlist";
+import checkItem from "./check-item";
+import checkLogin from "@/mixins/checkLogin.js";
 export default {
   data() {
     return {
@@ -55,72 +55,78 @@ export default {
       tabbar2: [],
       tabbar3: [],
       tabbar4: [],
-      authorityList: [],
+      auth: [],
       authList
     };
   },
   created() {
     this.$emit("showPopup", false);
+    var oldAuth = JSON.parse(this.userinfo.qx[0].content);
+    console.log(oldAuth);
+    oldAuth.map(m => {
+      this.tabbar.push(m.id);
+      this["tabbar" + m.id] = m.son;
+    });
   },
   methods: {
     showPopup(val) {
       this.$emit("showPopup", val);
     },
-    ifinArray(arr, index) {
-      var arrstr = arr.join("");
-      if (arrstr.indexOf(index) != -1) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     submit() {
-      // this.tabbar.map(m=>{
-      //     var tabbaritem = {};
-      //     tabbaritem.tabbar = m;
-      //     tabbaritem.
-      // })
-    },
-    formatModel(id){
-        return `tabbar${id}`;
+      var _this = this;
+      var authList = [];
+      this.tabbar.map(m => {
+        var tabbar = {};
+        tabbar.id = m;
+        tabbar.son = this["tabbar" + m];
+        authList.push(tabbar);
+      });
+      authList = JSON.stringify(authList);
+      console.log(authList);
+
+      this.$axios
+        .get(this.API_URL + "/Api/UserShow/add_userqx", {
+          //   baseURL: "http://zj.daonian.cn",
+          params: {
+            content: authList,
+            uid: _this.id
+          }
+        })
+        .then(({ data }) => {
+          if (data.status == 1) {
+            _this.$vux.alert.show({
+              title: "提示",
+              content: "权限设置成功！",
+              onHide() {
+                _this.$router.replace({
+                  path: "/shanghu/me/account"
+                });
+              }
+            });
+          } else {
+            _this.$vux.alert.show({
+              title: "提示",
+              content: "权限设置失败！",
+              onHide() {
+                _this.$router.replace({
+                  path: "/shanghu/me/account"
+                });
+              }
+            });
+          }
+        });
     }
   },
-  computed: {
-    tabbar1ed() {
-      if (this.ifinArray(this.tabbar, 1)) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    tabbar2ed() {
-      if (this.ifinArray(this.tabbar, 1)) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    tabbar3ed() {
-      if (this.ifinArray(this.tabbar, 3)) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    tabbar4ed() {
-      if (this.ifinArray(this.tabbar, 4)) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  },
+  watch: {},
+  computed: {},
   components: {
     bigTitle,
     CheckBox,
     CheckBoxGroup,
-    XButton
-  }
+    XButton,
+    checkItem
+  },
+  mixins: [checkLogin]
 };
 </script>
 

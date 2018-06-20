@@ -12,7 +12,7 @@
                     <div class="tit">管理的门店：十一经路店</div>
                     <div class="tit last-tit">账号说明：李海东</div>
                     <div class="xbtn-box">
-                        <XButton :mini='true' :plain='true' type='warn' class="mini-btn">权限设置</XButton>
+                        <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton>
                         <XButton :mini='true' :plain='true' type='warn' class="mini-btn">编辑</XButton>
                     </div>
 
@@ -130,6 +130,12 @@ export default {
     finishAdd(loc) {
       this.mapShow = false;
       this.loc = loc;
+    },
+    setAuth(){
+        this.$router.push('/shanghu/me/setAuthority');
+    },
+    add_son_account(){
+        this.$router.push('/shanghu/me/addSonAccount');
     }
   },
   components: {

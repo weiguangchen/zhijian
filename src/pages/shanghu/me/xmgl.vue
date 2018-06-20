@@ -124,7 +124,7 @@ import { KeyBoard } from "vue-ydui/dist/lib.px/keyboard";
 import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
-import wxConfig from "@/mixins/wxConfig.js";
+// import wxConfig from "@/mixins/wxConfig.js";
 export default {
   data() {
     return {

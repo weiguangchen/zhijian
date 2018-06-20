@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-19 16:22:59
+ * @Last Modified time: 2018-06-20 18:00:12
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -25,11 +25,13 @@ import orderList from '@/pages/orderList/index';
 import orderDetail from '@/pages/orderList/orderDetail';
 import pingjia from '@/pages/pingjia/index';
 import agent from '@/pages/agent/index';
+import addJms from '@/pages/agent/add_jms';
 import pinglun from '@/pages/pinglun/index';
 import shopCar from '@/pages/shopCar/index';
 
 import applyShanghu from '@/pages/shanghuApply/index';
 import checkshenfen from '@/pages/checkshenfen/index'
+import shanghuCheck from '@/pages/checkshenfen/shanghuCheck'
 import checkwarning from '@/pages/checkshenfen/warning'
 // 商户后台
 import shanghu from '@/pages/shanghu/index'
@@ -52,7 +54,7 @@ import fwList from '@/pages/shanghu/me/fwList'
 import addhuodong from '@/pages/shanghu/me/addhuodong'
 import account from '@/pages/shanghu/me/account'
 import setAuthority from '@/pages/shanghu/me/authority'
-
+import addSonAccount from '@/pages/shanghu/me/addSonAccount'
 
 import shangjia from '@/pages/shanghu/shangjia/index';
 import huifupinglun from '@/components/huifupinglun/index';
@@ -233,6 +235,13 @@ export const defaultRouterMaps = [{
       // tab: tab
     }
   }, {
+    path: '/addJms',
+    name: 'addJms',
+    components: {
+      default: addJms,
+      // tab: tab
+    }
+  }, {
     path: '/serviceDetail/:serviceId',
     name: 'serviceDetail',
     component: serviceDetail
@@ -277,6 +286,11 @@ export const defaultRouterMaps = [{
     path: '/checkshenfen',
     name: 'checkshenfen',
     component: checkshenfen,
+  },
+  {
+    path: '/shanghuCheck',
+    name: 'shanghuCheck',
+    component: shanghuCheck,
   },
   {
     path: '/warning',
@@ -410,16 +424,23 @@ export const defaultRouterMaps = [{
           //   role: ['shanghu']
           // }
         }, {
-          path: 'account',      
+          path: 'account',
           name: 'account',
           component: account,
           // meta: {
           //   role: ['shanghu']
           // }
         }, {
-          path: 'setAuthority',      
+          path: 'setAuthority',
           name: 'setAuthority',
           component: setAuthority,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        }, {
+          path: 'addSonAccount',
+          name: 'addSonAccount',
+          component: addSonAccount,
           // meta: {
           //   role: ['shanghu']
           // }
@@ -566,9 +587,12 @@ router.beforeEach((to, from, next) => {
     var url = VueCookies.get('enterBeforeUrl');
     // VueCookies.set('enterBeforeUrl','');
     console.log('进入地址:' + url)
-    // router.push(url);
-    // window.location.href = 'http://192.168.31.75:8081/';
-    // window.location.href = 'http://qd.daonian.cn';
+    // router.push({
+    //   path: url
+    // })
+    // next('/agent')
+    // window.location.href = 'http://192.168.31.75:8081' + url;
+    window.location.href = 'http://qd.daonian.cn' + url;
   }
 
 
@@ -581,63 +605,63 @@ router.beforeEach((to, from, next) => {
   } else {
     // 有cookies
     // 获取用户信息
+
     axios.get(API_URL + '/api/Show/get_user', {
-      params: {
-        id: userId
-      }
-    }).then(res => {
-      console.log('获取信息')
-      console.log(res)
-      if (res.data[0].is_user == 1) {
-        // 该用户有效
-        muta.SAVE_ID(store.state, userId);
-        muta.SAVE_USERINFO(store.state, res.data[0]);
-        next();
-
-      } else {
-        // 该用户无效
-        console.log('无效cookie，删除')
-        VueCookies.delete('user');
-        muta.SAVE_ID(store.state, '');
-        muta.SAVE_USERINFO(store.state, {});
-        next('/index');
-      }
-    })
-    .then(res => {
-      console.log('判断代理商')
-      next();
-      // if (/^\/agent/.test(to.fullPath)) {
-      //   console.log('1')
-      //   // 进入代理商页
-      //   if (store.state.userinfo.is_dl == 1) {
-      //     console.log('2')          
-      //     // 是分销商
-      //     next()
-      //   } else {
-      //     console.log('3')                  
-      //     next('/checkshenfen?checkType=daili');
+        params: {
+          id: userId
+        }
+      }).then(res => {
+        console.log('获取信息')
+        console.log(res)
+        if (res.data[0].is_user == 1) {
+          // 该用户有效
+          muta.SAVE_ID(store.state, userId);
+          muta.SAVE_USERINFO(store.state, res.data[0]);
+          next();
+        } else {
+          // 该用户无效
+          console.log('无效cookie，删除')
+          VueCookies.delete('user');
+          muta.SAVE_ID(store.state, '');
+          muta.SAVE_USERINFO(store.state, {});
+          next('/index');
+        }
+      })
+      .then(res => {
+        if (/^\/agent/.test(to.fullPath)) {
+          console.log('判断代理商')
+          console.log('1')
+          // 进入代理商页
+          if (store.state.userinfo.is_dl == 1) {
+            console.log('2')
+            // 是分销商
+            next()
+          } else {
+            console.log('3')
+            next('/checkshenfen');
 
 
-      //   }
-      // }
+          }
+        } else if (/^\/shanghu/.test(to.fullPath)) {
+          console.log('判断商户')
+          console.log('1')
+          // 进入商户页
+          if (store.state.userinfo.is_shop == 1) {
+            console.log('2')
+            // 是商户
+            next()
+          } else {
+            // 不是商户
+            console.log('3')
+            next('/shanghuCheck');
 
 
-      // console.log('判断商户')
-      // if (/^\/shanghu/.test(to.fullPath)) {
-      //   console.log('1')
-      //   // 进入商户页
-      //   if (store.state.userinfo.is_shop == 1) {
-      //     console.log('2')          
-      //     // 是商户
-      //     next('/shanghu/me/index')
-      //   } else {
-      //     // 不是商户
-      //     console.log('3')                  
-      //     next('/index');
+          }
+        }
 
-      //   }
-      // }
-    })
+        // next();
+
+      })
   }
 
 

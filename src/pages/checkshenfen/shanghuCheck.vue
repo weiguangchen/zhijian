@@ -1,7 +1,6 @@
 <template>
   <div class="shanghu-page">
     <bigTitle title="确认身份" :icon='false'></bigTitle>
-    {{checkType}}
     <div class="my-form">
       <div class="form-box">
 
@@ -93,19 +92,19 @@ export default {
           })
           .then(({ data }) => {
             console.log(data);
-            if (data.is_dl == 1) {
+            if (data.is_shop == 1) {
               _this.$vux.alert.show({
                 title: "提示",
                 content: "身份验证成功！",
                 onHide() {
                   _this.$router.replace({
-                    path: "/agent"
+                    path: "/shanghu/me/index"
                   });
                 }
               });
             } else {
               _this.$router.replace({
-                path: "/warning?tip=daili"
+                path: "/warning?tip=shanghu"
               });
             }
           });

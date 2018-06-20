@@ -46,7 +46,7 @@
                         </div>
                         <div class="text">区县代理</div>
                     </div>
-                    <div class="order-term-item" v-if="userinfo.dl[0].dl_jb == 1||userinfo.dl[0].dl_jb == 2||userinfo.dl[0].dl_jb == 3">
+                    <div class="order-term-item" @click="add_jms" v-if="userinfo.dl[0].dl_jb == 1||userinfo.dl[0].dl_jb == 2||userinfo.dl[0].dl_jb == 3">
                         <div class="icon">
                             <span class="iconfont icon-jiamengshang"></span>
                         </div>
@@ -58,11 +58,10 @@
             <div class="oplist">
                 <Group>
                     <Cell title='添加代理商'>
-                        <span>
+                        <!-- <span>
                             <span class="point">12</span>
                             <span class="iconfont icon-jinru"></span>
-                        </span>
-
+                        </span> -->
                     </Cell>
                     <Cell title='我的代理商'>
                         <span class="iconfont icon-jinru"></span>
@@ -89,7 +88,11 @@ export default {
   data() {
     return {};
   },
-  beforeRouteEnter() {},
+  methods: {
+    add_jms() {
+      this.$router.push("/addJms");
+    }
+  },
   components: { XButton, Group, Cell, ViewBox },
   mixins: [checkLogin]
 };
