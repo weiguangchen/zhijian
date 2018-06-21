@@ -344,6 +344,9 @@ export default {
       padding: 0.533333rem 0.4rem;
       background: #ffffff;
       @include font-dpr(13px);
+      img{
+        width: 100%;
+      }
     }
   }
   .pingjia {

@@ -1,46 +1,42 @@
 <template>
-    <div>
-        <ViewBox class="shanghu-page creat-huodong">
-            <bigTitle title='添加子账户' @showPopup='showPopup'></bigTitle>
-            <div class="form-box">
-              <div class="form-group">
-                    <h2 class="sub-title">选择账号所属门店:</h2>
-                    <Checker type='checkbox' v-model="faceLVal" class="check-box" default-item-class="checker-item" selected-item-class="checker-item-selected icon-duigou iconfont">
-                        <div class="check-item" v-for="(item,index) in face_list" :key="index">
-                            <CheckerItem :value='item.id'></CheckerItem>
-                            {{item.face_name}}
-                        </div>
+  <div>
+    <ViewBox class="shanghu-page creat-huodong">
+      <bigTitle title='添加子账户' @showPopup='showPopup'></bigTitle>
+      <div class="form-box">
+        <div class="form-group">
+          <h2 class="sub-title">选择账号所属门店</h2>
+          <CheckBoxGroup v-model="faceVal" color="#e03233">
+            <CheckBox v-for="(item,index) in face_list" :key="index" :val='item.id' shape="circle">{{item.face_name}}</CheckBox>
+          </CheckBoxGroup>
 
-                    </Checker>
-                </div>
+        </div>
 
+        <div class="form-group">
+          <h2 class="sub-title">新增账号的名称</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="account_name" placeholder='输入6-10位中文字符'></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">用户手机号</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="phone" placeholder='输入手机号'></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">再次输入手机号</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="rephone" placeholder='请再次输入手机号'></XInput>
+          </Group>
+        </div>
 
-                <div class="form-group">
-                    <h2 class="sub-title">新增账号的名称:</h2>
-                    <Group class="reset-vux-input">
-                        <XInput v-model="account_name"></XInput>
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">用户手机号:</h2>
-                    <Group class="reset-vux-input">
-                        <XInput v-model="phone"></XInput>
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">再次输入手机号:</h2>
-                    <Group class="reset-vux-input">
-                        <XInput v-model="rephone"></XInput>
-                    </Group>
-                </div>
+        <XButton type='warn' class="xbtn" @click.native="submitFn" :disabled='submiting'>提交</XButton>
+        <!-- <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton> -->
+      </div>
 
-                <XButton type='warn' class="xbtn" @click.native="submitFn" :disabled='submiting'>提交</XButton>
-                <!-- <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton> -->
-            </div>
+    </ViewBox>
 
-        </ViewBox>
-
-    </div>
+  </div>
 </template>
 
 <script>
@@ -63,13 +59,17 @@ import shanghuInput from "@/components/shanghu_form/input";
 import wxConfig from "@/mixins/wxConfig.js";
 import checkLogin from "@/mixins/checkLogin.js";
 import Qs from "qs";
-
+import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
 export default {
   data() {
     return {
-      account_name:'',
-      phone:'',
-      rephone:''
+      submiting: false,
+      face_list: [],
+
+      faceVal: [],
+      account_name: "",
+      phone: "",
+      rephone: ""
     };
   },
   created() {
@@ -80,7 +80,7 @@ export default {
     this.$axios
       .get(this.API_URL + "/Api/YouHui/card_add", {
         params: {
-          uid: _this.id
+          phone: _this.userinfo.uphone
         }
       })
       .then(({ data }) => {
@@ -90,144 +90,46 @@ export default {
         _this.face_list = data.face;
         _this.fw_list = data.fw;
       });
-
-    // this.$axios.get('Api/YouHui/get_hd_content',{
-    //     params:{
-    //         id:
-    //     }
-    // })
-    // this.$eruda.init();
-
-    // this.$axios
-    //   .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-    //     params: { shop_id: 1 }
-    //   })
-    //   .then(res => {
-    //     console.log(res);
-    //     _this.faceList = res.data.face;
-    //     _this.one_class_all = res.data.fw_class;
-    //     _this.two_class_all = res.data.fw;
-    //   });
-
-    // if (this.querys) {
-    //   this.getOldInfo().then(res => {
-    //     console.log("旧数据");
-    //     console.log(res.fw_face);
-    //     // console.log('门店数组')
-    //     // console.log(JSON.parse(res.fw_face))
-    //     this.fw_name = res.fw_mingzi;
-    //     this.fw_short_info = res.sub_name;
-    //     this.fw_intr = res.sub_content;
-    //     this.one_class_val = res.fw_cid;
-    //     this.two_class_val = res.fw_id;
-    //     var face = res.fw_face.map(item => {
-    //       return item.face_id;
-    //     });
-    //     this.face = face;
-    //     this.tupian = res.fw_img;
-    //     this.youxiao = parseInt(res.use_day);
-    //     this.yuanjia = res.y_money;
-    //     this.xianjia = res.money;
-    //     this.jiesuanjia = res.j_money;
-    //   });
-    // }
   },
 
   methods: {
     showPopup(val) {
       this.$emit("showPopup", val);
     },
-    changeCity(val) {
-      console.log(val);
-      let curCity = this.add.filter(m => {
-        return m.id == val;
-      });
-      this.currentQy = curCity[0].qy;
-      console.log(this.currentQy);
-    },
-    changeQy(val) {
-      console.log(val);
-      let curQy = this.currentQy.filter(m => {
-        return m.id == val;
-      });
-      console.log(curQy);
-      if (curQy.length > 0) {
-        this.currentSq = curQy[0].sq;
-      }
-      console.log(this.currentSq);
-    },
-    changeOneClass(val) {
-      var _this = this;
-      this.$axios
-        .get(_this.API_URL + "/Api/YouHui/get_hd_content", {
-          params: {
-            id: val
-          }
-        })
-        .then(({ data }) => {
-          console.log(data);
 
-          _this.detail_list = data;
-        });
-    },
     submitFn() {
-      //   this.submiting = true;
       var _this = this;
-      //   const myparams = new URLSearchParams();
-      //   myparams.append("param1",  [{
-      //                 fw_name: '2131',
-      //                 num: '12312',
-      //                 fw_id: 1
-      //             }, {
-      //                 fw_name: '2131',
-      //                 num: '12312',
-      //                 fw_id: 1
-      //             }, {
-      //                 fw_name: '2131',
-      //                 num: '12312',
-      //                 fw_id: 1
-      //             }]);
-      const params = {
-        card_name: _this.huodongname,
-        card_money: _this.huodongjia,
-        card_shopid: 1,
-        card_ymoney: _this.yuanjia,
-        card_jmoney: _this.jiesuanjia,
-        card_content_id: _this.detail,
-        card_city: _this.cityVal,
-        qy_id: _this.qyVal,
-        sq_id: _this.sqVal,
-        bk_num: _this.fw_num
-      };
-      console.log(_this.fw_num);
-      this.$axios
-        .get(_this.API_URL + "/Api/YouHui/add_card", {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          //   params:myparams,
-          params: {
-            card_name: _this.huodongname,
-            card_money: _this.huodongjia,
-            card_shopid: 1,
-            card_ymoney: _this.yuanjia,
-            card_jmoney: _this.jiesuanjia,
-            card_class_id: _this.one_class_val,
-            card_content_id: _this.detail,
-            city_id: _this.cityVal,
-            qy_id: _this.qyVal,
-            sq_id: _this.sqVal,
-            bk_num: _this.fw_num,
-            card_subname:_this.sub_name
-          }
-        })
-        .then(({ data }) => {
-          _this.submiting = false;
-          console.log(data);
-          if(data.status==1){
-              _this.$router.replace('/shanghu/me/addhuodong')
-          }
-        });
+
+      //   this.submiting = true;
+      this.submiting = true;
+      this.checkForm().then(
+        res => {
+          const params = {
+            shop_id: this.userinfo.shop[0].id,
+            sub_name: this.account_name,
+            phone: this.phone,
+            face_id: this.faceVal
+          };
+
+          console.log(params);
+
+          // this.$axios
+          //   .get(_this.API_URL + "/Api/UserShow/add_son", {
+          //     params: {
+          //       shop_id: this.userinfo.shop[0].id,
+          //       phone: "",
+          //       sub_name: "",
+          //       face_id: ""
+          //     }
+          //   })
+          //   .then(({ data }) => {
+          //     _this.submiting = false;
+          //   });
+        },
+        err => {
+          this.submiting = false;
+        }
+      );
     },
 
     // 获取已有数据
@@ -244,18 +146,37 @@ export default {
           return res.data.list[0];
         });
     },
-    checkSystem() {
-      var u = navigator.userAgent;
-      var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
-      var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-      if (isAndroid) {
-        this.system = 1;
-      } else if (isiOS) {
-        this.system = 2;
-      }
-      console.log("系统：" + this.system);
-    },
+    checkForm() {
+      console.log(!/^[u4e00-u9fa5]{6,}$/.test(this.account_name));
 
+      var _this = this;
+      return new Promise((resolve, reject) => {
+        if (this.faceVal.length <= 0) {
+          _this.alertWarning("请选择门店！");
+          reject();
+        } else if (!/^[u4e00-u9fa5]{6,}&/.test(this.account_name)) {
+          _this.alertWarning("请填写正确账号名称！");
+          reject();
+        } else if (
+          !/^[1][3,4,5,7,8][0-9]{9}$/.test(this.phone) ||
+          !/^[1][3,4,5,7,8][0-9]{9}$/.test(this.rephone)
+        ) {
+          _this.alertWarning("请填写正确手机号码！");
+          reject();
+        } else if (this.phone != this.rephone) {
+          _this.alertWarning("手机号不一致！");
+          reject();
+        } else {
+          resolve();
+        }
+      });
+    },
+    alertWarning(text) {
+      this.$vux.alert.show({
+        title: "提示",
+        content: text
+      });
+    }
   },
   computed: {
     querys() {
@@ -292,7 +213,9 @@ export default {
     CheckerItem,
     XTextarea,
     KeyBoard,
-    XNumber
+    XNumber,
+    CheckBoxGroup,
+    CheckBox
   },
   mixins: [checkLogin]
 };

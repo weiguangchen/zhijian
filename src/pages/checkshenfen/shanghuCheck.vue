@@ -76,7 +76,7 @@ export default {
     yanzheng() {
       var _this = this;
 
-      if (this.yzm != this.code) {
+      if (this.yzm != this.code && this.yzm && this.code) {
         this.$vux.toast.show({
           text: "请输入正确验证码",
           position: "middle"

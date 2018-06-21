@@ -57,23 +57,15 @@
             </div>
             <div class="oplist">
                 <Group>
-                    <Cell title='添加代理商'>
-                        <!-- <span>
-                            <span class="point">12</span>
-                            <span class="iconfont icon-jinru"></span>
-                        </span> -->
+                    <Cell title='添加代理商' :is-link='true' link='/addAgent'>
                     </Cell>
-                    <Cell title='我的代理商'>
-                        <span class="iconfont icon-jinru"></span>
+                    <Cell title='我的代理商' :is-link='true'>
                     </Cell>
-                    <Cell title='我的加盟商'>
-                        <span class="iconfont icon-jinru"></span>
+                    <Cell title='我的加盟商' :is-link='true'>
                     </Cell>
-                    <Cell title='我的报表'>
-                        <span class="iconfont icon-jinru"></span>
+                    <Cell title='我的报表' :is-link='true'>
                     </Cell>
-                    <Cell title='我的钱包'>
-                        <span class="iconfont icon-jinru"></span>
+                    <Cell title='我的钱包' :is-link='true'>
                     </Cell>
                 </Group>
             </div>

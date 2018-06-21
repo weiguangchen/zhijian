@@ -72,12 +72,12 @@
             </div>
             <div class="oplist" v-if="id">
                 <Group>
-                    <Cell title='申请成为商户' link="applyShanghu"  :is-link='true' v-if="userinfo.is_shop==0">
+                    <!-- <Cell title='申请成为商户' link="applyShanghu"  :is-link='true' v-if="userinfo.is_shop==0">
                     </Cell>
                     <Cell :title='shop_status' v-else-if='userinfo.shop_status == 0'>
                     </Cell>
                     <Cell :title='shop_status' v-else-if='userinfo.shop_status == 1' link='shanghu/me'>
-                    </Cell>
+                    </Cell> -->
                     <!-- <Cell title='历史收藏'>
                     </Cell> -->
                     <Cell title='我的优惠券' link='youhuijuan'>
