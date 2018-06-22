@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-21 13:36:42
+ * @Last Modified time: 2018-06-22 15:43:16
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -30,8 +30,8 @@ import shopCar from '@/pages/shopCar/index';
 import agent from '@/pages/agent/index';
 import addJms from '@/pages/agent/add_jms';
 import addAgent from '@/pages/agent/add_agent';
-
-
+// 图文详情页
+import twDetail from '@/pages/contentDetail/index';
 
 
 import applyShanghu from '@/pages/shanghuApply/index';
@@ -61,8 +61,11 @@ import account from '@/pages/shanghu/me/account'
 import setAuthority from '@/pages/shanghu/me/authority'
 import addSonAccount from '@/pages/shanghu/me/addSonAccount'
 
+
+
 import shangjia from '@/pages/shanghu/shangjia/index';
 import huifupinglun from '@/components/huifupinglun/index';
+// 登录等待页
 import logining from '@/pages/logining/index';
 
 // 插件
@@ -309,6 +312,11 @@ export const defaultRouterMaps = [{
     path: '/warning',
     name: 'checkwarning',
     component: checkwarning
+  },
+  {
+    path: '/twDetail/:twId',
+    name: 'twDetail',
+    component: twDetail
   },
   {
     path: '/shanghu',
@@ -604,8 +612,8 @@ router.beforeEach((to, from, next) => {
     //   path: url
     // })
     // next('/agent')
-    window.location.href = 'http://192.168.31.75:8081' + url;
-    // window.location.href = 'http://qd.daonian.cn' + url;
+    // window.location.href = 'http://192.168.31.75:8081' + url;
+    window.location.href = 'http://qd.daonian.cn' + url;
   }
 
 
@@ -641,38 +649,38 @@ router.beforeEach((to, from, next) => {
         }
       })
       .then(res => {
-        // if (/^\/agent/.test(to.fullPath)) {
-        //   console.log('判断代理商')
-        //   console.log('1')
-        //   // 进入代理商页
-        //   if (store.state.userinfo.is_dl == 1) {
-        //     console.log('2')
-        //     // 是分销商
-        //     next()
-        //   } else {
-        //     console.log('3')
-        //     next('/checkshenfen');
+        if (/^\/agent/.test(to.fullPath)) {
+          console.log('判断代理商')
+          console.log('1')
+          // 进入代理商页
+          if (store.state.userinfo.is_dl == 1) {
+            console.log('2')
+            // 是分销商
+            next()
+          } else {
+            console.log('3')
+            next('/checkshenfen');
 
 
-        //   }
-        // } else if (/^\/shanghu/.test(to.fullPath)) {
-        //   console.log('判断商户')
-        //   console.log('1')
-        //   // 进入商户页
-        //   if (store.state.userinfo.is_shop == 1) {
-        //     console.log('2')
-        //     // 是商户
-        //     next()
-        //   } else {
-        //     // 不是商户
-        //     console.log('3')
-        //     next('/shanghuCheck');
+          }
+        } else if (/^\/shanghu/.test(to.fullPath)) {
+          console.log('判断商户')
+          console.log('1')
+          // 进入商户页
+          if (store.state.userinfo.is_shop == 1) {
+            console.log('2')
+            // 是商户
+            next()
+          } else {
+            // 不是商户
+            console.log('3')
+            next('/shanghuCheck');
 
 
-        //   }
-        // }
+          }
+        }
 
-        next();
+        // next();
 
       })
   }

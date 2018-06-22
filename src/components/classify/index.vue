@@ -24,7 +24,7 @@ export default {
   },
   props: ["classArr"],
   created() {
-    this.page = Math.round(this.classArr.length / 8);
+    this.page = Math.ceil(this.classArr.length / 8);
     for (let i = 0; i < this.page; i++) {
       this.newClass.push(this.classArr.slice(i * 8, (i + 1) * 8));
     }

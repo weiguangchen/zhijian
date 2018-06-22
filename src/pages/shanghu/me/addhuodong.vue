@@ -1,114 +1,130 @@
 <template>
-    <div>
-        <ViewBox class="shanghu-page creat-huodong">
-            <bigTitle title='新建活动' @showPopup='showPopup'></bigTitle>
-            <div class="form-box">
-                <div class="form-group">
-                    <h2 class="sub-title">活动名称:</h2>
-                    <Group class="reset-vux-input">
-                        <XInput v-model="huodongname"></XInput>
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">简短名称:</h2>
-                    <Group class="reset-vux-input">
-                        <XInput v-model="sub_name"></XInput>
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">服务缩略图:</h2>
-                    <div class="uploadImage">
-                        <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
-                        <!-- 安卓预览图片 -->
-                        <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
-                        <!-- IOS预览图片 -->
-                        <img :src="localData || tupian" alt="" v-else class="thumb">
+  <div>
+    <ViewBox class="shanghu-page creat-huodong">
+      <bigTitle title='新建活动' @showPopup='showPopup'></bigTitle>
+      <div class="form-box">
+        <template v-if="step == 1">
+          <div class="form-group">
+            <h2 class="sub-title">活动名称:</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="huodongname"></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">简短名称:</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="sub_name"></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">活动缩略图:</h2>
+            <div class="uploadImage">
+              <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
+              <!-- 安卓预览图片 -->
+              <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
+              <!-- IOS预览图片 -->
+              <img :src="localData || tupian" alt="" v-else class="thumb">
 
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">城市</h2>
-                    <Group class="reset-vux-input">
-                        <Selector :options='add' :value-map="['id','city']" @on-change='changeCity' v-model="cityVal"></Selector>
-                    </Group>
-                </div>
-                <div class="form-group" v-if="currentQy">
-                    <h2 class="sub-title">区域</h2>
-                    <Group class="reset-vux-input">
-                        <Selector :options='currentQy' :value-map="['id','qy_name']" @on-change='changeQy' v-model="qyVal"></Selector>
-                    </Group>
-                </div>
-                <div class="form-group" v-if="currentSq">
-                    <h2 class="sub-title">社区</h2>
-                    <Group class="reset-vux-input">
-                        <Selector :options='currentSq' :value-map="['id','sq_name']" v-model="sqVal"></Selector>
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">分类:</h2>
-                    <Group class="reset-vux-input">
-                        <Selector :options='one_class_list' :value-map="['id','class_name']" @on-change='changeOneClass' v-model="one_class_val"></Selector>
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">支持门店:</h2>
-                    <Checker type='checkbox' v-model="faceLVal" class="check-box" default-item-class="checker-item" selected-item-class="checker-item-selected icon-duigou iconfont">
-                        <div class="check-item" v-for="(item,index) in face_list" :key="index">
-                            <CheckerItem :value='item.id'></CheckerItem>
-                            {{item.face_name}}
-                        </div>
-
-                    </Checker>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">图文详情:</h2>
-                    <Checker type='radio' v-model="detail" :radio-required='true' class="check-box" default-item-class="checker-item " selected-item-class="checker-item-selected icon-duigou iconfont">
-                        <div class="check-item" v-for="(item,index) in detail_list" :key="index">
-                            <CheckerItem :value='item.id'></CheckerItem>
-                            {{item.hd_content_name}}(预览)
-                        </div>
-                    </Checker>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">服务类别:</h2>
-                    <Group class="reset-vux-input">
-                        <div class="fw-item" v-for="(item,index) in fw_list" :key="index">
-                            <h2 class="sub-title">{{item.fw_mingzi}}</h2>
-                            <div class="select-num">
-                                <span>数量</span>
-                                <XNumber :min='0' v-model="fw_selceted[index]"></XNumber>
-                            </div>
-                        </div>
-
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">原价:</h2>
-                    <Group class="reset-vux-input">
-                        <XInput v-model="yuanjia"></XInput>
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">活动价:</h2>
-                    <Group class="reset-vux-input">
-                        <XInput v-model="huodongjia"></XInput>
-                    </Group>
-                </div>
-                <div class="form-group">
-                    <h2 class="sub-title">商户结算价:</h2>
-                    <Group class="reset-vux-input">
-                        <XInput v-model="jiesuanjia"></XInput>
-                    </Group>
-                </div>
-
-                <XButton type='warn' class="xbtn" @click.native="submitFn" :disabled='submiting'>提交</XButton>
-                <!-- <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton> -->
             </div>
 
-        </ViewBox>
+          </div>
+          <!-- <div class="form-group"> -->
+          <!-- <h2 class="sub-title">上传图片集:</h2> -->
+          <!-- <div class="uploadImage"> -->
+          <!-- <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div> -->
+          <!-- 安卓预览图片 -->
+          <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
+          <!-- IOS预览图片 -->
+          <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
 
-    </div>
+          <!-- </div> -->
+
+          <!-- </div> -->
+        </template>
+        <template v-if='step == 2'>
+          <div class="form-group">
+            <h2 class="sub-title">城市</h2>
+            <Group class="reset-vux-input">
+              <Selector :options='add' :value-map="['id','city']" @on-change='changeCity' v-model="cityVal"></Selector>
+            </Group>
+          </div>
+
+          <div class="form-group" v-if="currentQy">
+            <h2 class="sub-title">区域</h2>
+            <Group class="reset-vux-input">
+              <Selector :options='currentQy' :value-map="['id','qy_name']" @on-change='changeQy' v-model="qyVal"></Selector>
+            </Group>
+          </div>
+          <div class="form-group" v-if="currentSq">
+            <h2 class="sub-title">社区</h2>
+            <Group class="reset-vux-input">
+              <Selector :options='currentSq' :value-map="['id','sq_name']" v-model="sqVal"></Selector>
+            </Group>
+          </div>
+          <!-- <div class="form-group"> -->
+          <!-- <h2 class="sub-title">分类:</h2> -->
+          <Group>
+            <Selector :options='one_class_list' title='分类' :value-map="['id','class_name']" @on-change='changeOneClass' v-model="one_class_val" v-if="one_class_list"></Selector>
+          </Group>
+          <!-- </div> -->
+
+          <div class="form-group">
+            <h2 class="sub-title">图文详情:</h2>
+            <RadioGroup v-model="detail" color="#e03233">
+              <span v-for="(item,index) in detail_list" :key="index">
+                <Radio :val='item.id'>{{item.hd_content_name}}</Radio>
+                <span @click.stop="previewContent(item.id)">(预览)</span>
+              </span>
+            </RadioGroup>
+            <XDialog v-model="twDetailShow" :hide-on-blur='true'>
+              <div v-html="twDetailContent"></div>
+            </XDialog>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">支持门店:</h2>
+            <CheckBoxGroup v-model="faceLVal" color="#e03233">
+              <CheckBox shape="circle" :val='item.id' v-for="(item,index) in face_list" :key="index">{{item.face_name}}</CheckBox>
+            </CheckBoxGroup>
+          </div>
+          <div class="form-group">
+            {{fw_selceted}}
+            <h2 class="sub-title">服务类别:</h2>
+            <Group class="reset-vux-input">
+              <div class="fw-item" v-for="(item,index) in fw_list" :key="index">
+                <h2 class="sub-title">{{item.fw_mingzi}}</h2>
+                <div class="select-num">
+                  <span>数量</span>
+                  <XNumber :min='0' v-model="fw_selceted[index]"></XNumber>
+                </div>
+              </div>
+
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">原价:</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="yuanjia"></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">活动价:</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="huodongjia"></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">商户结算价:</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="jiesuanjia"></XInput>
+            </Group>
+          </div>
+        </template>
+        <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
+        <XButton type='warn' class="xbtn" @click.native="submitFn" :disabled='submiting' v-if="step == 2">提交</XButton>
+      </div>
+
+    </ViewBox>
+  </div>
 </template>
 
 <script>
@@ -122,8 +138,11 @@ import {
   Checker,
   CheckerItem,
   XTextarea,
-  XNumber
+  XNumber,
+  XDialog
 } from "vux";
+import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
+import { Radio, RadioGroup } from "vue-ydui/dist/lib.px/radio";
 import { KeyBoard } from "vue-ydui/dist/lib.px/keyboard";
 import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
@@ -135,6 +154,9 @@ import Qs from "qs";
 export default {
   data() {
     return {
+      step: 1,
+      twDetailShow: false,
+      twDetailContent: "",
       system: 1,
       submiting: false,
       one_class_list: [],
@@ -146,10 +168,12 @@ export default {
       detail_list: [],
       localData: "",
       imgs: "",
-
+      // 第一步
       huodongname: "",
       sub_name: "",
       tupian: "",
+      // tupianList: [],
+      // 第二步
       cityVal: "",
       qyVal: "",
       sqVal: "",
@@ -163,7 +187,7 @@ export default {
     };
   },
   created() {
-    this.$eruda.init();
+    // this.$eruda.init();
     this.checkSystem();
     var _this = this;
     this.$emit("showPopup", false);
@@ -171,7 +195,7 @@ export default {
     this.$axios
       .get(this.API_URL + "/Api/YouHui/card_add", {
         params: {
-          uid: _this.id
+          phone: _this.userinfo.uphone
         }
       })
       .then(({ data }) => {
@@ -182,46 +206,7 @@ export default {
         _this.fw_list = data.fw;
       });
 
-    // this.$axios.get('Api/YouHui/get_hd_content',{
-    //     params:{
-    //         id:
-    //     }
-    // })
     // this.$eruda.init();
-
-    // this.$axios
-    //   .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-    //     params: { shop_id: 1 }
-    //   })
-    //   .then(res => {
-    //     console.log(res);
-    //     _this.faceList = res.data.face;
-    //     _this.one_class_all = res.data.fw_class;
-    //     _this.two_class_all = res.data.fw;
-    //   });
-
-    // if (this.querys) {
-    //   this.getOldInfo().then(res => {
-    //     console.log("旧数据");
-    //     console.log(res.fw_face);
-    //     // console.log('门店数组')
-    //     // console.log(JSON.parse(res.fw_face))
-    //     this.fw_name = res.fw_mingzi;
-    //     this.fw_short_info = res.sub_name;
-    //     this.fw_intr = res.sub_content;
-    //     this.one_class_val = res.fw_cid;
-    //     this.two_class_val = res.fw_id;
-    //     var face = res.fw_face.map(item => {
-    //       return item.face_id;
-    //     });
-    //     this.face = face;
-    //     this.tupian = res.fw_img;
-    //     this.youxiao = parseInt(res.use_day);
-    //     this.yuanjia = res.y_money;
-    //     this.xianjia = res.money;
-    //     this.jiesuanjia = res.j_money;
-    //   });
-    // }
   },
 
   methods: {
@@ -262,65 +247,140 @@ export default {
         });
     },
     submitFn() {
-      //   this.submiting = true;
+      this.submiting = true;
       var _this = this;
-      //   const myparams = new URLSearchParams();
-      //   myparams.append("param1",  [{
-      //                 fw_name: '2131',
-      //                 num: '12312',
-      //                 fw_id: 1
-      //             }, {
-      //                 fw_name: '2131',
-      //                 num: '12312',
-      //                 fw_id: 1
-      //             }, {
-      //                 fw_name: '2131',
-      //                 num: '12312',
-      //                 fw_id: 1
-      //             }]);
-      const params = {
-        card_name: _this.huodongname,
-        card_money: _this.huodongjia,
-        card_shopid: 1,
-        card_ymoney: _this.yuanjia,
-        card_jmoney: _this.jiesuanjia,
-        card_content_id: _this.detail,
-        card_city: _this.cityVal,
-        qy_id: _this.qyVal,
-        sq_id: _this.sqVal,
-        bk_num: _this.fw_num
-      };
-      console.log(_this.fw_num);
-      this.$axios
-        .get(_this.API_URL + "/Api/YouHui/add_card", {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          //   params:myparams,
-          params: {
+      this.checkStep2().then(
+        res => {
+          const params = {
             card_name: _this.huodongname,
             card_money: _this.huodongjia,
             card_shopid: 1,
             card_ymoney: _this.yuanjia,
             card_jmoney: _this.jiesuanjia,
-            card_class_id: _this.one_class_val,
             card_content_id: _this.detail,
-            city_id: _this.cityVal,
+            card_city: _this.cityVal,
             qy_id: _this.qyVal,
             sq_id: _this.sqVal,
-            bk_num: _this.fw_num,
-            card_subname:_this.sub_name
+            bk_num: _this.fw_num
+          };
+          console.log(params);
+          this.$axios
+            .get(_this.API_URL + "/Api/YouHui/add_card", {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              //   params:myparams,
+              params: {
+                card_name: _this.huodongname,
+                card_money: _this.huodongjia,
+                card_shopid: 1,
+                card_ymoney: _this.yuanjia,
+                card_jmoney: _this.jiesuanjia,
+                card_class_id: _this.one_class_val,
+                card_content_id: _this.detail,
+                city_id: _this.cityVal,
+                qy_id: _this.qyVal,
+                sq_id: _this.sqVal,
+                bk_num: _this.fw_num,
+                card_subname: _this.sub_name
+              }
+            })
+            .then(({ data }) => {
+              _this.submiting = false;
+              console.log(data);
+              if (data.status == 1) {
+                _this.$router.replace("/shanghu/me/addhuodong");
+              }
+            });
+        },
+        err => {
+          this.submiting = false;
+          return false;
+        }
+      );
+    },
+    checkStep1() {
+      var _this = this;
+      return new Promise((resolve, reject) => {
+        if (!this.huodongname) {
+          _this.alertWarning("请输入活动名称！");
+          reject();
+        } else if (!this.sub_name) {
+          _this.alertWarning("请输入简短名称！");
+          reject();
+        } else if (!this.tupian) {
+          _this.alertWarning("请上传活动缩略图！");
+          reject();
+        } else if (!this.tupianList) {
+          _this.alertWarning("请上传活动图片集！");
+          reject();
+        } else {
+          resolve();
+        }
+      });
+    },
+    checkStep2() {
+      var _this = this;
+      return new Promise((resolve, reject) => {
+        if (!this.cityVal) {
+          _this.alertWarning("请选择城市！");
+          reject();
+        } else if (!this.sub_name) {
+          _this.alertWarning("请选择区域！");
+          reject();
+        } else if (!this.tupian) {
+          _this.alertWarning("请选择社区！");
+          reject();
+        } else if (!this.one_class_val) {
+          _this.alertWarning("请选择分类");
+          reject();
+        } else if (!this.faceLVal.length <= 0) {
+          _this.alertWarning("请选择门店！");
+          reject();
+        } else if (!this.detail) {
+          _this.alertWarning("请选择图文详情！");
+          reject();
+        } else if (!this.fw_selceted.length <= 0) {
+          _this.alertWarning("请选择服务！");
+          reject();
+        } else if (!this.detail) {
+          _this.alertWarning("请选择图文详情！");
+          reject();
+        } else if (!this.yuanjia) {
+          _this.alertWarning("请填写原价！");
+          reject();
+        } else if (!this.huodongjia) {
+          _this.alertWarning("请填写活动价！");
+          reject();
+        } else if (!this.jiesuanjia) {
+          _this.alertWarning("请填写结算价！");
+          reject();
+        } else {
+          resolve();
+        }
+      });
+    },
+    alertWarning(text) {
+      this.$vux.alert.show({
+        title: "提示",
+        content: text
+      });
+    },
+    previewContent(id) {
+      var _this = this;
+      console.log(id);
+      this.$axios
+        .get(_this.API_URL + "/Api/YouHui/content", {
+          params: {
+            id
           }
         })
         .then(({ data }) => {
-          _this.submiting = false;
+          this.twDetailShow = true;
           console.log(data);
-          if(data.status==1){
-              _this.$router.replace('/shanghu/me/addhuodong')
-          }
+          this.twDetailContent = data[0].hd_content;
         });
     },
-
     // 获取已有数据
     getOldInfo() {
       var _this = this;
@@ -380,7 +440,7 @@ export default {
         success: function(res) {
           var serverId = res.serverId; // 返回图片的服务器端ID
           _this.$axios
-            .get(_this.API_URL+"/api/wechat/bcimg", {
+            .get(_this.API_URL + "/api/wechat/bcimg", {
               params: {
                 imgs: res.serverId
               }
@@ -391,6 +451,16 @@ export default {
             });
         }
       });
+    },
+    next1() {
+      this.checkStep1().then(
+        res => {
+          this.step = 2;
+        },
+        err => {
+          return false;
+        }
+      );
     }
   },
   computed: {
@@ -428,7 +498,12 @@ export default {
     CheckerItem,
     XTextarea,
     KeyBoard,
-    XNumber
+    XNumber,
+    CheckBoxGroup,
+    CheckBox,
+    RadioGroup,
+    Radio,
+    XDialog
   },
   mixins: [checkLogin]
 };
@@ -502,6 +577,13 @@ export default {
       display: flex;
       align-items: center;
     }
+  }
+  .weui-dialog {
+    display: block;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    background: #ffffff;
+    overflow: scroll;
   }
 }
 </style>

@@ -27,6 +27,7 @@
                 </span>
             </div>
         </div>
+        {{fw_class}}
         <CheckBoxGroup v-model="fw_class">
             <CheckBox shape="circle" :val='item.id' v-for="(item,index) in fw_class_all" :key="index">{{item.class_name}}</CheckBox>
         </CheckBoxGroup>
@@ -90,7 +91,7 @@ export default {
       imgs: "",
       localData: "",
       tupian: "",
-      fw_class: []
+      fw_class: [1,2]
     };
   },
   created() {

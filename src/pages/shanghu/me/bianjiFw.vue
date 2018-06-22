@@ -1,7 +1,7 @@
 <template>
   <div>
     <ViewBox class="shanghu-page">
-      <bigTitle title='新建项目' @showPopup='showPopup'></bigTitle>
+      <bigTitle title='编辑项目' @showPopup='showPopup'></bigTitle>
       <div class="form-box">
         <template v-if="step == 1">
           <div class="form-group">
@@ -47,14 +47,30 @@
           <div class="form-group">
             <h2 class="sub-title">子分类列表:</h2>
             <Group class="reset-vux-input">
-              <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val"></Selector>
+              <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
             </Group>
+          </div>
+          <div class="form-group" v-if="two_class_val">
+            <h2 class="sub-title">图文详情:</h2>
+            <RadioGroup v-model="tw" color='#e03233'>
+              <span v-for="(item,index) in twList" :key="index">
+                <Radio :val='item.id'>{{item.fw_content_name}}</Radio>
+                <span @click="previewDetail(item.id)">预览</span>
+              </span>
+            </RadioGroup>
+            <div v-transfer-dom class="tw-preview-detail">
+              <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
+                <!-- 123 -->
+                <div v-html="twDetailContent"></div>
+              </XDialog>
+            </div>
+
           </div>
           <div class="form-group">
             <h2 class="sub-title">支持门店:</h2>
-            <Checker type='checkbox' v-model="face" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-              <CheckerItem :value='item.id' v-for="(item,index) in faceList" :key="index">{{item.face_name}}</CheckerItem>
-            </Checker>
+            <CheckBoxGroup v-model="face" color='#e03233'>
+              <CheckBox shape="circle" :val='item.id' v-for="(item,index) in List" :key="index">{{item.face_name}}</CheckBox>
+            </CheckBoxGroup>
           </div>
           <div class="form-group">
             <h2 class="sub-title">服务缩略图:</h2>
@@ -118,13 +134,17 @@ import {
   Confirm,
   Checker,
   CheckerItem,
-  XTextarea
+  XTextarea,
+  XDialog
 } from "vux";
 import { KeyBoard } from "vue-ydui/dist/lib.px/keyboard";
 import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
-import wxConfig from "@/mixins/wxConfig.js";
+import checkLogin from "@/mixins/checkLogin.js";
+import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
+import { Radio, RadioGroup } from "vue-ydui/dist/lib.px/radio";
+import { TransferDomDirective as TransferDom } from "vux";
 export default {
   data() {
     return {
@@ -132,6 +152,9 @@ export default {
       modalInfo: "",
 
       keyboardShow: false,
+      twList: [],
+      twDetailShow: false,
+      twDetailContent: "",
       step: 1,
       imgs: "",
       localData: "",
@@ -139,7 +162,7 @@ export default {
       one_class_all: [],
       two_class_all: [],
       two_class: [],
-      faceList: [],
+      List: [],
       // 第一步
       fw_name: "",
       fw_short_info: "",
@@ -147,13 +170,14 @@ export default {
       // 第二步
       one_class_val: "",
       two_class_val: "",
+      tw: "",
       face: [0, 1],
       tupian: "",
       //   第三部
-      youxiao: 0,
-      yuanjia: 0,
-      xianjia: 0,
-      jiesuanjia: 0
+      youxiao: "",
+      yuanjia: "",
+      xianjia: "",
+      jiesuanjia: ""
     };
   },
   created() {
@@ -164,11 +188,11 @@ export default {
 
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: 1 }
+        params: { shop_id: 1, phone: _this.userinfo.uphone }
       })
       .then(res => {
         console.log(res);
-        _this.faceList = res.data.face;
+        _this.List = res.data.face;
         _this.one_class_all = res.data.fw_class;
         _this.two_class_all = res.data.fw;
       });
@@ -242,12 +266,11 @@ export default {
         this.alertShow = true;
         this.modalInfo = "请请选择支持的门店";
         return false;
+      }else if (!this.tupian) {
+        this.alertShow = true;
+        this.modalInfo = "请上传服务缩略图";
+        return false;
       }
-      // else if (!this.tupian) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请上传服务缩略图";
-      //   return false;
-      // }
 
       this.step = 3;
     },
@@ -256,7 +279,7 @@ export default {
       this.checkForm().then(
         res => {
           this.$axios
-            .get(_this.API_URL+"/api/ShopFw/add_shop_fw", {
+            .get(_this.API_URL + "/api/ShopFw/add_shop_fw", {
               params: {
                 fw_mingzi: this.fw_name,
                 sub_name: this.fw_short_info,
@@ -300,23 +323,7 @@ export default {
         },
         err => {}
       );
-      // if (!this.youxiao || Number.isInteger(this.youxiao)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写正确有效期";
-      //   return false;
-      // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写原价";
-      //   return false;
-      // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写现价";
-      //   return false;
-      // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写结算价";
-      //   return false;
-      // }
+
     },
     changeFw() {
       var _this = this;
@@ -324,13 +331,14 @@ export default {
         res => {
           console.log("成功");
           this.$axios
-            .get(_this.API_URL+"/api/ShopFw/update_shop_fw", {
+            .get(_this.API_URL + "/api/ShopFw/update_shop_fw", {
               params: {
                 fw_mingzi: this.fw_name,
                 sub_name: this.fw_short_info,
                 sub_content: this.fw_intr,
                 fw_cid: this.one_class_val,
                 fw_id: this.two_class_val,
+                fw_content_id:this.tw,
                 fw_face: this.face,
                 fw_img: this.tupian,
                 use_day: this.youxiao,
@@ -372,23 +380,6 @@ export default {
         }
       );
 
-      // if (!this.youxiao || Number.isInteger(this.youxiao)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写正确有效期";
-      //   return false;
-      // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写原价";
-      //   return false;
-      // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写现价";
-      //   return false;
-      // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写结算价";
-      //   return false;
-      // }
     },
     checkForm() {
       var _this = this;
@@ -399,25 +390,30 @@ export default {
       console.log(!Number.isInteger(this.youxiao));
 
       return new Promise((resolve, reject) => {
-        // if (!Number.isInteger(this.youxiao)) {
-        //   this.alertShow = true;
-        //   this.modalInfo = "请填写正确有效期";
-        //   reject();
-        // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-        //   this.alertShow = true;
-        //   this.modalInfo = "原价";
-        //   reject();
-        // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-        //   this.alertShow = true;
-        //   this.modalInfo = "请填写现价";
-        //   reject();
-        // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-        //   this.alertShow = true;
-        //   this.modalInfo = "请填写结算价";
-        //   reject();
-        // }
+        if (!this.isPositiveInteger(this.youxiao)) {
+          this.alertShow = true;
+          this.modalInfo = "请填写正确有效期";
+          reject();
+        } else if (!this.isPositiveInteger(this.yuanjia)) {
+          this.alertShow = true;
+          this.modalInfo = "原价";
+          reject();
+        } else if (!this.isPositiveInteger(this.xianjia)) {
+          this.alertShow = true;
+          this.modalInfo = "请填写现价";
+          reject();
+        } else if (!this.isPositiveInteger(this.jiesuanjia)) {
+          this.alertShow = true;
+          this.modalInfo = "请填写结算价";
+          reject();
+        }
         resolve();
       });
+    },
+    isPositiveInteger(s) {
+      //是否为正整数
+      var re = /^[0-9]+$/;
+      return re.test(s);
     },
     changeOneClass(val) {
       console.log(val);
@@ -425,6 +421,37 @@ export default {
         return item.fid == val;
       });
       console.log(this.one_class_all);
+    },
+    changeTwoClass(id) {
+      console.log("id:");
+      console.log(id);
+      var _this = this;
+      this.$axios
+        .get(_this.API_URL + "/Api/ShopFw/get_fw_content", {
+          params: {
+            id
+          }
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.twList = data;
+        });
+    },
+    previewDetail(id) {
+      var _this = this;
+      // this.twDetailShow = true;
+
+      this.$axios
+        .get(_this.API_URL + "/Api/ShopFw/content", {
+          params: {
+            id
+          }
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.twDetailContent = data[0].fw_content;
+          this.twDetailShow = true;
+        });
     },
     checkSystem() {
       var u = navigator.userAgent;
@@ -471,7 +498,7 @@ export default {
         success: function(res) {
           var serverId = res.serverId; // 返回图片的服务器端ID
           _this.$axios
-            .get(_this.API_URL+"/api/wechat/bcimg", {
+            .get(_this.API_URL + "/api/wechat/bcimg", {
               params: {
                 imgs: res.serverId
               }
@@ -489,7 +516,8 @@ export default {
       return this.$axios
         .get(this.API_URL + "/api/ShopFw/edit_fw", {
           params: {
-            id: _this.querys
+            id: _this.querys,
+            phone: _this.userinfo.uphone
           }
         })
         .then(res => {
@@ -502,6 +530,9 @@ export default {
     querys() {
       return this.$route.params.fwId;
     }
+  },
+  directives: {
+    TransferDom
   },
   components: {
     bigTitle,
@@ -516,9 +547,14 @@ export default {
     Checker,
     CheckerItem,
     XTextarea,
-    KeyBoard
+    KeyBoard,
+    CheckBoxGroup,
+    CheckBox,
+    RadioGroup,
+    Radio,
+    XDialog
   },
-  mixins: []
+  mixins: [checkLogin]
 };
 </script>
 
@@ -547,6 +583,15 @@ export default {
     width: 2rem;
     height: 2rem;
     flex: none;
+  }
+}
+.tw-preview-detail {
+  .weui-dialog {
+    display: block;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    background: #ffffff;
+    overflow: scroll;
   }
 }
 </style>

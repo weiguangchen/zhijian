@@ -46,7 +46,7 @@
                         </div>
                         <div class="text">区县代理</div>
                     </div>
-                    <div class="order-term-item" @click="add_jms" v-if="userinfo.dl[0].dl_jb == 1||userinfo.dl[0].dl_jb == 2||userinfo.dl[0].dl_jb == 3">
+                    <div class="order-term-item" @click="add_jms" v-if="userinfo.dl[0].dl_jb == 3">
                         <div class="icon">
                             <span class="iconfont icon-jiamengshang"></span>
                         </div>

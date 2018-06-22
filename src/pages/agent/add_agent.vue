@@ -3,7 +3,10 @@
         <div class="form-box dl">
             <span class="title">添加人</span>
             <span class="form-text">
-                {{userinfo.nickname}}&nbsp;&nbsp;{{userinfo.uphone}}&nbsp;&nbsp;({{userinfo.dl[0].dl_name}})
+                {{userinfo.dl_name}}&nbsp;&nbsp;{{userinfo.uphone}}&nbsp;&nbsp;
+                <span v-if='userinfo.dl[0].dl_jb == 1'>股东代理</span>
+                <span v-else-if='userinfo.dl[0].dl_jb == 2'>市级代理</span>
+                <span v-else-if='userinfo.dl[0].dl_jb == 3'>区级代理</span>
             </span>
         </div>
 

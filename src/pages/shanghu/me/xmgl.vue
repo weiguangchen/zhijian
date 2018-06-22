@@ -41,20 +41,36 @@
           <div class="form-group">
             <h2 class="sub-title">分类:</h2>
             <Group class="reset-vux-input">
-              <Selector :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'></Selector>
+              <Selector :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass' v-if="one_class_all" title=''></Selector>
             </Group>
           </div>
           <div class="form-group">
             <h2 class="sub-title">子分类列表:</h2>
             <Group class="reset-vux-input">
-              <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val"></Selector>
+              <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
             </Group>
+          </div>
+          <div class="form-group" v-if="two_class_val">
+            <h2 class="sub-title">图文详情:</h2>
+            <RadioGroup v-model="tw" color='#e03233'>
+              <span v-for="(item,index) in twList" :key="index">
+                <Radio :val='item.id'>{{item.fw_content_name}}</Radio>
+                <span @click="previewDetail(item.id)">预览</span>
+              </span>
+            </RadioGroup>
+            <div v-transfer-dom class="tw-preview-detail">
+              <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
+                <!-- 123 -->
+                <div v-html="twDetailContent"></div>
+              </XDialog>
+            </div>
+
           </div>
           <div class="form-group">
             <h2 class="sub-title">支持门店:</h2>
-            <Checker type='checkbox' v-model="face" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-              <CheckerItem :value='item.id' v-for="(item,index) in faceList" :key="index">{{item.face_name}}</CheckerItem>
-            </Checker>
+            <CheckBoxGroup v-model="face" color='#e03233'>
+              <CheckBox shape="circle" :val='item.id' v-for="(item,index) in List" :key="index">{{item.face_name}}</CheckBox>
+            </CheckBoxGroup>
           </div>
           <div class="form-group">
             <h2 class="sub-title">服务缩略图:</h2>
@@ -73,25 +89,25 @@
           <div class="form-group">
             <h2 class="sub-title">有效期(天):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="youxiao" :required='true'></XInput>
+              <XInput v-model="youxiao" type='number' :required='true' placeholder='填写有效期'></XInput>
             </Group>
           </div>
           <div class="form-group">
             <h2 class="sub-title">原价(元):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="yuanjia" type='number'></XInput>
+              <XInput v-model="yuanjia" type='number' :required='true' placeholder='填写原价'></XInput>
             </Group>
           </div>
           <div class="form-group">
             <h2 class="sub-title">现价(元):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="xianjia" type='number'></XInput>
+              <XInput v-model="xianjia" type='number' :required='true' placeholder='填写现价'></XInput>
             </Group>
           </div>
           <div class="form-group">
             <h2 class="sub-title">商户结算价(元):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="jiesuanjia" type='number'></XInput>
+              <XInput v-model="jiesuanjia" type='number' :required='true' placeholder='填写商户结算价'></XInput>
             </Group>
           </div>
         </template>
@@ -118,13 +134,17 @@ import {
   Confirm,
   Checker,
   CheckerItem,
-  XTextarea
+  XTextarea,
+  XDialog
 } from "vux";
 import { KeyBoard } from "vue-ydui/dist/lib.px/keyboard";
 import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
-// import wxConfig from "@/mixins/wxConfig.js";
+import checkLogin from "@/mixins/checkLogin.js";
+import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
+import { Radio, RadioGroup } from "vue-ydui/dist/lib.px/radio";
+import { TransferDomDirective as TransferDom } from "vux";
 export default {
   data() {
     return {
@@ -132,14 +152,17 @@ export default {
       modalInfo: "",
 
       keyboardShow: false,
-      step: 1,
+      twList: [],
+      twDetailShow: false,
+      twDetailContent: "",
+      step: 2,
       imgs: "",
       localData: "",
       system: 1,
       one_class_all: [],
       two_class_all: [],
       two_class: [],
-      faceList: [],
+      List: [{}],
       // 第一步
       fw_name: "",
       fw_short_info: "",
@@ -147,13 +170,14 @@ export default {
       // 第二步
       one_class_val: "",
       two_class_val: "",
-      face: [0, 1],
+      tw: "",
+      face: [],
       tupian: "",
       //   第三部
-      youxiao: 0,
-      yuanjia: 0,
-      xianjia: 0,
-      jiesuanjia: 0
+      youxiao: "",
+      yuanjia: "",
+      xianjia: "",
+      jiesuanjia: ""
     };
   },
   created() {
@@ -164,11 +188,12 @@ export default {
 
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: 1 }
+        params: { shop_id: 1, phone: _this.userinfo.uphone }
       })
       .then(res => {
         console.log(res);
-        _this.faceList = res.data.face;
+        _this.List = res.data.face;
+        console.log(this.faceList);
         _this.one_class_all = res.data.fw_class;
         _this.two_class_all = res.data.fw;
       });
@@ -196,17 +221,7 @@ export default {
     //   });
     // }
   },
-  watch: {
-    two_class_val(newval) {
-      console.log("触发");
-      console.log(newval);
-      // this.two_class = this.two_class_all.filter(item => {
-      //   return item.fid == val;
-      // });
-      // console.log(this.one_class_all);
-    },
-    face(newval) {}
-  },
+  watch: {},
   methods: {
     showPopup(val) {
       this.$emit("showPopup", val);
@@ -228,8 +243,6 @@ export default {
       this.step = 2;
     },
     next2() {
-      console.log("门店");
-      console.log(this.face);
       if (!this.one_class_val) {
         this.alertShow = true;
         this.modalInfo = "请选择分类";
@@ -238,16 +251,19 @@ export default {
         this.alertShow = true;
         this.modalInfo = "请选择子分类";
         return false;
+      } else if (!this.tw) {
+        this.alertShow = true;
+        this.modalInfo = "请选择图文详情";
+        return false;
       } else if (this.face.length <= 0) {
         this.alertShow = true;
         this.modalInfo = "请请选择支持的门店";
         return false;
+      } else if (!this.tupian) {
+        this.alertShow = true;
+        this.modalInfo = "请上传服务缩略图";
+        return false;
       }
-      // else if (!this.tupian) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请上传服务缩略图";
-      //   return false;
-      // }
 
       this.step = 3;
     },
@@ -256,13 +272,14 @@ export default {
       this.checkForm().then(
         res => {
           this.$axios
-            .get(_this.API_URL+"/api/ShopFw/add_shop_fw", {
+            .get(_this.API_URL + "/api/ShopFw/add_shop_fw", {
               params: {
                 fw_mingzi: this.fw_name,
                 sub_name: this.fw_short_info,
                 sub_content: this.fw_intr,
                 fw_cid: this.one_class_val,
                 fw_id: this.two_class_val,
+                fw_content_id:this.tw,
                 fw_face: this.face,
                 fw_img: this.tupian,
                 use_day: this.youxiao,
@@ -281,7 +298,7 @@ export default {
                   content: "上传服务成功，请等待审核",
                   onHide() {
                     _this.$router.replace({
-                      path: "/shanghu/me"
+                      path: "/shanghu/me/index"
                     });
                   }
                 });
@@ -291,7 +308,7 @@ export default {
                   content: "上传服务失败，请重新上传",
                   onHide() {
                     _this.$router.replace({
-                      path: "/shanghu/me/xmgl"
+                      path: "/shanghu/me/index"
                     });
                   }
                 });
@@ -317,6 +334,22 @@ export default {
       //   this.modalInfo = "请填写结算价";
       //   return false;
       // }
+    },
+    previewDetail(id) {
+      var _this = this;
+      // this.twDetailShow = true;
+
+      this.$axios
+        .get(_this.API_URL + "/Api/ShopFw/content", {
+          params: {
+            id
+          }
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.twDetailContent = data[0].fw_content;
+          this.twDetailShow = true;
+        });
     },
     // changeFw() {
     //   var _this = this;
@@ -394,28 +427,27 @@ export default {
       var _this = this;
       console.log(this.youxiao);
       console.log(typeof this.youxiao);
-      console.log(Number.isInteger(12));
       console.log(Number.isInteger(this.youxiao));
       console.log(!Number.isInteger(this.youxiao));
-
+      console.log(this.isPositiveInteger(this.youxiao));
       return new Promise((resolve, reject) => {
-        // if (!Number.isInteger(this.youxiao)) {
-        //   this.alertShow = true;
-        //   this.modalInfo = "请填写正确有效期";
-        //   reject();
-        // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-        //   this.alertShow = true;
-        //   this.modalInfo = "原价";
-        //   reject();
-        // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-        //   this.alertShow = true;
-        //   this.modalInfo = "请填写现价";
-        //   reject();
-        // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-        //   this.alertShow = true;
-        //   this.modalInfo = "请填写结算价";
-        //   reject();
-        // }
+        if (!this.isPositiveInteger(this.youxiao)) {
+          this.alertShow = true;
+          this.modalInfo = "请填写正确有效期";
+          reject();
+        } else if (!this.isPositiveInteger(this.yuanjia)) {
+          this.alertShow = true;
+          this.modalInfo = "原价";
+          reject();
+        } else if (!this.isPositiveInteger(this.xianjia)) {
+          this.alertShow = true;
+          this.modalInfo = "请填写现价";
+          reject();
+        } else if (!this.isPositiveInteger(this.jiesuanjia)) {
+          this.alertShow = true;
+          this.modalInfo = "请填写结算价";
+          reject();
+        }
         resolve();
       });
     },
@@ -425,6 +457,21 @@ export default {
         return item.fid == val;
       });
       console.log(this.one_class_all);
+    },
+    changeTwoClass(id) {
+      console.log("id:");
+      console.log(id);
+      var _this = this;
+      this.$axios
+        .get(_this.API_URL + "/Api/ShopFw/get_fw_content", {
+          params: {
+            id
+          }
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.twList = data;
+        });
     },
     checkSystem() {
       var u = navigator.userAgent;
@@ -471,7 +518,7 @@ export default {
         success: function(res) {
           var serverId = res.serverId; // 返回图片的服务器端ID
           _this.$axios
-            .get(_this.API_URL+"/api/wechat/bcimg", {
+            .get(_this.API_URL + "/api/wechat/bcimg", {
               params: {
                 imgs: res.serverId
               }
@@ -483,6 +530,11 @@ export default {
         }
       });
     },
+    isPositiveInteger(s) {
+      //是否为正整数
+      var re = /^[0-9]+$/;
+      return re.test(s);
+    }
     // 获取已有数据
     // getOldInfo() {
     //   var _this = this;
@@ -503,6 +555,9 @@ export default {
       return this.$route.params.fwId;
     }
   },
+  directives: {
+    TransferDom
+  },
   components: {
     bigTitle,
     ViewBox,
@@ -516,9 +571,14 @@ export default {
     Checker,
     CheckerItem,
     XTextarea,
-    KeyBoard
+    KeyBoard,
+    CheckBoxGroup,
+    CheckBox,
+    RadioGroup,
+    Radio,
+    XDialog
   },
-  mixins: []
+  mixins: [checkLogin]
 };
 </script>
 
@@ -547,6 +607,15 @@ export default {
     width: 2rem;
     height: 2rem;
     flex: none;
+  }
+}
+.tw-preview-detail {
+  .weui-dialog {
+    display: block;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    background: #ffffff;
+    overflow: scroll;
   }
 }
 </style>
