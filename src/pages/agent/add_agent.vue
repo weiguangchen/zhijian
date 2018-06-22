@@ -1,77 +1,81 @@
 <template>
-    <div class=" add-jms">
-        <div class="form-box dl">
-            <span class="title">添加人</span>
-            <span class="form-text">
-                {{userinfo.dl_name}}&nbsp;&nbsp;{{userinfo.uphone}}&nbsp;&nbsp;
-                <span v-if='userinfo.dl[0].dl_jb == 1'>股东代理</span>
-                <span v-else-if='userinfo.dl[0].dl_jb == 2'>市级代理</span>
-                <span v-else-if='userinfo.dl[0].dl_jb == 3'>区级代理</span>
-            </span>
-        </div>
+  <div class=" add-jms">
+    <div class="form-box dl">
+      <span class="title">添加人</span>
+      <span class="form-text">
+        {{userinfo.dl_name}}&nbsp;&nbsp;{{userinfo.uphone}}&nbsp;&nbsp;
+        <span v-if='userinfo.dl[0].dl_jb == 1'>股东代理</span>
+        <span v-else-if='userinfo.dl[0].dl_jb == 2'>市级代理</span>
+        <span v-else-if='userinfo.dl[0].dl_jb == 3'>区级代理</span>
+      </span>
+    </div>
 
-        <div class="form-group">
-            <div class="form-box">
-                <span class="title">代理商名称</span>
-                <span>
-                    <XInput placeholder='请输入加盟商名称' v-model="agent_name"></XInput>
-                </span>
-            </div>
-            <div class="form-box">
-                <span class="title">联系人</span>
-                <span>
-                    <XInput placeholder='请输入联系人姓名' v-model="name"></XInput>
-                </span>
-            </div>
-            <div class="form-box">
-                <span class="title">联系电话</span>
-                <span>
-                    <XInput placeholder='请输入联系人电话号码' v-model="phone"></XInput>
-                </span>
-            </div>
-        </div>
-        <!-- <CheckBoxGroup v-model="fw_class">
-            <CheckBox shape="circle" :val='item.id' v-for="(item,index) in fw_class_all" :key="index">{{item.class_name}}</CheckBox>
-        </CheckBoxGroup> -->
-        <Group>
-            <Cell title='级别' v-model="level"></Cell>
-        </Group>
-        <Group>
-            <Selector :options='areaList' title='区域' :value-map="['id','city']" direction='rtl' @on-change='changeArea' v-if="areaList" v-model='area'></Selector>
-        </Group>
-        <Group>
-            <Cell title='地址' v-model="cityVal" @click.native="cityShow = true"></Cell>
-        </Group>
-        <CitySelect v-model="cityShow" :callback="finishSelectCity" :items="District"></CitySelect>
+    <div class="form-group">
+      <div class="form-box">
+        <span class="title">代理商名称</span>
+        <span>
+          <XInput placeholder='请输入加盟商名称' v-model="agent_name"></XInput>
+        </span>
+      </div>
+      <div class="form-box">
+        <span class="title">联系人</span>
+        <span>
+          <XInput placeholder='请输入联系人姓名' v-model="name"></XInput>
+        </span>
+      </div>
+      <div class="form-box">
+        <span class="title">联系电话</span>
+        <span>
+          <XInput placeholder='请输入联系人电话号码' v-model="phone"></XInput>
+        </span>
+      </div>
+    </div>
 
-        <Group>
-            <XTextarea title='详细地址' v-model="address"></XTextarea>
-        </Group>
-        <!-- <Group>
+    <Group>
+      <Cell title='级别' v-model="level"></Cell>
+    </Group>
+
+    <Group v-if="agentType == 2">
+      <Selector :options='areaList' title='城市' :value-map="['id','city']" direction='rtl' @on-change='changeArea' v-if="areaList" v-model='area'></Selector>
+    </Group>
+    <Group v-else-if='agentType == 3'>
+      <Selector :options='cityList' title='城市' :value-map="['id','city']" direction='rtl' @on-change='changeCity' v-if="areaList" v-model='cityAreaVal'></Selector>
+      <Selector :options='qyList' title='区域' :value-map="['id','qy_name']" direction='rtl'  v-if="areaList" v-model='qyAreaVal'></Selector>
+    </Group>
+
+    <Group>
+      <Cell title='地址' v-model="cityVal" @click.native="cityShow = true"></Cell>
+    </Group>
+    <CitySelect v-model="cityShow" :callback="finishSelectCity" :items="District"></CitySelect>
+
+    <Group>
+      <XTextarea title='详细地址' v-model="address"></XTextarea>
+    </Group>
+    <!-- <Group>
             <XInput v-model="map.poiaddress" @on-focus='mapShow = true' title='选择地址'></XInput>
         </Group> -->
-        <!-- <div class="upload"> -->
-        <!-- <h2 class="sub-title">营业执照:</h2> -->
-        <!-- <div class="uploadImage"> -->
-        <!-- <div class="upload-btn" @click="chooseImg"> -->
-        <!-- <i class="iconfont icon-xiangji" v-if="!imgs && !localData"></i> -->
-        <!-- <template v-else> -->
-        <!-- 安卓预览图片 -->
-        <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
-        <!-- IOS预览图片 -->
-        <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
-        <!-- </template> -->
-        <!-- </div> -->
-        <!-- </div> -->
-        <!-- </div> -->
-        <div class="agree">
-            <CheckBoxGroup color='#e03233' v-model="agree">
-                <CheckBox shape="circle" :val='true'>同意指尖到位协议</CheckBox>
-            </CheckBoxGroup>
-        </div>
-        <XButton type='warn' @click.native='submit' :disabled='submiting'>提交</XButton>
-        <!-- <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap> -->
+    <!-- <div class="upload"> -->
+    <!-- <h2 class="sub-title">营业执照:</h2> -->
+    <!-- <div class="uploadImage"> -->
+    <!-- <div class="upload-btn" @click="chooseImg"> -->
+    <!-- <i class="iconfont icon-xiangji" v-if="!imgs && !localData"></i> -->
+    <!-- <template v-else> -->
+    <!-- 安卓预览图片 -->
+    <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
+    <!-- IOS预览图片 -->
+    <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
+    <!-- </template> -->
+    <!-- </div> -->
+    <!-- </div> -->
+    <!-- </div> -->
+    <div class="agree">
+      <CheckBoxGroup color='#e03233' v-model="agree">
+        <CheckBox shape="circle" :val='true'>同意指尖到位协议</CheckBox>
+      </CheckBoxGroup>
     </div>
+    <XButton type='warn' @click.native='submit' :disabled='submiting'>提交</XButton>
+    <!-- <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap> -->
+  </div>
 </template>
 
 <script>
@@ -99,13 +103,17 @@ export default {
       city: ChinaAddressV4Data,
       areaList: [],
       submiting: false,
-
+      cityList:[],
+      qyList:[],
+      cityVal: "请选择地址",
+      
       agent_name: "",
       name: "",
       phone: "",
       level: "",
       area: "",
-      cityVal: "请选择地址",
+      cityAreaVal:'',
+      qyAreaVal:'',
       sheng: "",
       shi: "",
       qu: "",
@@ -155,6 +163,11 @@ export default {
     } else if (this.userinfo.dl[0].dl_jb == 2) {
       // 市级代理
       this.level = "区域代理";
+      // 获取代理区域
+      this.$axios.get(this.API_URL + "/Api/Dl/get_city").then(({ data }) => {
+        console.log(data);
+        _this.cityList = data;
+      });
     }
 
     //   console.log(_this.city);
@@ -187,7 +200,8 @@ export default {
           if (this.agentType == 2) {
             params.city = this.area;
           } else if (this.agentType == 3) {
-            params.qy = this.area;
+            params.qy = this.qyAreaVal;
+            params.city = this.cityAreaVal;
           }
           // 判断是否存在代理
           this.checkArea().then(
@@ -223,7 +237,7 @@ export default {
                 });
             },
             err => {
-                this.submiting = false;
+              this.submiting = false;
             }
           );
         },
@@ -299,6 +313,16 @@ export default {
     changeArea(val) {
       console.log(val);
       this.checkArea();
+    },
+    changeCity(val){
+      var _this = this;
+      this.$axios.get(_this.API_URL+"/Api/Dl/get_city",{
+        params:{
+          city_id :val
+        }
+      }).then(({data})=>{
+        this.qyList = data
+      })
     },
     finishSelectCity(val) {
       console.log(val);

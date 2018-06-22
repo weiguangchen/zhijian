@@ -70,7 +70,7 @@ export default {
       width: 1.173333rem;
       height: 1.173333rem;
       margin-bottom: 0.2rem;
-      border-radius: 50%;
+      // border-radius: 50%;
     }
   }
 }

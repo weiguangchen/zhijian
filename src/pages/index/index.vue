@@ -2,13 +2,13 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-19 14:29:25
+ * @Last Modified time: 2018-06-22 17:32:22
  */
 <template>
   <keep-alive>
     <div class="page">
       <ViewBox>
-        <div class="top-ad">
+        <div class="top-ad" :style="{'background-image':top_ad}">
           <div class="top-input">
             <span class="add" v-if="address">{{address.city}}</span>
             <input placeholder='请输入商家名或地点' class="search" />
@@ -19,8 +19,8 @@
         <classify :classArr='classArr' v-if="classArr.length"></classify>
         <div class="huodong">
           <Swiper :aspect-ratio='0.31'>
-            <SwiperItem>
-              <img src="~img/index/banner.png" alt="">
+            <SwiperItem v-for="(item,index) in middle_ad" :key="index">
+              <img :src="item" alt="">
             </SwiperItem>
           </Swiper>
           <!-- <div class="item">
@@ -89,7 +89,9 @@ export default {
       selectedTab: 0,
       classArr: [],
       listArr: {},
-      activeListId: ""
+      activeListId: "",
+      top_ad:'',
+      middle_ad:[]
     };
   },
   created() {
@@ -112,7 +114,12 @@ export default {
       _this.classArr = res.data.class;
       _this.listArr = res.data.info;
     });
+    
 
+    this.$axios.get(_this.API_URL+'/Api/Show/get_gg').then(({data})=>{
+      this.top_ad = data.one_img;
+      this.middle_ad =this.middle_ad.push(data.two_img);
+    })
     // this.$wx.ready(function() {
     //   _this.$wx.getLocation({
     //     type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -161,7 +168,8 @@ export default {
 <style lang='scss'>
 .top-ad {
   height: 2.666667rem;
-  background: url(~img/index/top-ad.png) no-repeat;
+  background-image: url(~img/index/top-ad.png);
+  background-repeat: no-repeat;
   background-size: cover;
   .top-input {
     display: flex;
