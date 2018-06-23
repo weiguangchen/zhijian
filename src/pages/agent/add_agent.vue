@@ -40,7 +40,7 @@
     </Group>
     <Group v-else-if='agentType == 3'>
       <Selector :options='cityList' title='城市' :value-map="['id','city']" direction='rtl' @on-change='changeCity' v-if="areaList" v-model='cityAreaVal'></Selector>
-      <Selector :options='qyList' title='区域' :value-map="['id','qy_name']" direction='rtl'  v-if="areaList" v-model='qyAreaVal'></Selector>
+      <Selector :options='qyList' title='区域' :value-map="['id','qy_name']" direction='rtl'  @on-change='changeQy' v-if="areaList" v-model='qyAreaVal'></Selector>
     </Group>
 
     <Group>
@@ -182,6 +182,7 @@ export default {
   },
   methods: {
     submit() {
+      var _this = this;
       this.submiting = true;
       this.formValidata().then(
         res => {
@@ -197,14 +198,18 @@ export default {
             fid: this.userinfo.dl[0].id
           };
           // 判断增加区级代理还是市级代理
+          var areaid;          
           if (this.agentType == 2) {
             params.city = this.area;
+            areaid = this.area;
           } else if (this.agentType == 3) {
             params.qy = this.qyAreaVal;
             params.city = this.cityAreaVal;
+            areaid = this.qyAreaVal;
           }
+    
           // 判断是否存在代理
-          this.checkArea().then(
+          this.checkArea(areaid).then(
             res => {
               console.log(params);
               this.$axios
@@ -272,14 +277,14 @@ export default {
         }
       });
     },
-    checkArea() {
+    checkArea(id) {
       var _this = this;
 
       return new Promise((resolve, reject) => {
         this.$axios
           .get(this.API_URL + "/Api/Dl/adress_yes", {
             params: {
-              id: _this.area,
+              id: id,
               status: _this.cityApiType
             }
           })
@@ -311,8 +316,7 @@ export default {
       });
     },
     changeArea(val) {
-      console.log(val);
-      this.checkArea();
+      this.checkArea(val);
     },
     changeCity(val){
       var _this = this;
@@ -323,6 +327,9 @@ export default {
       }).then(({data})=>{
         this.qyList = data
       })
+    },
+    changeQy(val){
+      this.checkArea(val);
     },
     finishSelectCity(val) {
       console.log(val);
@@ -392,7 +399,8 @@ export default {
       this.mapShow = false;
       this.map = val;
       console.log(val);
-    }
+    },
+
   },
   computed: {
     agentType() {

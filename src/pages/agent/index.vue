@@ -57,7 +57,7 @@
             </div>
             <div class="oplist">
                 <Group>
-                    <Cell title='添加代理商' :is-link='true' link='/addAgent'>
+                    <Cell title='添加代理商' :is-link='true' link='/addAgent' v-if="userinfo.dl[0].dl_jb != 3 ">
                     </Cell>
                     <Cell title='我的代理商' :is-link='true'>
                     </Cell>

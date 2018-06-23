@@ -27,7 +27,6 @@
                 </span>
             </div>
         </div>
-        {{fw_class}}
         <CheckBoxGroup v-model="fw_class">
             <CheckBox shape="circle" :val='item.id' v-for="(item,index) in fw_class_all" :key="index">{{item.class_name}}</CheckBox>
         </CheckBoxGroup>
@@ -134,6 +133,7 @@ export default {
   },
   methods: {
     submit() {
+      var _this = this;
       var params = {
         dl_id: this.userinfo.dl[0].id,
         shop_phone: this.phone,
