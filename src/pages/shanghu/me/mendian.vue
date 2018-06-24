@@ -22,7 +22,7 @@
 
 <script>
 import bigTitle from "@/components/bigTitle/index";
-import checkLogin from '@/mixins/checkLogin.js';
+import checkLogin from "@/mixins/checkLogin.js";
 import { ViewBox, XButton } from "vux";
 export default {
   data() {
@@ -86,8 +86,8 @@ export default {
     },
     get_face() {
       var _this = this;
-      if(this.userinfo.shop.length>0){
-         this.$axios
+
+      this.$axios
         .get(this.API_URL + "/Api/Shop/get_face", {
           params: {
             shop_id: _this.userinfo.shop[0].id //商户id
@@ -97,8 +97,6 @@ export default {
           console.log(data);
           _this.faceList = data;
         });
-      }
-     
     }
   },
   components: {
@@ -106,7 +104,7 @@ export default {
     bigTitle,
     XButton
   },
-  mixins:[checkLogin]
+  mixins: [checkLogin]
 };
 </script>
 

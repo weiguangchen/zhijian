@@ -23,7 +23,7 @@ import bigTitle from "@/components/bigTitle/index";
 import myMap from "@/components/map/index";
 import wxConfig from "@/mixins/wxConfig.js";
 import { XInput, Group, XButton } from "vux";
-
+import checkLogin from '@/mixins/checkLogin.js';
 export default {
   data() {
     return {
@@ -158,7 +158,7 @@ export default {
       }
     }
   },
-  mixins: []
+  mixins: [checkLogin]
 };
 </script>
 
