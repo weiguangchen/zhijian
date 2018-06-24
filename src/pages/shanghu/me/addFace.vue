@@ -11,8 +11,8 @@
         <XInput v-model="loc.poiaddress" @click.native='selectAdd'></XInput>
       </Group>
       <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
-      <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='finishBtn'>增加门店</XButton>
-      <XButton type='warn' class="xbtn" @click.native='change_face' v-else :disabled='finishBtn'>提交修改</XButton>
+      <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='submiting'>增加门店</XButton>
+      <XButton type='warn' class="xbtn" @click.native='change_face' v-else :disabled='submiting'>提交修改</XButton>
     </div>
 
   </div>
@@ -27,6 +27,7 @@ import { XInput, Group, XButton } from "vux";
 export default {
   data() {
     return {
+      submiting:false,
       face_name: "",
       mapShow: false,
       loc: ""
@@ -53,6 +54,7 @@ export default {
       this.$emit("showPopup", val);
     },
     add_face() {
+      this.submiting = true;
       var _this = this;
       console.log("提交");
       this.$axios
@@ -61,12 +63,23 @@ export default {
             face_name: _this.face_name,
             jd: _this.loc.latlng.lat,
             wd: _this.loc.latlng.lng,
-            fw_shop_id: 1
+            fw_shop_id: 1,
+            phone:_this.userinfo.uphone
           }
         })
         .then(({ data }) => {
           if (data.status == 1) {
+            this.$vux.alert.show({
+              title: "提示",
+              content: "创建门店成功！",
+              onHide() {
+                _this.$router.replace({
+                  path: "/shanghu/me/mendian"
+                });
+              }
+            });
           } else if (data.status == 0) {
+            this.submiting = false;
             this.$vux.alert.show({
               title: "提示",
               content: "创建门店失败，请重试！",
@@ -77,6 +90,8 @@ export default {
               }
             });
           }
+        },err=>{
+          this.submiting = false;
         });
     },
     change_face() {

@@ -76,10 +76,10 @@ export default {
     yanzheng() {
       var _this = this;
 
-      if (this.yzm != this.code && this.yzm && this.code) {
-        this.$vux.toast.show({
-          text: "请输入正确验证码",
-          position: "middle"
+      if (!(this.yzm == this.code && this.yzm && this.code)) {
+        this.$vux.alert.show({
+          title: "提示",
+          content: "请验证手机号！"
         });
         return false;
       } else {

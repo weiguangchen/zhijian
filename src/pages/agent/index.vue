@@ -46,7 +46,7 @@
                         </div>
                         <div class="text">区县代理</div>
                     </div>
-                    <div class="order-term-item" @click="add_jms" v-if="userinfo.dl[0].dl_jb == 3">
+                    <div class="order-term-item">
                         <div class="icon">
                             <span class="iconfont icon-jiamengshang"></span>
                         </div>
@@ -59,14 +59,16 @@
                 <Group>
                     <Cell title='添加代理商' :is-link='true' link='/addAgent' v-if="userinfo.dl[0].dl_jb != 3 ">
                     </Cell>
+                    <Cell title='添加加盟商' :is-link='true' link='/addJms' v-if="userinfo.dl[0].dl_jb == 3 " @click="add_jms">
+                    </Cell>
                     <Cell title='我的代理商' :is-link='true'>
                     </Cell>
-                    <Cell title='我的加盟商' :is-link='true'>
+                    <!-- <Cell title='我的加盟商' :is-link='true'>
                     </Cell>
                     <Cell title='我的报表' :is-link='true'>
                     </Cell>
                     <Cell title='我的钱包' :is-link='true'>
-                    </Cell>
+                    </Cell> -->
                 </Group>
             </div>
         </ViewBox>
@@ -140,6 +142,7 @@ export default {
         width: 2.133333rem;
         height: 2.133333rem;
         margin-bottom: 0.213333rem;
+        border-radius: 50%;
       }
       .name {
         @include font-dpr(14px);

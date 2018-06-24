@@ -188,7 +188,7 @@ export default {
 
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: 1, phone: _this.userinfo.uphone }
+        params: { shop_id: _this.userinfo.shop[0].id, phone: _this.userinfo.uphone }
       })
       .then(res => {
         console.log(res);

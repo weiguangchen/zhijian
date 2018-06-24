@@ -1,128 +1,153 @@
 <template>
-    <div class="page add-jms">
-        <div class="form-box dl">
-            <span class="title">代理商</span>
-            <span>
-                <XInput v-model="dl" :disabled='true'></XInput>
-            </span>
-        </div>
-
-        <div class="form-group">
-            <div class="form-box">
-                <span class="title">加盟商名称</span>
-                <span>
-                    <XInput placeholder='请输入加盟商名称' v-model="jms_name"></XInput>
-                </span>
-            </div>
-            <div class="form-box">
-                <span class="title">联系人</span>
-                <span>
-                    <XInput placeholder='请输入联系人姓名' v-model="name"></XInput>
-                </span>
-            </div>
-            <div class="form-box">
-                <span class="title">联系电话</span>
-                <span>
-                    <XInput placeholder='请输入联系人电话号码' v-model="phone"></XInput>
-                </span>
-            </div>
-        </div>
-        <CheckBoxGroup v-model="fw_class">
-            <CheckBox shape="circle" :val='item.id' v-for="(item,index) in fw_class_all" :key="index">{{item.class_name}}</CheckBox>
-        </CheckBoxGroup>
-        <Group>
-            <XAddress title='地区' :list='city' v-model="cityVal"></XAddress>
-        </Group>
-        <Group>
-            <XTextarea title='地址' v-model="address"></XTextarea>
-        </Group>
-        <Group>
-            <XInput v-model="map.poiaddress" @on-focus='mapShow = true' title='选择地址'></XInput>
-        </Group>
-        <div class="upload">
-            <h2 class="sub-title">营业执照:</h2>
-            <div class="uploadImage">
-                <div class="upload-btn" @click="chooseImg">
-                    <i class="iconfont icon-xiangji" v-if="!imgs && !localData"></i>
-                    <template v-else>
-                        <!-- 安卓预览图片 -->
-                        <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
-                        <!-- IOS预览图片 -->
-                        <img :src="localData || tupian" alt="" v-else class="thumb">
-                    </template>
-
-                </div>
-
-            </div>
-
-        </div>
-        <div class="agree">
-            <CheckBoxGroup color='#e03233' v-model="agree">
-                <CheckBox shape="circle">同意指尖到位协议</CheckBox>
-            </CheckBoxGroup>
-        </div>
-        <XButton type='warn' @click.native='submit'>提交</XButton>
-        <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
+  <div class="add-jms">
+    <div class="form-box dl">
+      <span class="title">代理商</span>
+      <span class="form-text">
+        {{userinfo.dl[0].xingming}}&nbsp;&nbsp;{{userinfo.uphone}}&nbsp;&nbsp;
+        <span v-if='userinfo.dl[0].dl_jb == 1'>股东代理</span>
+        <span v-else-if='userinfo.dl[0].dl_jb == 2'>市级代理</span>
+        <span v-else-if='userinfo.dl[0].dl_jb == 3'>区级代理</span>
+      </span>
     </div>
+
+    <div class="form-group">
+      <div class="form-box">
+        <span class="title">加盟商名称</span>
+        <span>
+          <XInput placeholder='请输入加盟商名称' v-model="jms_name"></XInput>
+        </span>
+      </div>
+      <div class="form-box">
+        <span class="title">联系人</span>
+        <span>
+          <XInput placeholder='请输入联系人姓名' v-model="name"></XInput>
+        </span>
+      </div>
+      <div class="form-box">
+        <span class="title">联系电话</span>
+        <span>
+          <XInput placeholder='请输入联系人电话号码' v-model="phone"></XInput>
+        </span>
+      </div>
+    </div>
+    <Group class="classifiy">
+      <div>类别</div>
+      <CheckBoxGroup v-model="fw_class">
+        <CheckBox shape="circle" :val='item.id' v-for="(item,index) in fw_class_all" :key="index">{{item.class_name}}</CheckBox>
+      </CheckBoxGroup>
+    </Group>
+
+    <Group>
+      <!-- <XAddress title='地区' :list='city' v-model="cityVal"></XAddress> -->
+      <Cell title='加盟城市' v-model="cityAreaKey"></Cell>
+      <Cell title='加盟区域' v-model="qyAreaKey"></Cell>
+      <Selector :options='sqList' title='加盟社区' :value-map="['id','sq_name']" direction='rtl' @on-change='changeQy' v-model='sqAreaVal'></Selector>
+    </Group>
+    <Group>
+      <XTextarea title='详细地址' v-model="address"></XTextarea>
+    </Group>
+    <Group>
+      <XInput v-model="map.poiaddress" @on-focus='mapShow = true' title='选择地址'></XInput>
+    </Group>
+    <div class="upload">
+      <h2 class="sub-title">营业执照:</h2>
+      <div class="uploadImage">
+        <div class="upload-btn" @click="chooseImg">
+          <i class="iconfont icon-xiangji" v-if="!imgs && !localData"></i>
+          <!-- imgs{{imgs}}
+          localData{{localData}}
+          tupian{{tupian}} -->
+          <template v-else>
+            <!-- 安卓预览图片 -->
+            <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
+            <!-- IOS预览图片 -->
+            <img :src="localData || tupian" alt="" v-else class="thumb">
+          </template>
+
+        </div>
+
+      </div>
+
+    </div>
+    <div class="agree">
+      <!-- <CheckBoxGroup color='#e03233'> -->
+      <CheckBox shape="circle" v-model="agree">同意指尖到位协议</CheckBox>
+      <!-- </CheckBoxGroup> -->
+    </div>
+    <XButton type='warn' @click.native='submit' :disabled='submiting'>提交</XButton>
+    <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
+  </div>
 </template>
 
 <script>
 import myMap from "@/components/map/index";
-import { XInput, XTextarea, Group, XAddress, XButton } from "vux";
+import {
+  XInput,
+  XTextarea,
+  Group,
+  XAddress,
+  XButton,
+  Cell,
+  Selector
+} from "vux";
 import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
 import checkLogin from "@/mixins/checkLogin.js";
 export default {
   data() {
     return {
+      submiting: false,
       mapShow: false,
-      dl: "李海东  15223032043",
       city: [],
       fw_class_all: [],
+      system: 1,
+      imgs: "",
+      localData: "",
+      sqList: [],
 
       jms_name: "",
       name: "",
       phone: "",
-      cityVal: [],
+      fw_class: [],
+      cityAreaKey: "",
+      cityAreaVal: "",
+      qyAreaKey: "",
+      qyAreaVal: "",
+      sqAreaVal: "",
+      // cityVal: [],
       address: "",
       map: {},
-      agree: [],
-      system: 1,
-      imgs: "",
-      localData: "",
       tupian: "",
-      fw_class: [1,2]
+      agree: false
     };
   },
   created() {
+    this.checkSystem();
+    // this.$eruda.init();
     var _this = this;
+    // 获取城市信息
     this.$axios.get(this.API_URL + "/Api/UserShow/city").then(({ data }) => {
       console.log(data);
-
+      // 获取城市信息
       data.map(m => {
-        var address = {};
-        address.name = m.city;
-        address.value = m.id;
-        _this.city.push(address);
-        if (m.qy.length > 0) {
-          m.qy.map(n => {
-            var address = {};
-            address.name = n.qy_name;
-            address.value = n.id;
-            address.parent = n.city_id;
-            _this.city.push(address);
-            if (n.sq.length > 0) {
-              n.sq.map(s => {
-                var address = {};
-                address.name = s.sq_name;
-                address.value = s.id;
-                address.parent = s.qy_id;
-                _this.city.push(address);
-              });
-            }
-          });
+        if (m.id == this.userinfo.dl[0].city_id) {
+          this.cityAreaKey = m.city;
+          this.cityAreaVal = m.id;
+          if (m.qy) {
+            m.qy.map(q => {
+              if (q.id == this.userinfo.dl[0].qy_id) {
+                this.qyAreaKey = q.qy_name;
+                this.qyAreaVal = q.id;
+                if (q.sq) {
+                  this.sqList = q.sq;
+                }
+              }
+            });
+          }
         }
       });
-      console.log(_this.city);
+
+      // 获取社区列表
+
       this.$axios
         .get(this.API_URL + "/Api/ShopFw/fw_shop_class")
         .then(({ data }) => {
@@ -134,50 +159,104 @@ export default {
   methods: {
     submit() {
       var _this = this;
-      var params = {
-        dl_id: this.userinfo.dl[0].id,
-        shop_phone: this.phone,
-        zj_img: this.tupian,
-        adress: this.address,
-        jd: this.map.latlng.lat,
-        wd: this.map.latlng.lng,
-        city: this.cityValue,
-        qy: this.qyValue,
-        sq: this.sqValue,
-        shop_name: this.jms_name,
-        xingming: this.name,
-        fw_class: this.fw_class
-      };
+      this.submiting = true;
+      this.formValidata().then(
+        res => {
+          var params = {
+            shop_name: this.jms_name,
+            xingming: this.name,
+            shop_phone: this.phone,
+            fw_class: this.fw_class,
+            city: this.cityAreaVal,
+            qy: this.qyAreaVal,
+            sq: this.sqAreaVal,
+            adress: this.address,
+            jd: this.map.latlng.lat,
+            wd: this.map.latlng.lng,
+            zj_img: this.tupian,
+            dl_id: this.userinfo.dl[0].id
+          };
 
-      console.log(params);
-      this.$axios
-        .get(this.API_URL + "/Api/ShopFw/add_fw_shop", {
-          params
-        })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.status == 1) {
-            _this.$vux.alert.show({
-              title: "提示",
-              content: "添加成功！",
-              onHide() {
-                _this.$router.replace({
-                  path: "/agent"
+          console.log(params);
+          this.$axios
+            .get(this.API_URL + "/Api/ShopFw/add_fw_shop", {
+              params
+            })
+            .then(({ data }) => {
+              console.log(data);
+              if (data.status == 1) {
+                _this.$vux.alert.show({
+                  title: "提示",
+                  content: "添加成功！",
+                  onHide() {
+                    _this.$router.replace({
+                      path: "/agent"
+                    });
+                  }
+                });
+              } else {
+                _this.$vux.alert.show({
+                  title: "提示",
+                  content: "添加失败！",
+                  onHide() {
+                    _this.$router.replace({
+                      path: "/agent"
+                    });
+                  }
                 });
               }
             });
-          } else {
-            _this.$vux.alert.show({
-              title: "提示",
-              content: "添加失败！",
-              onHide() {
-                _this.$router.replace({
-                  path: "/agent"
-                });
-              }
-            });
-          }
-        });
+        },
+        err => {
+          this.submiting = false;
+        }
+      );
+    },
+    formValidata() {
+      var _this = this;
+      return new Promise((resolve, reject) => {
+        if (!this.jms_name) {
+          _this.alertWarning("请输入加盟商名称！");
+          reject();
+        } else if (!this.name) {
+          _this.alertWarning("请输入联系人名称！");
+          rejcet();
+        } else if (
+          !this.phone ||
+          !/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(
+            this.phone
+          )
+        ) {
+          _this.alertWarning("请输入正确联系电话！");
+          rejcet();
+        } else if (this.fw_class.length <= 0) {
+          _this.alertWarning("请选择类别！");
+          rejcet();
+        } else if (!this.sqAreaVal) {
+          _this.alertWarning("请选择代理社区！");
+          rejcet();
+        } else if (!this.address) {
+          _this.alertWarning("请填写详细地址！");
+          rejcet();
+        } else if (!this.tupian) {
+          _this.alertWarning("请上传营业执照！");
+          rejcet();
+        } else if (!this.map) {
+          _this.alertWarning("请选择地址！");
+          rejcet();
+        } else if (!this.agree) {
+          _this.alertWarning("请同意协议！");
+          rejcet();
+        } else {
+          resolve();
+        }
+      });
+    },
+    alertWarning(text) {
+      this.$vux.alert.show({
+        title: "提示",
+        content: text
+      });
     },
     checkSystem() {
       var u = navigator.userAgent;
@@ -240,11 +319,16 @@ export default {
       this.mapShow = false;
       this.map = val;
       console.log(val);
-    }
+    },
+    changeQy() {}
   },
   computed: {
     cityValue() {
-      return this.cityVal[0];
+      var city = [];
+      city[0] = this.cityAreaVal;
+      city[1] = this.qyAreaVal;
+      city[2] = this.sqAreaVal;
+      return city;
     },
     qyValue() {
       return this.cityVal[1].split("-")[1];
@@ -261,7 +345,9 @@ export default {
     XButton,
     CheckBoxGroup,
     CheckBox,
-    myMap
+    myMap,
+    Selector,
+    Cell
   },
   mixins: [checkLogin]
 };
@@ -292,6 +378,16 @@ export default {
       flex: none;
       border-right: 1px solid #c6c6c6;
     }
+    .form-text {
+      padding-left: 15px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      color: #686868;
+    }
+  }
+  .classifiy {
+    margin: 0.4rem 0;
   }
   .form-group {
     .form-box {

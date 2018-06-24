@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-22 15:43:16
+ * @Last Modified time: 2018-06-24 12:32:18
  */
 import Vue from 'vue'
 import Router from 'vue-router'

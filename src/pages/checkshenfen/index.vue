@@ -1,7 +1,6 @@
 <template>
   <div class="shanghu-page">
     <bigTitle title="确认身份" :icon='false'></bigTitle>
-    {{checkType}}
     <div class="my-form">
       <div class="form-box">
 
@@ -76,11 +75,11 @@ export default {
     },
     yanzheng() {
       var _this = this;
-
-      if (this.yzm != this.code && this.yzm && this.code) {
-        this.$vux.toast.show({
-          text: "请输入正确验证码",
-          position: "middle"
+      console.log(!(this.yzm == this.code && this.yzm && this.code))
+      if (!(this.yzm == this.code && this.yzm && this.code)) {
+        this.$vux.alert.show({
+          title: "提示",
+          content: "请验证手机号！"
         });
         return false;
       } else {

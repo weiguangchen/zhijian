@@ -3,7 +3,7 @@
     <div class="form-box dl">
       <span class="title">添加人</span>
       <span class="form-text">
-        {{userinfo.dl_name}}&nbsp;&nbsp;{{userinfo.uphone}}&nbsp;&nbsp;
+        {{userinfo.dl[0].xingming}}&nbsp;&nbsp;{{userinfo.uphone}}&nbsp;&nbsp;
         <span v-if='userinfo.dl[0].dl_jb == 1'>股东代理</span>
         <span v-else-if='userinfo.dl[0].dl_jb == 2'>市级代理</span>
         <span v-else-if='userinfo.dl[0].dl_jb == 3'>区级代理</span>
@@ -36,11 +36,12 @@
     </Group>
 
     <Group v-if="agentType == 2">
-      <Selector :options='areaList' title='城市' :value-map="['id','city']" direction='rtl' @on-change='changeArea' v-if="areaList" v-model='area'></Selector>
+      <Selector :options='areaList' title='代理城市' :value-map="['id','city']" direction='rtl' @on-change='changeArea' v-if="areaList" v-model='area'></Selector>
     </Group>
     <Group v-else-if='agentType == 3'>
-      <Selector :options='cityList' title='城市' :value-map="['id','city']" direction='rtl' @on-change='changeCity' v-if="areaList" v-model='cityAreaVal'></Selector>
-      <Selector :options='qyList' title='区域' :value-map="['id','qy_name']" direction='rtl'  @on-change='changeQy' v-if="areaList" v-model='qyAreaVal'></Selector>
+      <!-- <Selector :options='cityList' title='城市' :value-map="['id','city']" direction='rtl' @on-change='changeCity' v-if="areaList" v-model='cityAreaVal'></Selector> -->
+      <Cell title='代理城市' v-model="cityAreaKey"></Cell>
+      <Selector :options='qyList' title='代理区域' :value-map="['id','qy_name']" direction='rtl' @on-change='changeQy' v-if="areaList" v-model='qyAreaVal'></Selector>
     </Group>
 
     <Group>
@@ -103,17 +104,18 @@ export default {
       city: ChinaAddressV4Data,
       areaList: [],
       submiting: false,
-      cityList:[],
-      qyList:[],
+      cityList: [],
+      qyList: [],
       cityVal: "请选择地址",
-      
+
       agent_name: "",
       name: "",
       phone: "",
       level: "",
       area: "",
-      cityAreaVal:'',
-      qyAreaVal:'',
+      cityAreaKey: "",
+      cityAreaVal: "",
+      qyAreaVal: "",
       sheng: "",
       shi: "",
       qu: "",
@@ -126,6 +128,7 @@ export default {
     // 获取地区三级联动数据
     this.$axios.get(this.API_URL + "/Api/UserShow/city").then(({ data }) => {
       console.log(data);
+      // 处理数据数据为插件需要格式
       data.map(m => {
         var address = {};
         address.name = m.city;
@@ -151,6 +154,7 @@ export default {
         }
       });
     });
+
     // 判断添加级别
     if (this.userinfo.dl[0].dl_jb == 1) {
       // 股东代理
@@ -167,18 +171,19 @@ export default {
       this.$axios.get(this.API_URL + "/Api/Dl/get_city").then(({ data }) => {
         console.log(data);
         _this.cityList = data;
+        data.map(m => {
+          console.log(m.id);
+          console.log(_this.userinfo.dl[0].city_id);
+          if (m.id == _this.userinfo.dl[0].city_id) {
+            _this.cityAreaVal = m.id;
+            _this.cityAreaKey = m.city;
+          }
+        });
+
+        _this.changeCity(_this.cityAreaVal);
       });
     }
 
-    //   console.log(_this.city);
-    //   this.$axios
-    //     .get(this.API_URL + "/Api/ShopFw/fw_shop_class")
-    //     .then(({ data }) => {
-    //       console.log(data);
-    //       this.fw_class_all = data;
-    //     });
-
-    // 判断添加的代理区域
   },
   methods: {
     submit() {
@@ -198,7 +203,7 @@ export default {
             fid: this.userinfo.dl[0].id
           };
           // 判断增加区级代理还是市级代理
-          var areaid;          
+          var areaid;
           if (this.agentType == 2) {
             params.city = this.area;
             areaid = this.area;
@@ -207,44 +212,48 @@ export default {
             params.city = this.cityAreaVal;
             areaid = this.qyAreaVal;
           }
-    
+
           // 判断是否存在代理
-          this.checkArea(areaid).then(
-            res => {
-              console.log(params);
-              this.$axios
-                .get(this.API_URL + "/Api/Dl/add_dl", {
-                  params
-                })
-                .then(({ data }) => {
-                  console.log(data);
-                  if (data.status == 1) {
-                    this.$vux.alert.show({
-                      title: "提示",
-                      content: "添加成功！",
-                      onHide() {
-                        _this.$router.replace({
-                          path: "/agent"
-                        });
-                      }
-                    });
-                  } else {
-                    this.$vux.alert.show({
-                      title: "提示",
-                      content: "添加失败！",
-                      onHide() {
-                        _this.$router.replace({
-                          path: "/agent"
-                        });
-                      }
-                    });
-                  }
-                });
-            },
-            err => {
-              this.submiting = false;
-            }
-          );
+          this.checkArea(areaid)
+            .then(res => {
+              return this.checkHasPhone();
+            })
+            .then(
+              res => {
+                console.log(params);
+                this.$axios
+                  .get(this.API_URL + "/Api/Dl/add_dl", {
+                    params
+                  })
+                  .then(({ data }) => {
+                    console.log(data);
+                    if (data.status == 1) {
+                      this.$vux.alert.show({
+                        title: "提示",
+                        content: "添加成功！",
+                        onHide() {
+                          _this.$router.replace({
+                            path: "/agent"
+                          });
+                        }
+                      });
+                    } else {
+                      this.$vux.alert.show({
+                        title: "提示",
+                        content: "添加失败！",
+                        onHide() {
+                          _this.$router.replace({
+                            path: "/agent"
+                          });
+                        }
+                      });
+                    }
+                  });
+              },
+              err => {
+                this.submiting = false;
+              }
+            );
         },
         err => {
           this.submiting = false;
@@ -260,8 +269,13 @@ export default {
         } else if (!this.name) {
           _this.alertWarning("请输入联系人！");
           rejcet();
-        } else if (!this.phone) {
-          _this.alertWarning("请输入联系电话！");
+        } else if (
+          !this.phone ||
+          !/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(
+            this.phone
+          )
+        ) {
+          _this.alertWarning("请输入正确联系电话！");
           rejcet();
         } else if (!this.cityVal) {
           _this.alertWarning("请选择地址！");
@@ -309,6 +323,25 @@ export default {
           });
       });
     },
+    checkHasPhone() {
+      var _this = this;
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .get(this.API_URL + "/Api/Dl/phone_yes", {
+            params: {
+              phone: this.phone
+            }
+          })
+          .then(({ data }) => {
+            if (data.status == 0) {
+              this.alertWarning("该手机号已存在,不能重复添加！");
+              reject();
+            }else if(data.status == 1){
+              resolve();
+            }
+          })
+      });
+    },
     alertWarning(text) {
       this.$vux.alert.show({
         title: "提示",
@@ -318,17 +351,19 @@ export default {
     changeArea(val) {
       this.checkArea(val);
     },
-    changeCity(val){
+    changeCity(val) {
       var _this = this;
-      this.$axios.get(_this.API_URL+"/Api/Dl/get_city",{
-        params:{
-          city_id :val
-        }
-      }).then(({data})=>{
-        this.qyList = data
-      })
+      this.$axios
+        .get(_this.API_URL + "/Api/Dl/get_city", {
+          params: {
+            city_id: val
+          }
+        })
+        .then(({ data }) => {
+          this.qyList = data;
+        });
     },
-    changeQy(val){
+    changeQy(val) {
       this.checkArea(val);
     },
     finishSelectCity(val) {
@@ -399,8 +434,7 @@ export default {
       this.mapShow = false;
       this.map = val;
       console.log(val);
-    },
-
+    }
   },
   computed: {
     agentType() {
