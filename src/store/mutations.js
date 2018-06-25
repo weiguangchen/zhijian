@@ -11,6 +11,9 @@ const mutations = {
   SET_ENTRYURL: (state, preload) => {
     state.entryUrl = preload;
   },
+  SET_ROUTER:(state,preload)=>{
+    state.routerMap = preload;
+  }
 }
 
 export default mutations;

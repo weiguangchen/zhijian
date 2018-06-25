@@ -46,7 +46,7 @@
             <i class="iconfont icon-jinru"></i>
           </span>
         </myTitle>
-        <div class="content" v-html="fw_info.fw_content">
+        <div class="content" v-html="fw_info.fw_content[0].fw_content" v-if="fw_info.fw_content">
 
         </div>
       </div>
@@ -178,6 +178,7 @@ export default {
   watch: {
     $route() {
       this.get_fw_info();
+      
     }
   },
   computed: {

@@ -8,7 +8,16 @@
       </Group>
       <h2 class="sub-title">门店位置:</h2>
       <Group class="reset-vux-input">
-        <XInput v-model="loc.poiaddress" @click.native='selectAdd'></XInput>
+        <XInput v-model="map.poiaddress" @click.native='selectAdd'></XInput>
+      </Group>
+      <h2 class="sub-title">详细地址:</h2>
+      <Group class="reset-vux-input">
+        <XInput v-model="address"></XInput>
+      </Group>
+      <Group>
+        <Cell title='加盟城市' v-model="cityKey"></Cell>
+        <Cell title='加盟区域' v-model="qyKey"></Cell>
+        <Selector :options='sqList' title='加盟社区' :value-map="['id','sq_name']" direction='rtl' @on-change='changeSq' v-model='sqVal'></Selector>
       </Group>
       <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
       <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='submiting'>增加门店</XButton>
@@ -22,15 +31,23 @@
 import bigTitle from "@/components/bigTitle/index";
 import myMap from "@/components/map/index";
 import wxConfig from "@/mixins/wxConfig.js";
-import { XInput, Group, XButton } from "vux";
+import { XInput, Group, XButton,Selector,Cell } from "vux";
 import checkLogin from '@/mixins/checkLogin.js';
 export default {
   data() {
     return {
       submiting:false,
-      face_name: "",
       mapShow: false,
-      loc: ""
+      sqList:[],
+
+      face_name: "",
+      map: "",
+      address:'',
+      cityVal:'',
+      cityKey:'',
+      qyVal:'',
+      qyKey:'',
+      sqVal:''
     };
   },
   created() {
@@ -48,6 +65,31 @@ export default {
           _this.face_name = data[0].face_name;
         });
     }
+
+    this.$axios.get(this.API_URL + "/Api/UserShow/city").then(({ data }) => {
+      console.log(data);
+      // 获取城市信息
+      data.map(m => {
+        if (m.id == this.userinfo.shop[0].city) {
+          this.cityKey = m.city;
+          this.cityVal = m.id;
+          if (m.qy) {
+            m.qy.map(q => {
+              if (q.id == this.userinfo.shop[0].qy) {
+                this.qyKey = q.qy_name;
+                this.qyVal = q.id;
+                if (q.sq) {
+                  this.sqList = q.sq;
+                }
+              }
+            });
+          }
+        }
+      });
+
+      // 获取社区列表
+    });
+
   },
   methods: {
     showPopup(val) {
@@ -60,11 +102,15 @@ export default {
       this.$axios
         .get(this.API_URL + "/Api/Shop/add_face", {
           params: {
-            face_name: _this.face_name,
-            jd: _this.loc.latlng.lat,
-            wd: _this.loc.latlng.lng,
-            fw_shop_id: 1,
-            phone:_this.userinfo.uphone
+            face_name: this.face_name,
+            jd: this.map.latlng.lat,
+            wd: this.map.latlng.lng,
+            fw_shop_id: this.userinfo.shop[0].id,
+            phone:this.userinfo.uphone,
+            adress:this.address,
+            city:this.cityVal,
+            qy:this.qyVal,
+            sq:this.sqVal
           }
         })
         .then(({ data }) => {
@@ -134,9 +180,30 @@ export default {
       console.log(this.mapShow);
       this.mapShow = true;
     },
-    finishAdd(loc) {
+    finishAdd(map) {
       this.mapShow = false;
-      this.loc = loc;
+      this.map = map;
+    },
+    validataForm(){
+      var _this = this;
+      // return new Promise((resolve,reject)=>{
+      //   if(!face_name){
+      //     reject()
+      //     _this.alertWarning('请填写门店名称！')
+      //   }else if(!map){
+      //     reject()
+      //     _this.alertWarning('请填写门店名称！')
+      //   }
+      // })
+    },
+    alertWarning(text){
+      this.$vux.alert.show({
+        title:'提示',
+        content:text
+      })
+    },
+    changeSq(val){
+      this.sqVal = val;
     }
   },
   components: {
@@ -144,7 +211,9 @@ export default {
     XInput,
     Group,
     XButton,
-    myMap
+    Selector,
+    myMap,
+    Cell
   },
   computed: {
     faceId() {

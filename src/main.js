@@ -34,10 +34,7 @@ Vue.use(ConfirmPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
 import 'babel-polyfill'
-/* vux组件 */
-// import { Tabbar, TabbarItem } from 'vux'
-// Vue.component('tabbar', Tabbar);
-// Vue.component('tabbar-item', TabbarItem);
+
 
 Vue.config.productionTip = false;
 

@@ -19,6 +19,7 @@
 
 <script>
 import bigTitle from "@/components/bigTitle/index";
+import checkLogin from '@/mixins/checkLogin.js';
 export default {
   data() {
     return {
@@ -30,7 +31,7 @@ export default {
     this.$axios
       .get(this.API_URL + "/Api/Shop/shop_fw", {
         params: {
-          shop_id: 1
+          shop_id: this.userinfo.shop[0].id
         }
       })
       .then(res => {
@@ -45,7 +46,8 @@ export default {
       });
     }
   },
-  components: { bigTitle }
+  components: { bigTitle },
+  mixins: [checkLogin]
 };
 </script>
 

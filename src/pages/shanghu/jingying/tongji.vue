@@ -1,38 +1,39 @@
 <template>
-    <div class="shanghu-page">
-        <bigTitle title="销售统计"></bigTitle>
-        <div class="tongji-info">
-            <div class="tongji-item" v-for="(item,index) in list" :key="index">
-                <img :src="item.fw_img" alt="" class="img">
-                <div class="info">
-                    <div class="mingzi">{{item.fw_mingzi}}</div>
-                    <div class="count">
-                        <div class="count-item">
-                            <div>销售量</div>
-                            <span>{{item.buy_number}}</span>
-                        </div>
-                        <div class="count-item">
-                            <div>验证量</div>
-                            <span>{{item.yz_number}}</span>
-                        </div>
-                        <div class="count-item">
-                            <div>退款量</div>
-                            <span>{{item.tuihuo_number}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="icon">
-                    <i class="iconfont icon-jinru"></i>
-                </div>
-
+  <div class="shanghu-page">
+    <bigTitle title="销售统计" @showPopup='showPopup'></bigTitle>
+    <div class="tongji-info">
+      <div class="tongji-item" v-for="(item,index) in list" :key="index">
+        <img :src="item.fw_img" alt="" class="img">
+        <div class="info">
+          <div class="mingzi">{{item.fw_mingzi}}</div>
+          <div class="count">
+            <div class="count-item">
+              <div>销售量</div>
+              <span>{{item.buy_number}}</span>
             </div>
+            <div class="count-item">
+              <div>验证量</div>
+              <span>{{item.yz_number}}</span>
+            </div>
+            <div class="count-item">
+              <div>退款量</div>
+              <span>{{item.tuihuo_number}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="icon">
+          <i class="iconfont icon-jinru"></i>
         </div>
 
+      </div>
     </div>
+
+  </div>
 </template>
 
 <script>
 import bigTitle from "@/components/bigTitle/index";
+import checkLogin from '@/mixins/checkLogin.js';
 export default {
   data() {
     return {
@@ -41,10 +42,11 @@ export default {
   },
   created() {
     var _this = this;
+    this.$emit("showPopup", false);
     this.$axios
       .get(this.API_URL + "/Api/Shop/shop_fw", {
         params: {
-          shop_id: 1
+          shop_id: this.userinfo.shop[0].id
         }
       })
       .then(res => {
@@ -52,13 +54,19 @@ export default {
         _this.list = res.data;
       });
   },
+  methods: {
+    showPopup(val) {
+      this.$emit("showPopup", val);
+    }
+  },
   components: { bigTitle },
+  mixins: [checkLogin]
 };
 </script>
 
 <style lang='scss'>
 .tongji-info {
-  padding-left: .533333rem;
+  padding-left: 0.533333rem;
   .tongji-item {
     @include font-dpr(12px);
     display: flex;
@@ -95,7 +103,7 @@ export default {
       align-items: center;
       width: 1.733333rem;
       flex: none;
-      margin-top: -.8rem;
+      margin-top: -0.8rem;
     }
   }
 }

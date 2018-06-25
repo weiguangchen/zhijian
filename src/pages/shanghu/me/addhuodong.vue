@@ -82,12 +82,11 @@
           </div>
           <div class="form-group">
             <h2 class="sub-title">支持门店:</h2>
-            <CheckBoxGroup v-model="faceLVal" color="#e03233">
+            <CheckBoxGroup v-model="faceVal" color="#e03233">
               <CheckBox shape="circle" :val='item.id' v-for="(item,index) in face_list" :key="index">{{item.face_name}}</CheckBox>
             </CheckBoxGroup>
           </div>
           <div class="form-group">
-            {{fw_selceted}}
             <h2 class="sub-title">服务类别:</h2>
             <Group class="reset-vux-input">
               <div class="fw-item" v-for="(item,index) in fw_list" :key="index">
@@ -178,7 +177,7 @@ export default {
       qyVal: "",
       sqVal: "",
       one_class_val: "",
-      faceLVal: [],
+      faceVal: [],
       detail: "",
       fw_selceted: [],
       yuanjia: 0,
@@ -187,7 +186,7 @@ export default {
     };
   },
   created() {
-    // this.$eruda.init();
+    this.$eruda.init();
     this.checkSystem();
     var _this = this;
     this.$emit("showPopup", false);
@@ -273,7 +272,7 @@ export default {
               params: {
                 card_name: _this.huodongname,
                 card_money: _this.huodongjia,
-                card_shopid: 1,
+                card_shopid: this.userinfo.shop[0].id,
                 card_ymoney: _this.yuanjia,
                 card_jmoney: _this.jiesuanjia,
                 card_class_id: _this.one_class_val,
@@ -289,7 +288,25 @@ export default {
               _this.submiting = false;
               console.log(data);
               if (data.status == 1) {
-                _this.$router.replace("/shanghu/me/addhuodong");
+                this.$vux.alert.show({
+                  title: "提示",
+                  content: "添加活动成功!",
+                  onHide() {
+                    _this.$router.replace({
+                      path:"/shanghu/me/index"
+                    });
+                  }
+                });
+              } else if (data.status == 0) {
+                this.$vux.alert.show({
+                  title: "提示",
+                  content: "添加活动失败!",
+                  onHide() {
+                    _this.$router.replace({
+                      path:"/shanghu/me/index"
+                    });
+                  }
+                });
               }
             });
         },
@@ -311,12 +328,13 @@ export default {
         } else if (!this.tupian) {
           _this.alertWarning("请上传活动缩略图！");
           reject();
-        } else if (!this.tupianList) {
-          _this.alertWarning("请上传活动图片集！");
-          reject();
         } else {
           resolve();
         }
+        //  else if (!this.tupianList) {
+        //   _this.alertWarning("请上传活动图片集！");
+        //   reject();
+        // }
       });
     },
     checkStep2() {
@@ -334,13 +352,13 @@ export default {
         } else if (!this.one_class_val) {
           _this.alertWarning("请选择分类");
           reject();
-        } else if (!this.faceLVal.length <= 0) {
+        } else if (this.faceVal.length <= 0) {
           _this.alertWarning("请选择门店！");
           reject();
         } else if (!this.detail) {
           _this.alertWarning("请选择图文详情！");
           reject();
-        } else if (!this.fw_selceted.length <= 0) {
+        } else if (this.fw_selceted.length <= 0) {
           _this.alertWarning("请选择服务！");
           reject();
         } else if (!this.detail) {

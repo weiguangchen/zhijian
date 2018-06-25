@@ -1,22 +1,20 @@
 <template>
-    <div class="page">
-        <ViewBox>
-            <XHeader title='豪景国际大厦' left-options.showBack='false'>
-                <span class="iconfont icon-shangmenxichesousuo" slot="right"></span>
-            </XHeader>
-            <classify :classArr='classArr' v-if="classArr.length"></classify>
-            <div class="ad">
-                <Swiper :aspect-ratio='0.24'>
-                    <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-                    <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-                    <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-                </Swiper>
-            </div>
-            
-            <tuijian :info='item' v-for="(item,index) in serviceList" :key="index" v-if="item.list.length>0"></tuijian>
-        </ViewBox>
-        <Loading :show="loading"></Loading>
-    </div>
+  <div class="page">
+    <ViewBox>
+      <XHeader title='豪景国际大厦' left-options.showBack='false'>
+        <span class="iconfont icon-shangmenxichesousuo" slot="right"></span>
+      </XHeader>
+      <classify :classArr='classArr' v-if="classArr.length"></classify>
+      <div class="ad">
+        <Swiper :aspect-ratio='0.24'>
+          <SwiperItem><img :src="item.url" alt="" v-for="(item,index) in ad" :key="index"></SwiperItem>
+        </Swiper>
+      </div>
+
+      <tuijian :info='item' v-for="(item,index) in serviceList" :key="index" v-if="item.list.length>0"></tuijian>
+    </ViewBox>
+    <Loading :show="loading"></Loading>
+  </div>
 </template>
 
 <script>
@@ -28,8 +26,9 @@ export default {
   data() {
     return {
       classArr: [],
-      serviceList:[],
-      loading: false
+      serviceList: [],
+      loading: false,
+      ad: []
     };
   },
   components: {
@@ -43,23 +42,28 @@ export default {
     Sticky,
     Loading
   },
-  created() {     
-    document.title = "分类"; 
+  created() {
+    document.title = "分类";
     this.loading = true;
     var _this = this;
     console.log("classid" + this.classId);
     this.$axios
-      .get(_this.API_URL+ "/api/Show/two_class", {
+      .get(_this.API_URL + "/api/Show/two_class", {
         params: {
           fid: _this.classId
         }
       })
       .then(res => {
-        console.log('二级类')
+        console.log("二级类");
         _this.classArr = res.data.class;
         _this.serviceList = res.data.info;
         _this.loading = false;
       });
+
+    this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({ data }) => {
+      this.ad = data.smeta;
+    });
+
     // this.$axios
     //   .get(_this.API_URL + "/api/Show/one_fw", {
     //     params: {
@@ -84,5 +88,4 @@ export default {
 .ad {
   height: 2.4rem;
 }
-
 </style>

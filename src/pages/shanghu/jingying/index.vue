@@ -1,21 +1,27 @@
 <template>
     <div class="shanghu-page">
         <ViewBox>
-            <bigTitle title='经营管理' ></bigTitle>
-            <div class="my-form">
-                <div class="form-box">
-                    <Group>
-                        <Cell title='优惠下载查看' :is-link='true'></Cell>
-                        <Cell title='活动验证' :is-link='true'></Cell>
-                        <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'></Cell>
-                        <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
-                        
-                    </Group>
-                </div>
+            <router-view @showPopup='showPopup'></router-view>
+            <!-- <bigTitle title='经营管理'></bigTitle>
+      <div class="my-form">
+        <div class="form-box">
+          <Group>
+            <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'></Cell>
+            <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
+          </Group>
+        </div>
+
+      </div> -->
+        </ViewBox>
+        <Popup position='right' v-model="popupShow">
+            <div class="popup-list">
+                <Group>
+                    <Cell title='消费统计' link='/shanghu/jingying/tongji'></Cell>
+                    <Cell title='订单管理' link='/shanghu/jingying/orderGl'></Cell>
+                </Group>
 
             </div>
-            <Popup></Popup>
-        </ViewBox>
+        </Popup>
     </div>
 </template>
 
@@ -24,7 +30,7 @@ import { ViewBox, Selector, Group, XButton, XInput, Confirm, Cell } from "vux";
 import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
-import {Popup} from 'vue-ydui/dist/lib.px/popup';
+import { Popup } from "vue-ydui/dist/lib.px/popup";
 export default {
   data() {
     return {
@@ -32,11 +38,17 @@ export default {
       face_id: "",
       faceList: [],
       alertShow: false,
-      xiaofeijuan: ""
+      xiaofeijuan: "",
+      popupShow: false
     };
   },
-  created() {},
-  methods: {},
+  created() {
+  },
+  methods: {
+    showPopup(val) {
+      this.popupShow = val;
+    }
+  },
   components: {
     bigTitle,
     ViewBox,
@@ -49,18 +61,10 @@ export default {
     Confirm,
     Cell,
     Popup
-  },
+  }
 };
 </script>
 
-<style lang='scss' scoped>
-.weui-cell {
-  @include font-dpr(14px);
-  height: 1.28rem;
-  padding-left: 0;
-  padding-right: 0;
-  &::before {
-    left: 0;
-  }
-}
+<style lang='scss'>
+
 </style>

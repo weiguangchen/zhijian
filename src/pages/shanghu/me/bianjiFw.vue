@@ -188,7 +188,7 @@ export default {
 
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: 1, phone: _this.userinfo.uphone }
+        params: { shop_id: this.userinfo.shop[0].id, phone: _this.userinfo.uphone }
       })
       .then(res => {
         console.log(res);
@@ -292,7 +292,7 @@ export default {
                 y_money: this.yuanjia,
                 money: this.xianjia,
                 j_money: this.jiesuanjia,
-                shop_id: 1
+                shop_id: this.userinfo.shop[0].id
               }
             })
             .then(res => {
@@ -345,7 +345,7 @@ export default {
                 y_money: this.yuanjia,
                 money: this.xianjia,
                 j_money: this.jiesuanjia,
-                shop_id: 1,
+                shop_id: this.userinfo.shop[0].id,
                 id: _this.querys
               }
             })
@@ -396,7 +396,7 @@ export default {
           reject();
         } else if (!this.isPositiveInteger(this.yuanjia)) {
           this.alertShow = true;
-          this.modalInfo = "原价";
+          this.modalInfo = "请填写原价";
           reject();
         } else if (!this.isPositiveInteger(this.xianjia)) {
           this.alertShow = true;
@@ -412,7 +412,7 @@ export default {
     },
     isPositiveInteger(s) {
       //是否为正整数
-      var re = /^[0-9]+$/;
+      var re = /^[1-9]\d*$/;
       return re.test(s);
     },
     changeOneClass(val) {

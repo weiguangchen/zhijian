@@ -41,7 +41,7 @@
       <!-- <XAddress title='地区' :list='city' v-model="cityVal"></XAddress> -->
       <Cell title='加盟城市' v-model="cityAreaKey"></Cell>
       <Cell title='加盟区域' v-model="qyAreaKey"></Cell>
-      <Selector :options='sqList' title='加盟社区' :value-map="['id','sq_name']" direction='rtl' @on-change='changeQy' v-model='sqAreaVal'></Selector>
+      <!-- <Selector :options='sqList' title='加盟社区' :value-map="['id','sq_name']" direction='rtl' @on-change='changeQy' v-model='sqAreaVal'></Selector> -->
     </Group>
     <Group>
       <XTextarea title='详细地址' v-model="address"></XTextarea>
@@ -54,20 +54,14 @@
       <div class="uploadImage">
         <div class="upload-btn" @click="chooseImg">
           <i class="iconfont icon-xiangji" v-if="!imgs && !localData"></i>
-          <!-- imgs{{imgs}}
-          localData{{localData}}
-          tupian{{tupian}} -->
           <template v-else>
             <!-- 安卓预览图片 -->
             <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
             <!-- IOS预览图片 -->
             <img :src="localData || tupian" alt="" v-else class="thumb">
           </template>
-
         </div>
-
       </div>
-
     </div>
     <div class="agree">
       <!-- <CheckBoxGroup color='#e03233'> -->
@@ -112,7 +106,7 @@ export default {
       cityAreaVal: "",
       qyAreaKey: "",
       qyAreaVal: "",
-      sqAreaVal: "",
+      sqAreaVal: 0,
       // cityVal: [],
       address: "",
       map: {},
@@ -122,7 +116,7 @@ export default {
   },
   created() {
     this.checkSystem();
-    // this.$eruda.init();
+    this.$eruda.init();
     var _this = this;
     // 获取城市信息
     this.$axios.get(this.API_URL + "/Api/UserShow/city").then(({ data }) => {
@@ -147,14 +141,14 @@ export default {
       });
 
       // 获取社区列表
-
-      this.$axios
-        .get(this.API_URL + "/Api/ShopFw/fw_shop_class")
-        .then(({ data }) => {
-          console.log(data);
-          this.fw_class_all = data;
-        });
     });
+
+    this.$axios
+      .get(this.API_URL + "/Api/ShopFw/fw_shop_class")
+      .then(({ data }) => {
+        console.log(data);
+        this.fw_class_all = data;
+      });
   },
   methods: {
     submit() {
@@ -232,14 +226,8 @@ export default {
         } else if (this.fw_class.length <= 0) {
           _this.alertWarning("请选择类别！");
           rejcet();
-        } else if (!this.sqAreaVal) {
-          _this.alertWarning("请选择代理社区！");
-          rejcet();
         } else if (!this.address) {
           _this.alertWarning("请填写详细地址！");
-          rejcet();
-        } else if (!this.tupian) {
-          _this.alertWarning("请上传营业执照！");
           rejcet();
         } else if (!this.map) {
           _this.alertWarning("请选择地址！");
@@ -250,7 +238,15 @@ export default {
         } else {
           resolve();
         }
+        // else if (!this.tupian) {
+        //   _this.alertWarning("请上传营业执照！");
+        //   rejcet();
+        // }
       });
+      // else if (!this.sqAreaVal) {
+      //   _this.alertWarning("请选择代理社区！");
+      //   rejcet();
+      // }
     },
     alertWarning(text) {
       this.$vux.alert.show({

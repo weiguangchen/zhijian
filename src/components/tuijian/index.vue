@@ -27,6 +27,9 @@ export default {
   data() {
     return {};
   },
+  created () {
+    this.sliceArr();
+  },
   methods: {
     toDetail(id) {
       var _this = this;
@@ -38,13 +41,18 @@ export default {
       this.$router.push({
         path: "/serviceClass/" + id
       });
+    },
+    sliceArr(){
+      this.info.list = this.info.list.slice(0,3);
     }
   },
+
   props: ["info"],
   components: {
     Group,
     Cell
-  }
+  },
+
 };
 </script>
 

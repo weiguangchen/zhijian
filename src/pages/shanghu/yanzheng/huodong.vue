@@ -36,6 +36,7 @@ import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
 import { Popup } from "vue-ydui/dist/lib.px/popup";
+import checkLogin from '@/mixins/checkLogin.js';
 export default {
   data() {
     return {
@@ -49,7 +50,7 @@ export default {
     var _this = this;
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: 1 }
+        params: { shop_id: this.userinfo.shop[0].id }
       })
       .then(res => {
         console.log(res);
@@ -92,7 +93,8 @@ export default {
     Confirm,
     Popup,
     Cell
-  }
+  },
+  mixins: [checkLogin]
 };
 </script>
 

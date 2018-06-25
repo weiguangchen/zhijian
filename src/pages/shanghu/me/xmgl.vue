@@ -86,34 +86,34 @@
           </div>
         </template>
         <template v-else-if="step == 3">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <h2 class="sub-title">有效期(天):</h2>
             <Group class="reset-vux-input">
               <XInput v-model="youxiao" type='number' :required='true' placeholder='填写有效期'></XInput>
             </Group>
-          </div>
+          </div> -->
           <div class="form-group">
             <h2 class="sub-title">原价(元):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="yuanjia" type='number' :required='true' placeholder='填写原价'></XInput>
+              <XInput v-model="yuanjia" :required='true' placeholder='填写原价'></XInput>
             </Group>
           </div>
           <div class="form-group">
             <h2 class="sub-title">现价(元):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="xianjia" type='number' :required='true' placeholder='填写现价'></XInput>
+              <XInput v-model="xianjia" :required='true' placeholder='填写现价'></XInput>
             </Group>
           </div>
           <div class="form-group">
             <h2 class="sub-title">商户结算价(元):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="jiesuanjia" type='number' :required='true' placeholder='填写商户结算价'></XInput>
+              <XInput v-model="jiesuanjia" :required='true' placeholder='填写商户结算价'></XInput>
             </Group>
           </div>
         </template>
         <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
         <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
-        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys">提交</XButton>
+        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys" :disabled='submiting'>提交</XButton>
         <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton>
       </div>
 
@@ -150,19 +150,20 @@ export default {
     return {
       alertShow: false,
       modalInfo: "",
+      submiting: false,
 
       keyboardShow: false,
       twList: [],
       twDetailShow: false,
       twDetailContent: "",
-      step: 2,
+      step: 1,
       imgs: "",
       localData: "",
       system: 1,
       one_class_all: [],
       two_class_all: [],
       two_class: [],
-      List: [{}],
+      List: [],
       // 第一步
       fw_name: "",
       fw_short_info: "",
@@ -184,11 +185,14 @@ export default {
     var _this = this;
     this.$emit("showPopup", false);
     this.checkSystem();
-    // this.$eruda.init();
+    this.$eruda.init();
 
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: _this.userinfo.shop[0].id, phone: _this.userinfo.uphone }
+        params: {
+          shop_id: _this.userinfo.shop[0].id,
+          phone: _this.userinfo.uphone
+        }
       })
       .then(res => {
         console.log(res);
@@ -269,6 +273,7 @@ export default {
     },
     finish() {
       var _this = this;
+      this.submiting = true;
       this.checkForm().then(
         res => {
           this.$axios
@@ -279,14 +284,14 @@ export default {
                 sub_content: this.fw_intr,
                 fw_cid: this.one_class_val,
                 fw_id: this.two_class_val,
-                fw_content_id:this.tw,
+                fw_content_id: this.tw,
                 fw_face: this.face,
                 fw_img: this.tupian,
                 use_day: this.youxiao,
                 y_money: this.yuanjia,
                 money: this.xianjia,
                 j_money: this.jiesuanjia,
-                shop_id: 1
+                shop_id: this.userinfo.shop[0].id
               }
             })
             .then(res => {
@@ -315,7 +320,9 @@ export default {
               }
             });
         },
-        err => {}
+        err => {
+          this.submiting = false;
+        }
       );
       // if (!this.youxiao || Number.isInteger(this.youxiao)) {
       //   this.alertShow = true;
@@ -437,7 +444,7 @@ export default {
           reject();
         } else if (!this.isPositiveInteger(this.yuanjia)) {
           this.alertShow = true;
-          this.modalInfo = "原价";
+          this.modalInfo = "请填写原价";
           reject();
         } else if (!this.isPositiveInteger(this.xianjia)) {
           this.alertShow = true;
@@ -447,8 +454,9 @@ export default {
           this.alertShow = true;
           this.modalInfo = "请填写结算价";
           reject();
+        } else {
+          resolve();
         }
-        resolve();
       });
     },
     changeOneClass(val) {
@@ -532,7 +540,7 @@ export default {
     },
     isPositiveInteger(s) {
       //是否为正整数
-      var re = /^[0-9]+$/;
+      var re = /^[1-9]\d*$/;
       return re.test(s);
     }
     // 获取已有数据

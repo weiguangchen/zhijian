@@ -1,5 +1,5 @@
-export const API_URL = 'http://zj.daonian.cn'
-
+export const API_URL = 'http://zj.daonian.cn';
+export const default_url = 'http://qd.daonian.cn';
 const $toDetail = function (id) {
   var _this = this;
   this.$router.push({

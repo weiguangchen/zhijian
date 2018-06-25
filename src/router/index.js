@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-24 12:32:18
+ * @Last Modified time: 2018-06-25 17:44:44
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -45,10 +45,7 @@ import xfm from '@/pages/shanghu/yanzheng/xfm'
 import huodongyz from '@/pages/shanghu/yanzheng/huodong'
 import pingjias from '@/pages/shanghu/pingjias/index'
 import pingjiaList from '@/pages/shanghu/pingjias/pingjiaList'
-import jingying from '@/pages/shanghu/jingying/index'
-import tongji from '@/pages/shanghu/jingying/tongji'
-import orderGl from '@/pages/shanghu/jingying/orderlist'
-// 商户后台/我的
+/* 商户后台/我的 */
 import shanghume from '@/pages/shanghu/me/index1'
 import shanghumeindex from '@/pages/shanghu/me/index'
 import mendian from '@/pages/shanghu/me/mendian'
@@ -60,8 +57,11 @@ import addhuodong from '@/pages/shanghu/me/addhuodong'
 import account from '@/pages/shanghu/me/account'
 import setAuthority from '@/pages/shanghu/me/authority'
 import addSonAccount from '@/pages/shanghu/me/addSonAccount'
-
-
+/* 商户后台/经营 */
+import shanghujingying from '@/pages/shanghu/jingying/index'
+import jingyingindex from '@/pages/shanghu/jingying/index1'
+import tongji from '@/pages/shanghu/jingying/tongji'
+import orderGl from '@/pages/shanghu/jingying/orderlist'
 
 import shangjia from '@/pages/shanghu/shangjia/index';
 import huifupinglun from '@/components/huifupinglun/index';
@@ -74,7 +74,8 @@ import muta from '@/store/mutations';
 import axios from "axios";
 import VueCookies from 'vue-cookie'
 import {
-  API_URL
+  API_URL,
+  default_url
 } from '@/assets/js/global.js';
 import wx from 'weixin-js-sdk';
 
@@ -250,7 +251,7 @@ export const defaultRouterMaps = [{
       default: addJms,
       // tab: tab
     }
-  },{
+  }, {
     path: '/addAgent',
     name: 'addAgent',
     components: {
@@ -367,27 +368,33 @@ export const defaultRouterMaps = [{
       {
         path: 'jingying',
         name: 'jingying',
-        component: jingying,
-        // meta: {
-        //   role: ['shanghu']
-        // },
+        component: shanghujingying,
+        children: [{
+          path: 'index',
+          name: 'index',
+          component: jingyingindex,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        }, {
+          path: 'tongji',
+          name: 'tongji',
+          component: tongji,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        }, {
+          path: 'orderGl',
+          name: 'orderGl',
+          component: orderGl,
+          // meta: {
+          //   role: ['shanghu']
+          // }
+        }, ]
+
       },
-      {
-        path: 'jingying/tongji',
-        name: 'tongji',
-        component: tongji,
-        // meta: {
-        //   role: ['shanghu']
-        // }
-      },
-      {
-        path: 'jingying/orderGl',
-        name: 'orderGl',
-        component: orderGl,
-        // meta: {
-        //   role: ['shanghu']
-        // }
-      },
+
+
       {
         path: 'me',
         name: 'shanghume',
@@ -472,11 +479,22 @@ export const defaultRouterMaps = [{
   }
 ]
 
+/* 权限列表
+1验证管理
+11验证消费码12验证优惠码13验证活动
+2评价管理
+21消费评价22优惠评价23活动评价
+3经营管理
+31活动统计32消费统计33订单统计
+4商户中心
+41项目管理42新建项目43门店管理44账户管理45财务管理
+ */
+
 export const asyncRouterMaps = [{
   path: '/shanghu',
   component: shanghu,
   meta: {
-    role: ['shanghu']
+    role: []
   },
   children: [{
       path: 'yanzheng',
@@ -512,27 +530,7 @@ export const asyncRouterMaps = [{
         role: ['shanghu']
       },
     },
-    {
-      path: 'jingying',
-      component: jingying,
-      meta: {
-        role: ['shanghu']
-      },
-    },
-    {
-      path: 'jingying/tongji',
-      component: tongji,
-      meta: {
-        role: ['shanghu']
-      }
-    },
-    {
-      path: 'jingying/orderGl',
-      component: orderGl,
-      meta: {
-        role: ['shanghu']
-      }
-    },
+
     {
       path: 'me',
       component: shanghume,
@@ -575,11 +573,22 @@ export const asyncRouterMaps = [{
   hidden: true
 }]
 
+function filterRouter(obj, map) {
+  obj.map(m => {
+    if (m.children) {
+      filterRouter()
+    }
+  })
+}
 
 const router = new Router({
   linkActiveClass: 'active-router',
   mode: 'history',
-  routes: defaultRouterMaps
+  routes: defaultRouterMaps,
+  scrollBehavior (to, from, savedPosition) {
+    console.log('滚动')
+    return { x: 0, y: 0 }
+  }
 })
 
 // 进入每个url时判断是否登录
@@ -598,7 +607,7 @@ router.beforeEach((to, from, next) => {
     wxConfig(store.state.entryUrl);
   } else {
     // 安卓微信    
-    var url = window.location.href;
+    var url = default_url + to.fullPath;
     wxConfig(url);
   }
 
@@ -606,14 +615,10 @@ router.beforeEach((to, from, next) => {
   if (to.query.id && /^\/logining/.test(to.fullPath)) {
     VueCookies.set('user', to.query.id);
     var url = VueCookies.get('enterBeforeUrl');
-    // VueCookies.set('enterBeforeUrl','');
     console.log('进入地址:' + url)
-    // router.push({
-    //   path: url
-    // })
-    // next('/agent')
+
     // window.location.href = 'http://192.168.31.75:8081' + url;
-    window.location.href = 'http://qd.daonian.cn' + url;
+    window.location.href = default_url + url;
   }
 
 
@@ -649,13 +654,19 @@ router.beforeEach((to, from, next) => {
         }
       })
       .then(res => {
+
+
+
+
+
+
         if (/^\/agent/.test(to.fullPath)) {
           console.log('判断代理商')
           console.log('1')
           // 进入代理商页
           if (store.state.userinfo.is_dl == 1) {
             console.log('2')
-            // 是分销商
+            // 是分销商            
             next()
           } else {
             console.log('3')
@@ -667,16 +678,25 @@ router.beforeEach((to, from, next) => {
           console.log('判断商户')
           console.log('1')
           // 进入商户页
+
           if (store.state.userinfo.is_shop == 1) {
             console.log('2')
             // 是商户
+            var routerMap = JSON.parse(store.state.userinfo.qx[0].content);
+            console.log('路由权限')
+            console.log(routerMap);
+            if (!store.state.routerMap) {
+              // 未设定路由权限
+
+            } else {
+
+            }
+
             next()
           } else {
             // 不是商户
             console.log('3')
             next('/shanghuCheck');
-
-
           }
         }
 

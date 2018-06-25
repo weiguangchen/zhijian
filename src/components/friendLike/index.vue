@@ -29,6 +29,11 @@ export default {
       }
     }
   },
+  methods: {
+    toDetail(id){
+      this.$router.push('/serviceDetail/'+id);
+    }
+  },
   components: {
       rater
   }

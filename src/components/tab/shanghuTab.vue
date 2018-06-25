@@ -20,7 +20,7 @@
         <router-link class="tabbar-item" to="/shanghu/pingjias">
             <i class="iconfont icon-shangcheng"></i><div>评价</div>
         </router-link>
-        <router-link class="tabbar-item" to="/shanghu/jingying">
+        <router-link class="tabbar-item" to="/shanghu/jingying/index">
             <i class="iconfont icon-faxian"></i><div>经营</div>
         </router-link>
         <router-link class="tabbar-item" to="/shanghu/me/index">

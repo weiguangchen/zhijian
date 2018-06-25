@@ -24,30 +24,41 @@
         <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress"></XInput>
       </Group>
     </div>
+    <div class="card-list" v-if="hasCard">
+      <h1 title="sub-title">优惠卡</h1>
+      <Group>
+        <Radio title="优惠卡" :options='card_list'></Radio>
+      </Group>
+    </div>
+
     <XButton class="xbtn" type='warn' @click.native='buy'>结算</XButton>
     <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
   </div>
 </template>
 
 <script>
-import { XNumber, Group, XInput, Cell, XButton } from "vux";
+import { XNumber, Group, XInput, Cell, XButton, Radio } from "vux";
 import myMap from "@/components/map/index";
 import checkLogin from "@/mixins/checkLogin.js";
 export default {
   data() {
     return {
       fwInfo: {},
-      num: 1,
-      mapInfo: "",
-      mapShow: false,
       orderNum: "",
+      card_list: [],
+      hasCard:false,
+      mapShow: false,
+
+      num: 1,
+      lianxiren: "",
       phone: "",
-      lianxiren: ""
+      mapInfo: ""
     };
   },
   created() {
     document.title = "确认订单";
     this.get_fw_info();
+    this.get_card();
     // this.$eruda.init();
   },
   methods: {
@@ -160,6 +171,24 @@ export default {
         .then(({ data }) => {
           _this.fwInfo = data[0];
         });
+    },
+    get_card() {
+      var _this = this;
+      this.$axios
+        .get(_this.API_URL + "/Api/BkPay/yes_card", {
+          params: {
+            user_id: this.id,
+            fw_id: this.serviceId
+          }
+        })
+        .then(({ data }) => {
+          if (data.status == 0) {
+            this.hasCard = false;
+          } else if (data.status == 1) {
+            this.hasCard = true;
+            this.card_list = data;
+          }
+        });
     }
   },
   computed: {
@@ -176,7 +205,8 @@ export default {
     XInput,
     Cell,
     myMap,
-    XButton
+    XButton,
+    Radio
   },
   mixins: [checkLogin]
 };
@@ -211,8 +241,17 @@ export default {
   .fw_num {
     margin-bottom: $bot;
   }
+  .fw_time {
+    margin-bottom: $bot;
+  }
   .xbtn {
     margin-top: 0.533333rem;
+  }
+  .card-list {
+    .sub-title {
+      @include font-dpr(14px);
+      background: #ffffff;
+    }
   }
 }
 </style>

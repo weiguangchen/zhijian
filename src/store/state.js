@@ -9,6 +9,6 @@ const state = {
     routers:[],
     addRouters:[],
 
-
+    routerMap:[]
 }
 export default state;

@@ -1,7 +1,7 @@
 <template>
   <!-- <router-link :to="'/serviceDetail/'+fwInfo.id"> -->
   <div class="service" @click="toDetail(fwInfo.shop_fw_id)">
-    <img src="~img/index/avatar.png" alt="" class="img">
+    <img :src="fwInfo.fw_img" alt="" class="img">
     <div class="info">
       <div class="intr">
         <div class="top">{{fwInfo.fw_mingzi}}</div>

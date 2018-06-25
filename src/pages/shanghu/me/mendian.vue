@@ -90,7 +90,8 @@ export default {
       this.$axios
         .get(this.API_URL + "/Api/Shop/get_face", {
           params: {
-            shop_id: _this.userinfo.shop[0].id //商户id
+            shop_id: _this.userinfo.shop[0].id, //商户id
+            phone:this.userinfo.uphone
           }
         })
         .then(({ data }) => {
