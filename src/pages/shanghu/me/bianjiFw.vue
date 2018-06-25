@@ -72,18 +72,18 @@
               <CheckBox shape="circle" :val='item.id' v-for="(item,index) in List" :key="index">{{item.face_name}}</CheckBox>
             </CheckBoxGroup>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <h2 class="sub-title">服务缩略图:</h2>
             <div class="uploadImage">
-              <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
+              <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div> -->
               <!-- 安卓预览图片 -->
-              <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
+              <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
               <!-- IOS预览图片 -->
-              <img :src="localData || tupian" alt="" v-else class="thumb">
+              <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
 
-            </div>
+            <!-- </div>
 
-          </div>
+          </div> -->
         </template>
         <template v-else-if="step == 3">
           <div class="form-group">
@@ -266,11 +266,12 @@ export default {
         this.alertShow = true;
         this.modalInfo = "请请选择支持的门店";
         return false;
-      }else if (!this.tupian) {
-        this.alertShow = true;
-        this.modalInfo = "请上传服务缩略图";
-        return false;
       }
+      // else if (!this.tupian) {
+      //   this.alertShow = true;
+      //   this.modalInfo = "请上传服务缩略图";
+      //   return false;
+      // }
 
       this.step = 3;
     },
@@ -340,7 +341,7 @@ export default {
                 fw_id: this.two_class_val,
                 fw_content_id:this.tw,
                 fw_face: this.face,
-                fw_img: this.tupian,
+                // fw_img: this.tupian,
                 use_day: this.youxiao,
                 y_money: this.yuanjia,
                 money: this.xianjia,

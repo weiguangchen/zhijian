@@ -61,7 +61,7 @@ export default {
       this.$axios
         .get(_this.API_URL + "/api/ShopFw/pay_num_ok", {
           params: {
-            fw_shop_id: 1,
+            fw_shop_id: this.userinfo.shop[0].id,
             pay_num: _this.pay_num,
             face_id: _this.face_id
           }
