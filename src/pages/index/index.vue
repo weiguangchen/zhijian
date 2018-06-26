@@ -2,36 +2,35 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-22 17:32:22
+ * @Last Modified time: 2018-06-26 17:23:41
  */
 <template>
   <keep-alive>
-    <div class="page">
+    <div class="page index">
       <ViewBox>
-        <div class="top-ad" :style="{backgroundImage:'url('+top_ad+')'}">
+        <div class="top-ad">
+          <swiper :options="swiperOption1" ref="mySwiper1">
+            <!-- slides -->
+            <swiper-slide v-for="(item,index) in top_ad" :key="index"><img :src="item.url" alt=""></swiper-slide>
+          </swiper>
+
           <div class="top-input">
-            <span class="add" v-if="address">{{address.city}}</span>
+            <span class="add" v-if="location">{{location.city}}</span>
             <input placeholder='请输入商家名或地点' class="search" />
           </div>
+
         </div>
-        <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
-        </iframe>
+        <!-- <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
+        </iframe> -->
         <classify :classArr='classArr' v-if="classArr.length"></classify>
         <div class="huodong">
-          <Swiper :aspect-ratio='0.31'>
-            <SwiperItem v-for="(item,index) in middle_ad" :key="index" v-if="middle_ad">
-              <img :src="item" alt="">
-            </SwiperItem>
-          </Swiper>
-          <!-- <div class="item">
-          <img src="~img/index/huodong1.png" alt="">
-        </div>
-        <div class="item">
-          <img src="~img/index/huodong1.png" alt="">
-        </div>
-        <div class="item">
-          <img src="~img/index/huodong1.png" alt="">
-        </div> -->
+          <swiper :options="swiperOption2" ref="mySwiper2">
+            <!-- slides -->
+            <swiper-slide v-for="(item,index) in middle_ad" :key="index"><img :src="item.url" alt=""></swiper-slide>
+            <!-- Optional controls -->
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
+
         </div>
         <div class="huodong-list">
           <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
@@ -40,7 +39,7 @@
           <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
         </div>
 
-        <tuijian :info='item' v-for="(item,index) in listArr" :key="index" v-if="item.list.length>0"></tuijian>
+        <tuijian :info='item' v-for="(item,index) in listArr" :key="index" v-if="item.list.length>0" fwClass='1'></tuijian>
 
         <!-- <div class="server-list"> -->
         <!-- <Sticky>
@@ -82,44 +81,54 @@ import {
 import service from "@/components/service/service";
 import classify from "@/components/classify/index";
 import tuijian from "@/components/tuijian/index";
-
+import { swiper, swiperSlide } from "vue-awesome-swiper";
+import { rejects } from "assert";
+import getLocation from '@/mixins/getLocation.js';
 export default {
   data() {
     return {
+      swiperOption1: {
+        loop: true,
+        autoplay: true
+      },
+      swiperOption2: {
+        loop: true,
+        autoplay: true,
+        pagination: {
+          el: ".huodong .swiper-pagination"
+        }
+      },
       selectedTab: 0,
       classArr: [],
       listArr: {},
       activeListId: "",
-      top_ad:'',
-      middle_ad:[]
+      top_ad: [],
+      middle_ad: []
     };
   },
   created() {
     document.title = "首页";
     var _this = this;
-    window.addEventListener(
-      "message",
-      function(event) {
-        // 接收位置信息
-        console.log("腾讯地图");
-        var loc = event.data;
-        _this.SAVE_ADDRESS(loc);
-        console.log("location", loc);
-      },
-      false
-    );
 
-    this.$axios.get(this.API_URL + "/api/Show/one_class").then(res => {
-      console.log(res);
-      _this.classArr = res.data.class;
-      _this.listArr = res.data.info;
-    });
-    
+    // this.$axios.get(this.API_URL + "/api/Show/one_class").then(res => {
+    //   console.log(res);
+    //   _this.classArr = res.data.class;
+    //   _this.listArr = res.data.info;
+    // });
 
-    this.$axios.get(_this.API_URL+'/Api/Show/get_gg').then(({data})=>{
-      this.top_ad = data.one_img;
-      this.middle_ad.push(data.two_img);
+
+    this.getPosition().then(res=>{
+      this.SET_LOCATION(res);
+      
+      this.get_fw();      
     })
+
+    this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({ data }) => {
+      // 获取头部广告
+      this.top_ad = data.one_img;
+      // 获取中部广告
+      this.middle_ad = data.two_img;
+    });
     // this.$wx.ready(function() {
     //   _this.$wx.getLocation({
     //     type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -134,18 +143,37 @@ export default {
     //   });
     // });
   },
-  activated(){
-    
+  mounted() {},
+  watch: {
+    location() {
+      this.get_fw();
+    }
   },
   methods: {
-    ...mapMutations(["SAVE_ID", "SAVE_USERINFO", "SAVE_ADDRESS"]),
-    getloc() {},
-    changeItem(index) {
-      this.activeItem = index;
+    ...mapMutations([
+      "SAVE_ID",
+      "SAVE_USERINFO",
+      "SAVE_ADDRESS",
+      "SET_LOCATION"
+    ]),
+    get_fw() {
+      var _this = this;
+      this.$axios
+        .get(_this.API_URL + "/Api/Fj/one_jl", {
+          params: {
+            lng: _this.location.lat,
+            lat: _this.location.lng
+          }
+        })
+        .then(({ data }) => {
+          console.log("获取最近服务");
+          _this.classArr = data.class;
+          _this.listArr = data.info;
+        });
     }
   },
   computed: {
-    ...mapState(["address"]),
+    ...mapState(["location"]),
     ifContentShow() {}
   },
   components: {
@@ -159,80 +187,88 @@ export default {
     Sticky,
     tuijian,
     XInput,
-    Swiper,
-    SwiperItem
+    // Swiper,
+    // SwiperItem,
+    swiperSlide,
+    swiper
   },
+  mixins: [getLocation]
 };
 </script>
 
 <style lang='scss'>
-.top-ad {
-  height: 2.666667rem;
-  background-image: url(~img/index/top-ad.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  .top-input {
+.index {
+  .top-ad {
+    .swiper-container {
+      height: 2.666667rem;
+    }
+    position: relative;
+    height: 2.666667rem;
+    // background-image: url(~img/index/top-ad.png);
+    // background-repeat: no-repeat;
+    // background-size: cover;
+    .top-input {
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      padding: 0.24rem 0.533333rem;
+      @include font-dpr(19px);
+      color: #292929;
+      .add {
+        margin-right: 0.333333rem;
+        line-height: 1;
+      }
+      .search {
+        padding-left: 0.266667rem;
+        flex: 1;
+        height: 0.693333rem;
+        border: 1px solid #000000;
+        border-radius: 0.346667rem;
+        outline: none;
+        @include font-dpr(12px);
+      }
+    }
+  }
+
+  .huodong {
+    // display: flex;
+    // justify-content: space-between;
+    // box-sizing: border-box;
+    padding: 0.16rem 0.4rem 0;
+    background: #ffffff;
+    .swiper-container {
+      height: 2.986667rem;
+    }
+  }
+
+  .huodong-list {
     display: flex;
-    align-items: center;
-    padding: 0.24rem 0.533333rem;
-    @include font-dpr(19px);
-    color: #292929;
-    .add {
-      margin-right: 0.333333rem;
-      line-height: 1;
-    }
-    .search {
-      padding-left: 0.266667rem;
-      flex: 1;
-      height: 0.693333rem;
-      border: 1px solid #000000;
-      border-radius: 0.346667rem;
-      outline: none;
-      @include font-dpr(12px);
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: 0.36rem 0.4rem;
+    height: 6.866667rem;
+    margin-bottom: $bot;
+    .item {
+      width: 4.08rem;
+      height: 2.64rem;
+      overflow: hidden;
+      margin-bottom: 0.826667rem;
+      .img {
+        vertical-align: top;
+      }
     }
   }
-}
 
-.huodong {
-  // display: flex;
-  // justify-content: space-between;
-  // box-sizing: border-box;
-  padding: 0.16rem 0.4rem 0;
-  background: #ffffff;
-  // height: 3.52rem;
-  // background: url(~img/index/huodong-bg.png) no-repeat;
-  // background-color: #ffffff;
-  // background-size: 6.533333rem;
-  // background-position: 50% -0.133333rem;
-  // border-bottom: 1px solid #dfdfdf;
-  // .item {
-  //   height: 1.6rem;
-  //   width: 2.666667rem;
-  // }
-}
-
-.huodong-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  background: #ffffff;
-  padding: 0.36rem 0.4rem;
-  height: 6.866667rem;
-  margin-bottom: $bot;
-  .item {
-    width: 4.08rem;
-    height: 2.64rem;
-    overflow: hidden;
-    margin-bottom: 0.826667rem;
-    .img {
-      vertical-align: top;
+  .server-list {
+    .tit-list {
+      border-bottom: 1px solid #dfdfdf;
     }
-  }
-}
-
-.server-list {
-  .tit-list {
-    border-bottom: 1px solid #dfdfdf;
   }
 }
 </style>

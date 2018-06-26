@@ -8,13 +8,15 @@
       </Cell>
     </Group>
     <div class="tuijian-list">
-      <div class="tuijian-item" v-for="(item,index) in info.list" :key="index"  @click="toDetail(item.shop_fw_id)">
+      <div class="tuijian-item" v-for="(item,index) in info.list" :key="index" @click="toDetail(item.shop_fw_id)">
         <div class="img">
           <img :src="item.fw_img" alt="" class="img">
         </div>
         <div class="name">{{item.fw_mingzi}}</div>
-        <div class="price"><span class="num">{{item.money}}</span>元</div>
-        <div class="shop"><i class="iconfont icon-dianpu"></i>{{item.shop_name}}</div>
+        <div class="price">
+          <span class="num">{{item.money}}</span>元</div>
+        <div class="shop">
+          <i class="iconfont icon-dianpu"></i>{{item.shop_name}}</div>
       </div>
 
     </div>
@@ -27,7 +29,7 @@ export default {
   data() {
     return {};
   },
-  created () {
+  created() {
     this.sliceArr();
   },
   methods: {
@@ -37,22 +39,27 @@ export default {
         path: "/serviceDetail/" + id
       });
     },
-    more(id){
-      this.$router.push({
-        path: "/serviceClass/" + id
-      });
+    more(id) {
+      if (this.fwClass == 1) {
+        this.$router.push({
+          path: "/serviceClass/" + id
+        });
+      }else if(this.fwClass == 2){
+         this.$router.push({
+          path: "/serviceList/" + id
+        });
+      }
     },
-    sliceArr(){
-      this.info.list = this.info.list.slice(0,3);
+    sliceArr() {
+      this.info.list = this.info.list.slice(0, 3);
     }
   },
 
-  props: ["info"],
+  props: ["info", "fwClass"],
   components: {
     Group,
     Cell
-  },
-
+  }
 };
 </script>
 
@@ -70,11 +77,11 @@ export default {
       border-bottom: none;
     }
   }
-  .vux-label{
+  .vux-label {
     line-height: 1;
-    padding-left: .186667rem;
+    padding-left: 0.186667rem;
     @include font-dpr(14px);
-    border-left: .066667rem solid #df3333;
+    border-left: 0.066667rem solid #df3333;
   }
 }
 .tuijian-list {
@@ -84,33 +91,35 @@ export default {
   padding-bottom: 0.133333rem;
   @include font-dpr(14px);
   .tuijian-item {
-    margin: 0 .32rem;
+    margin: 0 0.32rem;
     overflow: hidden;
     border-radius: 0.133333rem;
     width: 2.666667rem;
     flex: none;
-    line-height: .533333rem;
+    line-height: 0.533333rem;
     .img {
       width: 100%;
       height: 2.666667rem;
       overflow: hidden;
       margin-bottom: 0.066667rem;
     }
-    .name,.price,.shop{
+    .name,
+    .price,
+    .shop {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
- 
-    .price{
-      .num{
-        color:#de3230;
+
+    .price {
+      .num {
+        color: #de3230;
       }
     }
-    .shop{
+    .shop {
       color: #aaaaaa;
-      .iconfont{
-        margin-right: .133333rem;
+      .iconfont {
+        margin-right: 0.133333rem;
       }
     }
   }

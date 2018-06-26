@@ -3,8 +3,8 @@
     <ViewBox class="service-detail">
       <div class="banner">
         <div class="share"></div>
-        <Swiper height='5.12rem'>
-          <SwiperItem v-for="(item,index) in fw_info.fw_img" :key="index"><img :src="item" alt=""></SwiperItem>
+        <Swiper height='5.12rem' :show-dots='false'>
+          <SwiperItem v-for="(item,index) in fw_info.fw_img" :key="index"><img :src="item" alt="" class="img"></SwiperItem>
         </Swiper>
       </div>
       <div class="sp-info">
@@ -14,10 +14,10 @@
         <div class="bottom">{{fw_info.sub_content}}</div>
       </div>
 
-      <div class="comment">
+      <!-- <div class="comment">
         <span class="iconfont icon-fuwuxiangqingzan">好评率97%</span>
         <span class="count">共{{fw_info.token_num}}个消费评价</span>
-      </div>
+      </div> -->
 
       <div class="address1" @click="toShop(fw_info.shop_id)">
         <div class="top">
@@ -25,8 +25,8 @@
             <div class="name">{{fw_info.shop_name}}</div>
             <div class="info">
               <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
-              <span class="count">28条</span>
-              <span class="juli">5.5KM</span>
+              <!-- <span class="count">28条</span>
+              <span class="juli">5.5KM</span> -->
             </div>
           </div>
           <!-- <div class="right">
@@ -52,12 +52,6 @@
       </div>
 
       <div class="pingjia">
-        <!-- <myTitle>
-          <span>网友点评(28)</span>
-          <span slot="right">
-            <i class="iconfont icon-jinru"></i>
-          </span>
-        </myTitle> -->
         <Group>
           <Cell :title="'网友点评('+fw_info.token_num+')'">
             <span @click="more(fwId)">更多</span>
@@ -72,11 +66,11 @@
         </div>
       </div>
 
-      <div class="hot">
+      <!-- <div class="hot">
         <div class="title">小伙伴们还喜欢</div>
         <friendLike :friendLike='fw_info.friend_like'></friendLike>
 
-      </div>
+      </div> -->
 
       <div class="buy-btn">
         <div class="opbtn">
@@ -178,7 +172,7 @@ export default {
   watch: {
     $route() {
       this.get_fw_info();
-      
+
     }
   },
   computed: {
@@ -221,6 +215,9 @@ export default {
       height: 1.066667rem;
       background: rgba(#000000, 0.4);
       z-index: 999;
+    }
+    .img{
+      width: 100%;
     }
   }
 

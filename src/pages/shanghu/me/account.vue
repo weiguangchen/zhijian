@@ -69,7 +69,7 @@ export default {
             face_name: _this.face_name,
             jd: _this.loc.latlng.lat,
             wd: _this.loc.latlng.lng,
-            fw_shop_id: 1
+            fw_shop_id: this.userinfo.shop[0].id
           }
         })
         .then(({ data }) => {

@@ -12,6 +12,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(['id', 'userinfo'])
+    ...mapState(['id', 'userinfo',"location"])
   }
 }

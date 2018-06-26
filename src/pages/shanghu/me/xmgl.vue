@@ -26,18 +26,6 @@
           </div>
         </template>
         <template v-else-if="step == 2">
-          <!-- <div class="form-group">
-                        <h2 class="sub-title">标签:</h2>
-                        <Group>
-                            <XInput v-model="pay_num"></XInput>
-                        </Group>
-                    </div> -->
-          <!-- <div class="form-group">
-            <h2 class="sub-title">城市:</h2>
-            <Group>
-              <XInput v-model="pay_num"></XInput>
-            </Group>
-          </div> -->
           <div class="form-group">
             <h2 class="sub-title">分类:</h2>
             <Group class="reset-vux-input">
@@ -76,27 +64,33 @@
             <h2 class="sub-title">服务缩略图:</h2>
             <div class="uploadImage">
               <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div> -->
-              <!-- 安卓预览图片 -->
-              <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
-              <!-- IOS预览图片 -->
-              <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
+          <!-- 安卓预览图片 -->
+          <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
+          <!-- IOS预览图片 -->
+          <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
 
-            <!-- </div>
+          <!-- </div>
 
           </div> -->
         </template>
         <template v-else-if="step == 3">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <h2 class="sub-title">有效期(天):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="youxiao" type='number' :required='true' placeholder='填写有效期'></XInput>
+              <XInput v-model="youxiao" :required='true' placeholder='填写有效期'></XInput>
             </Group>
-          </div>
+          </div> -->
           <div class="form-group">
             <h2 class="sub-title">原价(元):</h2>
             <Group class="reset-vux-input">
               <XInput v-model="yuanjia" :required='true' placeholder='填写原价'></XInput>
+              
             </Group>
+            <div class="keyboard"></div>
+            <!-- <wc-keyboard v-model="yuanjia"  placeholder="询问服务员后输入"
+                  label="消费金额"
+                  inter="5"
+                  decimal="2"/> -->
           </div>
           <div class="form-group">
             <h2 class="sub-title">现价(元):</h2>
@@ -114,13 +108,9 @@
         <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
         <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
         <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys" :disabled='submiting'>提交</XButton>
-        <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton>
       </div>
-
     </ViewBox>
-    <Confirm v-model="alertShow">
-      {{modalInfo}}
-    </Confirm>
+
   </div>
 </template>
 
@@ -137,7 +127,6 @@ import {
   XTextarea,
   XDialog
 } from "vux";
-import { KeyBoard } from "vue-ydui/dist/lib.px/keyboard";
 import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
@@ -145,11 +134,11 @@ import checkLogin from "@/mixins/checkLogin.js";
 import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
 import { Radio, RadioGroup } from "vue-ydui/dist/lib.px/radio";
 import { TransferDomDirective as TransferDom } from "vux";
+import JKeyboard from "better-keyboard";
 export default {
   data() {
     return {
       alertShow: false,
-      modalInfo: "",
       submiting: false,
 
       keyboardShow: false,
@@ -175,7 +164,7 @@ export default {
       face: [],
       tupian: "",
       //   第三部
-      youxiao: "",
+      youxiao: 0,
       yuanjia: "",
       xianjia: "",
       jiesuanjia: ""
@@ -183,10 +172,13 @@ export default {
   },
   created() {
     var _this = this;
+    /* 关闭侧栏 */
     this.$emit("showPopup", false);
+    /* 判断系统 */
     this.checkSystem();
     this.$eruda.init();
 
+    /* 获取表单所需列表 */
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
         params: {
@@ -201,29 +193,6 @@ export default {
         _this.one_class_all = res.data.fw_class;
         _this.two_class_all = res.data.fw;
       });
-
-    // if (this.querys) {
-    //   this.getOldInfo().then(res => {
-    //     console.log("旧数据");
-    //     console.log(res.fw_face);
-    //     // console.log('门店数组')
-    //     // console.log(JSON.parse(res.fw_face))
-    //     this.fw_name = res.fw_mingzi;
-    //     this.fw_short_info = res.sub_name;
-    //     this.fw_intr = res.sub_content;
-    //     this.one_class_val = res.fw_cid;
-    //     this.two_class_val = res.fw_id;
-    //     var face = res.fw_face.map(item => {
-    //       return item.face_id;
-    //     });
-    //     this.face = face;
-    //     this.tupian = res.fw_img;
-    //     this.youxiao = parseInt(res.use_day);
-    //     this.yuanjia = res.y_money;
-    //     this.xianjia = res.money;
-    //     this.jiesuanjia = res.j_money;
-    //   });
-    // }
   },
   watch: {},
   methods: {
@@ -232,38 +201,31 @@ export default {
     },
     next1() {
       if (!this.fw_name) {
-        this.alertShow = true;
-        this.modalInfo = "请填写服务名称";
+        this.alertWarning("请填写服务名称！");
         return false;
       } else if (!this.fw_short_info) {
-        this.alertShow = true;
-        this.modalInfo = "请填写简短名称";
+        this.alertWarning("请填写简短名称！");
         return false;
       } else if (!this.fw_intr) {
-        this.alertShow = true;
-        this.modalInfo = "请填写服务介绍";
+        this.alertWarning("请填写服务介绍！");
         return false;
       }
       this.step = 2;
     },
     next2() {
       if (!this.one_class_val) {
-        this.alertShow = true;
-        this.modalInfo = "请选择分类";
+        this.alertWarning("请选择分类！");
         return false;
       } else if (!this.two_class_val) {
-        this.alertShow = true;
-        this.modalInfo = "请选择子分类";
+        this.alertWarning("请选择子分类！");
         return false;
       } else if (!this.tw) {
-        this.alertShow = true;
-        this.modalInfo = "请选择图文详情";
+        this.alertWarning("请选择图文详情！");
         return false;
       } else if (this.face.length <= 0) {
-        this.alertShow = true;
-        this.modalInfo = "请请选择支持的门店";
+        this.alertWarning("请请选择支持的门店！");
         return false;
-      } 
+      }
       // else if (!this.tupian) {
       //   this.alertShow = true;
       //   this.modalInfo = "请上传服务缩略图";
@@ -325,28 +287,9 @@ export default {
           this.submiting = false;
         }
       );
-      // if (!this.youxiao || Number.isInteger(this.youxiao)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写正确有效期";
-      //   return false;
-      // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写原价";
-      //   return false;
-      // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写现价";
-      //   return false;
-      // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-      //   this.alertShow = true;
-      //   this.modalInfo = "请填写结算价";
-      //   return false;
-      // }
     },
     previewDetail(id) {
       var _this = this;
-      // this.twDetailShow = true;
-
       this.$axios
         .get(_this.API_URL + "/Api/ShopFw/content", {
           params: {
@@ -359,105 +302,32 @@ export default {
           this.twDetailShow = true;
         });
     },
-    // changeFw() {
-    //   var _this = this;
-    //   this.checkForm().then(
-    //     res => {
-    //       console.log("成功");
-    //       this.$axios
-    //         .get(_this.API_URL+"/api/ShopFw/update_shop_fw", {
-    //           params: {
-    //             fw_mingzi: this.fw_name,
-    //             sub_name: this.fw_short_info,
-    //             sub_content: this.fw_intr,
-    //             fw_cid: this.one_class_val,
-    //             fw_id: this.two_class_val,
-    //             fw_face: this.face,
-    //             fw_img: this.tupian,
-    //             use_day: this.youxiao,
-    //             y_money: this.yuanjia,
-    //             money: this.xianjia,
-    //             j_money: this.jiesuanjia,
-    //             shop_id: 1,
-    //             id: _this.querys
-    //           }
-    //         })
-    //         .then(res => {
-    //           //   成功返回1不成功返回0
-    //           console.log(res);
-    //           if (res.data.status == 1) {
-    //             this.$vux.alert.show({
-    //               title: "提示",
-    //               content: "修改服务成功，请等待审核",
-    //               onHide() {
-    //                 _this.$router.replace({
-    //                   path: "/shanghu/me"
-    //                 });
-    //               }
-    //             });
-    //           } else if (res.data.status == 0) {
-    //             this.$vux.alert.replace({
-    //               title: "提示",
-    //               content: "修改服务失败，请重试",
-    //               onHide() {
-    //                 _this.$router.push({
-    //                   path: "/shanghu/me/xmgl"
-    //                 });
-    //               }
-    //             });
-    //           }
-    //         });
-    //     },
-    //     err => {
-    //       console.log("失败");
-    //     }
-    //   );
-
-    //   // if (!this.youxiao || Number.isInteger(this.youxiao)) {
-    //   //   this.alertShow = true;
-    //   //   this.modalInfo = "请填写正确有效期";
-    //   //   return false;
-    //   // } else if (!this.yuanjia || Number.isInteger(this.yuanjia)) {
-    //   //   this.alertShow = true;
-    //   //   this.modalInfo = "请填写原价";
-    //   //   return false;
-    //   // } else if (!this.xianjia || Number.isInteger(this.xianjia)) {
-    //   //   this.alertShow = true;
-    //   //   this.modalInfo = "请填写现价";
-    //   //   return false;
-    //   // } else if (!this.jiesuanjia || Number.isInteger(this.jiesuanjia)) {
-    //   //   this.alertShow = true;
-    //   //   this.modalInfo = "请填写结算价";
-    //   //   return false;
-    //   // }
-    // },
     checkForm() {
       var _this = this;
-      console.log(this.youxiao);
-      console.log(typeof this.youxiao);
-      console.log(Number.isInteger(this.youxiao));
-      console.log(!Number.isInteger(this.youxiao));
       console.log(this.isPositiveInteger(this.youxiao));
       return new Promise((resolve, reject) => {
-        if (!this.isPositiveInteger(this.youxiao)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写正确有效期";
+        // if (!this.isPositiveInteger(this.youxiao)) {
+        //   this.alertWarning("请填写正确有效期！");
+        //   reject();
+        // } else 
+        if (!this.isPrice(this.yuanjia)) {
+          this.alertWarning("请填写原价！");
           reject();
-        } else if (!this.isPositiveInteger(this.yuanjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写原价";
+        } else if (!this.isPrice(this.xianjia)) {
+          this.alertWarning("请填写现价！");
           reject();
-        } else if (!this.isPositiveInteger(this.xianjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写现价";
-          reject();
-        } else if (!this.isPositiveInteger(this.jiesuanjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写结算价";
+        } else if (!this.isPrice(this.jiesuanjia)) {
+          this.alertWarning("请填写结算价！");
           reject();
         } else {
           resolve();
         }
+      });
+    },
+    alertWarning(text) {
+      this.$vux.alert.show({
+        title: "提示",
+        content: text
       });
     },
     changeOneClass(val) {
@@ -539,25 +409,14 @@ export default {
         }
       });
     },
+    isPrice(s){
+      var re = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/;
+      return re.test(s);
+    },
     isPositiveInteger(s) {
-      //是否为正整数
       var re = /^[1-9]\d*$/;
       return re.test(s);
     }
-    // 获取已有数据
-    // getOldInfo() {
-    //   var _this = this;
-    //   return this.$axios
-    //     .get(this.API_URL + "/api/ShopFw/edit_fw", {
-    //       params: {
-    //         id: _this.querys
-    //       }
-    //     })
-    //     .then(res => {
-    //       console.log(res.data.list[0]);
-    //       return res.data.list[0];
-    //     });
-    // }
   },
   computed: {
     querys() {
@@ -580,7 +439,6 @@ export default {
     Checker,
     CheckerItem,
     XTextarea,
-    KeyBoard,
     CheckBoxGroup,
     CheckBox,
     RadioGroup,

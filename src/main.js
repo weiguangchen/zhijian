@@ -14,13 +14,13 @@ import VueHead from 'vue-head'
 Vue.use(VueHead)
 /* 引入flexible自适应 */
 import 'lib-flexible/flexible.js'
-
+/* 移动端调试插件 */
 import eruda from 'eruda';
 Vue.prototype.$eruda = eruda;
 /* 点击延迟 */
 const FastClick = require('fastclick')
 FastClick.attach(document.body)
-
+/* vue-cookie */
 import VueCookies from 'vue-cookies'
 Vue.prototype.$cookies = VueCookies;
 
@@ -35,6 +35,16 @@ Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
 import 'babel-polyfill'
 
+
+//挂载swiper
+import VueAwesomeSwiper from 'vue-awesome-swiper';
+import 'swiper/dist/css/swiper.css'
+Vue.use(VueAwesomeSwiper);
+
+/* 虚拟数字键盘 */
+// import wcKeyBoard from 'wc-keyboard'
+// import 'wc-keyboard/style.css'
+// Vue.use(wcKeyBoard);
 
 Vue.config.productionTip = false;
 

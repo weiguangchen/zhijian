@@ -76,22 +76,22 @@
             <h2 class="sub-title">服务缩略图:</h2>
             <div class="uploadImage">
               <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div> -->
-              <!-- 安卓预览图片 -->
-              <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
-              <!-- IOS预览图片 -->
-              <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
+          <!-- 安卓预览图片 -->
+          <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
+          <!-- IOS预览图片 -->
+          <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
 
-            <!-- </div>
+          <!-- </div>
 
           </div> -->
         </template>
         <template v-else-if="step == 3">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <h2 class="sub-title">有效期(天):</h2>
             <Group class="reset-vux-input">
               <XInput v-model="youxiao" :required='true'></XInput>
             </Group>
-          </div>
+          </div> -->
           <div class="form-group">
             <h2 class="sub-title">原价(元):</h2>
             <Group class="reset-vux-input">
@@ -118,9 +118,6 @@
       </div>
 
     </ViewBox>
-    <Confirm v-model="alertShow">
-      {{modalInfo}}
-    </Confirm>
   </div>
 </template>
 
@@ -148,7 +145,6 @@ import { TransferDomDirective as TransferDom } from "vux";
 export default {
   data() {
     return {
-      alertShow: false,
       modalInfo: "",
 
       keyboardShow: false,
@@ -174,7 +170,7 @@ export default {
       face: [0, 1],
       tupian: "",
       //   第三部
-      youxiao: "",
+      youxiao: 0,
       yuanjia: "",
       xianjia: "",
       jiesuanjia: ""
@@ -188,7 +184,10 @@ export default {
 
     this.$axios
       .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: this.userinfo.shop[0].id, phone: _this.userinfo.uphone }
+        params: {
+          shop_id: this.userinfo.shop[0].id,
+          phone: _this.userinfo.uphone
+        }
       })
       .then(res => {
         console.log(res);
@@ -237,16 +236,13 @@ export default {
     },
     next1() {
       if (!this.fw_name) {
-        this.alertShow = true;
-        this.modalInfo = "请填写服务名称";
+        this.alertWarning('请填写服务名称！');
         return false;
       } else if (!this.fw_short_info) {
-        this.alertShow = true;
-        this.modalInfo = "请填写简短名称";
+        this.alertWarning('请填写简短名称！');
         return false;
       } else if (!this.fw_intr) {
-        this.alertShow = true;
-        this.modalInfo = "请填写服务介绍";
+        this.alertWarning('请填写服务介绍！');
         return false;
       }
       this.step = 2;
@@ -255,16 +251,13 @@ export default {
       console.log("门店");
       console.log(this.face);
       if (!this.one_class_val) {
-        this.alertShow = true;
-        this.modalInfo = "请选择分类";
+        this.alertWarning('请选择分类！');
         return false;
       } else if (!this.two_class_val) {
-        this.alertShow = true;
-        this.modalInfo = "请选择子分类";
+        this.alertWarning('请选择子分类！');
         return false;
       } else if (this.face.length <= 0) {
-        this.alertShow = true;
-        this.modalInfo = "请请选择支持的门店";
+        this.alertWarning('请请选择支持的门店！');
         return false;
       }
       // else if (!this.tupian) {
@@ -324,7 +317,12 @@ export default {
         },
         err => {}
       );
-
+    },
+    alertWarning(text){
+      this.$vux.alert.show({
+        title:'提示',
+        content:text
+      })
     },
     changeFw() {
       var _this = this;
@@ -339,7 +337,7 @@ export default {
                 sub_content: this.fw_intr,
                 fw_cid: this.one_class_val,
                 fw_id: this.two_class_val,
-                fw_content_id:this.tw,
+                fw_content_id: this.tw,
                 fw_face: this.face,
                 // fw_img: this.tupian,
                 use_day: this.youxiao,
@@ -380,7 +378,6 @@ export default {
           console.log("失败");
         }
       );
-
     },
     checkForm() {
       var _this = this;
@@ -391,30 +388,23 @@ export default {
       console.log(!Number.isInteger(this.youxiao));
 
       return new Promise((resolve, reject) => {
-        if (!this.isPositiveInteger(this.youxiao)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写正确有效期";
+        if (!this.isPrice(this.yuanjia)) {
+          this.alertWarning('请填写原价！');
           reject();
-        } else if (!this.isPositiveInteger(this.yuanjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写原价";
+        } else if (!this.isPrice(this.xianjia)) {
+          this.alertWarning('请填写现价！');
           reject();
-        } else if (!this.isPositiveInteger(this.xianjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写现价";
-          reject();
-        } else if (!this.isPositiveInteger(this.jiesuanjia)) {
-          this.alertShow = true;
-          this.modalInfo = "请填写结算价";
+        } else if (!this.isPrice(this.jiesuanjia)) {
+          this.alertWarning('请填写结算价！');
           reject();
         }
+
+        // if (!this.isPositiveInteger(this.youxiao)) {
+        //   this.alertWarning('请填写正确有效期！');
+        //   reject();
+        // } else
         resolve();
       });
-    },
-    isPositiveInteger(s) {
-      //是否为正整数
-      var re = /^[1-9]\d*$/;
-      return re.test(s);
     },
     changeOneClass(val) {
       console.log(val);
@@ -511,6 +501,7 @@ export default {
         }
       });
     },
+
     // 获取已有数据
     getOldInfo() {
       var _this = this;
@@ -525,6 +516,14 @@ export default {
           console.log(res.data.list[0]);
           return res.data.list[0];
         });
+    },
+    isPrice(s) {
+      var re = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/;
+      return re.test(s);
+    },
+    isPositiveInteger(s) {
+      var re = /^[1-9]\d*$/;
+      return re.test(s);
     }
   },
   computed: {

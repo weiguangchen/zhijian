@@ -1,9 +1,9 @@
 <template>
   <div class="page">
     <ViewBox>
-      <XHeader title='豪景国际大厦' left-options.showBack='false'>
+      <!-- <XHeader title='豪景国际大厦' left-options.showBack='false'>
         <span class="iconfont icon-shangmenxichesousuo" slot="right"></span>
-      </XHeader>
+      </XHeader> -->
       <classify :classArr='classArr' v-if="classArr.length"></classify>
       <div class="ad">
         <Swiper :aspect-ratio='0.24'>
@@ -11,23 +11,24 @@
         </Swiper>
       </div>
 
-      <tuijian :info='item' v-for="(item,index) in serviceList" :key="index" v-if="item.list.length>0"></tuijian>
+      <tuijian :info='item' v-for="(item,index) in serviceList" :key="index" v-if="item.list.length>0" fwClass='2'></tuijian>
     </ViewBox>
-    <Loading :show="loading"></Loading>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import tuijian from "@/components/tuijian/index";
 import classify from "@/components/classify/index2";
 import service from "@/components/service/service";
 import { ViewBox, XHeader, Swiper, SwiperItem, Sticky, Loading } from "vux";
+import checkLogin from "@/mixins/checkLogin.js";
+import getLocation from "@/mixins/getLocation.js";
 export default {
   data() {
     return {
       classArr: [],
       serviceList: [],
-      loading: false,
       ad: []
     };
   },
@@ -44,21 +45,28 @@ export default {
   },
   created() {
     document.title = "分类";
-    this.loading = true;
     var _this = this;
     console.log("classid" + this.classId);
-    this.$axios
-      .get(_this.API_URL + "/api/Show/two_class", {
-        params: {
-          fid: _this.classId
-        }
-      })
-      .then(res => {
-        console.log("二级类");
-        _this.classArr = res.data.class;
-        _this.serviceList = res.data.info;
-        _this.loading = false;
-      });
+
+
+    this.getPosition().then(res=>{
+      this.SET_LOCATION(res);
+      
+      this.get_fw();
+    })
+
+    // this.$axios
+    //   .get(_this.API_URL + "/api/Show/two_class", {
+    //     params: {
+    //       fid: _this.classId
+    //     }
+    //   })
+    //   .then(res => {
+    //     console.log("二级类");
+    //     _this.classArr = res.data.class;
+    //     _this.serviceList = res.data.info;
+    //     _this.loading = false;
+    //   });
 
     this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({ data }) => {
       this.ad = data.smeta;
@@ -71,16 +79,39 @@ export default {
     //     }
     //   })
     //   .then(res => {
-    //       _this.serviceList = res.data;
+    //     _this.serviceList = res.data;
     //     console.log(res);
     //   });
   },
+  watch:{
+    location(){
+      this.get_fw();
+    }
+  },
+  methods: {
+    get_fw() {
+      var _this = this;
+      this.$axios
+        .get(_this.API_URL + "/Api/Fj/two_jl", {
+          params: {
+            fid: _this.classId,
+            lng: location.lat,
+            lat: location.lng
+          }
+        })
+        .then(({ data }) => {
+          _this.classArr = data.class;
+          _this.serviceList = data.info;
+        });
+    }
+  },
   computed: {
+    ...mapState(["location"]),
     classId() {
-      // 我们很快就会看到 `params` 是什么
       return this.$route.params.classId;
     }
-  }
+  },
+  mixins: [checkLogin, getLocation]
 };
 </script>
 

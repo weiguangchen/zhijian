@@ -10,9 +10,9 @@
         </div>
         <div class="bottom">
           <span>
-            <span class="iconfont icon-weizhi1"></span>体育中心</span>
-          <span>维修保养</span>
-          <span>&lt;2.8KM</span>
+            <span class="iconfont icon-weizhi1"></span>{{fwInfo.adress}}</span>
+          <span>{{fwInfo.fw_name}}</span>
+          <span>{{fwInfo.m}}KM</span>
         </div>
         <div class="tips" v-show="tuan">
           <div class="tip">内饰清洗</div>

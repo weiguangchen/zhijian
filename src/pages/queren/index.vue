@@ -24,14 +24,14 @@
         <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress"></XInput>
       </Group>
     </div>
-    <div class="card-list" v-if="hasCard">
-      <h1 title="sub-title">优惠卡</h1>
+    <div class="card-list" v-if="card_list.length>0">
+      <h1 class="sub-title">优惠卡</h1>
       <Group>
-        <Radio title="优惠卡" :options='card_list'></Radio>
+        <Radio title="优惠卡" :options='card_list' v-model="card_val"></Radio>
       </Group>
     </div>
 
-    <XButton class="xbtn" type='warn' @click.native='buy'>结算</XButton>
+    <XButton class="xbtn" type='warn' @click.native='buy' :disabled='submiting'>结算</XButton>
     <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
   </div>
 </template>
@@ -46,20 +46,20 @@ export default {
       fwInfo: {},
       orderNum: "",
       card_list: [],
-      hasCard:false,
+      hasCard: false,
       mapShow: false,
 
       num: 1,
       lianxiren: "",
       phone: "",
-      mapInfo: ""
+      mapInfo: "",
+      card_val: ""
     };
   },
   created() {
     document.title = "确认订单";
     this.get_fw_info();
     this.get_card();
-    // this.$eruda.init();
   },
   methods: {
     openMap() {
@@ -96,55 +96,81 @@ export default {
             content: "是否购买该服务？",
             onCancel() {},
             onConfirm() {
-              _this.$axios
-                .get(_this.API_URL + "/api/WxPay/pay", {
-                  params: {
-                    shop_fw_id: _this.serviceId,
-                    num: _this.num,
-                    uid: _this.id,
-                    address: _this.mapInfo.poiaddress,
-                    dianhua: _this.phone,
-                    xingming: _this.lianxiren
-                  }
-                })
-                .then(({ data }) => {
-                  _this.orderNum = data.pay_order_id;
-                  return new Promise((resolve, reject) => {
-                    _this.$wx.chooseWXPay({
-                      timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                      nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
-                      package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
-                      signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                      paySign: data.paySign, // 支付签名
-                      success: function(res) {
-                        // 支付成功后的回调函数
-                        resolve(res);
+              if (_this.card_val) {
+                _this.$axios
+                  .get(_this.API_URL + "/api/BkPay/bk_pay", {
+                    params: {
+                      fw_id: _this.serviceId,
+                      num: _this.num,
+                      uid: _this.id,
+                      address: _this.mapInfo.poiaddress,
+                      phone: _this.phone,
+                      xingming: _this.lianxiren,
+                      card_id: _this.card_val
+                    }
+                  })
+                  .then(({ data }) => {
+                    _this.$vux.alert.show({
+                      title: "提示",
+                      content: "购买成功,请在我的订单中查看消费码！",
+                      onHide() {
+                        _this.$router.push({
+                          path: "/me"
+                        });
                       }
                     });
                   });
-                })
-                .then(res => {
-                  console.log("支付成功回调");
-                  console.log(res);
-                  return _this.$axios.get(_this.API_URL + "/api/WxPay/fs", {
+              } else {
+                _this.$axios
+                  .get(_this.API_URL + "/api/WxPay/pay", {
                     params: {
-                      order_num: _this.orderNum
+                      shop_fw_id: _this.serviceId,
+                      num: _this.num,
+                      uid: _this.id,
+                      address: _this.mapInfo.poiaddress,
+                      dianhua: _this.phone,
+                      xingming: _this.lianxiren
                     }
-                  });
-                })
-                .then(res => {
-                  console.log("回调结束");
-                  console.log(res);
-                  _this.$vux.alert.show({
-                    title: "提示",
-                    content: "购买成功,请在我的订单中查看消费码！",
-                    onHide() {
-                      _this.$router.push({
-                        path: "/me"
+                  })
+                  .then(({ data }) => {
+                    _this.orderNum = data.pay_order_id;
+                    return new Promise((resolve, reject) => {
+                      _this.$wx.chooseWXPay({
+                        timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                        nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
+                        package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                        signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                        paySign: data.paySign, // 支付签名
+                        success: function(res) {
+                          // 支付成功后的回调函数
+                          resolve(res);
+                        }
                       });
-                    }
+                    });
+                  })
+                  .then(res => {
+                    console.log("支付成功回调");
+                    console.log(res);
+                    return _this.$axios.get(_this.API_URL + "/api/WxPay/fs", {
+                      params: {
+                        order_num: _this.orderNum
+                      }
+                    });
+                  })
+                  .then(res => {
+                    console.log("回调结束");
+                    console.log(res);
+                    _this.$vux.alert.show({
+                      title: "提示",
+                      content: "购买成功,请在我的订单中查看消费码！",
+                      onHide() {
+                        _this.$router.push({
+                          path: "/me"
+                        });
+                      }
+                    });
                   });
-                });
+              }
             }
           });
         }
@@ -182,12 +208,7 @@ export default {
           }
         })
         .then(({ data }) => {
-          if (data.status == 0) {
-            this.hasCard = false;
-          } else if (data.status == 1) {
-            this.hasCard = true;
-            this.card_list = data;
-          }
+          this.card_list = data;
         });
     }
   },
@@ -245,11 +266,12 @@ export default {
     margin-bottom: $bot;
   }
   .xbtn {
-    margin-top: 0.533333rem;
+    margin-top: 1.333333rem;
   }
   .card-list {
     .sub-title {
-      @include font-dpr(14px);
+      padding: 10px 15px;
+      @include font-dpr(17px);
       background: #ffffff;
     }
   }

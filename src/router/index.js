@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-28 10:14:23 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-25 17:44:44
+ * @Last Modified time: 2018-06-26 17:02:34
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -617,8 +617,8 @@ router.beforeEach((to, from, next) => {
     var url = VueCookies.get('enterBeforeUrl');
     console.log('进入地址:' + url)
 
-    // window.location.href = 'http://192.168.31.75:8081' + url;
-    window.location.href = default_url + url;
+    window.location.href = 'http://192.168.31.75:8081' + url;
+    // window.location.href = default_url + url;
   }
 
 
@@ -707,7 +707,7 @@ router.beforeEach((to, from, next) => {
 
 
 
-
+  // next();
 
 
 

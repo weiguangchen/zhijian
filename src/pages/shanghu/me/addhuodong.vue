@@ -118,7 +118,7 @@
             </Group>
           </div>
         </template>
-        <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
+        <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1" :disabled='step1submit'>下一步</XButton>
         <XButton type='warn' class="xbtn" @click.native="submitFn" :disabled='submiting' v-if="step == 2">提交</XButton>
       </div>
 
@@ -167,6 +167,7 @@ export default {
       detail_list: [],
       localData: "",
       imgs: "",
+
       // 第一步
       huodongname: "",
       sub_name: "",
@@ -204,8 +205,6 @@ export default {
         _this.face_list = data.face;
         _this.fw_list = data.fw;
       });
-
-    // this.$eruda.init();
   },
 
   methods: {
@@ -293,7 +292,7 @@ export default {
                   content: "添加活动成功!",
                   onHide() {
                     _this.$router.replace({
-                      path:"/shanghu/me/index"
+                      path: "/shanghu/me/index"
                     });
                   }
                 });
@@ -303,7 +302,7 @@ export default {
                   content: "添加活动失败!",
                   onHide() {
                     _this.$router.replace({
-                      path:"/shanghu/me/index"
+                      path: "/shanghu/me/index"
                     });
                   }
                 });
@@ -331,6 +330,7 @@ export default {
         } else {
           resolve();
         }
+
         //  else if (!this.tupianList) {
         //   _this.alertWarning("请上传活动图片集！");
         //   reject();
@@ -346,7 +346,7 @@ export default {
         } else if (!this.sub_name) {
           _this.alertWarning("请选择区域！");
           reject();
-        } else if (!this.tupian) {
+        } else if (!this.sqVal) {
           _this.alertWarning("请选择社区！");
           reject();
         } else if (!this.one_class_val) {
@@ -364,13 +364,13 @@ export default {
         } else if (!this.detail) {
           _this.alertWarning("请选择图文详情！");
           reject();
-        } else if (!this.yuanjia) {
+        } else if (!this.isPrice(this.yuanjia)) {
           _this.alertWarning("请填写原价！");
           reject();
-        } else if (!this.huodongjia) {
+        } else if (!this.isPrice(this.huodongjia)) {
           _this.alertWarning("请填写活动价！");
           reject();
-        } else if (!this.jiesuanjia) {
+        } else if (!this.isPrice(this.jiesuanjia)) {
           _this.alertWarning("请填写结算价！");
           reject();
         } else {
@@ -479,6 +479,14 @@ export default {
           return false;
         }
       );
+    },
+    isPrice(s) {
+      var re = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/;
+      return re.test(s);
+    },
+    isPositiveInteger(s) {
+      var re = /^[1-9]\d*$/;
+      return re.test(s);
     }
   },
   computed: {
@@ -500,7 +508,15 @@ export default {
       });
       //   arr = JSON.stringify(arr);
       return arr;
+    },
+    step1submit(){
+      if(this.tupian){
+        return false;
+      }else{
+        return true;
+      }
     }
+    
   },
   components: {
     bigTitle,

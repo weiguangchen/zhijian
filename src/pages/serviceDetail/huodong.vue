@@ -3,7 +3,7 @@
     <ViewBox class="service-detail">
       <div class="banner">
         <div class="share"></div>
-        <Swiper height='5.12rem'>
+        <Swiper height='5.12rem' :show-dots='false'>
           <!-- <SwiperItem v-for="(item,index) in huodong_info.cardImg" :key="index"><img :src="item" alt=""></SwiperItem> -->
         </Swiper>
       </div>

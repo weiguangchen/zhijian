@@ -1,6 +1,7 @@
 <template>
   <div class="shanghu-page add-face">
-    <bigTitle title='添加门店' @showPopup='showPopup'></bigTitle>
+    <bigTitle title='修改门店' @showPopup='showPopup' v-if="faceId"></bigTitle>
+    <bigTitle title='添加门店' @showPopup='showPopup' v-else></bigTitle>
     <div class="form-box">
       <h2 class="sub-title">门店名称:</h2>
       <Group class="reset-vux-input">
@@ -31,23 +32,23 @@
 import bigTitle from "@/components/bigTitle/index";
 import myMap from "@/components/map/index";
 import wxConfig from "@/mixins/wxConfig.js";
-import { XInput, Group, XButton,Selector,Cell } from "vux";
-import checkLogin from '@/mixins/checkLogin.js';
+import { XInput, Group, XButton, Selector, Cell } from "vux";
+import checkLogin from "@/mixins/checkLogin.js";
 export default {
   data() {
     return {
-      submiting:false,
+      submiting: false,
       mapShow: false,
-      sqList:[],
+      sqList: [],
 
       face_name: "",
       map: "",
-      address:'',
-      cityVal:'',
-      cityKey:'',
-      qyVal:'',
-      qyKey:'',
-      sqVal:''
+      address: "",
+      cityVal: "",
+      cityKey: "",
+      qyVal: "",
+      qyKey: "",
+      sqVal: ""
     };
   },
   created() {
@@ -63,6 +64,10 @@ export default {
         .then(({ data }) => {
           console.log(data);
           _this.face_name = data[0].face_name;
+          _this.map = JSON.parse(data[0].map);
+          _this.address = data[0].adress;
+          _this.sqVal = data[0].sq_id;
+          
         });
     }
 
@@ -89,7 +94,6 @@ export default {
 
       // 获取社区列表
     });
-
   },
   methods: {
     showPopup(val) {
@@ -105,40 +109,44 @@ export default {
             face_name: this.face_name,
             jd: this.map.latlng.lat,
             wd: this.map.latlng.lng,
+            map:this.map,
+            adress: this.address,
+            city: this.cityVal,
+            qy: this.qyVal,
+            sq: this.sqVal,
             fw_shop_id: this.userinfo.shop[0].id,
-            phone:this.userinfo.uphone,
-            adress:this.address,
-            city:this.cityVal,
-            qy:this.qyVal,
-            sq:this.sqVal
+            phone: this.userinfo.uphone
           }
         })
-        .then(({ data }) => {
-          if (data.status == 1) {
-            this.$vux.alert.show({
-              title: "提示",
-              content: "创建门店成功！",
-              onHide() {
-                _this.$router.replace({
-                  path: "/shanghu/me/mendian"
-                });
-              }
-            });
-          } else if (data.status == 0) {
+        .then(
+          ({ data }) => {
+            if (data.status == 1) {
+              this.$vux.alert.show({
+                title: "提示",
+                content: "创建门店成功！",
+                onHide() {
+                  _this.$router.replace({
+                    path: "/shanghu/me/mendian"
+                  });
+                }
+              });
+            } else if (data.status == 0) {
+              this.submiting = false;
+              this.$vux.alert.show({
+                title: "提示",
+                content: "创建门店失败，请重试！",
+                onHide() {
+                  _this.$router.replace({
+                    path: "/shanghu/me/mendian"
+                  });
+                }
+              });
+            }
+          },
+          err => {
             this.submiting = false;
-            this.$vux.alert.show({
-              title: "提示",
-              content: "创建门店失败，请重试！",
-              onHide() {
-                _this.$router.replace({
-                  path: "/shanghu/me/mendian"
-                });
-              }
-            });
           }
-        },err=>{
-          this.submiting = false;
-        });
+        );
     },
     change_face() {
       var _this = this;
@@ -146,8 +154,8 @@ export default {
         .get(this.API_URL + "/Api/Shop/edit_face", {
           params: {
             face_name: _this.face_name,
-            jd: _this.loc.latlng.lat,
-            wd: _this.loc.latlng.lng,
+            jd: _this.map.latlng.lat,
+            wd: _this.map.latlng.lng,
             id: _this.faceId
           }
         })
@@ -184,25 +192,25 @@ export default {
       this.mapShow = false;
       this.map = map;
     },
-    validataForm(){
+    checkForm() {
       var _this = this;
-      // return new Promise((resolve,reject)=>{
-      //   if(!face_name){
-      //     reject()
-      //     _this.alertWarning('请填写门店名称！')
-      //   }else if(!map){
-      //     reject()
-      //     _this.alertWarning('请填写门店名称！')
-      //   }
-      // })
+      return new Promise((resolve, reject) => {
+        if (!face_name) {
+          reject();
+          _this.alertWarning("请填写门店名称！");
+        } else if (!map) {
+          reject();
+          _this.alertWarning("请填写门店名称！");
+        }
+      });
     },
-    alertWarning(text){
+    alertWarning(text) {
       this.$vux.alert.show({
-        title:'提示',
-        content:text
-      })
+        title: "提示",
+        content: text
+      });
     },
-    changeSq(val){
+    changeSq(val) {
       this.sqVal = val;
     }
   },
