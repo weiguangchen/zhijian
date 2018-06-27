@@ -4,11 +4,6 @@
       <InfiniteScroll ref="infinitescroll" :callback="loadList">
         <template slot="list">
           <div class="ad">
-            <!-- <Swiper :aspect-ratio='0.24' ref="ad">
-              <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-              <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-              <SwiperItem><img src="~img/class/ad.png" alt=""></SwiperItem>
-            </Swiper> -->
             <swiper :options="swiperOption" ref="mySwiper">
               <!-- slides -->
               <swiper-slide><img src="~img/class/ad.png" alt=""></swiper-slide>
@@ -21,21 +16,46 @@
             <sticky>
               <div class="term">
                 <div class="select-box">
-                  <span class="term-item" :class="{active:selectType == 1}" @click="selectAdd(1)">
-                    <span>{{currentSelInfo.area.val}}</span>
+                  <span class="term-item" :class="{active:(selectType == 1&&selectAddShow)}" @click="selectAdd(1)">
+                    <span>{{currentSelInfo.area.sq.val}}</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
-                  <span class="term-item" :class="{active:selectType == 2}" @click="selectAdd(2)">
+                  <span class="term-item" :class="{active:(selectType == 2&&selectAddShow)}" @click="selectAdd(2)">
                     <span>{{currentSelInfo.order.val}}</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
-                  <span class="term-item" :class="{active:selectType == 3}" @click="selectAdd(3)">
+                  <span class="term-item" :class="{active:(selectType == 3&&selectAddShow)}" @click="selectAdd(3)">
                     <span>更多</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
                 </div>
-                <div class="term-box">
+                <!-- <addressSelect class="addressSelect" 
+                :type='selectType' v-if="location" v-show="selectAddShow" :currentInfo='currentSelInfo' 
+                @selectSq='selectSq' 
+                @selectQy='selectQy'
+                @selectOrder='selectOrder'
+                @init='init'></addressSelect> -->
+                <div class="address-select-box">
+                  <div class="add" v-if="type == 1">
+                    <div class="qy">
+                      <div class="item" :class="{active:currentInfo.area.key == 0}">附近</div>
+                      <div class="item" @click="selectQy(item)" v-for="(item,index) in qy" :key="index" :class="{active:currentInfo.area.qy.key == item.id}">{{item.qy_name}}</div>
+                    </div>
+                    <div class="sq">
+                      <template v-if="sq.length>0">
+                        <div class="item" :class="{active:currentInfo.area.sq.key == item.id}" v-for="(item,index) in sq" :key="index" @click="selectSq(item)">{{item.sq_name}}</div>
+                      </template>
+                      <div class="item" v-else>暂未开通</div>
+                    </div>
 
+                  </div>
+                  <div class="order-type" v-else-if="type == 2">
+                    <div class="item" :class="{active:currentInfo.order.key == item.id}" @click="selectOrder(item)" v-for="(item,index) in order" :key="index">{{item.val}}</div>
+                  </div>
+                  <div class="select" v-else-if='type == 3'>
+                    <div class="item">条件一</div>
+                    <div class="item">条件二</div>
+                  </div>
                 </div>
               </div>
             </sticky>
@@ -48,7 +68,6 @@
         <span slot="doneTip">暂无更多服务</span>
       </InfiniteScroll>
     </Layout>
-    <addressSelect class="addressSelect" :type='selectType' v-if="location" v-show="selectAddShow" :currentInfo='currentSelInfo'></addressSelect>
 
   </div>
 
@@ -69,18 +88,24 @@ export default {
     return {
       currentSelInfo: {
         area: {
-          key: 0,
-          val: "附近"
+          qy: {
+            key: 0,
+            val: "附近"
+          },
+          sq: {
+            key: 0,
+            val: "附近"
+          }
         },
         order: {
           key: 0,
           val: "智能排序"
         },
-        select: {}
+        search: {}
       },
 
       selectAddShow: false,
-      selectType: 1,
+      selectType: "",
       adHeight: "",
 
       swiperOption: {
@@ -153,11 +178,28 @@ export default {
       });
     },
     selectAdd(type) {
-      this.selectType = type;
-      if (document.querySelector("#scrollView").scrollTop < this.adHeight) {
-        document.querySelector("#scrollView").scrollTop = this.adHeight;
+      if (this.selectType == type) {
+        this.selectAddShow = !this.selectAddShow;
+      } else {
+        this.selectAddShow = true;
       }
-      this.selectAddShow = true;
+      this.selectType = type;
+    },
+    selectSq(sq) {
+      console.log(sq);
+      this.currentSelInfo.area.sq.val = sq.sq_name;
+      this.currentSelInfo.area.sq.key = sq.id;
+      this.selectAddShow = false;
+    },
+    selectQy(qy) {
+      console.log(qy);
+      this.currentSelInfo.area.qy.val = qy.qy_name;
+      this.currentSelInfo.area.qy.key = qy.id;
+    },
+    selectOrder(order) {
+      this.currentSelInfo.order.val = order.val;
+      this.currentSelInfo.order.key = order.key;
+      this.selectAddShow = false;
     }
   },
 
@@ -210,8 +252,8 @@ export default {
           align-items: center;
           flex: 1;
         }
-        .active{
-          color:#cb2620;
+        .active {
+          color: #cb2620;
         }
       }
       .term-box {
@@ -220,14 +262,28 @@ export default {
         left: 0;
         background: red;
       }
-
+      .addressSelect {
+      }
       .iconfont {
         color: #b6b6b6;
         @include font-dpr(14px);
       }
     }
   }
-  .addressSelect {
+  .address-select-box {
+    width: 100%;
+    z-index: 9999;
+    background: #ffffff;
+    .add {
+      display: flex;
+    }
+    .item {
+      padding: 0.266667rem 0.533333rem;
+      @include font-dpr(12px);
+    }
+    .active {
+      color: #cb2620;
+    }
   }
 }
 </style>

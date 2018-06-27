@@ -536,7 +536,8 @@ router.beforeEach((to, from, next) => {
     VueCookies.set('user', to.query.id);
     var url = VueCookies.get('enterBeforeUrl');
     console.log('进入地址:' + url)
-
+    
+    window.location.href = 'http://localhost:8081' + url;
     window.location.href = 'http://192.168.31.75:8081' + url;
     // window.location.href = default_url + url;
   }

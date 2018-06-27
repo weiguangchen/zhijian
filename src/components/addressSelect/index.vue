@@ -1,30 +1,26 @@
 <template>
-  <!-- <div class="mask" @touchmove.prevent='move'> -->
   <div class="address-select-box">
     <div class="add" v-if="type == 1">
-      <!-- <template> -->
-        <div class="qy">
-          <div class="item" :class="{active:currentInfo.area.key == 0}">附近</div>
-          <div class="item" @click="selectQy(item)" v-for="(item,index) in qy" :key="index" :class="{active:currentInfo.area.key == item.id}">{{item.qy_name}}</div>
-        </div>
-        <div class="sq">
-          <div class="item" v-for="(item,index) in sq" :key="index" v-if="sq.length>0">{{item.sq_name}}</div>
-          <div class="item" v-else>暂未开通</div>
-          
-        </div>
-      <!-- </template> -->
+      <div class="qy">
+        <div class="item" :class="{active:currentInfo.area.key == 0}">附近</div>
+        <div class="item" @click="selectQy(item)" v-for="(item,index) in qy" :key="index" :class="{active:currentInfo.area.qy.key == item.id}">{{item.qy_name}}</div>
+      </div>
+      <div class="sq">
+        <template v-if="sq.length>0">
+          <div class="item" :class="{active:currentInfo.area.sq.key == item.id}" v-for="(item,index) in sq" :key="index" @click="selectSq(item)">{{item.sq_name}}</div>
+        </template>
+        <div class="item" v-else>暂未开通</div>
+      </div>
 
     </div>
     <div class="order-type" v-else-if="type == 2">
-      <div class="item">智能排序</div>
-      <div class="item">热度最高</div>
+      <div class="item" :class="{active:currentInfo.order.key == item.id}" @click="selectOrder(item)" v-for="(item,index) in order" :key="index">{{item.val}}</div>
     </div>
     <div class="select" v-else-if='type == 3'>
       <div class="item">条件一</div>
       <div class="item">条件二</div>
     </div>
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -33,18 +29,31 @@ export default {
   data() {
     return {
       qy: [],
-      sq: []
+      qyVal:'',
+      sq: [],
+      sqVal:'',
+      order: [
+        {
+          val: "智能排序",
+          key: 1
+        }
+      ]
     };
   },
   created() {
     this.get_city();
+    this.init();
   },
-  props: ["type","currentInfo"],
+  props: ["type", "currentInfo"],
   methods: {
     move() {},
     selectQy(qy) {
       this.sq = qy.sq;
-      console.log(this.sq)
+      console.log(qy);
+      this.$emit("selectQy", qy);
+    },
+    selectSq(sq) {
+      this.$emit("selectSq", sq);
     },
     get_city() {
       var _this = this;
@@ -59,28 +68,29 @@ export default {
             }
           });
         });
+    },
+    selectOrder(order) {
+      this.$emit("selectOrder", order);
+    },
+    init() {
+      this.$emit("init",this.info);
     }
   },
   computed: {
-    ...mapState(["location"])
+    ...mapState(["location"]),
+    info() {
+      var info = {};
+      info.qy = this.qy;
+      info.sq = this.sq;
+      info.order = this.order;
+    }
   },
   components: {}
 };
 </script>
 
 <style lang='scss'>
-.mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(#000000, 0.4);
-  z-index: 99999;
-}
 .address-select-box {
-  position: fixed;
-  top: 1.386667rem;
   width: 100%;
   z-index: 9999;
   background: #ffffff;
