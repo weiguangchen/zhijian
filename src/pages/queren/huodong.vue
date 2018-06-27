@@ -7,12 +7,12 @@
                 <div class="fw_content">{{huodongInfo.card_subname}}</div>
             </div>
         </div>
-        <div class="fw_num">
+        <!-- <div class="fw_num">
             <Group>
                 <XNumber title='购买数量' :min='1' v-model="num"></XNumber>
                 <Cell title='总价' :value='money'></Cell>
             </Group>
-        </div>
+        </div> -->
         <div class="fw_time">
             <Group>
                 <XInput title='联系人' v-model="lianxiren"></XInput>

@@ -357,7 +357,7 @@ export default {
                   content: "修改服务成功，请等待审核",
                   onHide() {
                     _this.$router.replace({
-                      path: "/shanghu/me"
+                      path: "/shanghu/me/index"
                     });
                   }
                 });
@@ -367,7 +367,7 @@ export default {
                   content: "修改服务失败，请重试",
                   onHide() {
                     _this.$router.push({
-                      path: "/shanghu/me/xmgl"
+                      path: "/shanghu/me/index"
                     });
                   }
                 });

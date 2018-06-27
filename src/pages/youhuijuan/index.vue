@@ -31,13 +31,13 @@
                 <span class="fw-title">服务：</span>{{fw.fw_name}}</span>
               <span>剩余次数: {{fw.fw_num}}</span>
             </div>
-            <div class="line">
+            <!-- <div class="line">
               <span>
                 <span class="fw-title">验证码：</span>
                 <span class="fw-num">{{fw.pay_ma}}</span>
               </span>
               <span class="reset-num" @click="cz_card(fw.id,index,index1)">刷新验证码</span>
-            </div>
+            </div> -->
           </div>
 
         </div>

@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:03:22 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-26 16:04:09
+ * @Last Modified time: 2018-06-27 12:04:17
  */
 <template>
   <div id="app">
@@ -10,10 +10,13 @@
     <router-view/>
     <!-- </keep-alive> -->
     <router-view name="tab"></router-view>
+    <Loading v-show="isLoading"></Loading>
   </div>
 </template>
 
 <script>
+import { Loading } from 'vux'
+
 import { mapState,mapMutations } from "vuex";
 export default {
   name: "App",
@@ -22,10 +25,14 @@ export default {
 
   },
   computed: {
+    ...mapState(['isLoading'])
   },
   methods: {
     
     
+  },
+  components: {
+    Loading
   }
 };
 </script>

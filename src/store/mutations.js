@@ -13,6 +13,9 @@ const mutations = {
   },
   SET_LOCATION:(state,preload)=>{
     state.location = preload;
+  },
+  SET_ISLOADING:(state,preload)=>{
+    state.isLoading = preload;
   }
 }
 

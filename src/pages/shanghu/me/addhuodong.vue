@@ -187,7 +187,7 @@ export default {
     };
   },
   created() {
-    this.$eruda.init();
+    // this.$eruda.init();
     this.checkSystem();
     var _this = this;
     this.$emit("showPopup", false);

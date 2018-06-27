@@ -7,7 +7,7 @@
                 <div>可管理账号列表：</div>
             </div>
             <div class="account-list">
-                <Group class="reset-vux-input account-item">
+                <!-- <Group class="reset-vux-input account-item">
                     <div class="tit">账号的名称：dsjifwejo</div>
                     <div class="tit">管理的门店：十一经路店</div>
                     <div class="tit last-tit">账号说明：李海东</div>
@@ -15,8 +15,7 @@
                         <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton>
                         <XButton :mini='true' :plain='true' type='warn' class="mini-btn">编辑</XButton>
                     </div>
-
-                </Group>
+                </Group> -->
             </div>
 
             <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>

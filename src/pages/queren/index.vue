@@ -7,7 +7,7 @@
         <div class="fw_content">{{fwInfo.sub_content}}</div>
       </div>
     </div>
-    <div class="fw_num">
+    <div class="fw_num" v-if="!card_list.length>0">
       <Group>
         <XNumber title='购买数量' :min='1' v-model="num"></XNumber>
         <Cell title='总价' :value='money'></Cell>
@@ -27,7 +27,7 @@
     <div class="card-list" v-if="card_list.length>0">
       <h1 class="sub-title">优惠卡</h1>
       <Group>
-        <Radio title="优惠卡" :options='card_list' v-model="card_val"></Radio>
+        <Radio :options='card_list' v-model="card_val"></Radio>
       </Group>
     </div>
 
@@ -48,6 +48,7 @@ export default {
       card_list: [],
       hasCard: false,
       mapShow: false,
+      submiting: false,
 
       num: 1,
       lianxiren: "",
@@ -70,31 +71,39 @@ export default {
       this.mapShow = false;
     },
     buy() {
+
+      
       var _this = this;
+      this.submiting = true;
       if (this.id) {
         if (!this.lianxiren) {
           this.$vux.toast.show({
             text: "请输入联系人",
             position: "middle"
           });
+          this.submiting = false;
           return false;
         } else if (!this.phone) {
           this.$vux.toast.show({
             text: "请输入联系人手机号",
             position: "middle"
           });
+          this.submiting = false;
           return false;
-        } else if (!this.mapInfo) {
+        }else if (!this.mapInfo) {
           this.$vux.toast.show({
             text: "请选择收货地址",
             position: "middle"
           });
+          this.submiting = false;
           return false;
-        } else {
+        }  else {
           this.$vux.confirm.show({
             title: "提示",
             content: "是否购买该服务？",
-            onCancel() {},
+            onCancel() {
+              this.submiting = false;
+            },
             onConfirm() {
               if (_this.card_val) {
                 _this.$axios
@@ -106,7 +115,8 @@ export default {
                       address: _this.mapInfo.poiaddress,
                       phone: _this.phone,
                       xingming: _this.lianxiren,
-                      card_id: _this.card_val
+                      card_id: _this.card_val,
+                      shop_id:_this.shopid
                     }
                   })
                   .then(({ data }) => {
@@ -144,6 +154,9 @@ export default {
                         success: function(res) {
                           // 支付成功后的回调函数
                           resolve(res);
+                        },
+                        cancel: function(res) {
+                          _this.submiting = false;
                         }
                       });
                     });
@@ -208,13 +221,25 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.card_list = data;
+          var radioList =[];
+          if (data.status == 1) {
+            data.data.map(m => {
+              var item = {};
+              item.key = m.bk_id;
+              item.value = m.card_name;
+              radioList.push(item);
+            });
+          }
+          this.card_list = radioList;
         });
     }
   },
   computed: {
     serviceId() {
       return this.$route.query.serviceId;
+    },
+    shopid() {
+      return this.$route.query.shopid;
     },
     money() {
       return `${this.num * this.fwInfo.money}元`;

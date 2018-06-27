@@ -2,7 +2,7 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-26 17:23:41
+ * @Last Modified time: 2018-06-27 11:11:59
  */
 <template>
   <keep-alive>
@@ -83,7 +83,7 @@ import classify from "@/components/classify/index";
 import tuijian from "@/components/tuijian/index";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import { rejects } from "assert";
-import getLocation from '@/mixins/getLocation.js';
+import getLocation from "@/mixins/getLocation.js";
 export default {
   data() {
     return {
@@ -109,19 +109,13 @@ export default {
   created() {
     document.title = "首页";
     var _this = this;
-
-    // this.$axios.get(this.API_URL + "/api/Show/one_class").then(res => {
-    //   console.log(res);
-    //   _this.classArr = res.data.class;
-    //   _this.listArr = res.data.info;
-    // });
-
-
-    this.getPosition().then(res=>{
+    // this.$eruda.init();
+    
+    this.getPosition().then(res => {
       this.SET_LOCATION(res);
-      
-      this.get_fw();      
-    })
+      console.log(this.location)
+      this.get_fw();
+    });
 
     this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({ data }) => {
       // 获取头部广告
@@ -170,7 +164,7 @@ export default {
           _this.classArr = data.class;
           _this.listArr = data.info;
         });
-    }
+    },
   },
   computed: {
     ...mapState(["location"]),

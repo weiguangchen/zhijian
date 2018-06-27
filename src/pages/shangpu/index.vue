@@ -4,8 +4,6 @@
       <div class="banner">
         <Swiper :aspect-ratio='0.512' :show-dots='false'>
           <SwiperItem><img src="~img/shangpu/banner.png" alt=""></SwiperItem>
-          <SwiperItem><img src="~img/shangpu/banner.png" alt=""></SwiperItem>
-          <SwiperItem><img src="~img/shangpu/banner.png" alt=""></SwiperItem>
         </Swiper>
       </div>
 
@@ -44,10 +42,10 @@
       <div class="address">
         <div class="left">
           <div class="top">
-            <span class="iconfont icon-weizhi1"></span>卫国道泰兴路益寿东里37号楼底商（近仁爱医院）</div>
-          <div class="bottom">
+            <span class="iconfont icon-weizhi1"></span>{{shopInfo.adress}}</div>
+          <!-- <div class="bottom">
             距地铁2号线靖江路站c口（东）口步行690米
-          </div>
+          </div> -->
         </div>
         <div class="right">
           <span class="iconfont icon-lianxifangshi" v-if="shopInfo.shop_phone == 0"></span>

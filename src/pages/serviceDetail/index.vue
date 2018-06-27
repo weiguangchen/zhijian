@@ -35,7 +35,7 @@
         </div>
         <div class="bottom">
           <span class="iconfont icon-weizhi1"></span>
-          <span class="txt">卫国道泰兴路益寿东里37号楼底商（近仁爱医院）</span>
+          <span class="txt">{{fw_info.adress}}</span>
         </div>
       </div>
 
@@ -124,7 +124,8 @@ export default {
         this.$router.push({
           path: "/queren",
           query: {
-            serviceId: _this.fwId
+            serviceId: _this.fwId,
+            shopid:_this.fw_info.shop_id
           }
         });
       } else {

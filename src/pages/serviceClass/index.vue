@@ -83,11 +83,6 @@ export default {
     //     console.log(res);
     //   });
   },
-  watch:{
-    location(){
-      this.get_fw();
-    }
-  },
   methods: {
     get_fw() {
       var _this = this;
@@ -95,8 +90,8 @@ export default {
         .get(_this.API_URL + "/Api/Fj/two_jl", {
           params: {
             fid: _this.classId,
-            lng: location.lat,
-            lat: location.lng
+            lng: _this.location.lat,
+            lat: _this.location.lng
           }
         })
         .then(({ data }) => {

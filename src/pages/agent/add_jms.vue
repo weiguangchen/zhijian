@@ -116,7 +116,7 @@ export default {
   },
   created() {
     this.checkSystem();
-    this.$eruda.init();
+    // this.$eruda.init();
     var _this = this;
     // 获取城市信息
     this.$axios.get(this.API_URL + "/Api/UserShow/city").then(({ data }) => {
