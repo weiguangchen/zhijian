@@ -8,7 +8,9 @@
           <div class="item" @click="selectQy(item)" v-for="(item,index) in qy" :key="index" :class="{active:currentInfo.area.key == item.id}">{{item.qy_name}}</div>
         </div>
         <div class="sq">
-          <div class="item" v-for="(item,index) in sq" :key="index">{{item}}</div>
+          <div class="item" v-for="(item,index) in sq" :key="index" v-if="sq.length>0">{{item.sq_name}}</div>
+          <div class="item" v-else>暂未开通</div>
+          
         </div>
       <!-- </template> -->
 
@@ -41,7 +43,8 @@ export default {
   methods: {
     move() {},
     selectQy(qy) {
-
+      this.sq = qy.sq;
+      console.log(this.sq)
     },
     get_city() {
       var _this = this;
