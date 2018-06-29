@@ -3,9 +3,13 @@
     <bigTitle title='验证' @showPopup='showPopup'></bigTitle>
     <div class="my-form">
       <div class="form-box">
-        <Group>
+        <!-- <Group>
           <Cell title='验证消费码' :is-link='true' link='/shanghu/yanzheng/xfm' v-if="checkQx(11)"></Cell>
           <Cell title='验证活动码' :is-link='true' link='/shanghu/yanzheng/huodong'  v-if="checkQx(12)"></Cell>
+        </Group> -->
+        <Group>
+          <Cell title='验证消费码' :is-link='true' link='/shanghu/yanzheng/xfm'     ></Cell>
+          <Cell title='验证活动码' :is-link='true' link='/shanghu/yanzheng/huodong' ></Cell>
         </Group>
       </div>
     </div>

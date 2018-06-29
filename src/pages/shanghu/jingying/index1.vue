@@ -3,9 +3,13 @@
     <bigTitle title='经营管理' @showPopup='showPopup'></bigTitle>
     <div class="my-form">
       <div class="form-box">
-        <Group>
+        <!-- <Group>
           <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji' v-if="checkQx(31)"></Cell>
           <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
+        </Group> -->
+        <Group>
+          <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'  ></Cell>
+          <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl' ></Cell>
         </Group>
       </div>
     </div>

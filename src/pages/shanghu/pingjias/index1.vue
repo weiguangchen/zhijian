@@ -4,7 +4,8 @@
     <div class="my-form">
       <div class="form-box">
         <Group>
-          <Cell title='消费评价' :is-link='true' link='/shanghu/pingjias/pingjias' v-if="checkQx(21)"></Cell>
+          <!-- <Cell title='消费评价' :is-link='true' link='/shanghu/pingjias/pingjias' v-if="checkQx(21)"></Cell> -->
+          <Cell title='消费评价' :is-link='true' link='/shanghu/pingjias/pingjias'></Cell>
           <!-- <Cell title='活动评价' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
           <Cell title='优惠评价' :is-link='true' link='/shanghu/jingying/orderGl'></Cell> -->
         </Group>
