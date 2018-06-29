@@ -1,6 +1,6 @@
 <template>
-  <div class="shanghu-page">
-    <bigTitle title="销售统计" @showPopup='showPopup'></bigTitle>
+  <div>
+    <bigTitle title="消费统计" @showPopup='showPopup'></bigTitle>
     <div class="tongji-info">
       <div class="tongji-item" v-for="(item,index) in list" :key="index">
         <img :src="item.fw_img" alt="" class="img">

@@ -2,9 +2,8 @@ const state = {
     id:'',      /* 用户id */
     userinfo:{},   /* 用户信息 */
     entryUrl:'',    /* jssdk在ios端授权地址是第一次进入地址 */
-    routers:[],       
-    addRouters:[],
 
+    
     routerMap:[],    
 
     location:'',   /*   定位信息 */

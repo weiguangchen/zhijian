@@ -75,7 +75,7 @@ export default {
         });
     },
     showPopup(val) {
-      this.$emit('closePopup',val);
+      this.$emit('showPopup',val);
     }
   },
   components: {

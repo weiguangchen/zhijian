@@ -1,11 +1,12 @@
 <template>
   <div>
-    <bigTitle title='经营管理' @showPopup='showPopup'></bigTitle>
+    <bigTitle title='评价' @showPopup='showPopup'></bigTitle>
     <div class="my-form">
       <div class="form-box">
         <Group>
-          <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji' v-if="checkQx(31)"></Cell>
-          <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
+          <Cell title='消费评价' :is-link='true' link='/shanghu/pingjias/pingjias' v-if="checkQx(21)"></Cell>
+          <!-- <Cell title='活动评价' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
+          <Cell title='优惠评价' :is-link='true' link='/shanghu/jingying/orderGl'></Cell> -->
         </Group>
       </div>
     </div>

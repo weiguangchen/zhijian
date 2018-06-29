@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "better-scroll": "^1.12.4",
     "eruda": "^1.4.4",
     "lib-flexible": "^0.3.2",
     "swiper": "^4.3.3",

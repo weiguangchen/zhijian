@@ -1,31 +1,28 @@
 <template>
-  <div class="shanghu-box">
-    <div class="wrapper shanghu-warpper" ref="wrapper">
-      <ul class="content">
-        <router-view @showPopup='showPopup'></router-view>
-      </ul>
-    </div>
-    <Popup position='right' v-model="popupShow">
-      <div class="popup-list">
-        <Group>
-          <Cell title='消费评价' link='/shanghu/pingjias/pingjias'></Cell>
-        </Group>
-      </div>
-    </Popup>
-  </div>
+    <div>
+        <bigTitle title="消费评价列表" @showPopup='showPopup'></bigTitle>
+        <div class="pingjia-list">
+            <div class="pingjia-item" v-for="(item,index) in list" :key="index" @click="get_fw_content(item.shop_fw_id)">
+                <img :src="item.fw_img" alt="" class="img">
+                <div class="info">
+                    <div class="mingzi">{{item.fw_mingzi}}</div>
+                    <div class="count">¥{{item.money}}</div>
+                    <div>已有：
+                        <span class="num">{{item.token_num}}</span>人评价</div>
+                </div>
 
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-import BScroll from "better-scroll";
-import { Group, Cell } from "vux";
-import { Popup } from "vue-ydui/dist/lib.px/popup";
 import bigTitle from "@/components/bigTitle/index";
 import checkLogin from "@/mixins/checkLogin.js";
 export default {
   data() {
     return {
-      popupShow: false
+      list: []
     };
   },
   created() {
@@ -41,31 +38,22 @@ export default {
         _this.list = res.data;
       });
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapper, {
-        tap: true,
-        click: true
-      });
-    });
-  },
   methods: {
-    showPopup(val) {
-      this.popupShow = val;
-    },
     get_fw_content(fwid) {
       this.$router.push({
-        path: "/shanghu/pingjiaList/" + fwid
+        path: "/shanghu/pingjias/pingjiaList/" + fwid
       });
+    },
+    showPopup(){
+        this.$emit('showPopup',true);
     }
   },
-  components: { Popup, Group, Cell },
+  components: { bigTitle },
   mixins: [checkLogin]
 };
 </script>
 
 <style lang='scss'>
-
 .pingjia-list {
   padding-left: 0.533333rem;
   .pingjia-item {

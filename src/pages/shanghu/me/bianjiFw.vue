@@ -50,6 +50,7 @@
               <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
             </Group>
           </div>
+
           <div class="form-group" v-if="two_class_val">
             <h2 class="sub-title">图文详情:</h2>
             <RadioGroup v-model="tw" color='#e03233'>
@@ -107,7 +108,13 @@
           <div class="form-group">
             <h2 class="sub-title">商户结算价(元):</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="jiesuanjia" type='number'></XInput>
+              <XInput v-model="jiesuanjia" type='number' :disabled='true'></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">规格:</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="fw_gg" :disabled='true'></XInput>
             </Group>
           </div>
         </template>
@@ -145,10 +152,11 @@ import { TransferDomDirective as TransferDom } from "vux";
 export default {
   data() {
     return {
+      jsPrecent: 0.3 /* 结算比例 */,
       modalInfo: "",
-
+      fw_gg: "",
       keyboardShow: false,
-      twList: [],
+      twList: {},
       twDetailShow: false,
       twDetailContent: "",
       step: 1,
@@ -172,8 +180,8 @@ export default {
       //   第三部
       youxiao: 0,
       yuanjia: "",
-      xianjia: "",
-      jiesuanjia: ""
+      xianjia: ""
+      // jiesuanjia: ""
     };
   },
   created() {
@@ -215,7 +223,8 @@ export default {
         this.youxiao = parseInt(res.use_day);
         this.yuanjia = res.y_money;
         this.xianjia = res.money;
-        this.jiesuanjia = res.j_money;
+        this.tw = res.fw_content_id;
+        // this.jiesuanjia = res.j_money;
       });
     }
   },
@@ -228,7 +237,17 @@ export default {
       // });
       // console.log(this.one_class_all);
     },
-    face(newval) {}
+    face(newval) {},
+    tw(newval) {
+      var _this = this;
+      if (this.twList) {
+        this.twList.map(m => {
+          if (m.id == newval) {
+            _this.fw_gg = m.fw_gg;
+          }
+        });
+      }
+    }
   },
   methods: {
     showPopup(val) {
@@ -236,13 +255,13 @@ export default {
     },
     next1() {
       if (!this.fw_name) {
-        this.alertWarning('请填写服务名称！');
+        this.alertWarning("请填写服务名称！");
         return false;
       } else if (!this.fw_short_info) {
-        this.alertWarning('请填写简短名称！');
+        this.alertWarning("请填写简短名称！");
         return false;
       } else if (!this.fw_intr) {
-        this.alertWarning('请填写服务介绍！');
+        this.alertWarning("请填写服务介绍！");
         return false;
       }
       this.step = 2;
@@ -251,13 +270,16 @@ export default {
       console.log("门店");
       console.log(this.face);
       if (!this.one_class_val) {
-        this.alertWarning('请选择分类！');
+        this.alertWarning("请选择分类！");
         return false;
       } else if (!this.two_class_val) {
-        this.alertWarning('请选择子分类！');
+        this.alertWarning("请选择子分类！");
+        return false;
+      } else if (!this.tw) {
+        this.alertWarning("请选择图文详情！");
         return false;
       } else if (this.face.length <= 0) {
-        this.alertWarning('请请选择支持的门店！');
+        this.alertWarning("请请选择支持的门店！");
         return false;
       }
       // else if (!this.tupian) {
@@ -318,11 +340,11 @@ export default {
         err => {}
       );
     },
-    alertWarning(text){
+    alertWarning(text) {
       this.$vux.alert.show({
-        title:'提示',
-        content:text
-      })
+        title: "提示",
+        content: text
+      });
     },
     changeFw() {
       var _this = this;
@@ -389,13 +411,13 @@ export default {
 
       return new Promise((resolve, reject) => {
         if (!this.isPrice(this.yuanjia)) {
-          this.alertWarning('请填写原价！');
+          this.alertWarning("请填写原价！");
           reject();
         } else if (!this.isPrice(this.xianjia)) {
-          this.alertWarning('请填写现价！');
+          this.alertWarning("请填写现价！");
           reject();
         } else if (!this.isPrice(this.jiesuanjia)) {
-          this.alertWarning('请填写结算价！');
+          this.alertWarning("请填写结算价！");
           reject();
         }
 
@@ -414,8 +436,6 @@ export default {
       console.log(this.one_class_all);
     },
     changeTwoClass(id) {
-      console.log("id:");
-      console.log(id);
       var _this = this;
       this.$axios
         .get(_this.API_URL + "/Api/ShopFw/get_fw_content", {
@@ -425,6 +445,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.tw = "";
           this.twList = data;
         });
     },
@@ -529,6 +550,9 @@ export default {
   computed: {
     querys() {
       return this.$route.params.fwId;
+    },
+    jiesuanjia() {
+      return (this.xianjia * (1 - this.jsPrecent)).toFixed(2);
     }
   },
   directives: {

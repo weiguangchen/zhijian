@@ -1,43 +1,43 @@
 <template>
-    <div class="authority shanghu-page">
-        <bigTitle title='设置权限' @showPopup='showPopup'></bigTitle>
-        <div class="checker-box">
-            <!-- <checkItem :check='item' @changeCheck='changeCheck' v-for="(item,index) in authList" :key="index"></checkItem> -->
-            <CheckBoxGroup v-model="tabbar">
-                <CheckBox shape="circle" :val='1' class="check-title">验证管理</CheckBox>
-                <CheckBoxGroup v-model="tabbar1" class="son-box">
-                    <CheckBox shape="circle" :val='11'>验证消费券</CheckBox>
-                    <CheckBox shape="circle" :val='12'>验证优惠码</CheckBox>
-                    <CheckBox shape="circle" :val='13'>验证活动报名</CheckBox>
-                </CheckBoxGroup>
-                <CheckBox shape="circle" :val='2' class="check-title">评价管理</CheckBox>
-                <CheckBoxGroup v-model="tabbar2" class="son-box">
-                    <CheckBox shape="circle" :val='21'>消费评价</CheckBox>
-                    <CheckBox shape="circle" :val='22'>优惠券点评</CheckBox>
-                    <CheckBox shape="circle" :val='23'>活动点评</CheckBox>
-                </CheckBoxGroup>
-                <CheckBox shape="circle" :val='3' class="check-title">经营管理</CheckBox>
-                <CheckBoxGroup v-model="tabbar3" class="son-box">
-                    <CheckBox shape="circle" :val='31'>活动统计</CheckBox>
-                    <CheckBox shape="circle" :val='32'>消费统计</CheckBox>
-                    <CheckBox shape="circle" :val='33'>订单管理</CheckBox>
-                </CheckBoxGroup>
-                <CheckBox shape="circle" :val='4' class="check-title">商戶中心</CheckBox>
-                <CheckBoxGroup v-model="tabbar4" class="son-box">
-                    <CheckBox shape="circle" :val='41'>项目管理</CheckBox>
-                    <CheckBox shape="circle" :val='42'>新建项目</CheckBox>
-                    <CheckBox shape="circle" :val='43'>门店管理</CheckBox>
-                    <CheckBox shape="circle" :val='44'>账户管理</CheckBox>
-                    <CheckBox shape="circle" :val='45'>财务管理</CheckBox>
-                </CheckBoxGroup>
-            </CheckBoxGroup>
-        </div>
-
-        <div class="xbtn">
-            <XButton type='warn' @click.native='submit'>提交</XButton>
-        </div>
-
+  <div class="authority shanghu-page">
+    <bigTitle title='设置权限' @showPopup='showPopup'></bigTitle>
+    <div class="checker-box">
+      <!-- <checkItem :check='item' @changeCheck='changeCheck' v-for="(item,index) in authList" :key="index"></checkItem> -->
+      <CheckBoxGroup v-model="tabbar">
+        <CheckBox shape="circle" :val='1' class="check-title">验证管理</CheckBox>
+        <CheckBoxGroup v-model="tabbar1" class="son-box">
+          <CheckBox shape="circle" :val='11'>验证消费券</CheckBox>
+          <CheckBox shape="circle" :val='12'>验证活动</CheckBox>
+          <!-- <CheckBox shape="circle" :val='13'>验证优惠码</CheckBox> -->
+        </CheckBoxGroup>
+        <CheckBox shape="circle" :val='2' class="check-title">评价管理</CheckBox>
+        <CheckBoxGroup v-model="tabbar2" class="son-box">
+          <CheckBox shape="circle" :val='21'>消费评价</CheckBox>
+          <!-- <CheckBox shape="circle" :val='22'>优惠券点评</CheckBox>
+          <CheckBox shape="circle" :val='23'>活动点评</CheckBox> -->
+        </CheckBoxGroup>
+        <CheckBox shape="circle" :val='3' class="check-title">经营管理</CheckBox>
+        <CheckBoxGroup v-model="tabbar3" class="son-box">
+          <CheckBox shape="circle" :val='31'>消费统计</CheckBox>
+          <CheckBox shape="circle" :val='32'>订单管理</CheckBox>
+          <!-- <CheckBox shape="circle" :val='33'>活动统计</CheckBox> -->
+        </CheckBoxGroup>
+        <CheckBox shape="circle" :val='4' class="check-title">商戶中心</CheckBox>
+        <CheckBoxGroup v-model="tabbar4" class="son-box">
+          <CheckBox shape="circle" :val='41'>项目管理</CheckBox>
+          <CheckBox shape="circle" :val='42'>管理服务</CheckBox>
+          <CheckBox shape="circle" :val='43'>添加活动</CheckBox>
+          <CheckBox shape="circle" :val='44'>门店管理</CheckBox>
+          <CheckBox shape="circle" :val='45'>账户管理</CheckBox>
+        </CheckBoxGroup>
+      </CheckBoxGroup>
     </div>
+
+    <div class="xbtn">
+      <XButton type='warn' @click.native='submit'>提交</XButton>
+    </div>
+
+  </div>
 </template>
 
 <script>

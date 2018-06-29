@@ -51,6 +51,7 @@
 <script>
 import { ViewBox } from "vux";
 import bigTitle from "@/components/bigTitle/index";
+import checkLogin from '@/mixins/checkLogin.js';
 export default {
   data() {
     return {
@@ -64,7 +65,7 @@ export default {
     this.$axios
       .get(this.API_URL + "/Api/ShopFw/get_order", {
         params: {
-          fw_shop_id: 1,
+          fw_shop_id: this.userinfo.shop[0].id,
           num: 8,
           p: 1
         }
@@ -78,7 +79,8 @@ export default {
       this.$emit("showPopup", val);
     }
   },
-  components: { bigTitle, ViewBox }
+  components: { bigTitle, ViewBox },
+  mixins: [checkLogin]
 };
 </script>
 

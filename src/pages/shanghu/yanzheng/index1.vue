@@ -1,11 +1,11 @@
 <template>
   <div>
-    <bigTitle title='经营管理' @showPopup='showPopup'></bigTitle>
+    <bigTitle title='验证' @showPopup='showPopup'></bigTitle>
     <div class="my-form">
       <div class="form-box">
         <Group>
-          <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji' v-if="checkQx(31)"></Cell>
-          <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
+          <Cell title='验证消费码' :is-link='true' link='/shanghu/yanzheng/xfm' v-if="checkQx(11)"></Cell>
+          <Cell title='验证活动码' :is-link='true' link='/shanghu/yanzheng/huodong'  v-if="checkQx(12)"></Cell>
         </Group>
       </div>
     </div>
@@ -35,7 +35,9 @@ export default {
   methods: {
     showPopup(val) {
       this.$emit("showPopup", val);
-    }
+    },
+  },
+  computed: {
   },
   components: {
     bigTitle,

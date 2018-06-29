@@ -24,11 +24,17 @@
         <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress"></XInput>
       </Group>
     </div>
-    <div class="card-list" v-if="card_list.length>0">
-      <h1 class="sub-title">优惠卡</h1>
-      <Group>
+    <!-- v-if="card_list.length>0" -->
+    <div class="card-list" v-if="card_list.length>0" >
+      <!-- <h1 class="sub-title">优惠卡</h1> -->
+      <!-- <Group>
         <Radio :options='card_list' v-model="card_val"></Radio>
+      </Group> -->
+      <Group>
+        <PopupRadio title="优惠卡" :options='card_list'>
+        </PopupRadio>
       </Group>
+
     </div>
 
     <XButton class="xbtn" type='warn' @click.native='buy' :disabled='submiting'>结算</XButton>
@@ -37,7 +43,7 @@
 </template>
 
 <script>
-import { XNumber, Group, XInput, Cell, XButton, Radio } from "vux";
+import { XNumber, Group, XInput, Cell, XButton, Radio, PopupRadio } from "vux";
 import myMap from "@/components/map/index";
 import checkLogin from "@/mixins/checkLogin.js";
 export default {
@@ -45,7 +51,13 @@ export default {
     return {
       fwInfo: {},
       orderNum: "",
-      card_list: [],
+      card_list: [{
+        value:'卡1',
+        key:1
+      },{
+        value:'卡2',
+        key:2
+      }],
       hasCard: false,
       mapShow: false,
       submiting: false,
@@ -71,8 +83,6 @@ export default {
       this.mapShow = false;
     },
     buy() {
-
-      
       var _this = this;
       this.submiting = true;
       if (this.id) {
@@ -90,14 +100,14 @@ export default {
           });
           this.submiting = false;
           return false;
-        }else if (!this.mapInfo) {
+        } else if (!this.mapInfo) {
           this.$vux.toast.show({
             text: "请选择收货地址",
             position: "middle"
           });
           this.submiting = false;
           return false;
-        }  else {
+        } else {
           this.$vux.confirm.show({
             title: "提示",
             content: "是否购买该服务？",
@@ -116,7 +126,7 @@ export default {
                       phone: _this.phone,
                       xingming: _this.lianxiren,
                       card_id: _this.card_val,
-                      shop_id:_this.shopid
+                      shop_id: _this.shopid
                     }
                   })
                   .then(({ data }) => {
@@ -221,7 +231,7 @@ export default {
           }
         })
         .then(({ data }) => {
-          var radioList =[];
+          var radioList = [];
           if (data.status == 1) {
             data.data.map(m => {
               var item = {};
@@ -252,7 +262,8 @@ export default {
     Cell,
     myMap,
     XButton,
-    Radio
+    Radio,
+    PopupRadio
   },
   mixins: [checkLogin]
 };

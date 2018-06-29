@@ -1,8 +1,6 @@
 <template>
-  <div class="shanghu-page">
-    <ViewBox>
-      <router-view @closePopup='closePopup'></router-view>
-    </ViewBox>
+  <div>
+    <router-view @showPopup='showPopup'></router-view>
 
     <Popup v-model="popupShow" position='right'>
       <div class="popup-list">
@@ -24,8 +22,7 @@ import { Popup } from "vue-ydui/dist/lib.px/popup";
 export default {
   data() {
     return {
-      popupShow: false,
-
+      popupShow: false
     };
   },
   created() {
@@ -39,10 +36,10 @@ export default {
         _this.faceList = res.data.face;
       });
   },
-  watch:{
-      '$route'(){
-          this.popupShow = false;
-      }
+  watch: {
+    $route() {
+      this.popupShow = false;
+    }
   },
   methods: {
     // yanzheng() {
@@ -65,9 +62,8 @@ export default {
     // showPopup(val) {
     //   this.popupShow = val;
     // },
-    closePopup(val){
+    showPopup(val) {
       this.popupShow = val;
-        
     }
   },
   components: {

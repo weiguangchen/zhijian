@@ -17,15 +17,15 @@
               <div class="term">
                 <div class="select-box">
                   <span class="term-item" :class="{active:(selectType == 1&&selectAddShow)}" @click="selectAdd(1)">
-                    <span>{{currentSelInfo.area.sq.val}}</span>
+                    <span>{{currentInfo.area.sq.val}}</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
                   <span class="term-item" :class="{active:(selectType == 2&&selectAddShow)}" @click="selectAdd(2)">
-                    <span>{{currentSelInfo.order.val}}</span>
+                    <span>{{currentInfo.order.val}}</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
                   <span class="term-item" :class="{active:(selectType == 3&&selectAddShow)}" @click="selectAdd(3)">
-                    <span>更多</span>
+                    <span>{{currentInfo.search.val}}</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
                 </div>
@@ -35,33 +35,32 @@
                 @selectQy='selectQy'
                 @selectOrder='selectOrder'
                 @init='init'></addressSelect> -->
-                <div class="address-select-box">
-                  <div class="add" v-if="type == 1">
+                <div class="address-select-box" v-show="selectAddShow">
+                  <div class="add" v-if="selectType == 1">
                     <div class="qy">
-                      <div class="item" :class="{active:currentInfo.area.key == 0}">附近</div>
-                      <div class="item" @click="selectQy(item)" v-for="(item,index) in qy" :key="index" :class="{active:currentInfo.area.qy.key == item.id}">{{item.qy_name}}</div>
+                      <div class="item" :class="{active:qyVal.key == 0}" @click="fujin">附近</div>
+                      <div class="item" @click="selectQy(item)" v-for="(item,index) in qy" :key="index" :class="{active:qyVal.key== item.id}">{{item.qy_name}}</div>
                     </div>
                     <div class="sq">
                       <template v-if="sq.length>0">
-                        <div class="item" :class="{active:currentInfo.area.sq.key == item.id}" v-for="(item,index) in sq" :key="index" @click="selectSq(item)">{{item.sq_name}}</div>
+                        <div class="item" :class="{active:sqVal.key == item.id}" v-for="(item,index) in sq" :key="index" @click="selectSq(item)">{{item.sq_name}}</div>
                       </template>
                       <div class="item" v-else>暂未开通</div>
                     </div>
 
                   </div>
-                  <div class="order-type" v-else-if="type == 2">
-                    <div class="item" :class="{active:currentInfo.order.key == item.id}" @click="selectOrder(item)" v-for="(item,index) in order" :key="index">{{item.val}}</div>
+                  <div class="order-type" v-else-if="selectType == 2">
+                    <div class="item" :class="{active:orderVal.key == item.key}" @click="selectOrder(item)" v-for="(item,index) in order" :key="index">{{item.val}}</div>
                   </div>
-                  <div class="select" v-else-if='type == 3'>
-                    <div class="item">条件一</div>
-                    <div class="item">条件二</div>
+                  <div class="select" v-else-if='selectType == 3'>
+                    <div class="item" :class="{active:searchVal.key == item.key}" v-for="(item,index) in search" :key="index">{{item.val}}</div>
                   </div>
                 </div>
               </div>
             </sticky>
             <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
-            <service class="service" v-for="(item,index) in serviceList1" :key="index" :fwInfo='item'></service>
-            <service class="service" v-for="(item,index) in serviceList2" :key="index" :fwInfo='item'></service>
+            <!-- <service class="service" v-for="(item,index) in serviceList1" :key="index" :fwInfo='item'></service>
+            <service class="service" v-for="(item,index) in serviceList2" :key="index" :fwInfo='item'></service> -->
           </div>
         </template>
 
@@ -86,27 +85,65 @@ export default {
   name: "service-list",
   data() {
     return {
-      currentSelInfo: {
-        area: {
-          qy: {
-            key: 0,
-            val: "附近"
-          },
-          sq: {
-            key: 0,
-            val: "附近"
-          }
-        },
-        order: {
-          key: 0,
-          val: "智能排序"
-        },
-        search: {}
-      },
-
       selectAddShow: false,
       selectType: "",
       adHeight: "",
+
+      currentInfo: {
+        area: {
+          qy: {
+            val: "附近",
+            key: 0
+          },
+          sq: {
+            val: "附近",
+            key: 0
+          }
+        },
+        order: {
+          val: "智能排序",
+          key: 1
+        },
+        search: {
+          val: "暂无",
+          key: 1
+        }
+      },
+      qy: [],
+      qyVal: {
+        val: "附近",
+        key: 0
+      },
+      sq: [
+        {
+          val: "附近",
+          key: 0
+        }
+      ],
+      sqVal: {
+        val: "附近",
+        key: 0
+      },
+      order: [
+        {
+          val: "智能排序",
+          key: 1
+        }
+      ],
+      orderVal: {
+        val: "智能排序",
+        key: 1
+      },
+      search: [
+        {
+          val: "暂无",
+          key: 1
+        }
+      ],
+      searchVal: {
+        val: "暂无",
+        key: 1
+      },
 
       swiperOption: {
         loop: true,
@@ -138,26 +175,30 @@ export default {
 
         this.serviceList2 = res.list;
       });
+      this.get_city();
     });
   },
   mounted() {
-    this.$nextTick(() => {
-      this.adHeight = this.$refs.mySwiper.$el.offsetHeight;
-    });
+    // this.$nextTick(() => {
+    //   this.adHeight = this.$refs.mySwiper.$el.offsetHeight;
+    // });
   },
   methods: {
-    get_fw() {
+    get_fw(select) {
       var _this = this;
+      var deafultParams = {
+        fw_id: _this.classId,
+        num: 8,
+        p: _this.p,
+        lng: _this.location.lat,
+        lat: _this.location.lng,
+        city: this.location.province
+      };
+
+      var params = Object.assign(deafultParams, select);
       return this.$axios
         .get(_this.API_URL + "/Api/Fj/two_list", {
-          params: {
-            fw_id: _this.classId,
-            num: 8,
-            p: _this.p,
-            lng: _this.location.lat,
-            lat: _this.location.lng,
-            city: this.location.province
-          }
+          params
         })
         .then(({ data }) => {
           console.log(data);
@@ -185,21 +226,57 @@ export default {
       }
       this.selectType = type;
     },
-    selectSq(sq) {
-      console.log(sq);
-      this.currentSelInfo.area.sq.val = sq.sq_name;
-      this.currentSelInfo.area.sq.key = sq.id;
-      this.selectAddShow = false;
-    },
     selectQy(qy) {
       console.log(qy);
-      this.currentSelInfo.area.qy.val = qy.qy_name;
-      this.currentSelInfo.area.qy.key = qy.id;
+      this.sq = qy.sq;
+      this.qyVal.val = qy.qy_name;
+      this.qyVal.key = qy.id;
+    },
+    selectSq(sq) {
+      console.log(sq);
+      var _this = this;
+      this.sqVal.val = sq.sq_name;
+      this.sqVal.key = sq.id;
+      this.selectAddShow = false;
+      this.get_fw({
+        sq_id: _this.sqVal.key
+      }).then(res => {
+        this.serviceList = res.list;
+      });
     },
     selectOrder(order) {
-      this.currentSelInfo.order.val = order.val;
-      this.currentSelInfo.order.key = order.key;
+      this.orderVal.val = order.val;
+      this.orderVal.key = order.key;
       this.selectAddShow = false;
+    },
+    selectSearch(search) {
+      this.searchVal.val = search.val;
+      this.searchVal.key = search.key;
+      this.selectAddShow = false;
+    },
+    fujin() {
+      this.qyVal = {
+        key: 0,
+        val: "附近"
+      };
+      this.sq = [
+        {
+          id: 0,
+          sq_name: "附近"
+        }
+      ];
+    },
+    get_city() {
+      var _this = this;
+      this.$axios
+        .get("http://zj.daonian.cn/Api/UserShow/city")
+        .then(({ data }) => {
+          data.map(m => {
+            if (m.city == _this.location.province) {
+              _this.qy = m.qy;
+            }
+          });
+        });
     }
   },
 
@@ -208,6 +285,45 @@ export default {
       // 我们很快就会看到 `params` 是什么
       return this.$route.params.classId;
     }
+    // currentInfo() {
+    //   var current = {};
+
+    //   if (!this.qyVal) {
+    //     if (this.qy) {
+    //       current.area.qy.key = this.qy[0].id;
+    //       current.area.qy.val = this.qy[0].qy_name;
+    //     }
+    //   } else {
+    //     current.area.qy.key = this.qyVal.id;
+    //     current.area.qy.val = this.qyVal.qy_name;
+    //   }
+
+    //   // if (!this.sqVal) {
+    //   //   current.area.sq.key = this.sq[0].id;
+    //   //   current.area.sq.val = this.sq[0].sq_name;
+    //   // }else{
+    //   //   current.area.sq.key = this.sqVal.id;
+    //   //   current.area.sq.val = this.sqVal.sq_name;
+    //   // }
+
+    //   if (!this.orderVal) {
+    //     current.order.key = this.order[0].key;
+    //     current.order.val = this.order[0].val;
+    //   } else {
+    //     current.order.key = this.orderVal.id;
+    //     current.order.val = this.orderVal.qy_name;
+    //   }
+
+    //   if (!this.searchVal) {
+    //     current.search.key = this.search[0].key;
+    //     current.search.val = this.search[0].val;
+    //   } else {
+    //     current.search.key = this.searchVal.id;
+    //     current.search.val = this.searchVal.qy_name;
+    //   }
+
+    //   return current;
+    // }
   },
   components: {
     XHeader,

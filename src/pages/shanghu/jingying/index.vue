@@ -1,28 +1,21 @@
 <template>
-    <div class="shanghu-page">
-        <ViewBox>
-            <router-view @showPopup='showPopup'></router-view>
-            <!-- <bigTitle title='经营管理'></bigTitle>
-      <div class="my-form">
-        <div class="form-box">
-          <Group>
-            <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'></Cell>
-            <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
-          </Group>
-        </div>
-
-      </div> -->
-        </ViewBox>
-        <Popup position='right' v-model="popupShow">
-            <div class="popup-list">
-                <Group>
-                    <Cell title='消费统计' link='/shanghu/jingying/tongji'></Cell>
-                    <Cell title='订单管理' link='/shanghu/jingying/orderGl'></Cell>
-                </Group>
-
-            </div>
-        </Popup>
+  <div class="shanghu-box">
+    <div class="wrapper shanghu-warpper" ref="wrapper">
+      <ul class="content">
+        <router-view @showPopup='showPopup'></router-view>
+      </ul>
     </div>
+
+    <Popup position='right' v-model="popupShow">
+      <div class="popup-list">
+        <Group>
+          <Cell title='消费统计' link='/shanghu/jingying/tongji'  v-if="checkQx(31)"></Cell>
+          <Cell title='订单管理' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
+        </Group>
+
+      </div>
+    </Popup>
+  </div>
 </template>
 
 <script>
@@ -31,6 +24,8 @@ import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
 import { Popup } from "vue-ydui/dist/lib.px/popup";
+import BScroll from "better-scroll";
+import checkMenuQx from '@/mixins/checkMenuQx.js';
 export default {
   data() {
     return {
@@ -42,12 +37,19 @@ export default {
       popupShow: false
     };
   },
-  created() {
-  },
+  created() {},
   methods: {
     showPopup(val) {
       this.popupShow = val;
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        tap: true,
+        click: true
+      });
+    });
   },
   components: {
     bigTitle,
@@ -61,10 +63,10 @@ export default {
     Confirm,
     Cell,
     Popup
-  }
+  },
+  mixins: [checkMenuQx]
 };
 </script>
 
 <style lang='scss'>
-
 </style>

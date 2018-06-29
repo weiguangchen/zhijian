@@ -14,10 +14,10 @@
         </TabbarItem>
     </Tabbar> -->
      <div class="my-tabbar">
-        <router-link class="tabbar-item" to="/shanghu/yanzheng/xfm">
+        <router-link class="tabbar-item" to="/shanghu/yanzheng/index">
             <i class="iconfont icon-shouye"></i><div>验证</div>
         </router-link>
-        <router-link class="tabbar-item" to="/shanghu/pingjias">
+        <router-link class="tabbar-item" to="/shanghu/pingjias/index">
             <i class="iconfont icon-shangcheng"></i><div>评价</div>
         </router-link>
         <router-link class="tabbar-item" to="/shanghu/jingying/index">

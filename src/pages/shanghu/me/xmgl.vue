@@ -1,116 +1,123 @@
 <template>
   <div>
-    <ViewBox class="shanghu-page">
-      <bigTitle title='新建项目' @showPopup='showPopup'></bigTitle>
-      <div class="form-box">
-        <template v-if="step == 1">
-          <div class="form-group">
-            <h2 class="sub-title">服务名称</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="fw_name"></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">简短名称:
-              <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
-            </h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="fw_short_info"></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">服务介绍</h2>
-            <Group class="reset-vux-input">
-              <XTextarea :max='50' v-model="fw_intr"></XTextarea>
-            </Group>
-          </div>
-        </template>
-        <template v-else-if="step == 2">
-          <div class="form-group">
-            <h2 class="sub-title">分类:</h2>
-            <Group class="reset-vux-input">
-              <Selector :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass' v-if="one_class_all" title=''></Selector>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">子分类列表:</h2>
-            <Group class="reset-vux-input">
-              <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
-            </Group>
-          </div>
-          <div class="form-group" v-if="two_class_val">
-            <h2 class="sub-title">图文详情:</h2>
-            <RadioGroup v-model="tw" color='#e03233'>
-              <span v-for="(item,index) in twList" :key="index">
-                <Radio :val='item.id'>{{item.fw_content_name}}</Radio>
-                <span @click="previewDetail(item.id)">预览</span>
-              </span>
-            </RadioGroup>
-            <div v-transfer-dom class="tw-preview-detail">
-              <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
-                <!-- 123 -->
-                <div v-html="twDetailContent"></div>
-              </XDialog>
-            </div>
+    <!-- <ViewBox> -->
+    <bigTitle title='新建项目' @showPopup='showPopup'></bigTitle>
+    <div class="form-box">
+      <template v-if="step == 1">
+        <div class="form-group">
+          <h2 class="sub-title">服务名称</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="fw_name"></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">简短名称:
+            <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
+          </h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="fw_short_info"></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">服务介绍</h2>
+          <Group class="reset-vux-input">
+            <XTextarea :max='50' v-model="fw_intr"></XTextarea>
+          </Group>
+        </div>
 
+      </template>
+      <template v-else-if="step == 2">
+        <div class="form-group">
+          <h2 class="sub-title">分类:</h2>
+          <Group class="reset-vux-input">
+            <Selector :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass' v-if="one_class_all" title=''></Selector>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">子分类列表:</h2>
+          <Group class="reset-vux-input">
+            <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
+          </Group>
+        </div>
+        <div class="form-group" v-if="two_class_val">
+          <h2 class="sub-title">图文详情:</h2>
+          <RadioGroup v-model="tw" color='#e03233'>
+            <span v-for="(item,index) in twList" :key="index">
+              <Radio :val='item.id'>{{item.fw_content_name}}</Radio>
+              <span @click="previewDetail(item.id)">预览</span>
+            </span>
+          </RadioGroup>
+          <div v-transfer-dom class="tw-preview-detail">
+            <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
+              <!-- 123 -->
+              <div v-html="twDetailContent"></div>
+            </XDialog>
           </div>
-          <div class="form-group">
-            <h2 class="sub-title">支持门店:</h2>
-            <CheckBoxGroup v-model="face" color='#e03233'>
-              <CheckBox shape="circle" :val='item.id' v-for="(item,index) in List" :key="index">{{item.face_name}}</CheckBox>
-            </CheckBoxGroup>
-          </div>
-          <!-- <div class="form-group">
+
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">支持门店:</h2>
+          <CheckBoxGroup v-model="face" color='#e03233'>
+            <CheckBox shape="circle" :val='item.id' v-for="(item,index) in List" :key="index">{{item.face_name}}</CheckBox>
+          </CheckBoxGroup>
+        </div>
+        <!-- <div class="form-group">
             <h2 class="sub-title">服务缩略图:</h2>
             <div class="uploadImage">
               <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div> -->
-          <!-- 安卓预览图片 -->
-          <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
-          <!-- IOS预览图片 -->
-          <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
+        <!-- 安卓预览图片 -->
+        <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
+        <!-- IOS预览图片 -->
+        <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
 
-          <!-- </div>
+        <!-- </div>
 
           </div> -->
-        </template>
-        <template v-else-if="step == 3">
-          <!-- <div class="form-group">
+      </template>
+      <template v-else-if="step == 3">
+        <!-- <div class="form-group">
             <h2 class="sub-title">有效期(天):</h2>
             <Group class="reset-vux-input">
               <XInput v-model="youxiao" :required='true' placeholder='填写有效期'></XInput>
             </Group>
           </div> -->
-          <div class="form-group">
-            <h2 class="sub-title">原价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="yuanjia" :required='true' placeholder='填写原价'></XInput>
-              
-            </Group>
-            <div class="keyboard"></div>
-            <!-- <wc-keyboard v-model="yuanjia"  placeholder="询问服务员后输入"
+        <div class="form-group">
+          <h2 class="sub-title">原价(元):</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="yuanjia" :required='true' placeholder='填写原价'></XInput>
+
+          </Group>
+          <div class="keyboard"></div>
+          <!-- <wc-keyboard v-model="yuanjia"  placeholder="询问服务员后输入"
                   label="消费金额"
                   inter="5"
                   decimal="2"/> -->
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">现价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="xianjia" :required='true' placeholder='填写现价'></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">商户结算价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="jiesuanjia" :required='true' placeholder='填写商户结算价'></XInput>
-            </Group>
-          </div>
-        </template>
-        <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
-        <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
-        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys" :disabled='submiting'>提交</XButton>
-      </div>
-    </ViewBox>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">现价(元):</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="xianjia" :required='true' placeholder='填写现价'></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">商户结算价(元):</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="jiesuanjia" :required='true' placeholder='填写商户结算价' :disabled='true'></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">规格:</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="fw_gg" :required='true' :disabled='true'></XInput>
+          </Group>
+        </div>
 
+      </template>
+      <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
+      <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
+      <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys" :disabled='submiting'>提交</XButton>
+    </div>
+    <!-- </ViewBox> -->
   </div>
 </template>
 
@@ -135,12 +142,15 @@ import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
 import { Radio, RadioGroup } from "vue-ydui/dist/lib.px/radio";
 import { TransferDomDirective as TransferDom } from "vux";
 import JKeyboard from "better-keyboard";
+
 export default {
   data() {
     return {
+      scroll: "",
+      jsPrecent: 0.3 /* 结算比例 */,
       alertShow: false,
       submiting: false,
-
+      fw_gg: "",
       keyboardShow: false,
       twList: [],
       twDetailShow: false,
@@ -166,8 +176,8 @@ export default {
       //   第三部
       youxiao: 0,
       yuanjia: "",
-      xianjia: "",
-      jiesuanjia: ""
+      xianjia: ""
+      // jiesuanjia: ""
     };
   },
   created() {
@@ -176,7 +186,7 @@ export default {
     this.$emit("showPopup", false);
     /* 判断系统 */
     this.checkSystem();
-    this.$eruda.init();
+    // this.$eruda.init();
 
     /* 获取表单所需列表 */
     this.$axios
@@ -309,7 +319,7 @@ export default {
         // if (!this.isPositiveInteger(this.youxiao)) {
         //   this.alertWarning("请填写正确有效期！");
         //   reject();
-        // } else 
+        // } else
         if (!this.isPrice(this.yuanjia)) {
           this.alertWarning("请填写原价！");
           reject();
@@ -338,8 +348,6 @@ export default {
       console.log(this.one_class_all);
     },
     changeTwoClass(id) {
-      console.log("id:");
-      console.log(id);
       var _this = this;
       this.$axios
         .get(_this.API_URL + "/Api/ShopFw/get_fw_content", {
@@ -349,6 +357,9 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          if (data.length <= 0) {
+            this.tw = "";
+          }
           this.twList = data;
         });
     },
@@ -409,7 +420,7 @@ export default {
         }
       });
     },
-    isPrice(s){
+    isPrice(s) {
       var re = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/;
       return re.test(s);
     },
@@ -418,11 +429,27 @@ export default {
       return re.test(s);
     }
   },
+  watch: {
+    tw(newval) {
+      var _this = this;
+      if (this.twList) {
+        this.twList.map(m => {
+          if (m.id == newval) {
+            _this.fw_gg = m.fw_gg;
+          }
+        });
+      }
+    }
+  },
   computed: {
     querys() {
       return this.$route.params.fwId;
+    },
+    jiesuanjia() {
+      return (this.xianjia * (1 - this.jsPrecent)).toFixed(2);
     }
   },
+
   directives: {
     TransferDom
   },

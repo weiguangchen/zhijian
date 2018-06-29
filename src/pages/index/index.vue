@@ -2,47 +2,49 @@
  * @Author: 魏广辰 
  * @Date: 2018-05-26 12:02:12 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-06-27 11:11:59
+ * @Last Modified time: 2018-06-28 16:05:58
  */
 <template>
   <keep-alive>
-    <div class="page index">
-      <ViewBox>
-        <div class="top-ad">
-          <swiper :options="swiperOption1" ref="mySwiper1">
-            <!-- slides -->
-            <swiper-slide v-for="(item,index) in top_ad" :key="index"><img :src="item.url" alt=""></swiper-slide>
-          </swiper>
+    <div class="wrapper page" ref="wrapper">
+      <ul class="content">
+        <div class="index">
+          <ViewBox>
+            <div class="top-ad">
+              <swiper :options="swiperOption1" ref="mySwiper1">
+                <!-- slides -->
+                <swiper-slide v-for="(item,index) in top_ad" :key="index"><img :src="item.url" alt=""></swiper-slide>
+              </swiper>
 
-          <div class="top-input">
-            <span class="add" v-if="location">{{location.city}}</span>
-            <input placeholder='请输入商家名或地点' class="search" />
-          </div>
+              <div class="top-input">
+                <span class="add" v-if="location">{{location.city}}</span>
+                <input placeholder='请输入商家名或地点' class="search" />
+              </div>
 
-        </div>
-        <!-- <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
+            </div>
+            <!-- <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
         </iframe> -->
-        <classify :classArr='classArr' v-if="classArr.length"></classify>
-        <div class="huodong">
-          <swiper :options="swiperOption2" ref="mySwiper2">
-            <!-- slides -->
-            <swiper-slide v-for="(item,index) in middle_ad" :key="index"><img :src="item.url" alt=""></swiper-slide>
-            <!-- Optional controls -->
-            <div class="swiper-pagination" slot="pagination"></div>
-          </swiper>
+            <classify :classArr='classArr' v-if="classArr.length"></classify>
+            <div class="huodong">
+              <swiper :options="swiperOption2" ref="mySwiper2">
+                <!-- slides -->
+                <swiper-slide v-for="(item,index) in middle_ad" :key="index"><img :src="item.url" alt=""></swiper-slide>
+                <!-- Optional controls -->
+                <div class="swiper-pagination" slot="pagination"></div>
+              </swiper>
 
-        </div>
-        <div class="huodong-list">
-          <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
-          <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
-          <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
-          <a href="" class="item"><img src="~/img/index/huodong1.png" alt="" class="img"></a>
-        </div>
+            </div>
+            <div class="huodong-list">
+              <a href="" class="item"><img src="~/img/index/hd1.jpg" alt="" class="img"></a>
+              <a href="" class="item"><img src="~/img/index/hd2.jpg" alt="" class="img"></a>
+              <a href="" class="item"><img src="~/img/index/hd3.jpg" alt="" class="img"></a>
+              <a href="" class="item"><img src="~/img/index/hd4.jpg" alt="" class="img"></a>
+            </div>
 
-        <tuijian :info='item' v-for="(item,index) in listArr" :key="index" v-if="item.list.length>0" fwClass='1'></tuijian>
+            <tuijian :info='item' v-for="(item,index) in listArr" :key="index" v-if="item.list.length>0" fwClass='1'></tuijian>
 
-        <!-- <div class="server-list"> -->
-        <!-- <Sticky>
+            <!-- <div class="server-list"> -->
+            <!-- <Sticky>
           <div class="tit-list">
             <Tab v-model="selectedTab">
               <Tab-item v-for="(item,index) in classArr" :key="index" @on-item-click='changeItem(index)'>{{item.class_name}}</Tab-item>
@@ -50,17 +52,21 @@
           </div>
         </Sticky> -->
 
-        <!-- <div class="list-content"> -->
-        <!-- <div class="content" v-for="(item,index) in classArr" :key='index' v-show='selectedTab == index'>
+            <!-- <div class="list-content"> -->
+            <!-- <div class="content" v-for="(item,index) in classArr" :key='index' v-show='selectedTab == index'>
             <service v-for="(item,index) in listArr['list'+item.id]" :key="index" :fwInfo='item'></service>
           </div> -->
 
-        <!-- </div> -->
-        <!-- </div> -->
+            <!-- </div> -->
+            <!-- </div> -->
 
-      </ViewBox>
+          </ViewBox>
 
+        </div>
+      </ul>
+      <!-- 这里可以放一些其它的 DOM，但不会影响滚动 -->
     </div>
+
   </keep-alive>
 </template>
 
@@ -84,9 +90,11 @@ import tuijian from "@/components/tuijian/index";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import { rejects } from "assert";
 import getLocation from "@/mixins/getLocation.js";
+import BScroll from "better-scroll";
 export default {
   data() {
     return {
+      scroll: {},
       swiperOption1: {
         loop: true,
         autoplay: true
@@ -110,10 +118,10 @@ export default {
     document.title = "首页";
     var _this = this;
     // this.$eruda.init();
-    
+
     this.getPosition().then(res => {
       this.SET_LOCATION(res);
-      console.log(this.location)
+      console.log(this.location);
       this.get_fw();
     });
 
@@ -137,7 +145,14 @@ export default {
     //   });
     // });
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        tap: true,
+        click: true
+      });
+    });
+  },
   watch: {
     location() {
       this.get_fw();
@@ -164,7 +179,7 @@ export default {
           _this.classArr = data.class;
           _this.listArr = data.info;
         });
-    },
+    }
   },
   computed: {
     ...mapState(["location"]),
@@ -249,10 +264,10 @@ export default {
     height: 6.866667rem;
     margin-bottom: $bot;
     .item {
-      width: 4.08rem;
-      height: 2.64rem;
+      width: 4.4rem;
+      height: 2.933333rem;
       overflow: hidden;
-      margin-bottom: 0.826667rem;
+      margin-bottom: .133333rem;
       .img {
         vertical-align: top;
       }

@@ -64,10 +64,13 @@ export default {
         .then(({ data }) => {
           console.log(data);
           _this.face_name = data[0].face_name;
-          _this.map = JSON.parse(data[0].map);
+          if (data[0].map) {
+            _this.map = JSON.parse(data[0].map);
+          }
           _this.address = data[0].adress;
-          _this.sqVal = data[0].sq_id;
-          
+          if (data[0].sq_id) {
+            _this.sqVal = data[0].sq_id;
+          }
         });
     }
 
@@ -109,7 +112,7 @@ export default {
             face_name: this.face_name,
             jd: this.map.latlng.lat,
             wd: this.map.latlng.lng,
-            map:this.map,
+            map: this.map,
             adress: this.address,
             city: this.cityVal,
             qy: this.qyVal,
@@ -156,7 +159,14 @@ export default {
             face_name: _this.face_name,
             jd: _this.map.latlng.lat,
             wd: _this.map.latlng.lng,
-            id: _this.faceId
+            id: _this.faceId,
+            map: this.map,
+            city: this.cityVal,
+            qy: this.qyVal,
+            sq: this.sqVal,
+            adress: this.address,
+            fw_shop_id: this.userinfo.shop[0].id,
+            phone: this.userinfo.uphone
           }
         })
         .then(({ data }) => {
