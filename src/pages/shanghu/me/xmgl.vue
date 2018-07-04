@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <ViewBox> -->
     <bigTitle title='新建项目' @showPopup='showPopup'></bigTitle>
     <div class="form-box">
       <template v-if="step == 1">
@@ -42,7 +41,7 @@
         <div class="form-group" v-if="two_class_val">
           <h2 class="sub-title">图文详情:</h2>
           <RadioGroup v-model="tw" color='#e03233'>
-            <span v-for="(item,index) in twList" :key="index">
+            <span v-for="(item,index) in twList" :key="index" class="radio-box">
               <Radio :val='item.id'>{{item.fw_content_name}}</Radio>
               <span @click="previewDetail(item.id)">预览</span>
             </span>
@@ -117,7 +116,6 @@
       <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
       <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys" :disabled='submiting'>提交</XButton>
     </div>
-    <!-- </ViewBox> -->
   </div>
 </template>
 
@@ -264,7 +262,8 @@ export default {
                 y_money: this.yuanjia,
                 money: this.xianjia,
                 j_money: this.jiesuanjia,
-                shop_id: this.userinfo.shop[0].id
+                shop_id: this.userinfo.shop[0].id,
+                fw_gg:this.fw_gg
               }
             })
             .then(res => {
@@ -511,5 +510,9 @@ export default {
     background: #ffffff;
     overflow: scroll;
   }
+}
+.radio-box{
+  margin-right: .2rem /* 20/100 */;
+  margin-bottom: .15rem /* 15/100 */;
 }
 </style>

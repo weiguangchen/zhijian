@@ -3,9 +3,10 @@
     <ViewBox class="service-detail">
       <div class="banner">
         <div class="share"></div>
-        <Swiper height='5.12rem' :show-dots='false'>
+        <!-- <Swiper height='5.12rem' :show-dots='false'> -->
           <!-- <SwiperItem v-for="(item,index) in huodong_info.cardImg" :key="index"><img :src="item" alt=""></SwiperItem> -->
-        </Swiper>
+        <!-- </Swiper> -->
+        <img :src="huodong_info.content[0].hd_img" alt="">
       </div>
       <div class="sp-info">
         <div class="top">

@@ -87,7 +87,7 @@ export default {
     get_fw() {
       var _this = this;
       this.$axios
-        .get(_this.API_URL + "/Api/Fj/two_jl", {
+        .get(_this.API_URL + "/Api/Yes/two_jl", {
           params: {
             fid: _this.classId,
             lng: _this.location.lat,

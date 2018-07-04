@@ -9,7 +9,7 @@
     </Group>
     <div class="tuijian-list">
       <div class="tuijian-item" v-for="(item,index) in info.list" :key="index" @click="toDetail(item.shop_fw_id)">
-        <div class="img">
+        <div class="img-box">
           <img :src="item.fw_img" alt="" class="img">
         </div>
         <div class="name">{{item.fw_mingzi}}</div>
@@ -97,11 +97,15 @@ export default {
     width: 2.666667rem;
     flex: none;
     line-height: 0.533333rem;
-    .img {
-      width: 100%;
+    .img-box {
       height: 2.666667rem;
       overflow: hidden;
       margin-bottom: 0.066667rem;
+      .img{
+        max-width: none;
+        height: 100%;
+        transform: translateX(-15%);
+      }
     }
     .name,
     .price,

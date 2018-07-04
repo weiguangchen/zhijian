@@ -1,49 +1,54 @@
 <template>
   <div class="youhui">
-    <div class="select">
-      <!-- <div class=" item">全部</div> -->
-      <i class="iconfont icon-a"></i>
-      <div class="item active">活动卡</div>
-      <div class="item">优惠券</div>
-      <div class="item">代金券</div>
-    </div>
-    <div class="juan-list">
-      <div class="juan" v-for="(item,index) in cardList" :key="index">
-        <div class="top">
-          <img :src="item.card_img" alt="" class="thumb">
-          <div class="info">
-            <div class="name">
-              <span>{{item.shop_name}}</span>
-              <span class="price">￥{{item.card_money}}</span>
-            </div>
-            <div class="classifiy">{{item.card_name}}</div>
-          </div>
-          <div class="status wsy">未使用</div>
+    <div class="wrapper" ref="wrapper">
+      <ul class="content">  
+         <div class="select">
+          <!-- <div class=" item">全部</div> -->
+          <i class="iconfont icon-a"></i>
+          <div class="item active">活动卡</div>
+          <div class="item">优惠券</div>
+          <div class="item">代金券</div>
         </div>
-        <div class="bot">
-          <div class="address">
-            <i class="iconfont"></i>
-            {{item.adress}}
-          </div>
-          <div class="fw-item" v-for="(fw,index1) in item.son" :key="index1">
-            <div class="line">
-              <span>
-                <span class="fw-title">服务：</span>{{fw.fw_name}}</span>
-              <span>剩余次数: {{fw.fw_num}}</span>
+        <div class="juan-list">
+          <div class="juan" v-for="(item,index) in cardList" :key="index">
+            <div class="top">
+              <img :src="item.card_img" alt="" class="thumb">
+              <div class="info">
+                <div class="name">
+                  <span>{{item.shop_name}}</span>
+                  <span class="price">￥{{item.card_money}}</span>
+                </div>
+                <div class="classifiy">{{item.card_name}}</div>
+              </div>
+              <div class="status wsy">未使用</div>
             </div>
-            <!-- <div class="line">
-              <span>
-                <span class="fw-title">验证码：</span>
-                <span class="fw-num">{{fw.pay_ma}}</span>
-              </span>
-              <span class="reset-num" @click="cz_card(fw.id,index,index1)">刷新验证码</span>
-            </div> -->
+            <div class="bot">
+              <div class="address">
+                <i class="iconfont"></i>
+                {{item.adress}}
+              </div>
+              <div class="fw-item" v-for="(fw,index1) in item.son" :key="index1">
+                <div class="line">
+                  <span>
+                    <span class="fw-title">服务：</span>{{fw.fw_name}}</span>
+                  <span>剩余次数: {{fw.fw_num}}</span>
+                </div>
+                <!-- <div class="line">
+                  <span>
+                    <span class="fw-title">验证码：</span>
+                    <span class="fw-num">{{fw.pay_ma}}</span>
+                  </span>
+                  <span class="reset-num" @click="cz_card(fw.id,index,index1)">刷新验证码</span>
+                </div> -->
+              </div>
+
+            </div>
           </div>
 
         </div>
-      </div>
-
+      </ul>
     </div>
+   
 
     <!-- <Layout>
             <InfiniteScroll :callback="loadList" ref="infinitescroll"> -->
@@ -57,6 +62,7 @@
 import { InfiniteScroll } from "vue-ydui/dist/lib.px/infinitescroll";
 import { Layout } from "vue-ydui/dist/lib.px/layout";
 import { ViewBox } from "vux";
+import BScroll from "better-scroll";
 import checkLogin from "@/mixins/checkLogin";
 export default {
   data() {
@@ -85,7 +91,7 @@ export default {
           return data;
         });
     },
-    cz_card(id,index,sonindex) {
+    cz_card(id, index, sonindex) {
       this.$axios
         .get(this.API_URL + "/Api/YouHui/cz_card", {
           params: {
@@ -102,14 +108,26 @@ export default {
     Layout,
     InfiniteScroll
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        tap: true,
+        click: true
+      });
+    });
+  },
   mixins: [checkLogin]
 };
 </script>
 
 <style lang='scss'>
 .youhui {
+  height: 100%;
   box-sizing: border-box;
   padding: 0.533333rem 0.4rem 0;
+  .wrapper{
+    height: 100%;
+  }
   .select {
     display: flex;
     align-items: center;

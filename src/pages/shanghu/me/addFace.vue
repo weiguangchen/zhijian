@@ -200,6 +200,7 @@ export default {
     },
     finishAdd(map) {
       this.mapShow = false;
+      console.log(map)
       this.map = map;
     },
     checkForm() {

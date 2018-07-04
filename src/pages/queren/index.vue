@@ -31,7 +31,7 @@
         <Radio :options='card_list' v-model="card_val"></Radio>
       </Group> -->
       <Group>
-        <PopupRadio title="优惠卡" :options='card_list'>
+        <PopupRadio title="优惠卡" :options='card_list' v-model="card_val"> 
         </PopupRadio>
       </Group>
 

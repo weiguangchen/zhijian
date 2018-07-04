@@ -29,82 +29,96 @@
 </template>
 
 <script>
-import { ViewBox, Selector, Group, XButton, XInput, Confirm, Cell } from "vux";
-import bigTitle from "@/components/bigTitle/index";
-import shanghuSelect from "@/components/shanghu_form/face_select";
-import shanghuInput from "@/components/shanghu_form/input";
-import { Popup } from "vue-ydui/dist/lib.px/popup";
-import checkLogin from '@/mixins/checkLogin.js';
-export default {
-  data() {
-    return {
-      popupShow: false,
-      pay_num: "",
-      face_id: "",
-      faceList: [],
-    };
-  },
-  created() {
-    var _this = this;
-    this.$axios
-      .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: this.userinfo.shop[0].id,phone:this.userinfo.uphone }
-      })
-      .then(res => {
-        console.log(res);
-        _this.faceList = res.data.face;
-      });
-  },
-  methods: {
-    yanzheng() {
-      var _this = this;
-      this.$axios
-        .get(_this.API_URL + "/api/ShopFw/pay_num_ok", {
-          params: {
-            fw_shop_id: this.userinfo.shop[0].id,
-            pay_num: _this.pay_num,
-            face_id: _this.face_id
-          }
-        })
-        .then(res => {
-          // console.log(res);
-          _this.$vux.alert.show({
-            title:'提示',
-            content:res.data.log
-          })
-        });
-    },
-    showPopup(val) {
-      this.$emit('showPopup',val);
-    }
-  },
-  components: {
-    bigTitle,
+  import {
     ViewBox,
     Selector,
     Group,
-    shanghuSelect,
-    shanghuInput,
     XButton,
     XInput,
     Confirm,
-    Popup,
     Cell
-  },
-  mixins: [checkLogin]
-};
+  } from "vux";
+  import bigTitle from "@/components/bigTitle/index";
+  import shanghuSelect from "@/components/shanghu_form/face_select";
+  import shanghuInput from "@/components/shanghu_form/input";
+  import {
+    Popup
+  } from "vue-ydui/dist/lib.px/popup";
+  import checkLogin from '@/mixins/checkLogin.js';
+  export default {
+    data() {
+      return {
+        popupShow: false,
+        pay_num: "",
+        face_id: "",
+        faceList: [],
+      };
+    },
+    created() {
+      var _this = this;
+      this.$axios
+        .get(_this.API_URL + "/Api/ShopFw/get_face", {
+          params: {
+            phone: this.userinfo.uphone
+          }
+        })
+        .then(res => {
+          console.log(res);
+          _this.faceList = res.data;
+        });
+    },
+    methods: {
+      yanzheng() {
+        var _this = this;
+        this.$axios
+          .get(_this.API_URL + "/api/ShopFw/pay_num_ok", {
+            params: {
+              fw_shop_id: this.userinfo.shop[0].id,
+              pay_num: _this.pay_num,
+              face_id: _this.face_id
+            }
+          })
+          .then(res => {
+            // console.log(res);
+            _this.$vux.alert.show({
+              title: '提示',
+              content: res.data.log
+            })
+          });
+      },
+      showPopup(val) {
+        this.$emit('showPopup', val);
+      }
+    },
+    components: {
+      bigTitle,
+      ViewBox,
+      Selector,
+      Group,
+      shanghuSelect,
+      shanghuInput,
+      XButton,
+      XInput,
+      Confirm,
+      Popup,
+      Cell
+    },
+    mixins: [checkLogin]
+  };
+
 </script>
 
 <style lang='scss'>
-.yz-tips {
-  margin-top: 0.266667rem;
-  .tip-tit {
-    @include font-dpr(14px);
-    margin-bottom: 0.266667rem;
+  .yz-tips {
+    margin-top: 0.266667rem;
+    .tip-tit {
+      @include font-dpr(14px);
+      margin-bottom: 0.266667rem;
+    }
+    .tip-content {
+      padding-left: 0.4rem;
+      line-height: 0.533333rem;
+    }
   }
-  .tip-content {
-    padding-left: 0.4rem;
-    line-height: 0.533333rem;
-  }
-}
+
 </style>

@@ -26,11 +26,11 @@
       <div class="sp-info2">
         <div class="top">
           <span class="iconfont icon-yingyeshijian"></span>营业时间：周一到周日 08:00 —— 19:00</div>
-        <div class="middle">
+        <!-- <div class="middle">
           <span class="txt">WIFI</span>
           <span class="txt">刷卡</span>
           <span class="txt">手机支付</span>
-        </div>
+        </div> -->
         <div class="bottom">
           <span class="txt">内饰清洗</span>
           <span class="txt">抛光</span>

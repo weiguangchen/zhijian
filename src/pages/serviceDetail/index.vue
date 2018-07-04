@@ -10,7 +10,7 @@
       <div class="sp-info">
         <div class="top">
           <span class="price">
-            <span class="num">{{fw_info.money}}</span>元</span>{{fw_info.fw_mingzi}}</div>
+            <span class="num">{{fw_info.money}}</span>元  <span v-if="fw_info.fw_gg">/{{fw_info.fw_gg}}</span></span>{{fw_info.fw_mingzi}}</div>
         <div class="bottom">{{fw_info.sub_content}}</div>
       </div>
 

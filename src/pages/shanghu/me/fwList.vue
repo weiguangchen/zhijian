@@ -1,6 +1,6 @@
 <template>
   <div class="gl-fw">
-    <ViewBox class="shanghu-page">
+    <!-- <ViewBox class="shanghu-page"> -->
       <bigTitle title="管理服务" @showPopup='showPopup'></bigTitle>
       <div class="form-box">
         <div v-for="(item,index) in fwList" :key="index" class="fw-item">
@@ -15,7 +15,7 @@
         </div>
       </div>
 
-    </ViewBox>
+    <!-- </ViewBox> -->
   </div>
 </template>
 

@@ -35,10 +35,7 @@
 
             </div>
             <div class="huodong-list">
-              <a href="" class="item"><img src="~/img/index/hd1.jpg" alt="" class="img"></a>
-              <a href="" class="item"><img src="~/img/index/hd2.jpg" alt="" class="img"></a>
-              <a href="" class="item"><img src="~/img/index/hd3.jpg" alt="" class="img"></a>
-              <a href="" class="item"><img src="~/img/index/hd4.jpg" alt="" class="img"></a>
+              <div  class="item"  v-for="(item,index) in hd" :key="index" @click="toHd(item.alt)"><img :src="item.url" alt="" class="img"></div>
             </div>
 
             <tuijian :info='item' v-for="(item,index) in listArr" :key="index" v-if="item.list.length>0" fwClass='1'></tuijian>
@@ -111,7 +108,8 @@ export default {
       listArr: {},
       activeListId: "",
       top_ad: [],
-      middle_ad: []
+      middle_ad: [],
+      hd:[]
     };
   },
   created() {
@@ -130,6 +128,8 @@ export default {
       this.top_ad = data.one_img;
       // 获取中部广告
       this.middle_ad = data.two_img;
+      // 活动推荐
+      this.hd = data.hd_banner;
     });
     // this.$wx.ready(function() {
     //   _this.$wx.getLocation({
@@ -163,12 +163,13 @@ export default {
       "SAVE_ID",
       "SAVE_USERINFO",
       "SAVE_ADDRESS",
-      "SET_LOCATION"
+      "SET_LOCATION",
+      "SET_INDEX_HD_ID"
     ]),
     get_fw() {
       var _this = this;
       this.$axios
-        .get(_this.API_URL + "/Api/Fj/one_jl", {
+        .get(_this.API_URL + "/Api/Yes/one_jl", {
           params: {
             lng: _this.location.lat,
             lat: _this.location.lng
@@ -179,6 +180,15 @@ export default {
           _this.classArr = data.class;
           _this.listArr = data.info;
         });
+    },
+    toHd(id){
+      this.SET_INDEX_HD_ID(id)
+      this.$router.push({
+        path:'/faxian',
+        // query:{
+        //   select:id
+        // }
+      })
     }
   },
   computed: {

@@ -7,6 +7,9 @@ const state = {
     routerMap:[],    
 
     location:'',   /*   定位信息 */
-    isLoading:false    /* 跳转页面等待 */
+    isLoading:false,    /* 跳转页面等待 */
+
+
+    index_hd_id:''
 }
 export default state;

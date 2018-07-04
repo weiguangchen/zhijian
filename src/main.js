@@ -10,6 +10,11 @@ Vue.prototype.$axios = axios;
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
 
+import 'muse-ui/lib/styles/base.less';
+import { Radio } from 'muse-ui';
+import 'muse-ui/lib/styles/theme.less';
+Vue.component('mu-radio',Radio);
+
 import VueHead from 'vue-head'
 Vue.use(VueHead)
 /* 引入flexible自适应 */

@@ -114,7 +114,7 @@
           <div class="form-group">
             <h2 class="sub-title">商户结算价:</h2>
             <Group class="reset-vux-input">
-              <XInput v-model="jiesuanjia"></XInput>
+              <XInput v-model="jiesuanjia"  :disabled='true'></XInput>
             </Group>
           </div>
         </template>
@@ -167,7 +167,7 @@ export default {
       detail_list: [],
       localData: "",
       imgs: "",
-
+      jsPrecent:0.3,
       // 第一步
       huodongname: "",
       sub_name: "",
@@ -183,7 +183,7 @@ export default {
       fw_selceted: [],
       yuanjia: 0,
       huodongjia: 0,
-      jiesuanjia: 0
+      // jiesuanjia: 0
     };
   },
   created() {
@@ -249,19 +249,19 @@ export default {
       var _this = this;
       this.checkStep2().then(
         res => {
-          const params = {
-            card_name: _this.huodongname,
-            card_money: _this.huodongjia,
-            card_shopid: 1,
-            card_ymoney: _this.yuanjia,
-            card_jmoney: _this.jiesuanjia,
-            card_content_id: _this.detail,
-            card_city: _this.cityVal,
-            qy_id: _this.qyVal,
-            sq_id: _this.sqVal,
-            bk_num: _this.fw_num
-          };
-          console.log(params);
+          // const params = {
+          //   card_name: _this.huodongname,
+          //   card_money: _this.huodongjia,
+          //   card_shopid: 1,
+          //   card_ymoney: _this.yuanjia,
+          //   card_jmoney: _this.jiesuanjia,
+          //   card_content_id: _this.detail,
+          //   card_city: _this.cityVal,
+          //   qy_id: _this.qyVal,
+          //   sq_id: _this.sqVal,
+          //   bk_num: _this.fw_num
+          // };
+          // console.log(params);
           this.$axios
             .get(_this.API_URL + "/Api/YouHui/add_card", {
               headers: {
@@ -269,6 +269,7 @@ export default {
               },
               //   params:myparams,
               params: {
+                card_img:this.tupian,
                 card_name: _this.huodongname,
                 card_money: _this.huodongjia,
                 card_shopid: this.userinfo.shop[0].id,
@@ -280,7 +281,8 @@ export default {
                 qy_id: _this.qyVal,
                 sq_id: _this.sqVal,
                 bk_num: _this.fw_num,
-                card_subname: _this.sub_name
+                card_subname: _this.sub_name,
+                face:_this.faceVal
               }
             })
             .then(({ data }) => {
@@ -328,8 +330,8 @@ export default {
           _this.alertWarning("请上传活动缩略图！");
           reject();
         } else {
-          resolve();
         }
+          resolve();
 
         //  else if (!this.tupianList) {
         //   _this.alertWarning("请上传活动图片集！");
@@ -343,7 +345,7 @@ export default {
         if (!this.cityVal) {
           _this.alertWarning("请选择城市！");
           reject();
-        } else if (!this.sub_name) {
+        } else if (!this.qyVal) {
           _this.alertWarning("请选择区域！");
           reject();
         } else if (!this.sqVal) {
@@ -515,6 +517,9 @@ export default {
       }else{
         return true;
       }
+    },
+    jiesuanjia() {
+      return (this.huodongjia * (1 - this.jsPrecent)).toFixed(2);
     }
     
   },

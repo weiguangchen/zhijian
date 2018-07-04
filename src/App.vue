@@ -6,9 +6,10 @@
  */
 <template>
   <div id="app">
-    <!-- <keep-alive exclude='service-list'> -->
-    <router-view/>
-    <!-- </keep-alive> -->
+    <keep-alive >
+      <router-view v-if="keepAlive"/>
+    </keep-alive>
+    <router-view  v-if='!keepAlive'/>
     <router-view name="tab"></router-view>
     <Loading v-show="isLoading"></Loading>
   </div>
@@ -25,7 +26,10 @@ export default {
 
   },
   computed: {
-    ...mapState(['isLoading'])
+    ...mapState(['isLoading']),
+    keepAlive(){
+      return this.$route.meta.keepAlive;
+    }
   },
   methods: {
     

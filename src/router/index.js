@@ -58,7 +58,7 @@ Vue.use(Router)
 // import setAuthority from '@/pages/shanghu/me/authority'
 // import addSonAccount from '@/pages/shanghu/me/addSonAccount'
 /* 商户后台/经营 */
-import shanghujingying from '@/pages/shanghu/jingying/index'
+import shanghujingying from '@/pages/shanghu/jingying/index';
 import jingyingindex from '@/pages/shanghu/jingying/index1'
 import tongji from '@/pages/shanghu/jingying/tongji'
 import orderGl from '@/pages/shanghu/jingying/orderlist'
@@ -148,388 +148,198 @@ function wxConfig(url) {
 
 
 export const defaultRouterMaps = [{
-    path: '/',
-    redirect: '/index',
-    base: '/qd/',
-  }, {
-    path: '/index',
-    name: 'index',
-    components: {
-      default: resolve => require(['@/pages/index/index'], resolve),
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    }
-  }, {
-    path: '/shop',
-    name: 'shangcheng',
-    components: {
-      default: resolve => require(['@/pages/shangcheng/index'], resolve),
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    },
-  }, {
-    path: '/faxian',
-    name: 'faxian',
-    components: {
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    },
-  }, {
-    path: '/shangpu/:shangpuId',
-    name: 'shangpu',
-    components: {
-      default: resolve => require(['@/pages/shangpu/index'], resolve),
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    }
-  }, {
-    path: '/serviceClass/:classId',
-    name: 'serviceClass',
-    components: {
-      default: resolve => require(['@/pages/serviceClass/index'], resolve),
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    }
-  }, {
-    path: '/serviceList/:classId',
-    name: 'serviceList',
-    components: {
-      default: resolve => require(['@/pages/serviceList/index'], resolve),
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    }
-  }, {
-    path: '/me',
-    name: 'me',
-    components: {
-      default: resolve => require(['@/pages/me/index'], resolve),
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    }
-  }, {
-    path: '/youhuijuan',
-    name: 'youhuijuan',
-    components: {
-      default: resolve => require(['@/pages/youhuijuan/index'], resolve),
-    }
-  }, {
-    path: '/me/orderList/:orderStatus',
-    name: 'orderList',
-    components: {
-      default: resolve => require(['@/pages/orderList/index'], resolve),
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    }
-  }, {
-    path: '/me/orderDetail/:orderNum',
-    name: 'orderList',
-    components: {
-      default: resolve => require(['@/pages/orderList/orderDetail'], resolve)
-      // tab: tab
-    }
-  }, {
-    path: '/queren',
-    name: 'queren',
-    components: {
-      default: resolve => require(['@/pages/queren/index'], resolve),
-    }
-  }, {
-    path: '/huodongqueren',
-    name: 'queren',
-    components: {
-      default: resolve => require(['@/pages/queren/huodong'], resolve)
-    }
-  }, {
-    path: '/me/pingjia/:orderNum',
-    name: 'pingjia',
-    components: {
-      default: resolve => require(['@/pages/pingjia/index'], resolve),
-    }
-  }, {
-    path: '/agent',
-    name: 'agent',
-    components: {
-      default: resolve => require(['@/pages/agent/index'], resolve),
-      // tab: tab
-    }
-  }, {
-    path: '/addJms',
-    name: 'addJms',
-    components: {
-      default: resolve => require(['@/pages/agent/add_jms'], resolve),
-      // tab: tab
-    }
-  }, {
-    path: '/addAgent',
-    name: 'addAgent',
-    components: {
-      default: resolve => require(['@/pages/agent/add_agent'], resolve),
-      // tab: tab
-    }
-  }, {
-    path: '/serviceDetail/:serviceId',
-    name: 'serviceDetail',
-    component: resolve => require(["@/pages/serviceDetail/index"], resolve)
-  }, {
-    path: '/huodongDetail/:huodongId',
-    name: 'huodongDetail',
-    component: resolve => require(["@/pages/serviceDetail/huodong"], resolve)
-  }, {
-    path: '/pinglun/:serviceId',
-    name: 'pinglun',
-    component: resolve => require(['@/pages/pinglun/index'], resolve)
-  }, {
-    path: '/shangjia',
-    name: 'shangjia',
-    component: resolve => require(['@/pages/shanghu/shangjia/index'], resolve)
-  }, {
-    path: '/applyShanghu',
-    name: 'applyShanghu',
-    components: {
-      default: resolve => require(['@/pages/shanghuApply/index'], resolve),
-      tab: resolve => require(['@/components/tab/tab'], resolve)
-    }
-  }, {
-    path: '/shopCar',
-    name: 'shopCar',
-    components: {
-      default: resolve => require(['@/pages/shopCar/index'], resolve),
-      // tab: tab
-    }
-  },
-  {
-    path: '/huifupinglun',
-    name: 'huifupinglun',
-    component: resolve => require(['@/components/huifupinglun/index'], resolve)
-  },
-  {
-    path: '/logining',
-    name: 'logining',
-    component: resolve => require(['@/pages/logining/index'], resolve),
-  },
-  {
-    path: '/checkshenfen',
-    name: 'checkshenfen',
-    component: resolve => require(['@/pages/checkshenfen/index'], resolve),
-  },
-  {
-    path: '/shanghuCheck',
-    name: 'shanghuCheck',
-    component: resolve => require(['@/pages/checkshenfen/shanghuCheck'], resolve),
-  },
-  {
-    path: '/warning',
-    name: 'checkwarning',
-    component: resolve => require(['@/pages/checkshenfen/warning'], resolve)
-  },
-  {
-    path: '/twDetail/:twId',
-    name: 'twDetail',
-    component: resolve => require(['@/pages/contentDetail/index'], resolve)
-  },
-  // {
-  //   path: '/shanghu',
-  //   component: resolve => require(['@/pages/shanghu/index'], resolve),
-  //   name: 'shanghu',
-  //   meta: {
-  //     role: 0
-  //   },
-  //   children: []
-  // }
-  {
-    path: '/shanghu',
-    component: resolve => require(['@/pages/shanghu/index'], resolve),
-    name: 'shanghu',
-    meta: {
-      role: ['shanghu']
-    },
-    children: [{
-        path: 'yanzheng',
-        component: resolve => require(['@/pages/shanghu/yanzheng/index'], resolve),
-        name: 'yanzheng',
-        meta: {
-          role: 1
-        },
-        children: [{
-          path: 'index',
-          name: 'yanzhengindex',
-          component: resolve => require(['@/pages/shanghu/yanzheng/index1'], resolve),
-          meta: {
-            role: 999,
-            menu: []
-          },
-        }, {
-          path: 'xfm',
-          name: 'yanzhengxfm',
-          component: resolve => require(['@/pages/shanghu/yanzheng/xfm'], resolve),
-          meta: {
-            role: 11
-          },
-        }, {
-          path: 'huodong',
-          name: 'yanzhenghuodong',
-          component: resolve => require(['@/pages/shanghu/yanzheng/huodong'], resolve),
-          meta: {
-            role: 12
-          },
-        }]
-      },
-      {
-        path: 'pingjias',
-        name: 'pingjias',
-        component: resolve => require(['@/pages/shanghu/pingjias/index'], resolve),
-        meta: {
-          role: 2
-        },
-        children: [{
-          path: 'index',
-          name: 'pingjiaindex',
-          component: resolve => require(['@/pages/shanghu/pingjias/index1'], resolve),
-          meta: {
-            role: 999,
-            menu: []
-          },
-        }, {
-          path: 'pingjias',
-          name: 'allpingjias',
-          component: resolve => require(['@/pages/shanghu/pingjias/pingjias'], resolve),
-          meta: {
-            role: 21
-          },
-        }, {
-          path: 'pingjiaList/:pingjiaId',
-          name: 'pingjiaList',
-          component: resolve => require(['@/pages/shanghu/pingjias/pingjiaList'], resolve),
-          meta: {
-            role: 21
-          },
-        }, ]
-      },
-
-      {
-        path: 'jingying',
-        name: 'jingying',
-        component: resolve => require(['@/pages/shanghu/jingying/index'], resolve),
-        meta: {
-          role: 3,
-        },
-        children: [{
-          path: 'index',
-          name: 'index',
-          component: resolve => require(['@/pages/shanghu/jingying/index1'], resolve),
-          meta: {
-            role: 999,
-            menu: []
-          }
-        }, {
-          path: 'tongji',
-          name: 'tongji',
-          component: resolve => require(['@/pages/shanghu/jingying/tongji'], resolve),
-          meta: {
-            role: 31
-          }
-        }, {
-          path: 'orderGl',
-          name: 'orderGl',
-          component: resolve => require(['@/pages/shanghu/jingying/orderlist'], resolve),
-          meta: {
-            role: 32
-          }
-        }, ]
-
-      },
-
-
-      {
-        path: 'me',
-        name: 'shanghume',
-        component: resolve => require(['@/pages/shanghu/me/index1'], resolve),
-        meta: {
-          role: 4
-        },
-        children: [{
-          path: 'index',
-          name: 'shanghumeindex',
-          component: resolve => require(['@/pages/shanghu/me/index'], resolve),
-          meta: {
-            role: 999,
-            menu: []
-          }
-        }, {
-          path: 'xmgl',
-          name: 'shanghumexmgl',
-          component: resolve => require(['@/pages/shanghu/me/xmgl'], resolve),
-          meta: {
-            role: 41
-          }
-        }, {
-          path: 'bianjiFw/:fwId',
-          name: 'bianjiFw',
-          component: resolve => require(['@/pages/shanghu/me/bianjiFw'], resolve),
-          meta: {
-            role: 42
-          }
-        }, {
-          path: 'fwList',
-          name: 'shanghumefwlist',
-          component: resolve => require(['@/pages/shanghu/me/fwList'], resolve),
-          meta: {
-            role: 42
-          }
-        }, {
-          path: 'mendian',
-          name: 'shanghumemendian',
-          component: resolve => require(['@/pages/shanghu/me/mendian'], resolve),
-          meta: {
-            role: 44
-          }
-        }, {
-          path: 'addhuodong',
-          name: 'shanghumeaddhuodong',
-          component: resolve => require(['@/pages/shanghu/me/addhuodong'], resolve),
-          meta: {
-            role: 43
-          }
-        }, {
-          path: 'addFace',
-          name: 'shanghumeaddface',
-          component: resolve => require(['@/pages/shanghu/me/addFace'], resolve),
-          meta: {
-            role: 44
-          }
-        }, {
-          path: 'account',
-          name: 'account',
-          component: resolve => require(['@/pages/shanghu/me/account'], resolve),
-          meta: {
-            role: 45
-          }
-        }, {
-          path: 'setAuthority',
-          name: 'setAuthority',
-          component: resolve => require(['@/pages/shanghu/me/authority'], resolve),
-          meta: {
-            role: 45
-          }
-        }, {
-          path: 'addSonAccount',
-          name: 'addSonAccount',
-          component: resolve => require(['@/pages/shanghu/me/addSonAccount'], resolve),
-          meta: {
-            role: 45
-          }
-        }],
-
-      }
-    ]
+  path: '/',
+  redirect: '/index',
+  base: '/qd/',
+}, {
+  path: '/index',
+  name: 'index',
+  components: {
+    default: resolve => require(['@/pages/index/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
   }
-]
-
-/*  
-    权限列表
-    1验证管理
-    11验证消费码12验证活动
-    2评价管理
-    21消费评价22活动评价
-    3经营管理
-    31消费统计32订单管理33活动统计
-    4商户中心
-    41项目管理42编辑服务43添加活动44门店管理45账户管理
-*/
-
-export const asyncRouterMaps = [{
+}, {
+  path: '/shop',
+  name: 'shangcheng',
+  components: {
+    default: resolve => require(['@/pages/shangcheng/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
+  },
+  meta:{
+    keepAlive:true
+  }
+}, {
+  path: '/faxian',
+  name: 'faxian',
+  components: {
+    default:resolve => require(['@/pages/faxian/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
+  },
+}, {
+  path: '/shangpu/:shangpuId',
+  name: 'shangpu',
+  components: {
+    default: resolve => require(['@/pages/shangpu/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
+  }
+}, {
+  path: '/serviceClass/:classId',
+  name: 'serviceClass',
+  components: {
+    default: resolve => require(['@/pages/serviceClass/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
+  }
+}, {
+  path: '/serviceList/:classId',
+  name: 'serviceList',
+  components: {
+    default: resolve => require(['@/pages/serviceList/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
+  }
+}, {
+  path: '/me',
+  name: 'me',
+  components: {
+    default: resolve => require(['@/pages/me/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
+  }
+}, {
+  path: '/youhuijuan',
+  name: 'youhuijuan',
+  components: {
+    default: resolve => require(['@/pages/youhuijuan/index'], resolve),
+  }
+}, {
+  path: '/me/orderList/:orderStatus',
+  name: 'orderList',
+  components: {
+    default: resolve => require(['@/pages/orderList/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
+  }
+}, {
+  path: '/me/orderDetail',
+  name: 'orderList',
+  components: {
+    default: resolve => require(['@/pages/orderList/orderDetail'], resolve)
+    // tab: tab
+  }
+}, {
+  path: '/queren',
+  name: 'queren',
+  components: {
+    default: resolve => require(['@/pages/queren/index'], resolve),
+  }
+}, {
+  path: '/huodongqueren',
+  name: 'queren',
+  components: {
+    default: resolve => require(['@/pages/queren/huodong'], resolve)
+  }
+}, {
+  path: '/me/pingjia/:orderNum',
+  name: 'pingjia',
+  components: {
+    default: resolve => require(['@/pages/pingjia/index'], resolve),
+  }
+}, {
+  path: '/agent',
+  name: 'agent',
+  components: {
+    default: resolve => require(['@/pages/agent/index'], resolve),
+    // tab: tab
+  }
+}, {
+  path: '/addJms',
+  name: 'addJms',
+  components: {
+    default: resolve => require(['@/pages/agent/add_jms'], resolve),
+    // tab: tab
+  }
+}, {
+  path: '/addAgent',
+  name: 'addAgent',
+  components: {
+    default: resolve => require(['@/pages/agent/add_agent'], resolve),
+    // tab: tab
+  }
+}, {
+  path: '/serviceDetail/:serviceId',
+  name: 'serviceDetail',
+  component: resolve => require(["@/pages/serviceDetail/index"], resolve)
+}, {
+  path: '/huodongDetail/:huodongId',
+  name: 'huodongDetail',
+  component: resolve => require(["@/pages/serviceDetail/huodong"], resolve)
+}, {
+  path: '/pinglun/:serviceId',
+  name: 'pinglun',
+  component: resolve => require(['@/pages/pinglun/index'], resolve)
+}, {
+  path: '/shangjia',
+  name: 'shangjia',
+  component: resolve => require(['@/pages/shanghu/shangjia/index'], resolve)
+}, {
+  path: '/applyShanghu',
+  name: 'applyShanghu',
+  components: {
+    default: resolve => require(['@/pages/shanghuApply/index'], resolve),
+    tab: resolve => require(['@/components/tab/tab'], resolve)
+  }
+}, {
+  path: '/shopCar',
+  name: 'shopCar',
+  components: {
+    default: resolve => require(['@/pages/shopCar/index'], resolve),
+    // tab: tab
+  }
+},
+{
+  path: '/huifupinglun',
+  name: 'huifupinglun',
+  component: resolve => require(['@/components/huifupinglun/index'], resolve)
+},
+{
+  path: '/logining',
+  name: 'logining',
+  component: resolve => require(['@/pages/logining/index'], resolve),
+},
+{
+  path: '/checkshenfen',
+  name: 'checkshenfen',
+  component: resolve => require(['@/pages/checkshenfen/index'], resolve),
+},
+{
+  path: '/shanghuCheck',
+  name: 'shanghuCheck',
+  component: resolve => require(['@/pages/checkshenfen/shanghuCheck'], resolve),
+},
+{
+  path: '/warning',
+  name: 'checkwarning',
+  component: resolve => require(['@/pages/checkshenfen/warning'], resolve)
+},
+{
+  path: '/twDetail/:twId',
+  name: 'twDetail',
+  component: resolve => require(['@/pages/contentDetail/index'], resolve)
+},
+// {
+//   path: '/shanghu',
+//   component: resolve => require(['@/pages/shanghu/index'], resolve),
+//   name: 'shanghu',
+//   meta: {
+//     role: 0
+//   },
+//   children: []
+// }
+{
+  path: '/shanghu',
+  component: resolve => require(['@/pages/shanghu/index'], resolve),
+  name: 'shanghu',
+  meta: {
+    role: ['shanghu']
+  },
+  children: [{
     path: 'yanzheng',
     component: resolve => require(['@/pages/shanghu/yanzheng/index'], resolve),
     name: 'yanzheng',
@@ -589,7 +399,7 @@ export const asyncRouterMaps = [{
       meta: {
         role: 21
       },
-    }, ]
+    },]
   },
 
   {
@@ -621,7 +431,7 @@ export const asyncRouterMaps = [{
       meta: {
         role: 32
       }
-    }, ]
+    },]
 
   },
 
@@ -707,6 +517,200 @@ export const asyncRouterMaps = [{
     }],
 
   }
+  ]
+}
+]
+
+/*  
+    权限列表
+    1验证管理
+    11验证消费码12验证活动
+    2评价管理
+    21消费评价22活动评价
+    3经营管理
+    31消费统计32订单管理33活动统计
+    4商户中心
+    41项目管理42编辑服务43添加活动44门店管理45账户管理
+*/
+
+export const asyncRouterMaps = [{
+  path: 'yanzheng',
+  component: resolve => require(['@/pages/shanghu/yanzheng/index'], resolve),
+  name: 'yanzheng',
+  meta: {
+    role: 1
+  },
+  children: [{
+    path: 'index',
+    name: 'yanzhengindex',
+    component: resolve => require(['@/pages/shanghu/yanzheng/index1'], resolve),
+    meta: {
+      role: 999,
+      menu: []
+    },
+  }, {
+    path: 'xfm',
+    name: 'yanzhengxfm',
+    component: resolve => require(['@/pages/shanghu/yanzheng/xfm'], resolve),
+    meta: {
+      role: 11
+    },
+  }, {
+    path: 'huodong',
+    name: 'yanzhenghuodong',
+    component: resolve => require(['@/pages/shanghu/yanzheng/huodong'], resolve),
+    meta: {
+      role: 12
+    },
+  }]
+},
+{
+  path: 'pingjias',
+  name: 'pingjias',
+  component: resolve => require(['@/pages/shanghu/pingjias/index'], resolve),
+  meta: {
+    role: 2
+  },
+  children: [{
+    path: 'index',
+    name: 'pingjiaindex',
+    component: resolve => require(['@/pages/shanghu/pingjias/index1'], resolve),
+    meta: {
+      role: 999,
+      menu: []
+    },
+  }, {
+    path: 'pingjias',
+    name: 'allpingjias',
+    component: resolve => require(['@/pages/shanghu/pingjias/pingjias'], resolve),
+    meta: {
+      role: 21
+    },
+  }, {
+    path: 'pingjiaList/:pingjiaId',
+    name: 'pingjiaList',
+    component: resolve => require(['@/pages/shanghu/pingjias/pingjiaList'], resolve),
+    meta: {
+      role: 21
+    },
+  },]
+},
+
+{
+  path: 'jingying',
+  name: 'jingying',
+  component: resolve => require(['@/pages/shanghu/jingying/index'], resolve),
+  meta: {
+    role: 3,
+  },
+  children: [{
+    path: 'index',
+    name: 'index',
+    component: resolve => require(['@/pages/shanghu/jingying/index1'], resolve),
+    meta: {
+      role: 999,
+      menu: []
+    }
+  }, {
+    path: 'tongji',
+    name: 'tongji',
+    component: resolve => require(['@/pages/shanghu/jingying/tongji'], resolve),
+    meta: {
+      role: 31
+    }
+  }, {
+    path: 'orderGl',
+    name: 'orderGl',
+    component: resolve => require(['@/pages/shanghu/jingying/orderlist'], resolve),
+    meta: {
+      role: 32
+    }
+  },]
+
+},
+
+
+{
+  path: 'me',
+  name: 'shanghume',
+  component: resolve => require(['@/pages/shanghu/me/index1'], resolve),
+  meta: {
+    role: 4
+  },
+  children: [{
+    path: 'index',
+    name: 'shanghumeindex',
+    component: resolve => require(['@/pages/shanghu/me/index'], resolve),
+    meta: {
+      role: 999,
+      menu: []
+    }
+  }, {
+    path: 'xmgl',
+    name: 'shanghumexmgl',
+    component: resolve => require(['@/pages/shanghu/me/xmgl'], resolve),
+    meta: {
+      role: 41
+    }
+  }, {
+    path: 'bianjiFw/:fwId',
+    name: 'bianjiFw',
+    component: resolve => require(['@/pages/shanghu/me/bianjiFw'], resolve),
+    meta: {
+      role: 42
+    }
+  }, {
+    path: 'fwList',
+    name: 'shanghumefwlist',
+    component: resolve => require(['@/pages/shanghu/me/fwList'], resolve),
+    meta: {
+      role: 42
+    }
+  }, {
+    path: 'mendian',
+    name: 'shanghumemendian',
+    component: resolve => require(['@/pages/shanghu/me/mendian'], resolve),
+    meta: {
+      role: 44
+    }
+  }, {
+    path: 'addhuodong',
+    name: 'shanghumeaddhuodong',
+    component: resolve => require(['@/pages/shanghu/me/addhuodong'], resolve),
+    meta: {
+      role: 43
+    }
+  }, {
+    path: 'addFace',
+    name: 'shanghumeaddface',
+    component: resolve => require(['@/pages/shanghu/me/addFace'], resolve),
+    meta: {
+      role: 44
+    }
+  }, {
+    path: 'account',
+    name: 'account',
+    component: resolve => require(['@/pages/shanghu/me/account'], resolve),
+    meta: {
+      role: 45
+    }
+  }, {
+    path: 'setAuthority',
+    name: 'setAuthority',
+    component: resolve => require(['@/pages/shanghu/me/authority'], resolve),
+    meta: {
+      role: 45
+    }
+  }, {
+    path: 'addSonAccount',
+    name: 'addSonAccount',
+    component: resolve => require(['@/pages/shanghu/me/addSonAccount'], resolve),
+    meta: {
+      role: 45
+    }
+  }],
+
+}
 ]
 
 
@@ -724,16 +728,19 @@ const router = new Router({
   mode: 'history',
   routes: defaultRouterMaps,
   scrollBehavior(to, from, savedPosition) {
-    console.log('滚动')
-    return {
-      x: 0,
-      y: 0
-    }
+    // console.log('滚动')
+    // console.log(savedPosition)
+    // if (savedPosition) {
+    //   return savedPosition
+    // } else {
+    //   return { x: 0, y: 0 }
+    // }
   }
 })
 
 // 进入每个url时判断是否登录
 router.beforeEach((to, from, next) => {
+  document.body.scrollTop = 0;
   muta.SET_ISLOADING(store.state, true);
   var id = store.state.id;
   var userinfo = store.state.userinfo;
@@ -771,34 +778,45 @@ router.beforeEach((to, from, next) => {
   var userId = VueCookies.get("user");
   if (!userId) {
     VueCookies.set('enterBeforeUrl', to.fullPath);
+    console.log(window.location.href)
+    var windowUrl = window.location.href;var state;
+    console.log(/\/http:qd.daonian.cn/.test(windowUrl))
+    if(/http:\/\/qd.daonian.cn/.test(windowUrl)){
+      // 线上
+      state = 0; 
+    }else{
+      // 线下
+      state = 1;
+    }
     // 没有cookies
+    // state=1是线下环境state=0线上环境
     window.location.href =
-      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state="+state+"#wechat_redirect";
   } else {
     // 有cookies
     // 获取用户信息
 
     axios.get(API_URL + '/api/Show/get_user', {
-        params: {
-          id: userId
-        }
-      }).then(res => {
-        console.log('获取信息')
-        console.log(res)
-        if (res.data[0].is_user == 1) {
-          // 该用户有效
-          muta.SAVE_ID(store.state, userId);
-          muta.SAVE_USERINFO(store.state, res.data[0]);
-          next();
-        } else {
-          // 该用户无效
-          console.log('无效cookie，删除')
-          VueCookies.delete('user');
-          muta.SAVE_ID(store.state, '');
-          muta.SAVE_USERINFO(store.state, {});
-          next('/index');
-        }
-      })
+      params: {
+        id: userId
+      }
+    }).then(res => {
+      console.log('获取信息')
+      console.log(res)
+      if (res.data[0].is_user == 1) {
+        // 该用户有效
+        muta.SAVE_ID(store.state, userId);
+        muta.SAVE_USERINFO(store.state, res.data[0]);
+        next();
+      } else {
+        // 该用户无效
+        console.log('无效cookie，删除')
+        VueCookies.delete('user');
+        muta.SAVE_ID(store.state, '');
+        muta.SAVE_USERINFO(store.state, {});
+        next('/index');
+      }
+    })
       .then(res => {
         // if (store.state.routerMap.length <= 0) {
         //   // 没有生成权限

@@ -16,6 +16,9 @@ const mutations = {
   },
   SET_ISLOADING:(state,preload)=>{
     state.isLoading = preload;
+  },
+  SET_INDEX_HD_ID:(state,preload)=>{
+    state.index_hd_id = preload;
   }
 }
 

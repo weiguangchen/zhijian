@@ -4,13 +4,6 @@
       <InfiniteScroll ref="infinitescroll" :callback="loadList">
         <template slot="list">
           <div class="ad">
-            <!-- <swiper :options="swiperOption" ref="mySwiper"> -->
-            <!-- slides -->
-            <!-- <swiper-slide><img src="~img/class/ad.png" alt=""></swiper-slide>
-              <swiper-slide><img src="~img/class/ad.png" alt=""></swiper-slide>
-              <swiper-slide><img src="~img/class/ad.png" alt=""></swiper-slide>
-              <div class="swiper-pagination" slot="pagination"></div>
-            </swiper> -->
             <swiper :options="swiperOption" ref="mySwiper">
               <!-- slides -->
               <swiper-slide v-for="(item,index) in top_ad" :key="index">
@@ -23,15 +16,15 @@
               <div class="term">
                 <div class="select-box">
                   <span class="term-item" :class="{active:(selectType == 1&&selectAddShow)}" @click="selectAdd(1)">
-                    <span class="text">{{currentInfo.area.sq.val}}</span>
+                    <span>{{currentInfo.area.sq.val}}</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
                   <span class="term-item" :class="{active:(selectType == 2&&selectAddShow)}" @click="selectAdd(2)">
-                    <span class="text">{{currentInfo.order.val}}</span>
+                    <span>{{currentInfo.order.val}}</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
                   <span class="term-item" :class="{active:(selectType == 3&&selectAddShow)}" @click="selectAdd(3)">
-                    <span class="text">{{currentInfo.search.val}}</span>
+                    <span>{{currentInfo.search.val}}</span>
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
                 </div>
@@ -79,8 +72,9 @@
 </template>
 
 <script>
+import { mapState,mapMutations } from 'vuex';
   import addressSelect from "@/components/addressSelect/index";
-  import service from "@/components/service/service";
+  import service from "@/components/service/card";
   import {
     swiper,
     swiperSlide
@@ -113,6 +107,7 @@
           loop: true,
           autoplay: true
         },
+
         qy: [],
         qyVal: {
           val: "附近",
@@ -153,26 +148,49 @@
 
         classArr: [],
         serviceList: [],
-        serviceList1: [],
-        serviceList2: [],
+        // serviceList1: [],
+        // serviceList2: [],
         p: 1
       };
     },
+    watch: {
+      qyVal(newval) {
+        this.currentInfo.area.qy.val = newval.val;
+        this.currentInfo.area.qy.val = newval.key;
+      },
+      sqVal(newval) {
 
+        this.currentInfo.area.sq.val = newval.val;
+        this.currentInfo.area.sq.val = newval.key;
+        console.log(this.currentInfo)
+        console.log(newval)
+
+      }
+    },
     created() {
       document.title = "服务列表";
       var _this = this;
+
+
 
       this.getPosition().then(res => {
         console.log("获取定位成功");
         console.log(res);
         this.SET_LOCATION(res);
-        this.get_fw().then(res => {
-          this.serviceList = res.list;
-          this.serviceList1 = res.list;
 
-          this.serviceList2 = res.list;
-        });
+        if (this.index_hd_id) {
+          this.get_index_hd().then(res => {
+            this.serviceList = res;
+          })
+        } else {
+          this.get_fw().then(res => {
+            this.serviceList = res.list;
+            //   this.serviceList1 = res.list;
+
+            //   this.serviceList2 = res.list;
+          });
+        }
+
 
         this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({
           data
@@ -182,6 +200,9 @@
         });
         this.get_city();
       });
+
+
+
     },
     mounted() {
       // this.$nextTick(() => {
@@ -189,20 +210,48 @@
       // });
     },
     methods: {
+      ...mapMutations(['SET_INDEX_HD_ID']),
       get_fw(select) {
         var _this = this;
         var deafultParams = {
-          fw_id: _this.classId,
           num: 8,
           p: _this.p,
           lng: _this.location.lat,
           lat: _this.location.lng,
           city: this.location.province
         };
-
+        // 合并条件
         var params = Object.assign(deafultParams, select);
+
         return this.$axios
-          .get(_this.API_URL + "/Api/Yes/two_list", {
+          .get(_this.API_URL + "/Api/See/two_list", {
+            params
+          })
+          .then(({
+            data
+          }) => {
+            console.log(data);
+            if (data.ok == 1) {
+              _this.p++;
+            } else if (data.ok == 0) {
+              _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+            }
+            _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
+            return data;
+          });
+      },
+      get_index_hd() {
+        var _this = this;
+        var params = {
+          num: 8,
+          p: _this.p,
+          lng: _this.location.lat,
+          lat: _this.location.lng,
+          id: this.index_hd_id
+        };
+
+        return this.$axios
+          .get(_this.API_URL + "/Api/See/get_hd", {
             params
           })
           .then(({
@@ -246,6 +295,10 @@
         this.sqVal.val = sq.sq_name;
         this.sqVal.key = sq.id;
         this.selectAddShow = false;
+
+        // 清空活动id
+        this.SET_INDEX_HD_ID('');
+
         this.get_fw({
           sq_id: _this.sqVal.key
         }).then(res => {
@@ -289,6 +342,7 @@
     },
 
     computed: {
+      ...mapState(['index_hd_id']),
       classId() {
         // 我们很快就会看到 `params` 是什么
         return this.$route.params.classId;
@@ -308,7 +362,10 @@
         obj.search = this.searchVal;
         return obj;
 
-      }
+      },
+      // select() {
+      //   return this.$route.query.select;
+      // }
     },
     components: {
       XHeader,
@@ -349,20 +406,10 @@
           height: 100%;
           display: flex;
           .term-item {
-            padding: .1rem/* 10/100 */
-            ;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             flex: 1;
-            .text {
-              text-align: center;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              flex: 1;
-            }
           }
           .active {
             color: #cb2620;

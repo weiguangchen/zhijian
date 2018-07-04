@@ -49,21 +49,21 @@ export default {
   created() {
     var _this = this;
     this.$axios
-      .get(_this.API_URL + "/api/ShopFw/shop_fw", {
-        params: { shop_id: this.userinfo.shop[0].id }
+      .get(_this.API_URL + "/Api/ShopFw/get_face", {
+        params: { phone:this.userinfo.uphone }
       })
       .then(res => {
         console.log(res);
-        _this.faceList = res.data.face;
+        _this.faceList = res.data;
       });
   },
   methods: {
     yanzheng() {
       var _this = this;
       this.$axios
-        .get(_this.API_URL + "/api/ShopFw/pay_num_ok", {
+        .get(_this.API_URL + "/api/ShopFw/hd_ok", {
           params: {
-            fw_shop_id: 1,
+            fw_shop_id: this.userinfo.shop[0].id ,
             pay_num: _this.pay_num,
             face_id: _this.face_id
           }

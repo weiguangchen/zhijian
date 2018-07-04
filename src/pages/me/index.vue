@@ -38,12 +38,12 @@
             <div class="order-term" v-if="id">
                 <div class="title">我的订单</div>
                 <div class="order-terms">
-                    <div class="order-term-item" @click="toOrderList(0)">
+                    <!-- <div class="order-term-item" @click="toOrderList(0)">
                         <div class="icon">
                             <span class="iconfont icon-weifukuan"></span>
                         </div>
                         <div class="text">未付款</div>
-                    </div>
+                    </div> -->
                     <div class="order-term-item" @click="toOrderList(1)">
                         <div class="icon">
                             <span class="iconfont icon-weishiyong"></span>
