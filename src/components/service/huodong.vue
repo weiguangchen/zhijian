@@ -55,7 +55,7 @@
       margin-right: 0.32rem;
       overflow: hidden;
       .img{
-        transform: translateX(-50%);
+        transform: translateX(-15%);
         max-width: none;
         height: 100%;
       }

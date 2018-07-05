@@ -367,6 +367,10 @@ import { mapState,mapMutations } from 'vuex';
       //   return this.$route.query.select;
       // }
     },
+    destroyed(){  
+      // 清空活动id
+        this.SET_INDEX_HD_ID('');
+    },
     components: {
       XHeader,
       ViewBox,

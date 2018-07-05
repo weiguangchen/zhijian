@@ -4,7 +4,7 @@
   <div>
     <bigTitle title="订单管理" @showPopup='showPopup'></bigTitle>
     <div class="order-gl">
-      <div class="order-item" v-for="(item,index) in list" :key="index">
+      <div class="order-item" v-for="(item,index) in list" :key="index" @click="toDetail(item.id,item.zf)">
         <div class="order-num">
           <div>订单号：{{item.order_num}}</div>
           <div>交易时间：{{item.date}}</div>
@@ -19,10 +19,10 @@
           </div>
         </div>
         <div class="count">
-          <div class="count-item">
+          <div class="count-item" v-if="item.zf != 1">
             结算价：¥{{item.order_jprice}}
           </div>
-          <div class="count-item">
+          <div class="count-item" v-if="item.zf != 1">
             数量：{{item.shop_num}}
           </div>
           <div class="count-item">
@@ -66,6 +66,7 @@ export default {
       .get(this.API_URL + "/Api/ShopFw/get_order", {
         params: {
           fw_shop_id: this.userinfo.shop[0].id,
+          status:6,
           num: 8,
           p: 1
         }
@@ -77,6 +78,15 @@ export default {
   methods: {
     showPopup(val) {
       this.$emit("showPopup", val);
+    },
+    toDetail(id,zf){
+      this.$router.push({
+        path:'/shanghu/jingying/orderDetail',
+        query:{
+          id,
+          zf
+        }
+      })
     }
   },
   components: { bigTitle, ViewBox },

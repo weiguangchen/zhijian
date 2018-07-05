@@ -2,13 +2,7 @@
   <div class="shanghu-box">
     <div class="wrapper shanghu-warpper" ref="wrapper">
       <ul class="content">
-        <!-- <div> -->
-          <!-- <ViewBox> -->
           <router-view @showPopup='showPopup'></router-view>
-          <!-- </ViewBox> -->
-
-        <!-- </div> -->
-
       </ul>
     </div>
     <Popup position='right' v-model="popupShow">
@@ -26,7 +20,7 @@
 
 <script>
 import { Popup } from "vue-ydui/dist/lib.px/popup";
-
+import {InfiniteScroll} from 'vue-ydui/dist/lib.px/infinitescroll'; 
 import { ViewBox, Cell, Group } from "vux";
 import BScroll from "better-scroll";
 import checkMenuQx from "@/mixins/checkMenuQx.js";
@@ -52,6 +46,8 @@ export default {
         click: true
       });
     });
+        console.log('初始化scroll')
+    console.log(this.scroll)
   },
   computed: {
 
@@ -60,7 +56,7 @@ export default {
     ViewBox,
     Popup,
     Cell,
-    Group
+    Group,
   },
   mixins: [checkMenuQx]
 };

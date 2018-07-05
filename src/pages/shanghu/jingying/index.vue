@@ -8,11 +8,14 @@
 
     <Popup position='right' v-model="popupShow">
       <div class="popup-list">
-        <Group>
+        <!-- <Group>
           <Cell title='消费统计' link='/shanghu/jingying/tongji'  v-if="checkQx(31)"></Cell>
           <Cell title='订单管理' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
+        </Group> -->
+        <Group>
+          <Cell title='消费统计' link='/shanghu/jingying/tongji'  ></Cell>
+          <Cell title='订单管理' link='/shanghu/jingying/orderGl' ></Cell>
         </Group>
-
       </div>
     </Popup>
   </div>

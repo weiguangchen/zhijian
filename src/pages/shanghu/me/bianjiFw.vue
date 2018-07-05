@@ -1,132 +1,125 @@
 <template>
-  <div>
-      <bigTitle title='编辑项目' @showPopup='showPopup'></bigTitle>
-      <div class="form-box">
-        <template v-if="step == 1">
-          <div class="form-group">
-            <h2 class="sub-title">服务名称</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="fw_name"></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">简短名称:
-              <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
-            </h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="fw_short_info"></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">服务介绍</h2>
-            <Group class="reset-vux-input">
-              <XTextarea :max='50' v-model="fw_intr"></XTextarea>
-            </Group>
-          </div>
-        </template>
-        <template v-else-if="step == 2">
-          <!-- <div class="form-group">
+  <div class="bianjifw">
+    <bigTitle title='编辑项目' @showPopup='showPopup'></bigTitle>
+    <div class="form-box">
+      <template v-if="step == 1">
+        <div class="form-group">
+          <h2 class="sub-title">服务名称</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="fw_name"></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">简短名称:
+            <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
+          </h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="fw_short_info"></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">服务介绍</h2>
+          <Group class="reset-vux-input">
+            <XTextarea :max='50' v-model="fw_intr"></XTextarea>
+          </Group>
+        </div>
+      </template>
+      <template v-else-if="step == 2">
+        <!-- <div class="form-group">
                         <h2 class="sub-title">标签:</h2>
                         <Group>
                             <XInput v-model="pay_num"></XInput>
                         </Group>
                     </div> -->
-          <!-- <div class="form-group">
+        <!-- <div class="form-group">
             <h2 class="sub-title">城市:</h2>
             <Group>
               <XInput v-model="pay_num"></XInput>
             </Group>
           </div> -->
-          <div class="form-group">
-            <h2 class="sub-title">分类:</h2>
-            <Group class="reset-vux-input">
-              <Selector :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'></Selector>
-            </Group>
+        <div class="form-group">
+          <h2 class="sub-title">分类:</h2>
+          <Group class="reset-vux-input">
+            <Selector :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'></Selector>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">子分类列表:</h2>
+          <Group class="reset-vux-input">
+            <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
+          </Group>
+        </div>
+        <div class="form-group" v-if="two_class_val">
+          <h2 class="sub-title">图文详情:</h2>
+          <div v-for="(item,index) in twList" :key="index" class="radio-box">
+            <mu-radio color='#e03233' :label="item.fw_content_name" v-model="tw" :value='item.id'></mu-radio>
+            <span @click="previewDetail(item.id)" class="yulan">预览</span>
           </div>
-          <div class="form-group">
-            <h2 class="sub-title">子分类列表:</h2>
-            <Group class="reset-vux-input">
-              <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
-            </Group>
-          </div>
-          <div class="form-group" v-if="two_class_val">
-            <h2 class="sub-title">图文详情:</h2>
-            <!-- <RadioGroup v-model="tw" color='#e03233'>
-              <span v-for="(item,index) in twList" :key="index">
-                <Radio :val='item.id'>{{item.fw_content_name}}</Radio>
-                <span @click="previewDetail(item.id)">预览</span>
-              </span>
-            </RadioGroup> -->
-            <!-- {{twList}} -->
-            <div>
-              <mu-radio color='#e03233' :label="item.fw_content_name" v-model="tw" :value='item.id'  v-for="(item,index) in twList" :key="index"></mu-radio>
-            </div>
-            
-            <!-- <mu-radio label='测试' v-model="tw1" value='31'></mu-radio> -->
-            <div v-transfer-dom class="tw-preview-detail">
-              <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
-                <!-- 123 -->
-                <div v-html="twDetailContent"></div>
-              </XDialog>
-            </div>
+          <mu-radio label='测试' v-model="tw1" value='31' style="display:none;"></mu-radio>
 
+
+          <div v-transfer-dom class="tw-preview-detail">
+            <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
+              <!-- 123 -->
+              <div v-html="twDetailContent"></div>
+            </XDialog>
           </div>
-          <div class="form-group">
-            <h2 class="sub-title">支持门店:</h2>
-            <CheckBoxGroup v-model="face" color='#e03233'>
-              <CheckBox shape="circle" :val='item.id' v-for="(item,index) in List" :key="index" class="check-box">{{item.face_name}}</CheckBox>
-            </CheckBoxGroup>
-          </div>
-          <!-- <div class="form-group">
+
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">支持门店:</h2>
+          <mu-checkbox v-model="face" :value='item.id' v-for="(item,index) in List" :key="index" :label='item.face_name' color='#e03233'></mu-checkbox>
+        </div>
+        <!-- <div class="form-group">
             <h2 class="sub-title">服务缩略图:</h2>
             <div class="uploadImage">
               <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div> -->
-          <!-- 安卓预览图片 -->
-          <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
-          <!-- IOS预览图片 -->
-          <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
+        <!-- 安卓预览图片 -->
+        <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
+        <!-- IOS预览图片 -->
+        <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
 
-          <!-- </div>
+        <!-- </div>
 
           </div> -->
-        </template>
-        <template v-else-if="step == 3">
-          <!-- <div class="form-group">
+      </template>
+      <template v-else-if="step == 3">
+        <!-- <div class="form-group">
             <h2 class="sub-title">有效期(天):</h2>
             <Group class="reset-vux-input">
               <XInput v-model="youxiao" :required='true'></XInput>
             </Group>
           </div> -->
-          <div class="form-group">
-            <h2 class="sub-title">原价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="yuanjia" type='number'></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">现价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="xianjia" type='number'></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">商户结算价(元):</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="jiesuanjia" type='number' :disabled='true'></XInput>
-            </Group>
-          </div>
-          <div class="form-group">
-            <h2 class="sub-title">规格:</h2>
-            <Group class="reset-vux-input">
-              <XInput v-model="fw_gg" :disabled='true'></XInput>
-            </Group>
-          </div>
-        </template>
-        <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
-        <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
-        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys">提交</XButton>
-        <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton>
-      </div>
+        <div class="form-group">
+          <h2 class="sub-title">原价(元):</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="yuanjia" type='number'></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">现价(元):</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="xianjia" type='number'></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">商户结算价(元):</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="jiesuanjia" type='number' :disabled='true'></XInput>
+          </Group>
+        </div>
+        <div class="form-group">
+          <h2 class="sub-title">规格:</h2>
+          <Group class="reset-vux-input">
+            <XInput v-model="fw_gg" :disabled='true'></XInput>
+          </Group>
+        </div>
+      </template>
+      <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
+      <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
+      <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys">提交</XButton>
+      <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton>
+    </div>
   </div>
 </template>
 
@@ -187,7 +180,7 @@
         one_class_val: "",
         two_class_val: "",
         tw: '',
-        tw1:31,
+        tw1: 31,
         face: [],
         tupian: "",
         //   第三部
@@ -241,6 +234,7 @@
             this.yuanjia = res.y_money;
             this.xianjia = res.money;
             this.tw = res.fw_content_id;
+            this.fw_gg = res.fw_gg;
           })
           console.log('Vue')
           console.log(this)
@@ -249,18 +243,10 @@
       }
     },
     watch: {
-      two_class_val(newval) {
-        console.log("触发");
-        console.log(newval);
-        // this.two_class = this.two_class_all.filter(item => {
-        //   return item.fid == val;
-        // });
-        // console.log(this.one_class_all);
-      },
-      face(newval) {},
       tw(newval) {
         var _this = this;
         if (this.twList.length > 0) {
+
           this.twList.map(m => {
             if (m.id == newval) {
               _this.fw_gg = m.fw_gg;
@@ -612,51 +598,83 @@
 </script>
 
 <style lang='scss'>
-  .demo1-item {
-    border: 1px solid #ececec;
-    padding: 5px 15px;
-  }
+  .bianjifw {
+    .vux-selector {
+      .weui-cell__hd {
+        visibility: hidden;
+        width: 1px;
+      }
+    }
+    .demo1-item {
+      border: 1px solid #ececec;
+      padding: 5px 15px;
+    }
 
-  .demo1-item-selected {
-    border: 1px solid green;
-  }
+    .demo1-item-selected {
+      border: 1px solid green;
+    }
 
-  .uploadImage {
-    display: flex;
-    .upload-btn {
-      margin: 0 0.4rem;
-      text-align: center;
+    .uploadImage {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 2rem;
-      height: 2rem;
-      border: 1px dashed #2a2a2a;
-      border-radius: 0.133333rem;
+      .upload-btn {
+        margin: 0 0.4rem;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 2rem;
+        height: 2rem;
+        border: 1px dashed #2a2a2a;
+        border-radius: 0.133333rem;
+      }
+      .thumb {
+        width: 2rem;
+        height: 2rem;
+        flex: none;
+      }
     }
-    .thumb {
-      width: 2rem;
-      height: 2rem;
-      flex: none;
-    }
-  }
 
-  .tw-preview-detail {
-    .weui-dialog {
-      display: block;
-      top: 0.4rem;
-      bottom: 0.4rem;
-      background: #ffffff;
-      overflow: scroll;
+    .tw-preview-detail {
+      .weui-dialog {
+        display: block;
+        top: 0.4rem;
+        bottom: 0.4rem;
+        background: #ffffff;
+        overflow: scroll;
+      }
     }
-  }
 
-  .form-group {
-    .check-box {
-      margin-right: .2rem/* 20/100 */
-      ;
-      margin-bottom: .15rem/* 15/100 */
-      ;
+    .form-group {
+      .check-box {
+        margin-right: .2rem/* 20/100 */
+        ;
+        margin-bottom: .15rem/* 15/100 */
+        ;
+      }
+      .mu-checkbox {
+        margin-right: .2rem/* 20/100 */
+        ;
+        margin-bottom: .2rem/* 20/100 */
+        ;
+      }
+      .radio-box {
+        display: flex;
+        align-items: center;
+        margin-right: .2rem/* 20/100 */
+        ;
+        margin-bottom: .2rem/* 20/100 */
+        ;
+        .yulan {
+          border-radius: .1rem/* 10/100 */
+          ;
+          padding: .1rem/* 10/100 */
+          ;
+          color: #e03233;
+          margin-left: .1rem/* 10/100 */
+          ;
+          border: 1px solid #e03233;
+        }
+      }
     }
   }
 

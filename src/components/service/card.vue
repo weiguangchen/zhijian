@@ -76,10 +76,16 @@
     background: #ffffff;
     padding: 0.36rem 0 0.36rem 0.4rem;
     border-bottom: 1px solid #dfdfdf;
-    .img {
+    .img-box {
+      overflow: hidden;
       width: 2.346667rem;
       height: 2.346667rem;
       margin-right: 0.32rem;
+      .img{
+        height: 100%;
+        max-width: none;
+        transform: translateX(-15%);
+      }
     }
     .info {
       display: flex;

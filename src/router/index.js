@@ -431,6 +431,13 @@ export const defaultRouterMaps = [{
       meta: {
         role: 32
       }
+    },{
+      path: 'orderDetail',
+      name: 'shanghuOrderDetail',
+      component: resolve => require(['@/pages/shanghu/jingying/orderDetail'], resolve),
+      meta: {
+        role: 32
+      }
     },]
 
   },
@@ -483,6 +490,13 @@ export const defaultRouterMaps = [{
       path: 'addhuodong',
       name: 'shanghumeaddhuodong',
       component: resolve => require(['@/pages/shanghu/me/addhuodong'], resolve),
+      meta: {
+        role: 43
+      }
+    }, {
+      path: 'hdList',
+      name: 'hdList',
+      component: resolve => require(['@/pages/shanghu/me/hdList'], resolve),
       meta: {
         role: 43
       }

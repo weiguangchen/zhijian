@@ -7,7 +7,10 @@
         <div class="form-box">
           <div class="total-info">
             <div class="thumb-wrap">
-              <img :src="fw_img" alt="" class="thumb">
+              <div class="img-box">
+                <img :src="fw_img" alt="" class="thumb">
+
+              </div>
               <star :val='all' class="star"></star>
             </div>
             <div class="star-info">
@@ -53,150 +56,171 @@
 </template>
 
 <script>
-import { ViewBox, ButtonTab, ButtonTabItem } from "vux";
-import { InfiniteScroll } from "vue-ydui/dist/lib.px/infinitescroll";
-import { Layout } from "vue-ydui/dist/lib.px/layout";
-import pinglun from "@/components/pinglun/index";
-import bigTitle from "@/components/bigTitle/index";
-import starprogress from "@/components/progress/index";
-import star from "@/components/star/index";
-export default {
-  data() {
-    return {
-      activeIndex: 0,
-      starinfo: {
-        one: "",
-        two: "",
-        three: "",
-        four: "",
-        five: ""
-      },
-      fw_img: "",
-      all_token: "",
-      all: "",
-      list: [],
-      p: 1
-    };
-  },
-  created() {
-    var _this = this;
-    this.getInfo();
-    this.getList().then(res => {
-      console.log(this);
-      console.log(res);
-      _this.list = res.list;
-    });
-  },
-  methods: {
-    loadList() {
-      console.log("到底了");
-      this.getList().then(res => {
-        this.list = this.list.concat(res.list);
-      });
-    },
-    getInfo() {
-      var _this = this;
-      this.$axios
-        .get(this.API_URL + "/Api/Shop/fw_token", {
-          params: {
-            fw_shop_id: _this.fwId
-          }
-        })
-        .then(({ data }) => {
-          _this.starinfo.one = data.one;
-          _this.starinfo.two = data.two;
-          _this.starinfo.three = data.three;
-          _this.starinfo.four = data.four;
-          _this.starinfo.five = data.five;
-          _this.fw_img = data.img;
-          _this.all_token = data.all_token;
-          _this.all = data.all;
-        });
-    },
-    getList() {
-      var _this = this;
-      return this.$axios
-        .get(this.API_URL + "/Api/Shop/p_fw_token", {
-          params: {
-            fw_shop_id: _this.fwId,
-            num: 4,
-            p: _this.p
-          }
-        })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.ok == 1) {
-            this.p++;
-          } else if (data.ok == 0) {
-            _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
-          }
-          this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
-          return data;
-        });
-    }
-  },
-  computed: {
-    fwId() {
-      return this.$route.params.pingjiaId;
-    }
-  },
-  components: {
-    bigTitle,
+  import {
     ViewBox,
     ButtonTab,
-    ButtonTabItem,
-    starprogress,
-    star,
-    pinglun,
-    InfiniteScroll,
+    ButtonTabItem
+  } from "vux";
+  import {
+    InfiniteScroll
+  } from "vue-ydui/dist/lib.px/infinitescroll";
+  import {
     Layout
-  }
-};
+  } from "vue-ydui/dist/lib.px/layout";
+  import pinglun from "@/components/pinglun/index";
+  import bigTitle from "@/components/bigTitle/index";
+  import starprogress from "@/components/progress/index";
+  import star from "@/components/star/index";
+  export default {
+    data() {
+      return {
+        activeIndex: 0,
+        starinfo: {
+          one: "",
+          two: "",
+          three: "",
+          four: "",
+          five: ""
+        },
+        fw_img: "",
+        all_token: "",
+        all: "",
+        list: [],
+        p: 1
+      };
+    },
+    created() {
+      var _this = this;
+      this.getInfo();
+      this.getList().then(res => {
+        console.log(this);
+        console.log(res);
+        _this.list = res.list;
+      });
+    },
+    methods: {
+      loadList() {
+        console.log("到底了");
+        this.getList().then(res => {
+          this.list = this.list.concat(res.list);
+        });
+      },
+      getInfo() {
+        var _this = this;
+        this.$axios
+          .get(this.API_URL + "/Api/Shop/fw_token", {
+            params: {
+              fw_shop_id: _this.fwId
+            }
+          })
+          .then(({
+            data
+          }) => {
+            _this.starinfo.one = data.one;
+            _this.starinfo.two = data.two;
+            _this.starinfo.three = data.three;
+            _this.starinfo.four = data.four;
+            _this.starinfo.five = data.five;
+            _this.fw_img = data.img;
+            _this.all_token = data.all_token;
+            _this.all = data.all;
+          });
+      },
+      getList() {
+        var _this = this;
+        return this.$axios
+          .get(this.API_URL + "/Api/Shop/p_fw_token", {
+            params: {
+              fw_shop_id: _this.fwId,
+              num: 4,
+              p: _this.p
+            }
+          })
+          .then(({
+            data
+          }) => {
+            console.log(data);
+            if (data.ok == 1) {
+              this.p++;
+            } else if (data.ok == 0) {
+              _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+            }
+            this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
+            return data;
+          });
+      }
+    },
+    computed: {
+      fwId() {
+        return this.$route.params.pingjiaId;
+      }
+    },
+    components: {
+      bigTitle,
+      ViewBox,
+      ButtonTab,
+      ButtonTabItem,
+      starprogress,
+      star,
+      pinglun,
+      InfiniteScroll,
+      Layout
+    }
+  };
+
 </script>
 
 <style lang='scss'>
-.pingjia-detail {
-  padding-bottom: 50px;
-  .big-title {
-    margin-bottom: 0.533333rem;
-  }
-  .total-info {
-    display: flex;
-    margin-bottom: 1.066667rem;
-    padding-left: 0.533333rem;
-    .thumb-wrap {
-      position: relative;
-      margin-right: 0.24rem;
-      .star {
-        position: absolute;
-        bottom: 0.266667rem;
-        left: 0.266667rem;
+  .pingjia-detail {
+    padding-bottom: 50px;
+    .big-title {
+      margin-bottom: 0.533333rem;
+    }
+    .total-info {
+      display: flex;
+      margin-bottom: 1.066667rem;
+      padding-left: 0.533333rem;
+      .thumb-wrap {
+        position: relative;
+        margin-right: 0.24rem;
+        .star {
+          position: absolute;
+          bottom: 0.266667rem;
+          left: 0.266667rem;
+        }
+        .img-box {
+          overflow: hidden;
+          width: 2.666667rem;
+          height: 2.133333rem;
+          border-radius: 0.106667rem;
+          .thumb {
+            height: 100%;
+            max-width: none;
+            transform: translateX(-15%);
+          }
+        }
       }
-    }
-    .thumb {
-      width: 2.666667rem;
-      height: 2.133333rem;
-      border-radius: 0.106667rem;
-    }
-    .star-info {
-      .star-line {
-        display: flex;
-        align-items: center;
-        .progress {
-          margin: 0 0.106667rem 0 0.16rem;
+
+      .star-info {
+        .star-line {
+          display: flex;
+          align-items: center;
+          .progress {
+            margin: 0 0.106667rem 0 0.16rem;
+          }
         }
       }
     }
-  }
-  .vux-button-group > a.vux-button-group-current {
-    background: #de3232;
-  }
-  .vux-button-group > a.vux-button-tab-item-first:after {
-    border: 1px solid #de3232;
+    .vux-button-group>a.vux-button-group-current {
+      background: #de3232;
+    }
+    .vux-button-group>a.vux-button-tab-item-first:after {
+      border: 1px solid #de3232;
+    }
+
+    .vux-button-group>a.vux-button-tab-item-last:after {
+      border: 1px solid #de3232;
+    }
   }
 
-  .vux-button-group > a.vux-button-tab-item-last:after {
-    border: 1px solid #de3232;
-  }
-}
 </style>
