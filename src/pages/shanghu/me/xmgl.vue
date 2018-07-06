@@ -65,9 +65,7 @@
         <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
         <!-- IOS预览图片 -->
         <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
-
         <!-- </div>
-
           </div> -->
       </template>
       <template v-else-if="step == 3">

@@ -9,11 +9,13 @@
       <div class="account-list">
         <Group class="reset-vux-input account-item" v-for="(item,index) in accountList" :key="index">
           <div class="tit">账号的名称：{{item.sub_name}}</div>
-          <div class="tit">管理的门店：<span v-for="(item,index) in item.face" :key="index">{{item.face_name}}&nbsp;&nbsp;&nbsp;</span></div>
+          <div class="tit">管理的门店：
+            <span v-for="(item,index) in item.face" :key="index">{{item.face_name}}&nbsp;&nbsp;&nbsp;</span>
+          </div>
           <!-- <div class="tit last-tit">账号说明：李海东</div> -->
           <div class="xbtn-box">
-            <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton>
-            <XButton :mini='true' :plain='true' type='warn' class="mini-btn">编辑</XButton>
+            <!-- <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton> -->
+            <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="edit_son(item.phone,item.id)">编辑</XButton>
           </div>
         </Group>
       </div>
@@ -37,7 +39,7 @@
   export default {
     data() {
       return {
-        accountList:[]
+        accountList: []
       };
     },
     created() {
@@ -60,79 +62,14 @@
       showPopup(val) {
         this.$emit("showPopup", val);
       },
-      add_face() {
-        var _this = this;
-        console.log("提交");
-        this.$axios
-          .get(this.API_URL + "/Api/Shop/add_face", {
-            params: {
-              face_name: _this.face_name,
-              jd: _this.loc.latlng.lat,
-              wd: _this.loc.latlng.lng,
-              fw_shop_id: this.userinfo.shop[0].id
-            }
-          })
-          .then(({
-            data
-          }) => {
-            if (data.status == 1) {} else if (data.status == 0) {
-              this.$vux.alert.show({
-                title: "提示",
-                content: "创建门店失败，请重试！",
-                onHide() {
-                  _this.$router.replace({
-                    path: "/shanghu/me/mendian"
-                  });
-                }
-              });
-            }
-          });
-      },
-      change_face() {
-        var _this = this;
-        this.$axios
-          .get(this.API_URL + "/Api/Shop/edit_face", {
-            params: {
-              face_name: _this.face_name,
-              jd: _this.loc.latlng.lat,
-              wd: _this.loc.latlng.lng,
-              id: _this.faceId
-            }
-          })
-          .then(({
-            data
-          }) => {
-            console.log(data);
-            if (data.status == 1) {
-              this.$vux.alert.show({
-                title: "提示",
-                content: "修改成功！",
-                onHide() {
-                  _this.$router.replace({
-                    path: "/shanghu/me/mendian"
-                  });
-                }
-              });
-            } else if (data.status == 0) {
-              this.$vux.alert.show({
-                title: "提示",
-                content: "修改失败！",
-                onHide() {
-                  _this.$router.replace({
-                    path: "/shanghu/me/mendian"
-                  });
-                }
-              });
-            }
-          });
-      },
-      selectAdd() {
-        console.log(this.mapShow);
-        this.mapShow = true;
-      },
-      finishAdd(loc) {
-        this.mapShow = false;
-        this.loc = loc;
+      edit_son(phone,id) {
+        this.$router.push({
+          path: '/shanghu/me/addSonAccount',
+          query: {
+            phone,
+            id
+          }
+        });
       },
       setAuth() {
         this.$router.push('/shanghu/me/setAuthority');

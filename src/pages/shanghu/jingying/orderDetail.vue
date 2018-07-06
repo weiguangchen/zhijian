@@ -94,12 +94,12 @@
           .get(this.API_URL + "/Api/Order/get_order_content", {
             params: {
               id: this.orderId,
-              zf:this.zf
+              zf: this.zf
             }
           })
           .then(res => {
             console.log(res);
-            this.detail = res.data[0];
+            this.detail = res.data;
           });
       }
     },
@@ -107,7 +107,7 @@
       orderId() {
         return this.$route.query.id;
       },
-      zf(){
+      zf() {
         return this.$route.query.zf;
       }
     },

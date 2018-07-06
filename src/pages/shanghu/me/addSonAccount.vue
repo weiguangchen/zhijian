@@ -3,14 +3,23 @@
     <div class=" creat-huodong">
       <bigTitle title='添加子账户' @showPopup='showPopup'></bigTitle>
       <div class="form-box">
+
+        <div class="form-group">
+          <h2 class="sub-title">新增账号身份</h2>
+          {{shenfen}} {{shenfenList}}
+          <div v-for="(item,index) in shenfenList"  :key="index" class="">
+            <mu-radio color='#e03233' :value="item.id" v-model="shenfen" :label="item.name" class="radio-box"  ></mu-radio>
+          </div>
+          <!-- <mu-radio label="隐藏" v-model="shenfen1" value='999' style="display:none;"></mu-radio> -->
+        </div>
+        {{faceVal}}
         <div class="form-group">
           <h2 class="sub-title">选择账号所属门店</h2>
-          <CheckBoxGroup v-model="faceVal" color="#e03233">
+          <!-- <CheckBoxGroup v-model="faceVal" color="#e03233">
             <CheckBox v-for="(item,index) in face_list" :key="index" :val='item.id' shape="circle">{{item.face_name}}</CheckBox>
-          </CheckBoxGroup>
-
+          </CheckBoxGroup> -->
+          <mu-checkbox v-model="faceVal" :value='item.id' v-for="(item,index) in face_list" :key="index" :label='item.face_name' color='#e03233'></mu-checkbox>
         </div>
-
         <div class="form-group">
           <h2 class="sub-title">新增账号的名称</h2>
           <Group class="reset-vux-input">
@@ -29,13 +38,10 @@
             <XInput v-model="rephone" placeholder='请再次输入手机号'></XInput>
           </Group>
         </div>
-
         <XButton type='warn' class="xbtn" @click.native="submitFn" :disabled='submiting'>提交</XButton>
         <!-- <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton> -->
       </div>
-
     </div>
-
   </div>
 </template>
 
@@ -70,7 +76,13 @@
       return {
         submiting: false,
         face_list: [],
+        shenfenList: [{
+          name: '服务员',
+          id: 1
+        }],
 
+        shenfen: '',
+        shenfen1: 999,
         faceVal: [],
         account_name: "",
         phone: "",
@@ -81,7 +93,6 @@
       // this.$eruda.init();
       var _this = this;
       this.$emit("showPopup", false);
-
       this.$axios
         .get(this.API_URL + "/Api/UserShow/son_add", {
           params: {
@@ -95,7 +106,33 @@
           _this.face_list = data
         });
     },
+    mounted() {
+      var _this = this;
+      this.$axios
+        .get(_this.API_URL + "/Api/UserShow/son_edit", {
+          params: {
+            phone: this.queryPhone
+          }
+        })
+        .then(({
+          data
+        }) => {
+          console.log(data)
+          _this.$nextTick(() => {
+            _this.shenfen = data[0].shenfen;
+            data[0].face.map(m => {
+              this.faceVal.push(m.face_id);
+            });
+            _this.account_name = data[0].sub_name;
+            _this.phone = data[0].phone;
+            _this.rephone = data[0].phone;
+          })
 
+          
+
+        });
+
+    },
     methods: {
       showPopup(val) {
         this.$emit("showPopup", val);
@@ -103,37 +140,76 @@
 
       submitFn() {
         var _this = this;
-        //   this.submiting = true;
         this.submiting = true;
         this.checkForm().then(
           res => {
             const params = {
               shop_id: this.userinfo.shop[0].id,
+              shenfen: this.shenfen,
               sub_name: this.account_name,
               phone: this.phone,
               face_id: this.faceVal
             };
-
             console.log(params);
-
-            this.$axios
-              .get(_this.API_URL + "/Api/UserShow/add_son", {
-                params: params
+            if (this.queryPhone) {
+              // 编辑
+              Object.assign(params, {
+                id: this.accountId
               })
-              .then(({
-                data
-              }) => {
-                _this.submiting = false;
-                this.$vux.alert.show({
-                  title: "提示",
-                  content: '创建子账户成功！',
-                  onHide(){
-                    _this.$router.replace({
-                      path:'/shanghu/me/account'
-                    })
+              this.$axios
+                .get(_this.API_URL + "/Api/UserShow/edit_son", {
+                  params
+                })
+                .then(({
+                  data
+                }) => {
+                  console.log(data)
+                  if (data.status == 1) {
+                    this.$vux.alert.show({
+                      title: "提示",
+                      content: '修改子账户成功！',
+                      onHide() {
+                        _this.$router.replace({
+                          path: '/shanghu/me/account'
+                        })
+                      }
+                    });
+                  } else {
+                    this.$vux.alert.show({
+                      title: "提示",
+                      content: '修改子账户失败！',
+                      onHide() {
+                        _this.$router.replace({
+                          path: '/shanghu/me/account'
+                        })
+                      }
+                    });
                   }
                 });
-              });
+            } else {
+              // 新增
+              this.$axios
+                .get(_this.API_URL + "/Api/UserShow/add_son", {
+                  params
+                })
+                .then(({
+                  data
+                }) => {
+                  _this.submiting = false;
+                  this.$vux.alert.show({
+                    title: "提示",
+                    content: '创建子账户成功！',
+                    onHide() {
+                      _this.$router.replace({
+                        path: '/shanghu/me/account'
+                      })
+                    }
+                  });
+                });
+            }
+
+
+
           },
           err => {
             this.submiting = false;
@@ -141,26 +217,16 @@
         );
       },
 
-      // 获取已有数据
-      getOldInfo() {
-        var _this = this;
-        return this.$axios
-          .get(this.API_URL + "/api/ShopFw/edit_fw", {
-            params: {
-              id: _this.querys
-            }
-          })
-          .then(res => {
-            console.log(res.data.list[0]);
-            return res.data.list[0];
-          });
-      },
+
       checkForm() {
         console.log(!/^[u4e00-u9fa5]{6,}$/.test(this.account_name));
 
         var _this = this;
         return new Promise((resolve, reject) => {
-          if (this.faceVal.length <= 0) {
+          if (!this.shenfen) {
+            _this.alertWarning("请选择账号身份！");
+            reject();
+          } else if (this.faceVal.length <= 0) {
             _this.alertWarning("请选择门店！");
             reject();
           } else if (!this.account_name) {
@@ -187,24 +253,11 @@
       }
     },
     computed: {
-      querys() {
-        return this.$route.query.fwId;
+      queryPhone() {
+        return this.$route.query.phone;
       },
-      fw_num() {
-        var arr = [];
-
-        this.fw_list.map((m, index) => {
-          if (this.fw_selceted[index] >= 0) {
-            var item = [];
-            item[0] = m.fw_mingzi;
-            item[1] = m.shop_fw_id;
-            item[2] = this.fw_selceted[index];
-            //   item = JSON.stringify(item);
-            arr.push(item);
-          }
-        });
-        //   arr = JSON.stringify(arr);
-        return arr;
+      accountId() {
+        return this.$route.query.id;
       }
     },
     components: {
@@ -300,6 +353,16 @@
         align-items: center;
       }
     }
+    .yc-radio {
+      visibility: hidden;
+    }
+    .mu-checkbox {
+      margin-right: .2rem/* 20/100 */
+      ;
+      margin-bottom: .2rem/* 20/100 */
+      ;
+    }
+
   }
 
 </style>

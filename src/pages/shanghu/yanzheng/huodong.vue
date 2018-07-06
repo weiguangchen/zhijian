@@ -70,7 +70,6 @@ export default {
         })
         .then(res => {
           console.log(res);
-
           _this.$vux.alert.show({
               title:'提示',
               content:res.data.log
