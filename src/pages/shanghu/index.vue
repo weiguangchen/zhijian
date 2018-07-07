@@ -4,7 +4,7 @@
       <router-view></router-view>
     </div>
     <tabbar></tabbar>
-    <!-- <router-view name="tab"></router-view> -->
+    <router-view name="tab"></router-view>
   </div>
 </template>
 

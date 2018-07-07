@@ -1,27 +1,10 @@
 <template>
-    <!-- <Tabbar>
-        <TabbarItem link='/shanghu/yanzheng'>
-            <span slot="label">验证</span>
-        </TabbarItem>
-        <TabbarItem link='/shanghu/pingjia'>
-            <span slot="label">评价</span>
-        </TabbarItem>
-        <TabbarItem link='/shanghu/jingying'>
-            <span slot="label">经营</span>
-        </TabbarItem>
-        <TabbarItem link='/shanghu/me'>
-            <span slot="label">我的</span>
-        </TabbarItem>
-    </Tabbar> -->
      <div class="my-tabbar">
         <router-link class="tabbar-item" to="/shanghu/yanzheng/index">
             <i class="iconfont icon-shouye"></i><div>验证</div>
         </router-link>
         <router-link class="tabbar-item" to="/shanghu/pingjias/index">
-            <i class="iconfont icon-shangcheng"></i><div>评价</div>
-        </router-link>
-        <router-link class="tabbar-item" to="/shanghu/jingying/index">
-            <i class="iconfont icon-faxian"></i><div>经营</div>
+            <i class="iconfont icon-shangcheng"></i><div>订单</div>
         </router-link>
         <router-link class="tabbar-item" to="/shanghu/me/index">
             <i class="iconfont icon-wode"></i><div>我的</div>
@@ -36,7 +19,6 @@ export default {
   data() {
     return {};
   },
-  name:'shanghuTab',
   components: {
       Tabbar,TabbarItem
   }

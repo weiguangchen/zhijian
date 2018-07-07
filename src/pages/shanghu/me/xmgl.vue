@@ -45,7 +45,8 @@
             <mu-radio color='#e03233' :label="item.fw_content_name" v-model="tw" :value='item.id'></mu-radio>
             <span @click="previewDetail(item.id)" class="yulan">预览</span>
           </div>
-          <mu-radio label='测试' v-model="tw1" value='31' style="display:none;"></mu-radio>
+          <span></span>
+          <!-- <mu-radio label='测试' v-model="tw1" value='31' style="display:none;"></mu-radio> -->
           <div v-transfer-dom class="tw-preview-detail">
             <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
               <!-- 123 -->

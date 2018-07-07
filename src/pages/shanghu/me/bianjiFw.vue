@@ -164,7 +164,7 @@
         twList: {},
         twDetailShow: false,
         twDetailContent: "",
-        step: 2,
+        step: 1,
         imgs: "",
         localData: "",
         system: 1,
