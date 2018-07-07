@@ -49,13 +49,12 @@
             <Selector :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
           </Group>
         </div>
-        <div class="form-group" v-if="two_class_val">
+        <div class="form-group" v-if='twList.length>0'>
           <h2 class="sub-title">图文详情:</h2>
           <div v-for="(item,index) in twList" :key="index" class="radio-box">
             <mu-radio color='#e03233' :label="item.fw_content_name" v-model="tw" :value='item.id'></mu-radio>
             <span @click="previewDetail(item.id)" class="yulan">预览</span>
           </div>
-          <mu-radio label='测试' v-model="tw1" value='31' style="display:none;"></mu-radio>
 
 
           <div v-transfer-dom class="tw-preview-detail">
@@ -180,7 +179,6 @@
         one_class_val: "",
         two_class_val: "",
         tw: '',
-        tw1: 31,
         face: [],
         tupian: "",
         //   第三部
@@ -233,11 +231,10 @@
             this.youxiao = parseInt(res.use_day);
             this.yuanjia = res.y_money;
             this.xianjia = res.money;
-            this.tw = res.fw_content_id;
+            this.tw =res.fw_content_id;
             this.fw_gg = res.fw_gg;
           })
-          console.log('Vue')
-          console.log(this)
+
           // this.jiesuanjia = res.j_money;
         });
       }

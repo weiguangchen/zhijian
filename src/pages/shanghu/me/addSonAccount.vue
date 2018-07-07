@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class=" creat-huodong">
+    <div class="add-account">
       <bigTitle title='添加子账户' @showPopup='showPopup'></bigTitle>
       <div class="form-box">
 
         <div class="form-group">
           <h2 class="sub-title">新增账号身份</h2>
-          <mu-radio color='#e03233' label="服务员" v-model="sf" value="1"   class="radio-box"></mu-radio>
+          <mu-radio color='#e03233' :label="item.name" v-model="sf" :value="item.id"   class="radio-box" v-for='(item,index) in shenfenList' :key='index'></mu-radio>
         </div>
         <div class="form-group">
           <h2 class="sub-title">选择账号所属门店</h2>
@@ -67,14 +67,10 @@ export default {
         {
           name: "服务员",
           id: 1
-        },
-        {
-          name: "管理员",
-          id: 2
         }
       ],
 
-      sf: {},
+      sf: '',
       test:'',
       faceVal: [],
       account_name: "",
@@ -110,9 +106,9 @@ export default {
         console.log("旧数据");
         console.log(data);
 
-        _this.$nextTick(() => {
-          _this.sf = data[0].shenfen;
-        });
+
+          _this.sf =parseInt(data[0].shenfen);
+        
         _this.test = data[0].shenfen;
         data[0].face.map(m => {
           this.faceVal.push(m.face_id);
@@ -285,7 +281,7 @@ export default {
   }
 }
 
-.creat-huodong {
+.add-account {
   .fw-item {
     margin: 0 0.426667rem;
     border-bottom: 1px solid #e4e4e4;
