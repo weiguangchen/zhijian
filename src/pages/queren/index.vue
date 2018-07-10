@@ -11,11 +11,11 @@
     </div>
     <div class="fw_num">
       <Group>
-        <XNumber title='购买数量' :min='1' v-model="num"  v-if="!card_list.length>0"></XNumber>
+        <XNumber title='购买数量' :min='1' v-model="num" v-if="!card_list.length>0"></XNumber>
         <Cell title='总价' :value='money'></Cell>
-        <XInput title='联系人' v-model="lianxiren"></XInput>
-        <XInput title='联系电话' v-model="phone"></XInput>
-        <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress"></XInput>
+        <XInput title='联系人' v-model="lianxiren" text-align='right'></XInput>
+        <XInput title='联系电话' v-model="phone" text-align='right'></XInput>
+        <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress" text-align='right'></XInput>
       </Group>
     </div>
 
@@ -115,7 +115,7 @@
               title: "提示",
               content: "是否购买该服务？",
               onCancel() {
-                this.submiting = false;
+                _this.submiting = false;
               },
               onConfirm() {
                 if (_this.card_val) {
@@ -263,7 +263,12 @@
         return this.$route.query.shopid;
       },
       money() {
-        return `${this.num * this.fwInfo.money}元/${this.fwInfo.fw_gg}`;
+        if (this.fwInfo.fw_gg) {
+          return `${this.num * this.fwInfo.money}元/${this.fwInfo.fw_gg}`;
+        } else {
+          return `${this.num * this.fwInfo.money}元`;
+        }
+
       }
     },
     components: {

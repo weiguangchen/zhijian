@@ -1,6 +1,6 @@
 <template>
   <div class="shanghu-page">
-    <bigTitle title="确认身份" :icon='false'></bigTitle>
+    <bigTitle title="确认商户身份" :icon='false'></bigTitle>
     <div class="my-form">
       <div class="form-box">
 

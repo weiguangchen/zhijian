@@ -25,15 +25,16 @@
               <span v-if="item.zf != 1">需付款：¥{{item.order_price}}</span>
             </div>
             <div class="xbtn">
-              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 0">去支付</XButton>
-              <template v-if="item.status == 1">
-                <!-- <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton> -->
+              <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 0">去支付</XButton> -->
+              <!-- <template v-if="item.status == 1">
+                <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
                 <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(item.order_num,item.zf)">去评价</XButton>
-              </template>
-              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 2">再次购买</XButton>
+              </template> -->
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 1">去退款</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 2" @click.native="buy(item.shop_fw_id)">再次购买</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="item.status == 3">退款中</XButton>
-              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 4">再次购买</XButton>
-              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 5">再次购买</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 4"  @click.native="buy(item.shop_fw_id)">再次购买</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 5"  @click.native="buy(item.shop_fw_id)">再次购买</XButton>
             </div>
           </div>
         </div>
@@ -151,6 +152,12 @@
         this.getOrderList().then(res => {
           this.orderList = this.orderList.concat(res.list);
         });
+      },
+      buy(id){
+        console.log(id)
+        this.$router.push({
+          path:'/serviceDetail/'+id
+        })
       }
     },
     computed: {

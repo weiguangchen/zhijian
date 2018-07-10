@@ -340,7 +340,7 @@
                 }) => {
                   _this.submiting = false;
                   console.log(data);
-                  if (data == 1) {
+                  if (data.status == 1) {
                     this.$vux.alert.show({
                       title: "提示",
                       content: "添加活动成功!",
@@ -350,7 +350,7 @@
                         });
                       }
                     });
-                  } else if (data == 0) {
+                  } else if (data.status == 0) {
                     this.$vux.alert.show({
                       title: "提示",
                       content: "添加活动失败!",
@@ -475,8 +475,8 @@
           this.sqVal = data[0].sq_id;
           this.one_class_val = data[0].card_class_id;
           this.tw = data[0].card_content_id;
-          this.yuanjia = data[0].card_money;
-          this.huodongjia = data[0].card_ymoney
+          this.huodongjia = data[0].card_money;
+          this.yuanjia = data[0].card_ymoney
         })
       },
       checkSystem() {

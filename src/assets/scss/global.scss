@@ -8,6 +8,7 @@ body {
   overflow-x: hidden;
   // box-sizing: border-box;
   font-family: '微软雅黑';
+  color: #000000;
 }
 img{
   max-width:100%;
@@ -79,6 +80,10 @@ a {
   width: 100%;
 }
 
-a.active-router {
+.active-router {
   color: #de3232;
+}
+
+.ivu-select-dropdown{
+  max-height: none;
 }

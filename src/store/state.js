@@ -4,7 +4,8 @@ const state = {
     entryUrl:'',    /* jssdk在ios端授权地址是第一次进入地址 */
 
     
-    routerMap:[],    
+    routerMap:[],   
+    routerStatus:false, 
 
     location:'',   /*   定位信息 */
     isLoading:false,    /* 跳转页面等待 */

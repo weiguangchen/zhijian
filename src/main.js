@@ -15,6 +15,14 @@ import { Radio,Checkbox } from 'muse-ui';
 // import 'muse-ui/lib/styles/theme.less';
 Vue.component('mu-radio',Radio);
 Vue.component('mu-checkbox',Checkbox);
+
+import 'iview/dist/styles/iview.css';
+import { Select , Option  } from 'iview';
+Vue.component('iview-select', Select);
+Vue.component('iview-op', Option );
+
+
+
 import VueHead from 'vue-head'
 Vue.use(VueHead)
 /* 引入flexible自适应 */

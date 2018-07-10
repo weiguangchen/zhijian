@@ -1,109 +1,131 @@
 <template>
-  <div>
-    <bigTitle title="订单详情" @showPopup='showPopup' :icon='false'></bigTitle>
-    <div class="order-detail ">
-      <div class="order-wrapper">
-        <div class="order-num">
-          <h2>①&nbsp;&nbsp;门店接单</h2>
-          <div>订单号：{{detail.order_num}}</div>
-          <div>下单时间：{{detail.date}}</div>
-        </div>
-        <div class="order-info">
-          <div class="line">
-            <span class="title">服务名称：</span>
-            <span class="content">京东IE我就发文件费我个金佛IE文件佛IE文件佛IE我就分为</span>
+  <div class="order-detail-wrapper">
+    <betterScroll>
+      <bigTitle title="订单详情" @showPopup='showPopup' :icon='false'></bigTitle>
+      <div class="order-detail ">
+        <div class="order-wrapper">
+          <div class="order-num">
+            <h2>①&nbsp;&nbsp;门店接单</h2>
+            <div>订单号：{{detail.order_num}}</div>
+            <div>下单时间：{{detail.date}}</div>
           </div>
-          <div class="line">
-            <span class="title">下单用户：</span>
-            <span class="content">{{detail.xingming}}</span>
-          </div>
-          <div class="line">
-            <span class="title">联系方式：</span>
-            <span class="content">{{detail.dianhua}}</span>
-          </div>
-          <div class="line">
-            <span class="title">地址：</span>
-            <span class="content">{{detail.adress}}</span>
-          </div>
-          <div class="line">
-            <span class="title">交易数量：</span>
-            <span class="content">{{detail.shop_num}}</span>
-          </div>
-          <div class="line">
-            <span class="title">交易金额：</span>
-            <span class="content">{{detail.order_price}}</span>
-          </div>
-          <div class="line">
-            <span class="title">支持门店：</span>
-            <span class="content">十一经路</span>
-          </div>
-        </div>
-      </div>
-      <div class="jiedan">
-        <div>
-          <span>派单人：孙宇</span>
-          <span>服务人员：李海东</span>
-        </div>
-        <div class="date">派单时间：2018-2129939391099</div>
-        <XButton type='warn'>接单</XButton>
-      </div>
-      <div class="uploadImg">
-        <h2>②&nbsp;&nbsp;上传服务图片</h2>
-        <div class="fw-img">
-          <h3>服务前照片</h3>
-          <div class="upload-wrapper">
-            <div class="upload-btn" @click="chooseImg(1)">上传图片</div>
-            <div class="upload-box" v-for="(item,index) in beforeFwYulantu" :key="index">
-              <div class="img-box">
-                <img :src="item" alt="" class="img">
-              </div>
-              <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index,1)"></i>
+          <div class="order-info">
+            <div class="line">
+              <span class="title">服务名称：</span>
+              <span class="content">{{detail.fw_mingzi}}</span>
             </div>
-          </div>
-          <h3>服务后照片</h3>
-          <div class="upload-wrapper">
-            <div class="upload-btn" @click="chooseImg(2)">上传图片</div>
-            <div class="upload-box" v-for="(item,index) in afterFwYulantu" :key="index">
-              <div class="img-box">
-                <img :src="item" alt="" class="img">
-              </div>
-              <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index,2)"></i>
+            <div class="line">
+              <span class="title">下单用户：</span>
+              <span class="content">{{detail.xingming}}</span>
+            </div>
+            <div class="line">
+              <span class="title">联系方式：</span>
+              <span class="content">{{detail.dianhua}}</span>
+            </div>
+            <div class="line">
+              <span class="title">地址：</span>
+              <span class="content">{{detail.adress}}</span>
+            </div>
+            <div class="line">
+              <span class="title">交易数量：</span>
+              <span class="content">{{detail.shop_num}}</span>
+            </div>
+            <div class="line">
+              <span class="title">交易金额：</span>
+              <span class="content">{{detail.order_price}}</span>
+            </div>
+            <div class="line">
+              <span class="title">支持门店：</span>
+              <span class="content">十一经路</span>
             </div>
           </div>
         </div>
-      </div>
-      <div class="btns">
-        <XButton type='warn' class="btn">完成服务</XButton>
-        <XButton class="btn">退单</XButton>
-      </div>
-    </div>
+        <div class="jiedan">
+          <div>
+            <span>派单人：{{detail.paidan_xingming}}</span>
+            <span>服务人员：{{detail.fw_user}}</span>
+          </div>
+          <div class="date">派单时间：{{detail.paidan_time}}</div>
+          <XButton type='warn' @click.native="jiedan" v-if="detail.paidan_status == 2">接单</XButton>
+          <XButton :disabled='detail.paidan_status == 3' v-if="detail.paidan_status == 3">已接单</XButton>
+          <XButton :disabled='detail.paidan_status == 5' v-if="detail.paidan_status == 5">申请退单中...</XButton>
+        </div>
+        <!-- <template v-if="detail.paidan_status == 3"> -->
+        <div class="uploadImg">
+          <h2>②&nbsp;&nbsp;上传服务图片</h2>
+          <div class="fw-img">
+            <h3>服务前照片</h3>
+            <div class="upload-wrapper">
+              <div class="upload-btn" @click="chooseImg(1)">上传图片</div>
+              <div class="upload-box" v-for="(item,index) in beforeFwYulantu" :key="index">
+                <div class="img-box">
+                  <img :src="item" alt="" class="img">
+                </div>
+                <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index,1)"></i>
+              </div>
+            </div>
+            <h3>服务后照片</h3>
+            <div class="upload-wrapper">
+              <div class="upload-btn" @click="chooseImg(2)">上传图片</div>
+              <div class="upload-box" v-for="(item,index) in afterFwYulantu" :key="index">
+                <div class="img-box">
+                  <img :src="item" alt="" class="img">
+                </div>
+                <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index,2)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btns">
+          <XButton type='warn' class="btn">完成服务</XButton>
+          <XButton class="btn" @click.native='tuidan'>退单</XButton>
 
+        </div>
+        <!-- </template> -->
+
+      </div>
+    </betterScroll>
+    <Popup v-model="alertShow" position='center'>
+      <Group>
+        <XTextarea v-model="tuidan_info"></XTextarea>
+        <XButton @click.native='submit_tuidan' :disabled='td_submiting'>提交</XButton>
+      </Group>
+    </Popup>
   </div>
+
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll/index';
+  import {
+    Popup
+  } from 'vue-ydui/dist/lib.px/popup';
   import {
     Selector,
     XButton,
-    Group
+    Group,
+    XTextarea
   } from 'vux';
   import bigTitle from "@/components/bigTitle/index";
   import checkLogin from '@/mixins/checkLogin.js';
   export default {
     data() {
       return {
+        system: 1,
         son: [],
         detail: {},
+        alertShow: false,
+        td_submiting: false,
+        tuidan_info: '',
 
-
+        // 服务前本地图片地址
         beforeFwOriginImgs: [],
         beforeFwYulantu: [],
         beforeFwImgs: [],
-        /* 服务前本地图片地址 */
+        /* 服务后本地图片地址 */
         afterFwOriginImgs: [],
         afterFwYulantu: [],
         afterFwImgs: [],
-        system: 1,
       };
     },
     created() {
@@ -111,11 +133,70 @@
       this.checkSystem();
       this.$emit("showPopup", false);
       this.$eruda.init();
-      //   this.get_detail();
+      this.get_detail();
     },
     methods: {
       showPopup(val) {
         this.$emit("showPopup", val);
+      },
+      jiedan() {
+        this.$axios
+          .get(this.API_URL + "/Api/order/js_order", {
+            params: {
+              zf: this.zf,
+              id: this.orderId
+            }
+          })
+          .then(({
+            data
+          }) => {
+            console.log(data);
+            this.$vux.alert.show({
+              title: '提示',
+              content: '接单成功！',
+            })
+            this.get_detail();
+          });
+      },
+      tuidan() {
+        this.alertShow = true;
+      },
+      submit_tuidan() {
+        var _this = this;
+        this.td_submiting = true;
+
+        if (!this.tuidan_info) {
+          this.$vux.alert.show({
+            title: '提示',
+            content: '请填写申请信息！'
+          })
+          this.td_submiting = false;
+        } else {
+          this.$axios.get(this.API_URL + '/Api/order/jj_order', {
+            params: {
+              phone: this.userinfo.uphone,
+              tui_liyou: this.tuidan_info,
+              zf: this.zf,
+              order_id: this.orderId
+            }
+          }).then(({
+            data
+          }) => {
+            console.log(data)
+            _this.alertShow = false;
+            _this.$vux.alert.show({
+              title: '提示',
+              content: data.log,
+              onHide() {
+                _this.$router.push({
+                  path: '/shanghu/jingying/orderGl'
+                })
+              }
+            })
+
+          })
+        }
+
       },
       get_son() {
         this.$axios
@@ -139,7 +220,7 @@
           })
           .then(res => {
             console.log(res);
-            this.detail = res.data[0];
+            this.detail = res.data;
           });
       },
       checkSystem() {
@@ -154,6 +235,8 @@
         console.log("系统：" + this.system);
       },
       chooseImg(type) {
+        console.log('type:' + type)
+        console.log(type == 1)
         var _this = this;
         this.$wx.chooseImage({
           count: 9, // 默认9
@@ -165,31 +248,33 @@
             console.log(res.localIds)
             if (type == 1) {
               // 服务前图片
-              _this.beforeFwOriginImgs = _this.beforeFwOriginImgs.concat(res.localIds);
+              _this.beforeFwOriginImgs.push(res.localIds);
               if (_this.system == 1) {
                 console.log(1)
                 // 安卓
-                _this.beforeFwYulantu = _this.beforeFwYulantu.concat(res.localIds);
+                _this.beforeFwYulantu.push(res.localIds);
               } else if (_this.system == 2) {
                 console.log(2)
                 // ios 复制原图
-                var clone = res.localIds;
+                var clone = [...res.localIds]
                 console.log(clone)
                 // 生成ios预览图
                 _this.getLocalImgData(clone, 1);
+                // _this.uploadImg(clone, 1)
               }
             } else if (type == 2) {
               console.log(2)
               // 服务后图片
-              _this.afterFwOriginImgs = _this.afterFwOriginImgs.concat(res.localIds);
+              _this.afterFwOriginImgs.push(res.localIds);
               if (_this.system == 1) {
                 // 安卓
-                _this.afterFwYulantu = _this.afterFwYulantu.concat(res.localIds);
+                _this.afterFwYulantu.push(res.localIds);
               } else if (_this.system == 2) {
                 // ios 复制原图
-                var clone = res.localIds;
+                var clone = [...res.localIds]
                 // 生成ios预览图
                 _this.getLocalImgData(clone, 2);
+                // _this.uploadImg(clone, 2)
               }
             }
           }
@@ -215,9 +300,9 @@
                 .then(res => {
                   console.log(res);
                   if (type == 1) {
-                    _this.beforeFwImgs = _this.beforeFwImgs.concat(res.data);
+                    _this.beforeFwImgs.push(res.data);
                   } else if (type == 2) {
-                    _this.afterFwImgs = _this.afterFwImgs.concat(res.data);
+                    _this.afterFwImgs.push(res.data);
                   }
                 });
             }
@@ -261,16 +346,31 @@
           this.$wx.getLocalImgData({
             localId: curimg, // 图片的localID
             success: function (res) {
+                console.log(res)
               if (type == 1) {
-                _this.beforeFwYulantu = _this.beforeFwYulantu.concat(res.localData); // localData是图片的base64数据，可以用img标签显示
+                _this.beforeFwYulantu.push(res.localData); // localData是图片的base64数据，可以用img标签显示
               } else if (type == 2) {
-                _this.afterFwYulantu = _this.afterFwYulantu.concat(res.localData); // localData是图片的base64数据，可以用img标签显示
+                _this.afterFwYulantu.push(res.localData); // localData是图片的base64数据，可以用img标签显示
               }
               _this.getLocalImgData(img);
             }
           });
         }
       },
+      finishFw() {
+        this.$axios.get(this.API_URL + '/Api/order/yes_order', {
+          params: {
+            zf: this.zf,
+            id: this.orderId,
+            q_img: [],
+            h_img: []
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data)
+        })
+      }
     },
     watch: {
       //   beforeFwOriginImgs(newval) {
@@ -328,7 +428,10 @@
       bigTitle,
       Selector,
       XButton,
-      Group
+      Group,
+      Popup,
+      betterScroll,
+      XTextarea
     },
     mixins: [checkLogin]
   };
@@ -336,6 +439,10 @@
 </script>
 
 <style lang='scss'>
+  .order-detail-wrapper {
+    height: 100%;
+  }
+
   .order-detail {
     height: 100%;
     background: #f0f0f0;

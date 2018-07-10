@@ -14,16 +14,16 @@
         </TabbarItem>
     </Tabbar> -->
     <div class="my-tabbar">
-        <router-link class="tabbar-item" to="/index">
+        <router-link class="tabbar-item" to="/index" tag="span">
             <i class="iconfont icon-shouye"></i><div>首页</div>
         </router-link>
-        <router-link class="tabbar-item" to="/shop">
+        <router-link class="tabbar-item" to="/shop" tag="span">
             <i class="iconfont icon-shangcheng"></i><div>商城</div>
         </router-link>
-        <router-link class="tabbar-item" to="/faxian">
+        <router-link class="tabbar-item" to="/faxian" tag="span">
             <i class="iconfont icon-faxian"></i><div>发现</div>
         </router-link>
-        <router-link class="tabbar-item" to="/me">
+        <router-link class="tabbar-item" to="/me" tag="span">
             <i class="iconfont icon-wode"></i><div>我的</div>
         </router-link>
     </div>

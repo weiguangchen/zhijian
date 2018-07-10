@@ -19,6 +19,9 @@ const mutations = {
   },
   SET_INDEX_HD_ID:(state,preload)=>{
     state.index_hd_id = preload;
+  },
+  SET_ROUTER_STATUS:(state,preload)=>{
+    state.routerStatus = preload;
   }
 }
 

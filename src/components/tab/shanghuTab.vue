@@ -14,16 +14,16 @@
         </TabbarItem>
     </Tabbar> -->
      <div class="my-tabbar">
-        <router-link class="tabbar-item" to="/shanghu/yanzheng/index">
+        <router-link class="tabbar-item" to="/shanghu/yanzheng/index" tag="span">
             <i class="iconfont icon-shouye"></i><div>验证</div>
         </router-link>
-        <router-link class="tabbar-item" to="/shanghu/pingjias/index">
+        <router-link class="tabbar-item" to="/shanghu/pingjias/index" tag="span">
             <i class="iconfont icon-shangcheng"></i><div>评价</div>
         </router-link>
-        <router-link class="tabbar-item" to="/shanghu/jingying/index">
+        <router-link class="tabbar-item" to="/shanghu/jingying/index" tag="span">
             <i class="iconfont icon-faxian"></i><div>经营</div>
         </router-link>
-        <router-link class="tabbar-item" to="/shanghu/me/index">
+        <router-link class="tabbar-item" to="/shanghu/me/index" tag="span">
             <i class="iconfont icon-wode"></i><div>我的</div>
         </router-link>
     </div>

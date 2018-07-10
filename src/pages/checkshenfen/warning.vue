@@ -5,9 +5,13 @@
       抱歉，确认信息失败<br/> 加盟商信息与该手机号码不匹配
       <br/> 请联系您的代理商
     </div>
-    <div class="content" v-else>
+    <div class="content" v-else-if="tip == 'daili'">
       抱歉，确认信息失败<br/> 代理商信息与该手机号码不匹配
       <br/> 请联系您的上级代理商
+    </div>
+    <div class="content" v-else-if="tip == 'servicer'">
+      抱歉，确认信息失败<br/> 服务员信息与该手机号码不匹配
+      <br/> 请联系您的管理员
     </div>
     <XButton @click.native='queren' class="xbtn" type='warn'>点击返回公众号 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{time}}s)</XButton>
   </div>
@@ -44,11 +48,7 @@ export default {
   },
   computed: {
     tip(){
-      if(this.$route.query.tip == 'shanghu'){
-        return 'shanghu'
-      }else if(this.$route.query.tip == 'daili'){
-        return 'daili'
-      }
+      return this.$route.query.tip;
     }
   },
   components: {

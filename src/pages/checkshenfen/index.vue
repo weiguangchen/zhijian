@@ -1,6 +1,6 @@
 <template>
   <div class="shanghu-page">
-    <bigTitle title="确认身份" :icon='false'></bigTitle>
+    <bigTitle title="确认代理商身份" :icon='false'></bigTitle>
     <div class="my-form">
       <div class="form-box">
 
@@ -95,7 +95,7 @@ export default {
             if (data.is_dl == 1) {
               _this.$vux.alert.show({
                 title: "提示",
-                content: "身份验证成功！",
+                content: "代理商身份验证成功！",
                 onHide() {
                   _this.$router.replace({
                     path: "/agent"

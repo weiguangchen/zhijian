@@ -9,7 +9,7 @@
         </Group> -->
         <Group>
           <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'  ></Cell>
-          <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl' ></Cell>
+          <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
         </Group>
       </div>
     </div>

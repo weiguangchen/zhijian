@@ -1,21 +1,42 @@
 <template>
-  <!-- <div class="shanghu-page">
-        <ViewBox> -->
-  <div>
-    <bigTitle title="订单管理" @showPopup='showPopup'></bigTitle>
+
+  <betterScroll>
     <div class="order-gl">
+      <bigTitle title="订单管理" @showPopup='showPopup' :icon='false' :right='true'>
+        <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="orderType" @on-change='changeType'>
+          <iview-op value='6'>全部订单</iview-op>
+          <iview-op value='1'>未派单订单</iview-op>
+          <iview-op value='2'>已派发订单</iview-op>
+          <iview-op value='3'>已接单订单</iview-op>
+          <iview-op value='4'>已完成订单</iview-op>
+          <iview-op value='5'>正在退款订单</iview-op>
+        </iview-select>
+      </bigTitle>
       <div class="order-item" v-for="(item,index) in list" :key="index" @click="toDetail(item.id,item.zf)">
         <div class="order-num">
           <div>订单号：{{item.order_num}}</div>
           <div>交易时间：{{item.date}}</div>
-
+          <Step :current='item.paidan_status' class="step-wrapper">
+            <StepItem>
+              <span slot="top">未派单</span>
+            </StepItem>
+            <StepItem>
+              <span slot="top">已派单</span>
+            </StepItem>
+            <StepItem>
+              <span slot="top">已接单</span>
+            </StepItem>
+            <StepItem>
+              <span slot="top">已完成</span>
+            </StepItem>
+          </Step>
         </div>
         <div class="order-info">
           <img :src="item.fw_img" alt="" class="img">
           <div class="info">
             <div class="mingzi">{{item.fw_mingzi}}</div>
-            <div class="mingzi">下单会员：{{item.nickname}}</div>
-            <div class="mingzi">手机号：{{item.phone}}</div>
+            <div class="mingzi">下单会员：{{item.xingming}}</div>
+            <div class="mingzi">手机号：{{item.dianhua}}</div>
           </div>
         </div>
         <div class="count">
@@ -41,107 +62,159 @@
       </div>
 
     </div>
-  </div>
+  </betterScroll>
 
-  <!-- </ViewBox>
-
-    </div> -->
 </template>
 
 <script>
-import { ViewBox } from "vux";
-import bigTitle from "@/components/bigTitle/index";
-import checkLogin from '@/mixins/checkLogin.js';
-export default {
-  data() {
-    return {
-      list: [],
-      p: 1
-    };
-  },
-  created() {
-    var _this = this;
-    this.$emit("showPopup", false);
-    this.$axios
-      .get(this.API_URL + "/Api/ShopFw/get_order", {
-        params: {
-          fw_shop_id: this.userinfo.shop[0].id,
-          status:6,
-          num: 8,
-          p: 1
-        }
-      })
-      .then(({ data }) => {
-        _this.list = data.list;
-      });
-  },
-  methods: {
-    showPopup(val) {
-      this.$emit("showPopup", val);
+  import betterScroll from '@/components/betterScroll/index';
+  import {
+    Step,
+    StepItem
+  } from 'vue-ydui/dist/lib.px/step';
+  import {
+    ViewBox
+  } from "vux";
+  import bigTitle from "@/components/bigTitle/index";
+  import checkLogin from '@/mixins/checkLogin.js';
+  export default {
+    data() {
+      return {
+        orderType: 6,
+        list: [],
+        p: 1
+      };
     },
-    toDetail(id,zf){
-      this.$router.push({
-        path:'/shanghu/jingying/orderDetail',
-        query:{
-          id,
-          zf
-        }
+    created() {
+      var _this = this;
+      this.$emit("showPopup", false);
+      this.get_order_list().then(res=>{
+        console.log(res)
+        this.list = res.list;
       })
-    }
-  },
-  components: { bigTitle, ViewBox },
-  mixins: [checkLogin]
-};
+    },
+    methods: {
+      showPopup(val) {
+        this.$emit("showPopup", val);
+      },
+      changeType(val) {
+        console.log(val)
+        this.get_order_list().then(res=>{
+          console.log(res)
+          this.list = res.list;
+        })
+      },
+      toDetail(id, zf) {
+        this.$router.push({
+          path: '/shanghu/jingying/orderDetail',
+          query: {
+            id,
+            zf
+          }
+        })
+      },
+      getStep(status) {
+        if (status == 1) {
+          return 1
+        } else if (status == 2) {
+          return 2
+        } else if (status == 3) {
+          return 3
+        } else if (status == 4) {
+          return 4
+        }
+      },
+      get_order_list() {
+        var _this = this;
+        return this.$axios
+          .get(this.API_URL + "/Api/ShopFw/get_order", {
+            params: {
+              fw_shop_id: this.userinfo.shop[0].id,
+              status: 6,
+              paidan_status:this.orderType,
+              num: 8,
+              p: this.p
+            }
+          })
+          .then(({
+            data
+          }) => {
+            return data;
+          });
+      }
+    },
+    computed: {
+
+    },
+    components: {
+      bigTitle,
+      ViewBox,
+      Step,
+      StepItem,
+      betterScroll
+    },
+    mixins: [checkLogin]
+  };
+
 </script>
 
 <style lang='scss'>
-.order-gl {
-  line-height: 1;
-  background: #f0f0f0;
-  .order-item {
-    padding-left: 0.533333rem;
-    background: #ffffff;
-    @include font-dpr(12px);
-    box-sizing: border-box;
-    padding-top: 0.56rem;
-    padding-bottom: 0.533333rem;
-    margin-bottom: 0.266667rem;
-    .order-num {
-      border-bottom: 1px solid #f0f0f0;
-      & > div {
-        margin-bottom: 0.266667rem;
-      }
+  .order-gl {
+    line-height: 1;
+    background: #f0f0f0;
+    .select-wrapper {
+      font-size: .373333rem/* 28/75 */
+      ;
     }
-    .order-info {
-      padding: 0.266667rem 0;
-      display: flex;
-      .img {
-        width: 2.666667rem;
-        height: 2.133333rem;
-        border-radius: 0.133333rem;
-        margin-right: 0.24rem;
-      }
-
-      .info {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        justify-content: space-around;
-      }
-    }
-
-    .count {
-      display: flex;
-      .count-item {
-        flex: 1;
-        .warn {
-          color: #dc3330;
+    .order-item {
+      padding-left: 0.533333rem;
+      background: #ffffff;
+      @include font-dpr(12px);
+      box-sizing: border-box;
+      padding-top: 0.56rem;
+      padding-bottom: 0.533333rem;
+      margin-bottom: 0.266667rem;
+      .order-num {
+        border-bottom: 1px solid #f0f0f0;
+        &>div {
+          margin-bottom: 0.266667rem;
         }
-        .success {
-          color: #1e7c28;
+        .step-wrapper {
+          margin-left: -.533333rem/* 40/75 */
+          ;
+        }
+      }
+      .order-info {
+        padding: 0.266667rem 0;
+        display: flex;
+        .img {
+          width: 2.666667rem;
+          height: 2.133333rem;
+          border-radius: 0.133333rem;
+          margin-right: 0.24rem;
+        }
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          justify-content: space-around;
+        }
+      }
+
+      .count {
+        display: flex;
+        .count-item {
+          flex: 1;
+          .warn {
+            color: #dc3330;
+          }
+          .success {
+            color: #1e7c28;
+          }
         }
       }
     }
   }
-}
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page c-order">
     <div class="order-detail">
       <div class="order-time">
         <span v-if="orderDetail.status == 1">未使用订单</span>
@@ -121,126 +121,128 @@
 </script>
 
 <style lang='scss'>
-  .order-detail {
-    .order-time {
-      display: flex;
-      @include font-dpr(17px);
-      padding: 0 0.4rem;
-      align-items: center;
-      justify-content: space-between;
-      background: url(~img/public/order-bg.png) no-repeat;
-      height: 1.6rem;
-      color: #ffffff;
-      margin-bottom: $bot;
-    }
-    .address {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      margin-bottom: $bot;
-      padding: 0 0.4rem;
-      background: #ffffff;
-      height: 2rem;
-      .shr {
+  .c-order {
+    .order-detail {
+      .order-time {
         display: flex;
+        @include font-dpr(17px);
+        padding: 0 0.4rem;
         align-items: center;
-        margin-bottom: 0.266667rem;
-        @include font-dpr(14px);
-        .sh-user {
+        justify-content: space-between;
+        background: url(~img/public/order-bg.png) no-repeat;
+        height: 1.6rem;
+        color: #ffffff;
+        margin-bottom: $bot;
+      }
+      .address {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: $bot;
+        padding: 0 0.4rem;
+        background: #ffffff;
+        height: 2rem;
+        .shr {
           display: flex;
           align-items: center;
-          margin-right: 1.066667rem;
-          .iconfont {
-            @include font-dpr(20px);
-            color: #a7a7a7;
+          margin-bottom: 0.266667rem;
+          @include font-dpr(14px);
+          .sh-user {
+            display: flex;
+            align-items: center;
+            margin-right: 1.066667rem;
+            .iconfont {
+              @include font-dpr(20px);
+              color: #a7a7a7;
+              margin-right: 0.266667rem;
+            }
+          }
+        }
+        .add {
+          padding-left: 0.666667rem;
+          color: #a7a7a7;
+        }
+      }
+      .order-item {
+        background: #ffffff;
+        @include font-dpr(12px);
+        margin-bottom: $bot;
+        .title {
+          color: #2b2b2b;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 0.866667rem;
+          padding: 0 0.4rem;
+          border-bottom: 1px solid #f0f0f0;
+          .shop-name {
+            .icon-dianpu {
+              margin-right: 0.186667rem;
+            }
+            .icon-jinru {
+              margin-left: 0.293333rem;
+            }
+            display: flex;
+            align-items: center;
+          }
+          .status {
+            color: #e14946;
+          }
+        }
+        .content {
+          display: flex;
+          padding: 0.4rem;
+          border-bottom: 1px solid #f0f0f0;
+          .thumb {
+            width: 2.666667rem;
+            height: 2.133333rem;
             margin-right: 0.266667rem;
+          }
+          .text {
+            display: flex;
+            align-items: center;
+            @include font-dpr(14px);
+            line-height: 0.506667rem;
+            flex: 1;
+          }
+        }
+        .price {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          height: 1.173333rem;
+          border-bottom: 1px solid #f0f0f0;
+          padding-right: 0.4rem;
+          @include font-dpr(14px);
+          .count {
+            margin-right: 0.426667rem;
           }
         }
       }
-      .add {
-        padding-left: 0.666667rem;
-        color: #a7a7a7;
+      .order-info {
+        margin-bottom: $bot;
+        height: 1.4rem;
+        color: #a6a6a6;
+        padding-left: 0.4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #ffffff;
+        line-height: 1;
+        .num {
+          margin-bottom: 0.266667rem;
+        }
       }
-    }
-    .order-item {
-      background: #ffffff;
-      @include font-dpr(12px);
-      margin-bottom: $bot;
-      .title {
-        color: #2b2b2b;
+      .xbtn {
+        height: 1.4rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 0.866667rem;
         padding: 0 0.4rem;
-        border-bottom: 1px solid #f0f0f0;
-        .shop-name {
-          .icon-dianpu {
-            margin-right: 0.186667rem;
-          }
-          .icon-jinru {
-            margin-left: 0.293333rem;
-          }
-          display: flex;
-          align-items: center;
+        background: #ffffff;
+        .btn {
+          margin: 0 0 0 0.266667rem;
         }
-        .status {
-          color: #e14946;
-        }
-      }
-      .content {
-        display: flex;
-        padding: 0.4rem;
-        border-bottom: 1px solid #f0f0f0;
-        .thumb {
-          width: 2.666667rem;
-          height: 2.133333rem;
-          margin-right: 0.266667rem;
-        }
-        .text {
-          display: flex;
-          align-items: center;
-          @include font-dpr(14px);
-          line-height: 0.506667rem;
-          flex: 1;
-        }
-      }
-      .price {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        height: 1.173333rem;
-        border-bottom: 1px solid #f0f0f0;
-        padding-right: 0.4rem;
-        @include font-dpr(14px);
-        .count {
-          margin-right: 0.426667rem;
-        }
-      }
-    }
-    .order-info {
-      margin-bottom: $bot;
-      height: 1.4rem;
-      color: #a6a6a6;
-      padding-left: 0.4rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background: #ffffff;
-      line-height: 1;
-      .num {
-        margin-bottom: 0.266667rem;
-      }
-    }
-    .xbtn {
-      height: 1.4rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 0.4rem;
-      background: #ffffff;
-      .btn {
-        margin: 0 0 0 0.266667rem;
       }
     }
   }

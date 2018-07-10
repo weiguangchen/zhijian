@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="add-account">
-      <bigTitle title='添加子账户' @showPopup='showPopup'></bigTitle>
+      <bigTitle title='添加子账户' @showPopup='showPopup' v-if="!queryPhone"></bigTitle>
+      <bigTitle title='编辑子账户' @showPopup='showPopup' v-else></bigTitle>
       <div class="form-box">
 
         <div class="form-group">
@@ -15,7 +16,7 @@
         <div class="form-group">
           <h2 class="sub-title">新增账号的名称</h2>
           <Group class="reset-vux-input">
-            <XInput v-model="account_name" placeholder='输入6-10位中文字符'></XInput>
+            <XInput v-model="account_name" placeholder='请输入账号名称'></XInput>
           </Group>
         </div>
         <div class="form-group">
@@ -79,6 +80,8 @@ export default {
     };
   },
   created() {
+    console.log('路由')
+    console.log(this.$router)
     // this.$eruda.init();
     var _this = this;
     this.$emit("showPopup", false);
