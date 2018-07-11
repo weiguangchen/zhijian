@@ -87,3 +87,7 @@ a {
 .ivu-select-dropdown{
   max-height: none;
 }
+
+.vux-number-selector,.vux-number-input {
+  box-sizing: content-box;
+}

@@ -64,7 +64,7 @@
                 <div class="upload-btn" @click="chooseImg(1)">上传图片</div>
                 <div class="upload-box" v-for="(item,index) in beforeFwYulantu" :key="index">
                   <div class="img-box">
-                    <img :src="item" alt="" class="img">
+                    <img :src="item" alt="" class="img" @click="previewImg(item,beforeFwYulantu)">
                   </div>
                   <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index,1)"></i>
                 </div>
@@ -74,7 +74,7 @@
                 <div class="upload-btn" @click="chooseImg(2)">上传图片</div>
                 <div class="upload-box" v-for="(item,index) in afterFwYulantu" :key="index">
                   <div class="img-box">
-                    <img :src="item" alt="" class="img">
+                    <img :src="item" alt="" class="img" @click="previewImg(item,afterFwYulantu)">
                   </div>
                   <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index,2)"></i>
                 </div>
@@ -96,11 +96,11 @@
           <h2>上传服务图片</h2>
           <h3>服务前照片</h3>
           <div class="img-boxs">
-            <img :src="item" alt="" v-for="(item,index) in detail.q_img" :key="index" class="fw-img">
+            <img :src="item" alt="" v-for="(item,index) in detail.q_img" :key="index" class="fw-img" @click="previewImg(item,detail.q_img)">
           </div>
           <h3>服务后照片</h3>
           <div class="img-boxs">
-            <img :src="item" alt="" v-for="(item,index) in detail.h_img" :key="index" class="fw-img">
+            <img :src="item" alt="" v-for="(item,index) in detail.h_img" :key="index" class="fw-img" @click="previewImg(item,detail.h_img)">
           </div>
         </div>
         <div class="jiedan" v-if="detail.paidan_status == 5">
@@ -218,7 +218,7 @@
               content: data.log,
               onHide() {
                 _this.$router.push({
-                  path: '/shanghu/jingying/orderGl'
+                  path: '/fuwuyuan/jingying/orderGl'
                 })
               }
             })
@@ -265,6 +265,7 @@
       },
       chooseImg(type) {
         var _this = this;
+        console.log('选择图片')
         this.$wx.chooseImage({
           count: 1, // 默认9
           sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
@@ -336,6 +337,12 @@
                 }
               });
           }
+        });
+      },
+      previewImg(curimg, allimg) {
+        this.$wx.previewImage({
+          current: curimg, // 当前显示图片的http链接
+          urls: allimg // 需要预览的图片http链接列表
         });
       },
       deleteImg(index, type) {
@@ -413,7 +420,7 @@
                 content: '完成服务！',
                 onHide() {
                   _this.$router.push({
-                    path: '/shanghu/jingying/orderGl'
+                    path: '/fuwuyuan/jingying/orderGl'
                   })
                 }
               })
@@ -423,7 +430,7 @@
                 content: data.log,
                 onHide() {
                   _this.$router.push({
-                    path: '/shanghu/jingying/orderGl'
+                    path: '/fuwuyuan/jingying/orderGl'
                   })
                 }
               })
@@ -435,10 +442,10 @@
     },
     computed: {
       orderId() {
-        return this.$route.query.id;
+        return this.$route.params.id;
       },
       zf() {
-        return this.$route.query.zf;
+        return this.$route.params.zf;
       },
     },
     components: {
@@ -520,8 +527,9 @@
         margin-bottom: .266667rem/* 20/75 */
         ;
       }
-      .text{
-        font-size: .373333rem /* 28/75 */;
+      .text {
+        font-size: .373333rem/* 28/75 */
+        ;
         line-height: 2;
       }
       .img-boxs {

@@ -188,7 +188,8 @@
           this.system = 2;
         }
         console.log("系统：" + this.system);
-      }
+      },
+      uploadComplete(){}
     },
     components: {
       XInput,
@@ -199,7 +200,7 @@
       uploadImage
     },
     computed: {
-      order_num() {
+      orderId() {
         return this.$route.params.orderNum;
       },
       type() {

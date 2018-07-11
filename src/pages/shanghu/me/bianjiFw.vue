@@ -69,18 +69,18 @@
           <h2 class="sub-title">支持门店:</h2>
           <mu-checkbox v-model="face" :value='item.id' v-for="(item,index) in List" :key="index" :label='item.face_name' color='#e03233'></mu-checkbox>
         </div>
-        <!-- <div class="form-group">
+        <div class="form-group">
             <h2 class="sub-title">服务缩略图:</h2>
             <div class="uploadImage">
-              <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div> -->
+              <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div>
         <!-- 安卓预览图片 -->
-        <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
+        <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1">
         <!-- IOS预览图片 -->
-        <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
+        <img :src="localData || tupian" alt="" v-else class="thumb">
 
-        <!-- </div>
+        </div>
 
-          </div> -->
+          </div>
       </template>
       <template v-else-if="step == 3">
         <!-- <div class="form-group">
@@ -192,7 +192,7 @@
       var _this = this;
       this.$emit("showPopup", false);
       this.checkSystem();
-      // this.$eruda.init();
+      this.$eruda.init();
 
       this.$axios
         .get(_this.API_URL + "/api/ShopFw/shop_fw", {

@@ -7,9 +7,13 @@
           <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji' v-if="checkQx(31)"></Cell>
           <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
         </Group> -->
-        <Group>
+        <Group v-if="shenfenType == 'shanghu'">
           <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'  ></Cell>
           <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
+        </Group>
+        <Group v-else-if="shenfenType == 'fuwuyuan'">
+          <Cell title='消费统计' :is-link='true' link='/fuwuyuan/jingying/tongji'  ></Cell>
+          <Cell title='订单管理' :is-link='true' link='/fuwuyuan/jingying/orderGl'></Cell>
         </Group>
       </div>
     </div>
@@ -23,6 +27,7 @@ import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
 import { Popup } from "vue-ydui/dist/lib.px/popup";
 import checkMenuQx from '@/mixins/checkMenuQx.js';
+import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
 export default {
   data() {
     return {
@@ -35,6 +40,7 @@ export default {
   },
   created() {
     this.$emit("showPopup", false);
+    console.log()
   },
   methods: {
     showPopup(val) {
@@ -54,7 +60,8 @@ export default {
     Cell,
     Popup
   },
-  mixins: [checkMenuQx]
+
+  mixins: [checkMenuQx,checkAdminShenfen]
 };
 </script>
 

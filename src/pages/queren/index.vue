@@ -10,16 +10,37 @@
       </div>
     </div>
     <div class="fw_num">
-      <Group>
-        <XNumber title='购买数量' :min='1' v-model="num" v-if="!card_list.length>0"></XNumber>
+      <Group class="form">
+        <XNumber title='购买数量' :min='1' v-model="num" v-if="!card_list.length>0" class="xnum"></XNumber>
         <Cell title='总价' :value='money'></Cell>
-        <XInput title='联系人' v-model="lianxiren" text-align='right'></XInput>
+        <!-- <XInput title='联系人' v-model="lianxiren" text-align='right'></XInput>
         <XInput title='联系电话' v-model="phone" text-align='right'></XInput>
-        <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress" text-align='right'></XInput>
+        <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress" text-align='right'></XInput> -->
       </Group>
+      <div class="address-wrapper" @click="toAddList">
+        <div class="bg"></div>
+        <div class="my-address">
+          <div v-if="moren_add" class="my-add-box">
+            <div class="title">
+              <i class="iconfont icon-weizhi1"></i>地址信息</div>
+            <div class="add-info">
+              <div class="info-wrapper">
+                <div>客户姓名：{{moren_add.name}}</div>
+                <div>手机：{{moren_add.phone}}</div>
+                <div>
+                  <span class="txt">服务地址：</span>{{moren_add.adress}}</div>
+                <div class="car-info">车辆信息：{{moren_add.car_card}}{{moren_add.car_color}} {{moren_add.car_xing}}</div>
+              </div>
+              <i class="iconfont icon-jinru"></i>
+            </div>
+          </div>
+          <div class="no-add">点击添加收货地址</div>
+        </div>
+        <div class="bg"></div>
+
+      </div>
     </div>
 
-    <!-- v-if="card_list.length>0" -->
     <div class="card-list" v-if="card_list.length>0">
       <!-- <h1 class="sub-title">优惠卡</h1> -->
       <!-- <Group>
@@ -69,13 +90,16 @@
         lianxiren: "",
         phone: "",
         mapInfo: "",
-        card_val: ""
+        card_val: "",
+
+        moren_add: ''
       };
     },
     created() {
       document.title = "确认订单";
       this.get_fw_info();
       this.get_card();
+      this.get_moren_add();
     },
     methods: {
       openMap() {
@@ -89,26 +113,11 @@
         var _this = this;
         this.submiting = true;
         if (this.id) {
-          if (!this.lianxiren) {
-            this.$vux.toast.show({
-              text: "请输入联系人",
-              position: "middle"
-            });
-            this.submiting = false;
-            return false;
-          } else if (!this.phone) {
-            this.$vux.toast.show({
-              text: "请输入联系人手机号",
-              position: "middle"
-            });
-            this.submiting = false;
-            return false;
-          } else if (!this.mapInfo) {
-            this.$vux.toast.show({
-              text: "请选择收货地址",
-              position: "middle"
-            });
-            this.submiting = false;
+          if (this.moren_add == '') {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '请填写地址!'
+            })
             return false;
           } else {
             this.$vux.confirm.show({
@@ -154,7 +163,11 @@
                         uid: _this.id,
                         adress: _this.mapInfo.poiaddress,
                         dianhua: _this.phone,
-                        xingming: _this.lianxiren
+                        xingming: _this.lianxiren,
+                        three: this.moren_add.three,
+                        car_card: this.moren_add.car_card,
+                        car_color: this.moren_add.car_color,
+                        car_xing: this.moren_add.car_xing
                       }
                     })
                     .then(({
@@ -253,6 +266,23 @@
             }
             this.card_list = radioList;
           });
+      },
+      get_moren_add() {
+        this.$axios.get(this.API_URL + '/Api/Adress/moren_adress', {
+          params: {
+            uid: this.id
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          this.moren_add = data[0];
+        })
+      },
+      toAddList() {
+        this.$router.push({
+          path: '/addressList'
+        })
       }
     },
     computed: {
@@ -327,6 +357,86 @@
     }
     .fw_num {
       margin-bottom: $bot;
+      .form {
+        margin-bottom: $bot;
+      }
+      .address-wrapper {
+        .bg {
+          height: .4rem/* 30/75 */
+          ;
+          background: url(~img/public/queren-bg.png);
+        }
+        .my-address {
+          height: 4.266667rem/* 320/75 */
+          ;
+          min-height: 4.266667rem/* 320/75 */
+          ;
+          background: #ffffff;
+          .my-add-box {
+            padding: .266667rem/* 20/75 */
+            0 .266667rem/* 20/75 */
+            .4rem/* 30/75 */
+            ;
+            .title {
+              display: flex;
+              align-items: center;
+              margin-bottom: .4rem/* 30/75 */
+              ;
+              .iconfont {
+                width: .933333rem/* 70/75 */
+                ;
+                font-size: .6rem/* 45/75 */
+                ;
+              }
+              font-size: .373333rem/* 28/75 */
+              ;
+            }
+            .add-info {
+              color: #4f4f4f;
+              font-size: .346667rem/* 26/75 */
+              ;
+              line-height: 2;
+              display: flex;
+              align-items: center;
+              padding-left: .933333rem/* 70/75 */
+              ;
+              .info-wrapper {
+                word-wrap: break-word;
+                overflow: hidden;
+                flex: none;
+                width: 7.466667rem/* 560/75 */
+                ;
+                .txt {
+                  float: left;
+                }
+                .car-info {
+                  font-size: .32rem/* 24/75 */
+                  ;
+                  color: #5f5f5f;
+                }
+              }
+              .icon-jinru {
+                font-size: .56rem/* 42/75 */
+                ;
+                color: #000000;
+                margin-left: .2rem/* 15/75 */
+                ;
+              }
+            }
+          }
+          .no-add {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            font-size: .48rem/* 36/75 */
+            ;
+            opacity: .5;
+          }
+        }
+      }
+
     }
     .fw_time {
       margin-bottom: $bot;

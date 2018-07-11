@@ -109,14 +109,16 @@ function delParam(url, paramKey) {
 
 function wxConfig(url) {
   var _this = this;
+  console.log('请求jssdk票据')
+  console.log(url)
+  console.log(encodeURIComponent(url))
   axios
     .get(API_URL + "/api/wechat/sharewx", {
       params: {
-        url
+        url: encodeURIComponent(url)
       }
     })
     .then(res => {
-      console.log('请求jssdk票据')
       console.log(res);
       return res.data;
     })
@@ -138,19 +140,19 @@ function wxConfig(url) {
       });
     });
 
-  wx.ready(function () {
+  // wx.ready(function () {
 
-    wx.checkJsApi({
-      jsApiList: ['chooseImage', 'previewImage', 'uploadImage', 'getLocalImgData', 'getLocation', 'openLocation'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-      success: function (res) {
-        // 以键值对的形式返回，可用的api值true，不可用为false
-        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
-        console.log('检测微信jssdk是否可用')
-        console.log(res);
-      }
-    });
+  //   wx.checkJsApi({
+  //     jsApiList: ['chooseImage', 'previewImage', 'uploadImage', 'getLocalImgData', 'getLocation', 'openLocation'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+  //     success: function (res) {
+  //       // 以键值对的形式返回，可用的api值true，不可用为false
+  //       // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+  //       console.log('检测微信jssdk是否可用')
+  //       console.log(res);
+  //     }
+  //   });
 
-  })
+  // })
 
 }
 
@@ -336,6 +338,14 @@ export const defaultRouterMaps = [{
     path: '/twDetail/:twId',
     name: 'twDetail',
     component: resolve => require(['@/pages/contentDetail/index'], resolve)
+  }, {
+    path: '/editAddress',
+    name: 'editAddress',
+    component: resolve => require(['@/pages/address/editAddress'], resolve)
+  },{
+    path: '/addressList',
+    name: 'addressList',
+    component: resolve => require(['@/pages/address/addList'], resolve)
   },
 
 ]
@@ -570,7 +580,7 @@ const servicerRouterMaps = [{
     default: resolve => require(['@/pages/shanghu/index'], resolve),
     tab: resolve => require(['@/components/tab/waiterTab'], resolve),
   },
-  name: 'shanghu',
+  name: 'fuwuyuan',
   meta: {
     role: ['shanghu']
   },
@@ -667,7 +677,7 @@ const servicerRouterMaps = [{
           role: 32
         }
       }, {
-        path: 'orderDetail',
+        path: 'orderDetail/:id/:zf',
         name: 'orderDetail',
         component: resolve => require(['@/pages/shanghu/jingying/servicerOrderDetail'], resolve),
         meta: {

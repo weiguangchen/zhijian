@@ -95,12 +95,10 @@
         this.$emit("showPopup", val);
       },
       toDetail(id, zf) {
+        console.log('/fuwuyuan/jingying/orderDetail')
+        
         this.$router.push({
-          path: '/shanghu/jingying/orderDetail',
-          query: {
-            id,
-            zf
-          }
+          path: '/fuwuyuan/jingying/orderDetail/'+id+'/'+zf,
         })
       },
       changeType(val) {

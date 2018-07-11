@@ -4,9 +4,13 @@
 
     <Popup v-model="popupShow" position='right'>
       <div class="popup-list">
-        <Group>
+        <Group v-if="shenfenType == 'shanghu'">
           <Cell title='消费券验证' link='/shanghu/yanzheng/xfm'></Cell>
           <Cell title='活动验证' link='/shanghu/yanzheng/huodong'></Cell>
+        </Group>
+        <Group v-else-if="shenfenType == 'fuwuyuan'">
+          <Cell title='消费券验证' link='/fuwuyuan/yanzheng/xfm'></Cell>
+          <Cell title='活动验证' link='/fuwuyuan/yanzheng/huodong'></Cell>
         </Group>
       </div>
     </Popup>
@@ -19,6 +23,7 @@ import bigTitle from "@/components/bigTitle/index";
 import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
 import { Popup } from "vue-ydui/dist/lib.px/popup";
+import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
 export default {
   data() {
     return {
@@ -78,7 +83,8 @@ export default {
     Confirm,
     Popup,
     Cell
-  }
+  },
+  mixins:[checkAdminShenfen]
 };
 </script>
 

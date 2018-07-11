@@ -22,6 +22,9 @@ const mutations = {
   },
   SET_ROUTER_STATUS:(state,preload)=>{
     state.routerStatus = preload;
+  },
+  SET_PUBLICQUERY:(state,preload)=>{
+    state.publicQuery = preload;
   }
 }
 

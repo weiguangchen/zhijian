@@ -12,6 +12,7 @@ const state = {
 
     
     index_hd_id:'',   /* 首页活动 */
-
+    
+    publicQuery:{}      /* 临时传参 */
 } 
 export default state;

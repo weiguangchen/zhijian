@@ -3,13 +3,13 @@
     <bigTitle title='验证' @showPopup='showPopup'></bigTitle>
     <div class="my-form">
       <div class="form-box">
-        <!-- <Group>
-          <Cell title='验证消费码' :is-link='true' link='/shanghu/yanzheng/xfm' v-if="checkQx(11)"></Cell>
-          <Cell title='验证活动码' :is-link='true' link='/shanghu/yanzheng/huodong'  v-if="checkQx(12)"></Cell>
-        </Group> -->
-        <Group>
+        <Group v-if="shenfenType == 'shanghu'">
           <Cell title='验证消费码' :is-link='true' link='/shanghu/yanzheng/xfm'     ></Cell>
           <Cell title='验证活动码' :is-link='true' link='/shanghu/yanzheng/huodong' ></Cell>
+        </Group>
+        <Group v-else-if="shenfenType == 'fuwuyuan'">
+          <Cell title='验证消费码' :is-link='true' link='/fuwuyuan/yanzheng/xfm'     ></Cell>
+          <Cell title='验证活动码' :is-link='true' link='/fuwuyuan/yanzheng/huodong' ></Cell>
         </Group>
       </div>
     </div>
@@ -23,6 +23,7 @@ import shanghuSelect from "@/components/shanghu_form/face_select";
 import shanghuInput from "@/components/shanghu_form/input";
 import { Popup } from "vue-ydui/dist/lib.px/popup";
 import checkMenuQx from '@/mixins/checkMenuQx.js';
+import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
 export default {
   data() {
     return {
@@ -56,7 +57,7 @@ export default {
     Cell,
     Popup
   },
-  mixins: [checkMenuQx]
+  mixins: [checkMenuQx,checkAdminShenfen]
 };
 </script>
 

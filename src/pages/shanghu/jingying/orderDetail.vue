@@ -92,7 +92,7 @@
         <div v-else-if="detail.paidan_status == 5" class="tuidan">
           <h2>退单中</h2>
           <div class="info">
-            <h3>该订单由李海东发起退单申请，申请理由：</h3>
+            <h3>该订单由{{detail.fw_user}}发起退单申请，申请理由：</h3>
             <div>{{detail.tui[0].tui_liyou}}</div>
             <div>退单时间：{{detail.tui[0].tui_time}}</div>
           </div>
@@ -126,6 +126,7 @@
       this.$emit("showPopup", false);
       this.get_detail();
       this.get_son();
+      
     },
     methods: {
       showPopup(val) {

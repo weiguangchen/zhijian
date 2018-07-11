@@ -12,9 +12,13 @@
           <Cell title='消费统计' link='/shanghu/jingying/tongji'  v-if="checkQx(31)"></Cell>
           <Cell title='订单管理' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
         </Group> -->
-        <Group>
+        <Group v-if="shenfenType == 'shanghu'">
           <Cell title='消费统计' link='/shanghu/jingying/tongji'></Cell>
           <Cell title='订单管理' link='/shanghu/jingying/orderGl'></Cell>
+        </Group>
+        <Group v-else-if="shenfenType == 'fuwuyuan'">
+          <Cell title='消费统计' link='/fuwuyuan/jingying/tongji'></Cell>
+          <Cell title='订单管理' link='/fuwuyuan/jingying/orderGl'></Cell>
         </Group>
       </div>
     </Popup>
@@ -44,6 +48,8 @@
   } from 'vue-ydui/dist/lib.px/textarea';
   // import BScroll from "better-scroll";
   import checkMenuQx from '@/mixins/checkMenuQx.js';
+import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
+
   export default {
     data() {
       return {
@@ -93,7 +99,7 @@
       Popup,
       XTextarea
     },
-    mixins: [checkMenuQx]
+    mixins: [checkMenuQx,checkAdminShenfen]
   };
 
 </script>

@@ -95,7 +95,7 @@ import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
 import { CitySelect } from "vue-ydui/dist/lib.px/cityselect";
 import District from "ydui-district/dist/jd_province_city_area_id";
 import checkLogin from "@/mixins/checkLogin.js";
-
+import 'vue-ydui/dist/ydui.base.css';
 export default {
   data() {
     return {
