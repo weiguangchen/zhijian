@@ -39,13 +39,12 @@
           <Cell title='选择服务时间' :isLink='true'></Cell>
           <Cell title='选择优惠券 ' :isLink='true' @click.native="selectJuan"></Cell>
         </Group>
-
       </div>
 
 
       <XButton class="xbtn" type='warn' @click.native='buy' :disabled='submiting'>结算</XButton>
     </betterScroll>
-      <selectJuan v-show="juanShow" @finish='finish' @set_card='set_card' :fwId='serviceId'></selectJuan>
+    <selectJuan v-show="juanShow" @finish='finish' @set_card='set_card' :fwId='serviceId'></selectJuan>
 
   </div>
 </template>
@@ -81,7 +80,7 @@
         card_val: "",
 
         moren_add: '',
-        juanShow:false
+        juanShow: false
       };
     },
     created() {
@@ -93,6 +92,9 @@
       buy() {
         var _this = this;
         this.submiting = true;
+
+
+
         if (this.id) {
           if (this.moren_add == '') {
             this.$vux.alert.show({
@@ -101,6 +103,9 @@
             })
             return false;
           } else {
+
+
+
             this.$vux.confirm.show({
               title: "提示",
               content: "是否购买该服务？",
@@ -109,36 +114,60 @@
               },
               onConfirm() {
                 if (_this.card_val) {
-                  _this.$axios
-                    .get(_this.API_URL + "/api/BkPay/bk_pay", {
-                      params: {
-                        fw_id: _this.serviceId,
-                        num: _this.num,
-                        uid: _this.id,
-                        shop_id: _this.shopid,
-                        adress: _this.moren_add.adress,
-                        dianhua: _this.moren_add.phone,
-                        xingming: _this.moren_add.name,
-                        three: _this.moren_add.three,
-                        car_card: _this.moren_add.car_card,
-                        car_color: _this.moren_add.car_color,
-                        car_xing: _this.moren_add.car_xing,
-                        card_id: _this.card_val
+                  var panduan;
+                  for (let i = 0; i < _this.currentCard().son.length; i++) {
+                    if (_this.currentCard().son[i].fw_id == _this.serviceId) {
+                      panduan = _this.currentCard().son[i];
+                      console.log(panduan)
+                      break;
+                    }
+                  }
+                  // console.log(_this.num)
+                  // console.log(panduan.fw_num)
+                  // console.log(_this.num > panduan.fw_num)
+
+                  if (_this.num > panduan.fw_num) {
+                    _this.$vux.alert.show({
+                      title: '提示',
+                      content: '活动次数不够',
+                      onHide(){
+                            _this.submiting = false;
                       }
                     })
-                    .then(({
-                      data
-                    }) => {
-                      _this.$vux.alert.show({
-                        title: "提示",
-                        content: "购买成功,请在我的订单中查看消费码！",
-                        onHide() {
-                          _this.$router.push({
-                            path: "/me"
-                          });
+                  } else {
+                    _this.$axios
+                      .get(_this.API_URL + "/api/BkPay/bk_pay", {
+                        params: {
+                          fw_id: _this.serviceId,
+                          num: _this.num,
+                          uid: _this.id,
+                          shop_id: _this.shopid,
+                          adress: _this.moren_add.adress,
+                          dianhua: _this.moren_add.phone,
+                          xingming: _this.moren_add.name,
+                          three: _this.moren_add.three,
+                          car_card: _this.moren_add.car_card,
+                          car_color: _this.moren_add.car_color,
+                          car_xing: _this.moren_add.car_xing,
+                          card_id: _this.card_val
                         }
+                      })
+                      .then(({
+                        data
+                      }) => {
+                        _this.$vux.alert.show({
+                          title: "提示",
+                          content: "购买成功,请在我的订单中查看消费码！",
+                          onHide() {
+                            _this.$router.push({
+                              path: "/me"
+                            });
+                          }
+                        });
                       });
-                    });
+                  }
+
+
                 } else {
                   _this.$axios
                     .get(_this.API_URL + "/api/WxPay/pay", {
@@ -270,11 +299,22 @@
         // })
 
       },
-      finish(val){
+      finish(val) {
         this.juanShow = val;
       },
-      set_card(val){
+      set_card(val) {
         this.card_val = val;
+      },
+      currentCard() {
+        var _this = this;
+        if (this.card_val) {
+          for (let i = 0; i < this.card_list.length; i++) {
+            if (this.card_list[i].bk_id == _this.card_val) {
+              return this.card_list[i]
+            }
+          }
+        }
+
       }
     },
     computed: {
@@ -291,7 +331,8 @@
           return `${this.num * this.fwInfo.money}元`;
         }
 
-      }
+      },
+
     },
     components: {
       XNumber,

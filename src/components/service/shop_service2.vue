@@ -1,5 +1,5 @@
 <template>
-  <div class="service-wrapper2">
+  <div class="service-wrapper2" @click="toDetail(info.shop_fw_id)">
       <div class="img-box">
           <img :src="info.fw_img" alt="" class="img">
       </div>
@@ -21,6 +21,16 @@
         default: {}
       },
 
+    },
+    methods:{
+        toDetail(id) {
+        this.$router.push({
+          name: 'serviceDetail',
+          params: {
+            serviceId: id
+          }
+        });
+      }
     },
     components: {
 
