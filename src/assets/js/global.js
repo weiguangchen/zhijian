@@ -7,7 +7,7 @@ const $toDetail = function (id) {
   });
 }
 
-const wxConfig = function() {
+const wxConfig = function () {
   var _this = this;
   this.$axios
     .get(_this.API_URL + "/api/wechat/sharewx", {
@@ -39,6 +39,24 @@ const wxConfig = function() {
     });
 }
 
+export function setMetaTitle(title) {
+  document.title = title
+  let mobile = navigator.userAgent.toLowerCase()
+  if (/iphone|ipad|ipod/.test(mobile)) {
+    let iframe = document.createElement('iframe')
+    iframe.style.display = 'none'
+    // 替换成站标favicon路径或者任意存在的较小的图片即可
+    iframe.setAttribute('src', 'static/img/blank.png')
+    let iframeCallback = function () {
+      setTimeout(function () {
+        iframe.removeEventListener('load', iframeCallback)
+        document.body.removeChild(iframe)
+      }, 0)
+    }
+    iframe.addEventListener('load', iframeCallback)
+    document.body.appendChild(iframe)
+  }
+}
 
 
 export default {
@@ -46,5 +64,6 @@ export default {
     Vue.prototype.API_URL = API_URL;
     Vue.prototype.$toDetail = $toDetail;
     Vue.prototype.wxConfig = wxConfig;
+    Vue.prototype.setMetaTitle = setMetaTitle;
   }
 };

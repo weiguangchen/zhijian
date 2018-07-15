@@ -1,511 +1,770 @@
 <template>
-  <div class="page">
-    <ViewBox>
-      <div class="banner">
-        <Swiper :aspect-ratio='0.512' :show-dots='false'>
-          <SwiperItem><img src="~img/shangpu/banner.png" alt=""></SwiperItem>
-        </Swiper>
-      </div>
-
-      <div class="sp-info1">
-        <div class="top">{{shopInfo.shop_name}}
-          <span class="iconfont icon-shoucang"></span>
+  <div class="page shop-wrapper">
+    <betterScroll>
+      <div class="info-wrapper">
+        <img src="~img/shangpu/banner.png" alt="" id="blur-bg" class="blur-bg" @load="load_blur_bg">
+        <canvas class="blur-canvas" id="blur-canvas"></canvas>
+        <div class="logo">
+          <img src="~img/shangpu/banner.png" alt="" class="img">
         </div>
-        <div class="middle">
-          <rater val='4' class="rater"></rater>
-          <span class="txt">28条</span>
-        </div>
-        <div class="bottom">
-          <span class="txt">技术：5.6</span>
-          <span class="txt">服务：7.8</span>
-          <span class="txt">环境7.8</span>
-          <span class="txt">卫国道</span>
+        <div class="info">
+          <div>{{shopInfo.shop_name}}</div>
+          <div>
+            <rater val='4' class="rater"></rater>
+          </div>
+          <div>
+            <span>技术：5.6</span>
+            <span>服务：7.8</span>
+            <span>环境：7.8</span>
+          </div>
+          <div>营业时间：周一到周日 08:00 —— 19:00</div>
         </div>
       </div>
+      <swiper :options="swiperOption" ref="mySwiper" class="top-ad">
+        <!-- slides -->
+        <swiper-slide v-for="(item,index) in top_ad" :key="index">
+          <img :src="item.url" alt="">
+        </swiper-slide>
+      </swiper>
+      <!-- <Sticky> -->
+      <Tab active-color='#e86359' class="x-tab" v-model="tabActiveIndex">
+        <TabItem selected='selected' @on-item-click='changeTab'>
+          <i class="iconfont icon-quanbufuwuweixuanzhong"></i>
+          <span>全部服务</span>
+        </TabItem>
+        <TabItem @on-item-click='changeTab'>
+          <i class="iconfont icon-huodongxiangmuweixuanzhong"></i>
+          <span>活动项目</span>
+        </TabItem>
+        <TabItem @on-item-click='changeTab'>
+          <i class="iconfont icon-yonghupingjiaweixuanzhong"></i>
+          <span>用户评价</span>
+        </TabItem>
+        <TabItem @on-item-click='changeTab'>
+          <i class="iconfont icon-shangpuxiangqingxuanzhong"></i>
+          <span>商铺详情</span>
+        </TabItem>
+      </Tab>
+      <!-- </Sticky> -->
+      <swiper :options="swiperOption" ref="mySwiper" @transitionEnd='transitionEnd'>
+        <swiper-slide class="fw-wrapper">
+          <div class="toggle-btn">
+            <div class="selector">
+              <Selector title='类别' :options='classArr' placeholder='类别' v-model="leibie" @on-change='changeFwType'></Selector>
+            </div>
+            <span>
+              <i class="iconfont icon-pingpu" :class="{active:showType == 1}" @click="changeShowType(1)"></i>
+              <i class="iconfont icon-liebiao" :class="{active:showType == 2} " @click="changeShowType(2)"></i>
+            </span>
 
-      <div class="sp-info2">
-        <div class="top">
-          <span class="iconfont icon-yingyeshijian"></span>营业时间：周一到周日 08:00 —— 19:00</div>
-        <!-- <div class="middle">
-          <span class="txt">WIFI</span>
-          <span class="txt">刷卡</span>
-          <span class="txt">手机支付</span>
-        </div> -->
-        <div class="bottom">
-          <span class="txt">内饰清洗</span>
-          <span class="txt">抛光</span>
-          <span class="txt">清洗</span>
-          <span class="txt">补胎</span>
-        </div>
-      </div>
+          </div>
+          <div class="list" v-if="showType == 1">
+            <fw v-for="(item,index) in current_fw_list" :key="index" :info='item'></fw>
+          </div>
+          <div class="fw-list" v-else-if="showType == 2">
+            <fw2 v-for="(item,index) in current_fw_list" :key="index" :info='item' class="fw2-item"></fw2>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="list">
+            <hd v-for="(item,index) in huodong" :key="index" :info='item'></hd>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="pingjia">
+            <div class="list">
+              <div class="item">
+                <div class="left">
+                  <img src="~img/shangpu/avatar.png" alt="" class="avatar">
+                </div>
+                <div class="right">
+                  <div class="tit">
+                    <span class="name">黑夜的味道</span>
+                    <span class="date">2017年11月28日</span>
+                  </div>
+                  <rater val='4' class="rater"></rater>
+                  <div class="content">
+                    <div class="txt">
+                      家门口的修理厂，巴拉巴拉北京佛无法就我IE分级加尔文覅金额外，非法金额为飞机。
+                    </div>
+                    <div class="imgs">
+                      <img src="~img/shangpu/pl1.png" alt="">
+                      <img src="~img/shangpu/pl2.png" alt="">
+                      <img src="~img/shangpu/pl3.png" alt="">
 
-      <div class="address">
-        <div class="left">
-          <div class="top">
-            <span class="iconfont icon-weizhi1"></span>{{shopInfo.adress}}</div>
-          <!-- <div class="bottom">
-            距地铁2号线靖江路站c口（东）口步行690米
-          </div> -->
-        </div>
-        <div class="right">
-          <span class="iconfont icon-lianxifangshi" v-if="shopInfo.shop_phone == 0"></span>
-        </div>
-      </div>
+                    </div>
+                  </div>
+                  <div class="click">
+                    <span>浏览2059</span>
+                    <span>132
+                      <i class="iconfont icon-dianzan"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="left">
+                  <img src="~img/shangpu/avatar.png" alt="" class="avatar">
+                </div>
+                <div class="right">
+                  <div class="tit">
+                    <span class="name">黑夜的味道</span>
+                    <span class="date">2017年11月28日</span>
+                  </div>
+                  <rater val='1' class="rater"></rater>
+                  <div class="content">
+                    <div class="txt">
+                      家门口的修理厂，巴拉巴拉北京佛无法就我IE分级加尔文覅金额外，非法金额为飞机。
+                    </div>
+                    <div class="imgs">
+                      <img src="~img/shangpu/pl1.png" alt="">
+                      <img src="~img/shangpu/pl2.png" alt="">
+                      <img src="~img/shangpu/pl3.png" alt="">
 
-      <div class="tuangou">
-        <div class="tit">
-          <span class="left" v-if="huodong">
-            <!-- <img src="~img/shangpu/tuangou.png" alt="" class="icon"> -->
-            活动({{huodong.length}})
-          </span>
-          <!-- <span class="right">
-            <i class="iconfont icon-dui">随时退</i>
-            <i class="iconfont icon-dui">过期退</i>
-          </span> -->
-        </div>
-        <div class="list">
-          <huodong v-for="(item,index) in huodong" :key="index" :info='item'></huodong>
-        </div>
-      </div>
-
-      <div class="tuangou">
-        <div class="tit">
-          <span class="left" v-if="shopInfo.fw">
-            <!-- <img src="~img/shangpu/tuangou.png" alt="" class="icon"> -->
-            服务({{shopInfo.fw.length}})
-          </span>
-          <!-- <span class="right">
-            <i class="iconfont icon-dui">随时退</i>
-            <i class="iconfont icon-dui">过期退</i>
-          </span> -->
-        </div>
-        <div class="list">
-          <tuangou v-for="(item,index) in shopInfo.fw" :key="index" :info='item'></tuangou>
-        </div>
-      </div>
-
-      <!-- <div class="pingjia">
-        <div class="title">
-          <div class="left">网友点评(28)</div>
-          <span class="iconfont icon-jinru"></span>
-        </div>
-        <div class="list">
-          <div class="item">
-            <div class="left"><img src="~img/shangpu/avatar.png" alt="" class="avatar"></div>
+                    </div>
+                  </div>
+                  <div class="click">
+                    <span>浏览2059</span>
+                    <span>132
+                      <i class="iconfont icon-dianzan"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="sp-info2">
+            <div class="top">
+              <span class="iconfont icon-yingyeshijian"></span>营业时间：周一到周日 08:00 —— 19:00</div>
+            <div class="middle">
+              <span class="txt">WIFI</span>
+              <span class="txt">刷卡</span>
+              <span class="txt">手机支付</span>
+            </div>
+            <div class="bottom">
+              <span class="txt">内饰清洗</span>
+              <span class="txt">抛光</span>
+              <span class="txt">清洗</span>
+              <span class="txt">补胎</span>
+            </div>
+          </div>
+          <div class="address">
+            <div class="left">
+              <div class="top">
+                <span class="iconfont icon-weizhi1"></span>{{shopInfo.adress}}</div>
+              <div class="bottom">
+                距地铁2号线靖江路站c口（东）口步行690米
+              </div>
+            </div>
             <div class="right">
-              <div class="tit">
-                <span class="name">黑夜的味道</span>
-                <span class="date">2017年11月28日</span>
-              </div>
-              <rater val='4' class="rater"></rater>
-              <div class="content">
-                <div class="txt">
-                  家门口的修理厂，巴拉巴拉北京佛无法就我IE分级加尔文覅金额外，非法金额为飞机。
-                </div>
-                <div class="imgs">
-                  <img src="~img/shangpu/pl1.png" alt="">
-                  <img src="~img/shangpu/pl2.png" alt="">
-                  <img src="~img/shangpu/pl3.png" alt="">
+              <span class="iconfont icon-lianxifangshi" v-if="shopInfo.shop_phone == 0"></span>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
 
-                </div>
-              </div>
-              <div class="click">
-                <span>浏览2059</span>
-                <span>132
-                  <i class="iconfont icon-dianzan"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="left"><img src="~img/shangpu/avatar.png" alt="" class="avatar"></div>
-            <div class="right">
-              <div class="tit">
-                <span class="name">黑夜的味道</span>
-                <span class="date">2017年11月28日</span>
-              </div>
-              <rater val='1' class="rater"></rater>
-              <div class="content">
-                <div class="txt">
-                  家门口的修理厂，巴拉巴拉北京佛无法就我IE分级加尔文覅金额外，非法金额为飞机。
-                </div>
-                <div class="imgs">
-                  <img src="~img/shangpu/pl1.png" alt="">
-                  <img src="~img/shangpu/pl2.png" alt="">
-                  <img src="~img/shangpu/pl3.png" alt="">
-
-                </div>
-              </div>
-              <div class="click">
-                <span>浏览2059</span>
-                <span>132
-                  <i class="iconfont icon-dianzan"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hot">
-        <div class="title">小伙伴们还喜欢</div>
-        <div class="list">
-          <div class="item">
-            <img src="~img/shangpu/car.png" alt="" class="thumb">
-            <div class="intr">
-              <div class="tit">炫车豪庭汽车</div>
-              <rater val='2' class="rater"></rater>
-              <div class="tip">
-                <span>维修保养</span>
-                <span>卫国道</span>
-                <span>12KM</span>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <img src="~img/shangpu/car.png" alt="" class="thumb">
-            <div class="intr">
-              <div class="tit">炫车豪庭汽车</div>
-              <rater val='2' class="rater"></rater>
-              <div class="tip">
-                <span>维修保养</span>
-                <span>卫国道</span>
-                <span>12KM</span>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <img src="~img/shangpu/car.png" alt="" class="thumb">
-            <div class="intr">
-              <div class="tit">炫车豪庭汽车</div>
-              <rater val='2' class="rater"></rater>
-              <div class="tip">
-                <span>维修保养</span>
-                <span>卫国道</span>
-                <span>12KM</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div> -->
-    </ViewBox>
+    </betterScroll>
   </div>
 </template>
 <script>
-import { Swiper, SwiperItem, ViewBox, Cell, Group } from "vux";
-import rater from "@/components/star/index";
-import tuangou from "@/components/service/serviceTuan.vue";
-import huodong from "@/components/service/huodong.vue";
-export default {
-  data() {
-    return {
-      val: 3,
-      shopInfo: "",
-      huodong:[]
-    };
-  },
-  created() {
-    var _this = this;
-    this.$axios
-      .get(this.API_URL + "/Api/Show/get_shop", {
-        params: {
-          shop_id: _this.shopId
-        }
-      })
-      .then(({ data }) => {
-        console.log(data);
-        _this.shopInfo = data[0];
-      });
-// 获取所有活动
-      this.$axios
-      .get(this.API_URL + "/Api/Show/get_card", {
-        params: {
-          shop_id: _this.shopId
-        }
-      })
-      .then(({ data }) => {
-        console.log(data);
-        _this.huodong = data;
-      });
-  },
-  computed: {
-    shopId() {
-      return this.$route.params.shangpuId;
-    }
-  },
-  components: {
+  import {
+    // Swiper,
+    // SwiperItem,
     ViewBox,
-    Swiper,
-    SwiperItem,
-    rater,
-    tuangou,
     Cell,
     Group,
-    huodong
-  }
-};
+    Tab,
+    TabItem,
+    Sticky,
+    Selector
+  } from "vux";
+  import {
+    swiper,
+    swiperSlide
+  } from "vue-awesome-swiper";
+  import betterScroll from '@/components/betterScroll/index';
+  import rater from "@/components/star/index";
+  import tuangou from "@/components/service/serviceTuan.vue";
+  import huodong from "@/components/service/huodong.vue";
+  import fw from "@/components/service/shop_service.vue";
+  import fw2 from "@/components/service/shop_service2.vue";
+  import hd from "@/components/service/shop_huodong.vue";
+  var StackBlur = require("stackblur-canvas");
+  import {
+    Slider,
+    SliderItem
+  } from 'vue-ydui/dist/lib.px/slider';
+
+  export default {
+    data() {
+      return {
+        val: 3,
+        shopInfo: "",
+        current_fw_list: [],
+        huodong: [],
+        selected: '全部服务',
+        tabActiveIndex: 0,
+        swiperOption: {
+          autoHeight: true
+        },
+        top_ad: [],
+        showType: 2,
+        classArr: [],
+        leibie: ''
+      };
+    },
+    created() {
+      var _this = this;
+      this.get_shop();
+      // 获取所有活动
+      this.$axios
+        .get(this.API_URL + "/Api/Show/get_card", {
+          params: {
+            shop_id: _this.shopId
+          }
+        })
+        .then(({
+          data
+        }) => {
+          console.log(data);
+          _this.huodong = data;
+        });
+
+      this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({
+        data
+      }) => {
+        // 获取头部广告
+        this.top_ad = data.list_banner;
+      });
+    },
+    methods: {
+      load_blur_bg() {
+        console.log('加载好了')
+        StackBlur.image('blur-bg', 'blur-canvas', 100, true);
+      },
+      transitionEnd() {
+        console.log(this.swiper.activeIndex)
+        this.tabActiveIndex = this.swiper.activeIndex
+      },
+      changeTab(val) {
+        this.swiper.slideTo(val, 200, false)
+      },
+      changeShowType(type) {
+        this.showType = type;
+      },
+      getClassArr(fw) {
+        if (fw.length > 0) {
+          var classArr = [{
+            value: '全部',
+            key: 0
+          }];
+          var classs = [];
+          fw.map(m => {
+            if (classs.indexOf(m.fw_id) < 0) {
+              var cls = {};
+              cls.key = m.fw_id;
+              cls.value = m.two_name;
+              classArr.push(cls);
+              classs.push(m.fw_id);
+            }
+          })
+          this.classArr = classArr;
+          console.log(classArr)
+        }
+      },
+      get_shop() {
+        this.$axios
+          .get(this.API_URL + "/Api/Show/get_shop", {
+            params: {
+              shop_id: this.shopId
+            }
+          })
+          .then(({
+            data
+          }) => {
+            console.log(data);
+            this.shopInfo = data[0];
+            this.setMetaTitle(data[0].shop_name);
+            this.getClassArr(data[0].fw);
+            this.current_fw_list = data[0].fw;
+          });
+      },
+      changeFwType(fwId) {
+        console.log(fwId)
+        if (fwId == 0) {
+          // 全部
+          this.current_fw_list = this.shopInfo.fw;
+        } else {
+          this.current_fw_list = this.shopInfo.fw.filter(m => {
+            return m.fw_id == fwId;
+          })
+        }
+
+      }
+    },
+    computed: {
+      shopId() {
+        return this.$route.params.shangpuId;
+      },
+      swiper() {
+        return this.$refs.mySwiper.swiper
+      },
+    },
+    mounted() {
+
+    },
+    components: {
+      ViewBox,
+      rater,
+      tuangou,
+      Cell,
+      Group,
+      huodong,
+      Tab,
+      TabItem,
+      Sticky,
+      Slider,
+      SliderItem,
+      fw,
+      fw2,
+      hd,
+      betterScroll,
+      swiperSlide,
+      swiper,
+      Selector
+    }
+  };
+
 </script>
 
 <style lang='scss'>
-.banner {
-  height: 5.12rem;
-  overflow: hidden;
-}
+  .banner {
+    height: 5.12rem;
+    overflow: hidden;
+  }
 
-%public {
-  padding: 0.32rem 0.56rem 0.32rem 0.4rem;
-  background: #ffffff;
-  border-bottom: 1px solid #dfdfdf;
-  line-height: 1;
-  color: #2b2b2b;
-  .top,
-  .middle,
-  .bottom {
-    display: flex;
-    align-items: center;
-  }
-  .top,
-  .middle {
-    margin-bottom: 0.32rem;
-  }
-  .middle,
-  .bottom {
-    .txt {
-      color: #2b2b2b;
-      opacity: 0.5;
-    }
-  }
-}
-.sp-info1 {
-  @extend %public;
-
-  .top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    @include font-dpr(16px);
-    color: #2b2b2b;
-  }
-  .bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .rater {
-    margin-right: 0.8rem;
-  }
-}
-.sp-info2 {
-  .iconfont {
-    @include font-dpr(22px);
-  }
-  @extend %public;
-  .top {
-    @include font-dpr(12px);
-    .icon-yingyeshijian {
-      margin-right: 0.186667rem;
-    }
-  }
-  .middle,
-  .bottom {
-    padding-left: 0.8rem;
-  }
-  .middle {
-    .txt {
-      margin-right: 0.88rem;
-    }
-  }
-  .bottom {
-    .txt {
+  .shop-wrapper {
+    padding-bottom: 50px;
+    .info-wrapper {
+      position: relative;
       display: flex;
-      align-items: center;
-      padding: 0 0.213333rem;
-      height: 0.453333rem;
-      border: 1px solid #7f7f7f;
-      border-radius: 0.08rem;
-      margin-right: 0.293333rem;
-    }
-  }
-}
-.address {
-  padding: 0.293333rem 0 0.293333rem 0.4rem;
-  background: #ffffff;
-  display: flex;
-  color: #2b2b2b;
-  margin-bottom: 0.373333rem;
-  .iconfont {
-    @include font-dpr(24px);
-  }
-  .top {
-    display: flex;
-    align-items: center;
-    line-height: 0.453333rem;
-    margin-bottom: 0.2rem;
-    .icon-weizhi1 {
-      margin-right: 0.24rem;
-    }
-  }
-  .bottom {
-    padding-left: 0.8rem;
-    opacity: 0.5;
-  }
-  .right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 2.026667rem;
-  }
-}
-.tuangou {
-  margin-bottom: 0.373333rem;
-  .tit {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 0.933333rem;
-    padding: 0 0.453333rem;
-    background: #ffffff;
-    border-bottom: 1px solid #dfdfdf;
-    color: #2b2b2b;
-    .left,
-    .right {
-      display: flex;
-      align-items: center;
-    }
-    .left {
-      font-size: 17px;
-    }
-    .right {
-      font-size: 12px;
-      opacity: 0.5;
-      .icon-dui {
-        &:first-child {
-          margin-right: 0.48rem;
-        }
-        &:before {
-          margin-right: 0.133333rem;
+      padding: .533333rem/* 40/75 */
+      .4rem/* 30/75 */
+      ;
+      margin-bottom: $bot;
+      color: #ffffff;
+      overflow: hidden;
+      .logo {
+        position: relative;
+        z-index: 9999;
+        width: 2.133333rem/* 160/75 */
+        ;
+        height: 2.133333rem/* 160/75 */
+        ;
+        margin-right: .466667rem/* 35/75 */
+        ;
+        border-radius: .133333rem/* 10/75 */
+        ;
+        overflow: hidden;
+        flex: none;
+        .img {
+          height: 100%;
         }
       }
-    }
-    .icon {
-      width: 0.586667rem;
-      margin-right: 0.2rem;
-    }
-  }
-}
-.pingjia {
-  margin-bottom: 0.373333rem;
-  .title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    @include font-dpr(17px);
-    background: #ffffff;
-    height: 1.026667rem;
-    padding: 0 0.453333rem;
-    border-bottom: 1px solid #dfdfdf;
-  }
-  .item {
-    display: flex;
-    background: #ffffff;
-    border-bottom: 1px solid #dfdfdf;
-    .left {
-      padding: 0.32rem 0.32rem 0 0.4rem;
-      .avatar {
-        width: 1.466667rem;
-        height: 1.466667rem;
-        border-radius: 50%;
+      .info {
+        position: relative;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+      .blur-bg {
+        position: absolute;
+        top: -99999px;
+        right: -99999px;
+      }
+      .blur-canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
       }
     }
-    .right {
-      padding: 0.426667rem 0.4rem 0.4rem 0;
-      flex: 1;
-      line-height: 1;
-      .tit {
-        margin-bottom: 0.346667rem;
+    .x-tab {
+      .vux-tab,
+      .vux-tab-container {
+        height: 1.706667rem/* 128/75 */
+        ;
+      }
+      .vux-tab-item {
+        display: flex;
+        flex-direction: column;
+
+        .iconfont {
+          font-size: .8rem/* 60/75 */
+          ;
+        }
+        .icon-yonghupingjiaweixuanzhong {
+          font-size: .666667rem/* 50/75 */
+          ;
+        }
+        .icon-shangpuxiangqingxuanzhong {
+          font-size: .733333rem/* 55/75 */
+          ;
+        }
+        span {
+          margin-top: -.533333rem/* 40/75 */
+          ;
+        }
+      }
+
+    }
+    .vux-tab-wrap {
+      padding-top: 1.706667rem/* 128/75 */
+      ;
+    }
+    .fw-wrapper {
+      background: #ffffff;
+      .toggle-btn {
         display: flex;
         justify-content: space-between;
+        padding: 0 .4rem/* 30/75 */
+        ;
+        height: 1.333333rem/* 100/75 */
+        ;
         align-items: center;
-        color: #2b2b2b;
-        .name {
-          font-size: 15px;
-        }
-        .date {
-          opacity: 0.5;
-          font-size: 12px;
-        }
-      }
-      .rater {
-        margin-bottom: 0.4rem;
-      }
-      .content {
-        margin-bottom: 0.4rem;
-        .txt {
-          line-height: 0.56rem;
-          margin-bottom: 0.266667rem;
-        }
-        .imgs {
-          display: flex;
-          justify-content: space-between;
-          img {
-            width: 2.066667rem;
-            height: 1.786667rem;
+        .selector {
+          .weui-cells {
+            margin-top: 0;
+            &:after {
+              border: none;
+            }
+            &:before {
+              border: none;
+            }
+          }
+          .weui-select {
+            height: .533333rem/* 40/75 */
+            ;
+            font-size: .333333rem/* 25/75 */
+            ;
+            line-height: .533333rem/* 40/75 */
+            ;
+          }
+          .weui-cell__bd {
+            &:after {
+              display: none;
+            }
+          }
+          .weui-label {
+            width: 1px;
+            visibility: hidden;
           }
         }
+        .iconfont {
+          font-size: .733333rem/* 55/75 */
+          ;
+          color: #b2b2b2;
+          margin-left: .666667rem/* 50/75 */
+          ;
+        }
+        .active {
+          color: #000000;
+        }
       }
-      .click {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        @include font-dpr(12px);
+    }
+    .fw-list {
+      width: 100%;
+      box-sizing: border-box;
+      background: #ffffff;
+      padding: 0 .666667rem/* 50/75 */
+      ;
+      &:after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+      .fw2-item {
+        float: left;
+        margin-right: .8rem/* 60/75 */
+        ;
+        margin-bottom: .733333rem/* 55/75 */
+        ;
+      }
+      .fw2-item {
+        &:nth-child(even) {
+          margin-right: 0;
+        }
+      }
+    }
+    .top-ad {
+      height: 2.4rem;
+    }
+  }
+
+  %public {
+    padding: 0.32rem 0.56rem 0.32rem 0.4rem;
+    background: #ffffff;
+    border-bottom: 1px solid #dfdfdf;
+    line-height: 1;
+    color: #2b2b2b;
+    .top,
+    .middle,
+    .bottom {
+      display: flex;
+      align-items: center;
+    }
+    .top,
+    .middle {
+      margin-bottom: 0.32rem;
+    }
+    .middle,
+    .bottom {
+      .txt {
         color: #2b2b2b;
         opacity: 0.5;
       }
     }
   }
-}
-.hot {
-  .title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    @include font-dpr(17px);
-    background: #ffffff;
-    height: 1.026667rem;
-    padding: 0 0.4rem;
-  }
-  .list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 0 0.4rem;
-    background: #ffffff;
-  }
-  .item {
-    width: 4.24rem;
-    line-height: 1;
-    background: #ffffff;
-    padding-bottom: 0.426667rem;
-    .thumb {
-      width: 100%;
-      margin-bottom: 0.133333rem;
-    }
-    .tit {
-      @include font-dpr(15px);
-      color: #2b2b2b;
-      margin-bottom: 0.213333rem;
-    }
-    .rater {
-      margin-bottom: 0.293333rem;
-    }
-    .tip {
+
+  .sp-info1 {
+    @extend %public;
+
+    .top {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      @include font-dpr(16px);
       color: #2b2b2b;
-      @include font-dpr(12px);
-      opacity: 0.5;
+    }
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .rater {
+      margin-right: 0.8rem;
     }
   }
-}
+
+  .sp-info2 {
+    .iconfont {
+      @include font-dpr(22px);
+    }
+    @extend %public;
+    .top {
+      @include font-dpr(12px);
+      .icon-yingyeshijian {
+        margin-right: 0.186667rem;
+      }
+    }
+    .middle,
+    .bottom {
+      padding-left: 0.8rem;
+    }
+    .middle {
+      .txt {
+        margin-right: 0.88rem;
+      }
+    }
+    .bottom {
+      .txt {
+        display: flex;
+        align-items: center;
+        padding: 0 0.213333rem;
+        height: 0.453333rem;
+        border: 1px solid #7f7f7f;
+        border-radius: 0.08rem;
+        margin-right: 0.293333rem;
+      }
+    }
+  }
+
+  .address {
+    padding: 0.293333rem 0 0.293333rem 0.4rem;
+    background: #ffffff;
+    display: flex;
+    color: #2b2b2b;
+    margin-bottom: 0.373333rem;
+    .iconfont {
+      @include font-dpr(24px);
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      line-height: 0.453333rem;
+      margin-bottom: 0.2rem;
+      .icon-weizhi1 {
+        margin-right: 0.24rem;
+      }
+    }
+    .bottom {
+      padding-left: 0.8rem;
+      opacity: 0.5;
+    }
+    .right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 2.026667rem;
+    }
+  }
+
+  .tuangou {
+    margin-bottom: 0.373333rem;
+    .tit {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 0.933333rem;
+      padding: 0 0.453333rem;
+      background: #ffffff;
+      border-bottom: 1px solid #dfdfdf;
+      color: #2b2b2b;
+      .left,
+      .right {
+        display: flex;
+        align-items: center;
+      }
+      .left {
+        font-size: 17px;
+      }
+      .right {
+        font-size: 12px;
+        opacity: 0.5;
+        .icon-dui {
+          &:first-child {
+            margin-right: 0.48rem;
+          }
+          &:before {
+            margin-right: 0.133333rem;
+          }
+        }
+      }
+      .icon {
+        width: 0.586667rem;
+        margin-right: 0.2rem;
+      }
+    }
+  }
+
+  .pingjia {
+    margin-bottom: 0.373333rem;
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      @include font-dpr(17px);
+      background: #ffffff;
+      height: 1.026667rem;
+      padding: 0 0.453333rem;
+      border-bottom: 1px solid #dfdfdf;
+    }
+    .item {
+      display: flex;
+      background: #ffffff;
+      border-bottom: 1px solid #dfdfdf;
+      .left {
+        padding: 0.32rem 0.32rem 0 0.4rem;
+        .avatar {
+          width: 1.466667rem;
+          height: 1.466667rem;
+          border-radius: 50%;
+        }
+      }
+      .right {
+        padding: 0.426667rem 0.4rem 0.4rem 0;
+        flex: 1;
+        line-height: 1;
+        .tit {
+          margin-bottom: 0.346667rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: #2b2b2b;
+          .name {
+            font-size: 15px;
+          }
+          .date {
+            opacity: 0.5;
+            font-size: 12px;
+          }
+        }
+        .rater {
+          margin-bottom: 0.4rem;
+        }
+        .content {
+          margin-bottom: 0.4rem;
+          .txt {
+            line-height: 0.56rem;
+            margin-bottom: 0.266667rem;
+          }
+          .imgs {
+            display: flex;
+            justify-content: space-between;
+            img {
+              width: 2.066667rem;
+              height: 1.786667rem;
+            }
+          }
+        }
+        .click {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          @include font-dpr(12px);
+          color: #2b2b2b;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  .hot {
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      @include font-dpr(17px);
+      background: #ffffff;
+      height: 1.026667rem;
+      padding: 0 0.4rem;
+    }
+    .list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 0 0.4rem;
+      background: #ffffff;
+    }
+    .item {
+      width: 4.24rem;
+      line-height: 1;
+      background: #ffffff;
+      padding-bottom: 0.426667rem;
+      .thumb {
+        width: 100%;
+        margin-bottom: 0.133333rem;
+      }
+      .tit {
+        @include font-dpr(15px);
+        color: #2b2b2b;
+        margin-bottom: 0.213333rem;
+      }
+      .rater {
+        margin-bottom: 0.293333rem;
+      }
+      .tip {
+        display: flex;
+        justify-content: space-between;
+        color: #2b2b2b;
+        @include font-dpr(12px);
+        opacity: 0.5;
+      }
+    }
+  }
+
 </style>

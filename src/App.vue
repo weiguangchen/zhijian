@@ -23,7 +23,13 @@ export default {
   name: "App",
   components: {},
   created() {
+    // var router = this.$route;
+    // console.log('router')
+    // console.log(router);
 
+    // if(router.meta.title != ''){
+    //   this.setMetaTitle(router.meta.title);
+    // }
   },
   computed: {
     ...mapState(['isLoading']),

@@ -45,6 +45,7 @@
 import { InfiniteScroll } from "vue-ydui/dist/lib.px/infinitescroll";
 import { Layout } from "vue-ydui/dist/lib.px/layout";
 import pinglun from "@/components/pinglun/index";
+  import setTitle from '@/mixins/setTitle.js'
 export default {
   data() {
     return {
@@ -53,7 +54,7 @@ export default {
     };
   },
   created() {
-    document.title = "全部评论";
+    
     var _this = this;
     this.get_all_pl().then(res => {
       _this.list = res.list;
@@ -93,7 +94,8 @@ export default {
     fwId() {
       return this.$route.params.serviceId;
     }
-  }
+  },
+  mixins:[setTitle]
 };
 </script>
 

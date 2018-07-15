@@ -95,6 +95,7 @@ import { mapState,mapMutations } from 'vuex';
   } from "vue-ydui/dist/lib.px/layout";
   import checkLogin from "@/mixins/checkLogin.js";
   import getLocation from "@/mixins/getLocation.js";
+  import setTitle from '@/mixins/setTitle.js';
   export default {
     name: "service-list",
     data() {
@@ -168,7 +169,6 @@ import { mapState,mapMutations } from 'vuex';
       }
     },
     created() {
-      document.title = "服务列表";
       var _this = this;
 
 
@@ -385,7 +385,7 @@ import { mapState,mapMutations } from 'vuex';
       swiperSlide,
       swiper
     },
-    mixins: [checkLogin, getLocation]
+    mixins: [checkLogin, getLocation,setTitle]
   };
 
 </script>

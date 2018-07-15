@@ -40,6 +40,7 @@
   import checkLogin from "@/mixins/checkLogin.js";
   import wxConfig from "@/mixins/wxConfig.js";
   import uploadImage from '@/components/uploadImg/index';
+    import setTitle from '@/mixins/setTitle.js'
   export default {
     data() {
       return {
@@ -54,7 +55,6 @@
       };
     },
     created() {
-      document.title = "评价";
       var _this = this;
       this.checkSystem();
       // this.$eruda.init();
@@ -62,7 +62,7 @@
         this.$axios
           .get(this.API_URL + "/Api/UserShow/order_content1", {
             params: {
-              order_num: _this.order_num
+              order_num: _this.orderId
             }
           })
           .then(res => {
@@ -73,7 +73,7 @@
         this.$axios
           .get(this.API_URL + "/Api/UserShow/order_content", {
             params: {
-              order_num: _this.order_num
+              order_num: _this.orderId
             }
           })
           .then(res => {
@@ -207,7 +207,7 @@
         return this.$route.query.type;
       }
     },
-    mixins: [checkLogin]
+    mixins: [checkLogin,setTitle]
   };
 
 </script>

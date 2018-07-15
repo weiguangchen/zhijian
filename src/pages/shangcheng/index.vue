@@ -2,14 +2,14 @@
   <div class="page">
     <ViewBox class="shangcheng">
       <div class="top-input">
-        <span class="add">天津</span>
+        <span class="add" v-if="location">{{location.city}}</span>
         <input placeholder='请输入商家名或地点' class="search"/>
       </div>
       <ScrollTab class="ScrollTab">
         <ScrollTabPanel :label="item.class_name" v-for="(item,index) in listArr" :key="index">
           <div class="class-wrap">
             <div v-for="(item,index) in item.son" :key="index" class="two-item" @click="toDetail(item.id)">
-              <img :src="item.two_sp_class_img" alt="" class="thumb">
+              <img v-lazy="item.two_sp_class_img" alt="" class="thumb">
               <p>{{item.fw_name}}</p>
             </div>
           </div>
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { ViewBox, XInput } from "vux";
 import { ScrollTab, ScrollTabPanel } from "vue-ydui/dist/lib.px/scrolltab";
 export default {
@@ -30,7 +31,7 @@ export default {
     };
   },
   created() {
-    document.title = "商城";
+    this.setMetaTitle('商城');
     var _this = this;
     this.$axios.get(this.API_URL + "/api/Show/ot_class").then(({ data }) => {
       _this.listArr = data;
@@ -40,6 +41,9 @@ export default {
     toDetail(id) {
       this.$router.push("/serviceList/" + id);
     }
+  },
+  computed:{
+    ...mapState(["location"]),
   },
   components: {
     ScrollTab,

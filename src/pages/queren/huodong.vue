@@ -40,6 +40,7 @@
   } from "vux";
   import myMap from "@/components/map/index";
   import checkLogin from "@/mixins/checkLogin.js";
+  import setTitle from '@/mixins/setTitle.js'
   export default {
     data() {
       return {
@@ -53,7 +54,6 @@
       };
     },
     created() {
-      document.title = "确认订单";
       this.get_fw_info();
       // this.$eruda.init();
     },
@@ -184,7 +184,7 @@
       myMap,
       XButton
     },
-    mixins: [checkLogin]
+    mixins: [checkLogin, setTitle]
   };
 
 </script>

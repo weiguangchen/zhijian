@@ -31,10 +31,11 @@
       </div>
     </div>
     <Group class="classifiy">
-      <div>类别</div>
-      <CheckBoxGroup v-model="fw_class">
+      <Cell title='类别'></Cell>
+      <mu-radio  :value='item.id' v-for="(item,index) in fw_class_all" :key="index" v-model="fw_class" :label='item.class_name'></mu-radio>
+      <!-- <CheckBoxGroup v-model="fw_class">
         <CheckBox shape="circle" :val='item.id' v-for="(item,index) in fw_class_all" :key="index">{{item.class_name}}</CheckBox>
-      </CheckBoxGroup>
+      </CheckBoxGroup> -->
     </Group>
 
     <Group>
@@ -82,7 +83,7 @@ import {
   XAddress,
   XButton,
   Cell,
-  Selector
+  Selector,
 } from "vux";
 import { CheckBox, CheckBoxGroup } from "vue-ydui/dist/lib.px/checkbox";
 import checkLogin from "@/mixins/checkLogin.js";

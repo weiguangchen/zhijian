@@ -32,7 +32,7 @@
   } from 'vux'
   import betterScroll from '@/components/betterScroll';
   import checkLogin from "@/mixins/checkLogin.js";
-
+  import setTitle from '@/mixins/setTitle.js'
   export default {
     data() {
       return {
@@ -120,7 +120,7 @@
       XButton,
       betterScroll
     },
-    mixins: [checkLogin]
+    mixins: [checkLogin,setTitle]
   }
 
 </script>

@@ -1,22 +1,6 @@
 <template>
   <div class="page queren">
-    <div class="fw_info">
-      <div class="img-box">
-        <img :src="fwInfo.fw_img" alt="" class="thumb">
-      </div>
-      <div class="fw_txt">
-        <div class="fw_name">{{fwInfo.fw_mingzi}}</div>
-        <div class="fw_content">{{fwInfo.sub_content}}</div>
-      </div>
-    </div>
-    <div class="fw_num">
-      <Group class="form">
-        <XNumber title='购买数量' :min='1' v-model="num" v-if="!card_list.length>0" class="xnum"></XNumber>
-        <Cell title='总价' :value='money'></Cell>
-        <!-- <XInput title='联系人' v-model="lianxiren" text-align='right'></XInput>
-        <XInput title='联系电话' v-model="phone" text-align='right'></XInput>
-        <XInput title='服务地址' @click.native="openMap" v-model="mapInfo.poiaddress" text-align='right'></XInput> -->
-      </Group>
+    <betterScroll>
       <div class="address-wrapper" @click="toAddList">
         <div class="bg"></div>
         <div class="my-address">
@@ -34,27 +18,35 @@
               <i class="iconfont icon-jinru"></i>
             </div>
           </div>
-          <div class="no-add">点击添加收货地址</div>
+          <div class="no-add" v-else>点击添加收货地址</div>
         </div>
         <div class="bg"></div>
 
       </div>
-    </div>
+      <div class="fw_info">
+        <div class="img-box">
+          <img :src="fwInfo.fw_img" alt="" class="thumb">
+        </div>
+        <div class="fw_txt">
+          <div class="fw_name">{{fwInfo.fw_mingzi}}</div>
+          <div class="fw_content">{{fwInfo.sub_content}}</div>
+        </div>
+      </div>
+      <div class="fw_num">
+        <Group class="form">
+          <XNumber title='购买数量' :min='1' v-model="num" class="xnum"></XNumber>
+          <Cell title='总价' :value='money'></Cell>
+          <Cell title='选择服务时间' :isLink='true'></Cell>
+          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectJuan"></Cell>
+        </Group>
 
-    <div class="card-list" v-if="card_list.length>0">
-      <!-- <h1 class="sub-title">优惠卡</h1> -->
-      <!-- <Group>
-        <Radio :options='card_list' v-model="card_val"></Radio>
-      </Group> -->
-      <Group>
-        <PopupRadio title="优惠卡" :options='card_list' v-model="card_val">
-        </PopupRadio>
-      </Group>
+      </div>
 
-    </div>
 
-    <XButton class="xbtn" type='warn' @click.native='buy' :disabled='submiting'>结算</XButton>
-    <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
+      <XButton class="xbtn" type='warn' @click.native='buy' :disabled='submiting'>结算</XButton>
+    </betterScroll>
+      <selectJuan v-show="juanShow" @finish='finish' @set_card='set_card' :fwId='serviceId'></selectJuan>
+
   </div>
 </template>
 
@@ -68,20 +60,16 @@
     Radio,
     PopupRadio
   } from "vux";
-  import myMap from "@/components/map/index";
   import checkLogin from "@/mixins/checkLogin.js";
+  import setTitle from '@/mixins/setTitle.js'
+  import betterScroll from '@/components/betterScroll/index';
+  import selectJuan from './selectJuan';
   export default {
     data() {
       return {
         fwInfo: {},
         orderNum: "",
-        card_list: [{
-          value: '卡1',
-          key: 1
-        }, {
-          value: '卡2',
-          key: 2
-        }],
+        card_list: [],
         hasCard: false,
         mapShow: false,
         submiting: false,
@@ -92,23 +80,16 @@
         mapInfo: "",
         card_val: "",
 
-        moren_add: ''
+        moren_add: '',
+        juanShow:false
       };
     },
     created() {
-      document.title = "确认订单";
       this.get_fw_info();
       this.get_card();
       this.get_moren_add();
     },
     methods: {
-      openMap() {
-        this.mapShow = true;
-      },
-      finishAdd(val) {
-        this.mapInfo = val;
-        this.mapShow = false;
-      },
       buy() {
         var _this = this;
         this.submiting = true;
@@ -134,11 +115,15 @@
                         fw_id: _this.serviceId,
                         num: _this.num,
                         uid: _this.id,
-                        adress: _this.mapInfo.poiaddress,
-                        phone: _this.phone,
-                        xingming: _this.lianxiren,
-                        card_id: _this.card_val,
-                        shop_id: _this.shopid
+                        shop_id: _this.shopid,
+                        adress: _this.moren_add.adress,
+                        dianhua: _this.moren_add.phone,
+                        xingming: _this.moren_add.name,
+                        three: _this.moren_add.three,
+                        car_card: _this.moren_add.car_card,
+                        car_color: _this.moren_add.car_color,
+                        car_xing: _this.moren_add.car_xing,
+                        card_id: _this.card_val
                       }
                     })
                     .then(({
@@ -161,13 +146,13 @@
                         shop_fw_id: _this.serviceId,
                         num: _this.num,
                         uid: _this.id,
-                        adress: _this.mapInfo.poiaddress,
-                        dianhua: _this.phone,
-                        xingming: _this.lianxiren,
-                        three: this.moren_add.three,
-                        car_card: this.moren_add.car_card,
-                        car_color: this.moren_add.car_color,
-                        car_xing: this.moren_add.car_xing
+                        adress: _this.moren_add.adress,
+                        dianhua: _this.moren_add.phone,
+                        xingming: _this.moren_add.name,
+                        three: _this.moren_add.three,
+                        car_card: _this.moren_add.car_card,
+                        car_color: _this.moren_add.car_color,
+                        car_xing: _this.moren_add.car_xing
                       }
                     })
                     .then(({
@@ -255,16 +240,7 @@
           .then(({
             data
           }) => {
-            var radioList = [];
-            if (data.status == 1) {
-              data.data.map(m => {
-                var item = {};
-                item.key = m.bk_id;
-                item.value = m.card_name;
-                radioList.push(item);
-              });
-            }
-            this.card_list = radioList;
+            this.card_list = data.data;
           });
       },
       get_moren_add() {
@@ -283,6 +259,22 @@
         this.$router.push({
           path: '/addressList'
         })
+      },
+      selectJuan() {
+        this.juanShow = true;
+        // this.$router.push({
+        //   path: '/selectJuan',
+        //   query: {
+        //     fwId: this.serviceId
+        //   }
+        // })
+
+      },
+      finish(val){
+        this.juanShow = val;
+      },
+      set_card(val){
+        this.card_val = val;
       }
     },
     computed: {
@@ -306,12 +298,13 @@
       Group,
       XInput,
       Cell,
-      myMap,
       XButton,
       Radio,
-      PopupRadio
+      PopupRadio,
+      betterScroll,
+      selectJuan
     },
-    mixins: [checkLogin]
+    mixins: [checkLogin, setTitle]
   };
 
 </script>
@@ -360,95 +353,170 @@
       .form {
         margin-bottom: $bot;
       }
-      .address-wrapper {
-        .bg {
-          height: .4rem/* 30/75 */
+    }
+    .address-wrapper {
+      .bg {
+        height: .4rem/* 30/75 */
+        ;
+        background: url(~img/public/queren-bg.png);
+      }
+      .my-address {
+        min-height: 4.266667rem/* 320/75 */
+        ;
+        background: #ffffff;
+        .my-add-box {
+          padding: .266667rem/* 20/75 */
+          0 .266667rem/* 20/75 */
+          .4rem/* 30/75 */
           ;
-          background: url(~img/public/queren-bg.png);
-        }
-        .my-address {
-          height: 4.266667rem/* 320/75 */
-          ;
-          min-height: 4.266667rem/* 320/75 */
-          ;
-          background: #ffffff;
-          .my-add-box {
-            padding: .266667rem/* 20/75 */
-            0 .266667rem/* 20/75 */
-            .4rem/* 30/75 */
-            ;
-            .title {
-              display: flex;
-              align-items: center;
-              margin-bottom: .4rem/* 30/75 */
-              ;
-              .iconfont {
-                width: .933333rem/* 70/75 */
-                ;
-                font-size: .6rem/* 45/75 */
-                ;
-              }
-              font-size: .373333rem/* 28/75 */
-              ;
-            }
-            .add-info {
-              color: #4f4f4f;
-              font-size: .346667rem/* 26/75 */
-              ;
-              line-height: 2;
-              display: flex;
-              align-items: center;
-              padding-left: .933333rem/* 70/75 */
-              ;
-              .info-wrapper {
-                word-wrap: break-word;
-                overflow: hidden;
-                flex: none;
-                width: 7.466667rem/* 560/75 */
-                ;
-                .txt {
-                  float: left;
-                }
-                .car-info {
-                  font-size: .32rem/* 24/75 */
-                  ;
-                  color: #5f5f5f;
-                }
-              }
-              .icon-jinru {
-                font-size: .56rem/* 42/75 */
-                ;
-                color: #000000;
-                margin-left: .2rem/* 15/75 */
-                ;
-              }
-            }
-          }
-          .no-add {
+          .title {
             display: flex;
-            justify-content: center;
             align-items: center;
-            width: 100%;
-            height: 100%;
-            font-size: .48rem/* 36/75 */
+            margin-bottom: .4rem/* 30/75 */
             ;
-            opacity: .5;
+            .iconfont {
+              width: .933333rem/* 70/75 */
+              ;
+              font-size: .6rem/* 45/75 */
+              ;
+            }
+            font-size: .373333rem/* 28/75 */
+            ;
           }
+          .add-info {
+            color: #4f4f4f;
+            font-size: .346667rem/* 26/75 */
+            ;
+            line-height: 2;
+            display: flex;
+            align-items: center;
+            padding-left: .933333rem/* 70/75 */
+            ;
+            .info-wrapper {
+              word-wrap: break-word;
+              overflow: hidden;
+              flex: none;
+              width: 7.466667rem/* 560/75 */
+              ;
+              .txt {
+                float: left;
+              }
+              .car-info {
+                font-size: .32rem/* 24/75 */
+                ;
+                color: #5f5f5f;
+              }
+            }
+            .icon-jinru {
+              font-size: .56rem/* 42/75 */
+              ;
+              color: #000000;
+              margin-left: .2rem/* 15/75 */
+              ;
+            }
+          }
+        }
+        .no-add {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          font-size: .48rem/* 36/75 */
+          ;
+          opacity: .5;
         }
       }
-
     }
     .fw_time {
       margin-bottom: $bot;
     }
     .xbtn {
-      margin-top: 1.333333rem;
+      // margin-top: 1.333333rem;
     }
     .card-list {
+      box-sizing: bor der-box;
+      background: #ffffff;
       .sub-title {
         padding: 10px 15px;
         @include font-dpr(17px);
         background: #ffffff;
+      }
+      .card-item {
+        display: flex;
+        padding-right: .6rem/* 45/75 */
+        ;
+        margin-bottom: .666667rem/* 50/75 */
+        ;
+        .card-radio {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: 1;
+        }
+        .card {
+          display: flex;
+          position: relative;
+          width: 8rem/* 600/75 */
+          ;
+          padding: .133333rem/* 10/75 */
+          0 .133333rem/* 10/75 */
+          .666667rem/* 50/75 */
+          ;
+          min-height: 1.786667rem/* 134/75 */
+          ;
+          background-image: url(~img/public/card-bg.png);
+          background-position-y: .533333rem/* 40/75 */
+          ;
+          background-size: 5.533333rem/* 415/75 */
+          ;
+          background-repeat: no-repeat;
+          background-color: #ffffff;
+          box-shadow: 0 0 10px 4px rgba(#000000, .1);
+          font-size: .32rem/* 24/75 */
+          ;
+          .card-info {
+            width: 5.533333rem/* 415/75 */
+            ;
+            border-right: 1px dashed #7b7b7b;
+            line-height: .64rem/* 48/75 */
+            ;
+            display: flex;
+            .text {
+              flex: none;
+            }
+            .fw-box {
+              padding: 0 .266667rem/* 20/75 */
+              ;
+              .fw {
+                display: inline-block;
+              }
+            }
+          }
+          .cishu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            text-align: center;
+            padding: .4rem/* 30/75 */
+            0;
+            em {
+              font-size: .64rem/* 48/75 */
+              ;
+              font-weight: bold;
+              color: #de3232;
+            }
+          }
+          .left-circle {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translate(-50%, -50%);
+            width: .533333rem/* 40/75 */
+            ;
+          }
+        }
       }
     }
   }

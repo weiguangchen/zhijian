@@ -160,7 +160,7 @@
     },
 
     created() {
-      document.title = "服务列表";
+      document.title = "";
       var _this = this;
 
       this.getPosition().then(res => {
@@ -208,6 +208,7 @@
           .then(({
             data
           }) => {
+            this.setMetaTitle(data.ming)
             console.log(data);
             if (data.ok == 1) {
               _this.p++;

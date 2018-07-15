@@ -94,7 +94,12 @@
     methods: {
       pingjia(orderId) {
         console.log(orderId);
-        this.$router.push("/me/pingjia/" + orderId);
+        this.$router.push({
+          path:"/me/pingjia/" + orderId,
+          query:{
+            type:this.type
+          }
+        });
       },
       toDetail(id) {
         this.$toDetail(id);

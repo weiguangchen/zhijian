@@ -10,6 +10,7 @@ Vue.prototype.$axios = axios;
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
 
+import 'vue-ydui/dist/ydui.base.css';
 // import 'muse-ui/lib/styles/base.less';
 import { Radio,Checkbox } from 'muse-ui';
 // import 'muse-ui/lib/styles/theme.less';
@@ -17,11 +18,21 @@ Vue.component('mu-radio',Radio);
 Vue.component('mu-checkbox',Checkbox);
 
 import 'iview/dist/styles/iview.css';
-import { Select , Option  } from 'iview';
+import { Select , Option,Step,Steps  } from 'iview';
 Vue.component('iview-select', Select);
 Vue.component('iview-op', Option );
+Vue.component('iview-step', Step );
+Vue.component('iview-steps', Steps );
 
-
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload)
+// // or with options
+// Vue.use(VueLazyload, {
+//   preLoad: 1.3,
+//   error: 'dist/error.png',
+//   loading: 'dist/loading.gif',
+//   attempt: 1
+// })
 
 import VueHead from 'vue-head'
 Vue.use(VueHead)

@@ -7,27 +7,22 @@
         <div class="index">
           <ViewBox>
             <div class="top-ad">
-              <swiper :options="swiperOption1" ref="mySwiper1">
-                <!-- slides -->
-                <swiper-slide v-for="(item,index) in top_ad" :key="index">
-                  <img :src="item.url" alt="">
-                </swiper-slide>
-              </swiper>
-
               <div class="top-input">
                 <span class="add" v-if="location">{{location.city}}</span>
                 <input placeholder='请输入商家名或地点' class="search" />
               </div>
-
+              <swiper :options="swiperOption1" ref="mySwiper1" @transitionEnd='transitionEnd(1)'>
+                <swiper-slide v-for="(item,index) in top_ad" :key="index">
+                  <img v-lazy="item.url" alt="">
+                </swiper-slide>
+              </swiper>
             </div>
-            <!-- <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="https://apis.map.qq.com/tools/geolocation?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
-        </iframe> -->
             <classify :classArr='classArr' v-if="classArr.length"></classify>
             <div class="huodong">
-              <swiper :options="swiperOption2" ref="mySwiper2">
+              <swiper :options="swiperOption2" ref="mySwiper2" @transitionEnd='transitionEnd(2)'>
                 <!-- slides -->
                 <swiper-slide v-for="(item,index) in middle_ad" :key="index">
-                  <img :src="item.url" alt="">
+                  <img v-lazy="item.url" alt="">
                 </swiper-slide>
                 <!-- Optional controls -->
                 <div class="swiper-pagination" slot="pagination"></div>
@@ -36,7 +31,7 @@
             </div>
             <div class="huodong-list">
               <div class="item" v-for="(item,index) in hd" :key="index" @click="toHd(item.alt)">
-                <img :src="item.url" alt="" class="img">
+                <img v-lazy="item.url" alt="" class="img">
               </div>
             </div>
 
@@ -98,17 +93,20 @@
   } from "assert";
   import getLocation from "@/mixins/getLocation.js";
   import BScroll from "better-scroll";
+  import setTitle from '@/mixins/setTitle.js'
   export default {
     data() {
       return {
         scroll: {},
         swiperOption1: {
           loop: true,
+          disableOnInteraction: false,
           autoplay: true
         },
         swiperOption2: {
           loop: true,
           autoplay: true,
+          disableOnInteraction: false,
           pagination: {
             el: ".huodong .swiper-pagination"
           }
@@ -123,7 +121,6 @@
       };
     },
     created() {
-      document.title = "首页";
       var _this = this;
       // this.$eruda.init();
 
@@ -143,19 +140,7 @@
         // 活动推荐
         this.hd = data.hd_banner;
       });
-      // this.$wx.ready(function() {
-      //   _this.$wx.getLocation({
-      //     type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-      //     success: function(res) {
-      //       var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-      //       var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-      //       var speed = res.speed; // 速度，以米/每秒计
-      //       var accuracy = res.accuracy; // 位置精度
-      //       console.log("地理位置:");
-      //       console.log(res);
-      //     }
-      //   });
-      // });
+
     },
     mounted() {
       this.$nextTick(() => {
@@ -210,11 +195,33 @@
           })
         }
 
+      },
+      transitionEnd(n) {
+        var Swiper = this['mySwiper' + n];
+        var index = Swiper.activeIndex;
+        if(n == 1){
+          var l = this.top_ad.length
+        }else if(n == 2){
+          var l = this.middle_ad.length
+
+        }
+
+        if (index + 1 == l) {
+          setTimeout(() => {
+            Swiper.slideTo(0, 200)
+            Swiper.autoplay.start()
+          }, 3000);
+        }
       }
     },
     computed: {
       ...mapState(["location"]),
-      ifContentShow() {}
+      mySwiper1() {
+        return this.$refs.mySwiper1.swiper;
+      },
+      mySwiper2() {
+        return this.$refs.mySwiper2.swiper;
+      }
     },
     components: {
       ViewBox,
@@ -232,7 +239,7 @@
       swiperSlide,
       swiper
     },
-    mixins: [getLocation]
+    mixins: [getLocation,setTitle]
   };
 
 </script>
@@ -244,16 +251,8 @@
         height: 2.666667rem;
       }
       position: relative;
-      height: 2.666667rem; // background-image: url(~img/index/top-ad.png);
-      // background-repeat: no-repeat;
-      // background-size: cover;
       .top-input {
         box-sizing: border-box;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        z-index: 99999;
         display: flex;
         align-items: center;
         padding: 0.24rem 0.533333rem;

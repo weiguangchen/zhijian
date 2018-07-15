@@ -32,6 +32,7 @@
   import District from "ydui-district/dist/jd_province_city_area_id";
   import 'vue-ydui/dist/ydui.base.css';
   import checkLogin from "@/mixins/checkLogin.js";
+    import setTitle from '@/mixins/setTitle.js'
   export default {
     data() {
       return {
@@ -195,7 +196,7 @@
       XTextarea,
       XButton
     },
-    mixins: [checkLogin]
+    mixins: [checkLogin,setTitle]
   }
 
 </script>

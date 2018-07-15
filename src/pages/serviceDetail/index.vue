@@ -173,7 +173,7 @@
               arr.push(res.data[0].fw_img);
               res.data[0].fw_img = arr;
             }
-
+              this.setMetaTitle(res.data[0].fw_mingzi)
             _this.fw_info.token = res.data[0].token.slice(0, 2);
             _this.fw_info.fw_img = arr;
           });
