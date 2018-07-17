@@ -20,7 +20,7 @@
             </div>
             <div class="line">
               <span class="title">联系方式：</span>
-              <span class="content">{{detail.dianhua}}</span>
+              <span class="content">{{detail.phone}}</span>
             </div>
             <div class="line">
               <span class="title">地址：</span>
@@ -38,6 +38,18 @@
               <span class="title">支持门店：</span>
               <span class="content">十一经路</span>
             </div>
+            <div class="line">
+            <span class="title">车辆牌照：</span>
+            <span class="content">{{detail.car_card}}</span>
+          </div>
+          <div class="line">
+            <span class="title">车辆颜色：</span>
+            <span class="content">{{detail.car_color}}</span>
+          </div>
+          <div class="line">
+            <span class="title">车型：</span>
+            <span class="content">{{detail.car_xing}}</span>
+          </div>
           </div>
         </div>
         <div class="jiedan" v-if="detail.paidan_status == 2">

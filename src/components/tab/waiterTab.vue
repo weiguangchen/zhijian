@@ -1,9 +1,9 @@
 <template>
      <div class="my-tabbar">
-        <router-link class="tabbar-item" to="/fuwuyuan/yanzheng/index" tag="span">
+        <router-link class="tabbar-item" to="/fuwuyuan/yanzheng/xfm" tag="span">
             <i class="iconfont icon-shouye"></i><div>验证</div>
         </router-link>
-        <router-link class="tabbar-item" to="/fuwuyuan/jingying/index" tag="span">
+        <router-link class="tabbar-item" to="/fuwuyuan/jingying/orderGl" tag="span">
             <i class="iconfont icon-shangcheng"></i><div>订单</div>
         </router-link>
         <router-link class="tabbar-item" to="/fuwuyuan/me/index" tag="span">

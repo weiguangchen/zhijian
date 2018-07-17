@@ -125,7 +125,7 @@
 
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
   .address-list {
     padding-bottom: 80px;
     height: 100%;

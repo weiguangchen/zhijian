@@ -1,10 +1,17 @@
 <template>
   <div class="selectJuan">
     <template v-if="hasCard">
+      <div class="no-juan">
+        <div class="radio">
+          <mu-radio v-model="juan" value='nocard' @change="change"></mu-radio>
+        </div>
+        <div class="info">不使用优惠券</div>
+      </div>
+
       <div class="juan" v-for="(item,index) in card_list" :key="index">
         <div class="juan-top">
           <div class="radio">
-            <mu-radio v-model="juan" :value='item.bk_id'></mu-radio>
+            <mu-radio v-model="juan" :value='item.bk_id' @change="change"></mu-radio>
           </div>
           <div class="info">
             <div class="left">
@@ -22,28 +29,36 @@
           <span :class="{disabled:item.fw_num<=0}" v-for="(item,index) in item.son" :key="index">{{item.fw_name}}({{item.fw_num}})</span>
         </div>
       </div>
+
+
     </template>
 
     <div v-else class="none">没有可用优惠券</div>
-    <XButton @click.native='finish' type='warn' class="xbtn">确定</XButton>
+    <!-- <XButton @click.native='finish' type='warn' class="xbtn">确定</XButton> -->
   </div>
 </template>
 
 <script>
-import{ XButton } from 'vux';
+  import {
+    XButton
+  } from 'vux';
   import checkLogin from "@/mixins/checkLogin.js";
 
   export default {
     data() {
       return {
         juan: '',
-        card_list: []
+        card_list: [],
       }
     },
     created() {
+      if(this.cardVal){
+        this.juan = this.cardVal;
+      }
       this.get_card();
+
     },
-    props:['fwId'],
+    // props:['fwId'],
     methods: {
       get_card() {
         var _this = this;
@@ -51,7 +66,7 @@ import{ XButton } from 'vux';
           .get(_this.API_URL + "/Api/BkPay/yes_card", {
             params: {
               user_id: this.id,
-              fw_id: this.fwId
+              fw_id: this.serviceId
             }
           })
           .then(({
@@ -62,18 +77,39 @@ import{ XButton } from 'vux';
             }
           });
       },
-      finish(){
-        this.$emit('finish',false);
-        this.$emit('set_card',this.juan)
+      finish() {
+        this.$emit('finish', false);
+        this.$emit('set_card', this.juan)
+      },
+      change(val) {
+        var query = {
+          serviceId: this.serviceId,
+          shopid: this.shopid,
+        }
+        if (val != 'nocard') {
+          Object.assign(query,{
+            cardVal:this.juan
+          })
+        }
+        this.$router.replace({
+          path: '/queren',
+          query
+        })
       }
     },
     components: {
-        XButton
+      XButton
     },
     computed: {
-    //   fwId() {
-    //     return this.$route.query.fwId;
-    //   },
+      serviceId() {
+        return this.$route.query.serviceId;
+      },
+      shopid() {
+        return this.$route.query.shopid;
+      },
+      cardVal(){
+        return this.$route.query.cardVal;
+      },
       hasCard() {
         if (this.card_list.length > 0) {
           return true;
@@ -89,17 +125,18 @@ import{ XButton } from 'vux';
 
 <style scoped lang='scss'>
   .selectJuan {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 999;
-      background: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background: #ffffff;
     padding-right: .4rem/* 30/75 */
     ;
     color: #2c2c2c;
     .juan {
+
       .juan-top {
         display: flex;
         justify-content: space-between;
@@ -176,16 +213,36 @@ import{ XButton } from 'vux';
         }
       }
     }
-    .none{
-        text-align: center;
-        color: #c1c1c1;
-        line-height: 2;
+    .no-juan {
+      display: flex;
+      height: 2.133333rem/* 160/75 */
+      ;
+      .radio {
+        flex: none;
+        width: 1.6rem/* 120/75 */
+        ;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .info {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        font-size: .4rem/* 30/75 */
+        ;
+      }
     }
-    .xbtn{
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
+    .none {
+      text-align: center;
+      color: #c1c1c1;
+      line-height: 2;
+    }
+    .xbtn {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
     }
   }
 

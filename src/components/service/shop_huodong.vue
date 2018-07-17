@@ -9,7 +9,7 @@
       <div class="line">
         <span class="num">
           <span class="money">
-            <em>{{info.card_ymoney}}</em>元</span>
+            <em>{{info.card_money}}</em>元</span>
           <del class="y-money">原价{{info.card_ymoney}}元</del>
         </span>
         <span class="sold">已售 {{info.buy_number}}</span>

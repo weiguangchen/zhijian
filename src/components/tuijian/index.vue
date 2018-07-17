@@ -8,7 +8,7 @@
       </Cell>
     </Group>
     <div class="tuijian-list">
-      <div class="tuijian-item" v-for="(item,index) in info.list" :key="index" @click="toDetail(item.shop_fw_id)">
+      <div class="tuijian-item" v-for="(item,index) in info.list" :key="index" @click="toDetail(item.shop_fw_id,item.face.id)">
         <div class="img-box">
           <img v-lazy="item.fw_img" alt="" class="img">
         </div>
@@ -18,7 +18,7 @@
           <span v-if="item.fw_gg">/{{item.fw_gg}}</span>
         </div>
         <div class="shop">
-          <i class="iconfont icon-dianpu"></i>{{item.shop_name}}</div>
+          <i class="iconfont icon-dianpu"></i>{{item.face.face_name}}</div>
       </div>
 
     </div>
@@ -38,10 +38,10 @@
       this.sliceArr();
     },
     methods: {
-      toDetail(id) {
+      toDetail(id,faceId) {
         var _this = this;
         this.$router.push({
-          path: "/serviceDetail/" + id
+          path: "/serviceDetail/" + id+'/'+faceId
         });
       },
       more(id) {

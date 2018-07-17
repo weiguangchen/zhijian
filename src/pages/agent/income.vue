@@ -30,11 +30,11 @@
             <div class="money">￥100.00</div>
           </div>
           <div class="detail-item">
-            总收益
+            未结算
             <div class="money">￥100.00</div>
           </div>
           <div class="detail-item">
-            总收益
+            已结算
             <div class="money">￥100.00</div>
           </div>
         </div>
@@ -50,11 +50,11 @@
             <div class="money">￥100.00</div>
           </div>
           <div class="detail-item">
-            总收益
+            未结算
             <div class="money">￥100.00</div>
           </div>
           <div class="detail-item">
-            总收益
+            已结算
             <div class="money">￥100.00</div>
           </div>
         </div>

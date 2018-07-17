@@ -169,9 +169,6 @@
         this.SET_LOCATION(res);
         this.get_fw().then(res => {
           this.serviceList = res.list;
-          this.serviceList1 = res.list;
-
-          this.serviceList2 = res.list;
         });
 
         this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({
@@ -202,13 +199,13 @@
 
         var params = Object.assign(deafultParams, select);
         return this.$axios
-          .get(_this.API_URL + "/Api/Yes/two_list", {
+          .get(_this.API_URL + "/Api/Yes/new_two_list", {
             params
           })
           .then(({
             data
           }) => {
-            this.setMetaTitle(data.ming)
+            this.setMetaTitle(data.fw_name)
             console.log(data);
             if (data.ok == 1) {
               _this.p++;

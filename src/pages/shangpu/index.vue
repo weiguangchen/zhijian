@@ -8,7 +8,7 @@
           <img src="~img/shangpu/banner.png" alt="" class="img">
         </div>
         <div class="info">
-          <div>{{shopInfo.shop_name}}</div>
+          <div>{{faceInfo.face_name}}</div>
           <div>
             <rater val='4' class="rater"></rater>
           </div>
@@ -59,10 +59,10 @@
 
           </div>
           <div class="list" v-if="showType == 1">
-            <fw v-for="(item,index) in current_fw_list" :key="index" :info='item'></fw>
+            <fw v-for="(item,index) in current_fw_list" :key="index" :info='item' :faceId='shopId'></fw>
           </div>
           <div class="fw-list" v-else-if="showType == 2">
-            <fw2 v-for="(item,index) in current_fw_list" :key="index" :info='item' class="fw2-item"></fw2>
+            <fw2 v-for="(item,index) in current_fw_list" :key="index" :info='item' :faceId='shopId' class="fw2-item"></fw2>
           </div>
         </swiper-slide>
         <swiper-slide>
@@ -150,12 +150,12 @@
               <span class="txt">补胎</span>
             </div>
           </div>
-          <div class="address">
+          <div class="address" v-if="faceInfo.map">
             <div class="left">
               <div class="top">
-                <span class="iconfont icon-weizhi1"></span>{{shopInfo.adress}}</div>
+                <span class="iconfont icon-weizhi1"></span>{{faceInfo.map.poiaddress}}</div>
               <div class="bottom">
-                距地铁2号线靖江路站c口（东）口步行690米
+                {{faceInfo.map.poiname}}
               </div>
             </div>
             <div class="right">
@@ -178,7 +178,8 @@
     Tab,
     TabItem,
     Sticky,
-    Selector
+    Selector,
+    Blur
   } from "vux";
   import {
     swiper,
@@ -202,6 +203,7 @@
       return {
         val: 3,
         shopInfo: "",
+        fw_list:[],
         current_fw_list: [],
         huodong: [],
         selected: '全部服务',
@@ -212,7 +214,9 @@
         top_ad: [],
         showType: 2,
         classArr: [],
-        leibie: ''
+        leibie: '',
+
+        faceInfo:{},
       };
     },
     created() {
@@ -238,6 +242,8 @@
         // 获取头部广告
         this.top_ad = data.list_banner;
       });
+      // 获取门店信息
+      this.get_face_info()
     },
     methods: {
       load_blur_bg() {
@@ -285,19 +291,38 @@
             data
           }) => {
             console.log(data);
-            this.shopInfo = data[0];
-            this.setMetaTitle(data[0].shop_name);
-            this.getClassArr(data[0].fw);
-            this.current_fw_list = data[0].fw;
+            // this.shopInfo = data[0];
+            // this.setMetaTitle(data[0].shop_name);
+            // this.getClassArr(data[0].fw);
+            // this.current_fw_list = data[0].fw;
           });
+      },
+      get_face_info() {
+        this.$axios.get(this.API_URL + '/Api/show/get_face', {
+          params: {
+            face_id: this.shopId
+          }
+        }).then(({
+          data
+        }) => {
+          console.log('123')
+          console.log(data)
+          data.face.map = JSON.parse(data.face.map);
+          this.faceInfo = data.face;
+          this.fw_list = data.fw;
+          this.setMetaTitle(data.face.face_name);
+          this.getClassArr(data.fw);
+          this.current_fw_list = data.fw;
+          this.huodong = data.hd;
+        })
       },
       changeFwType(fwId) {
         console.log(fwId)
         if (fwId == 0) {
           // 全部
-          this.current_fw_list = this.shopInfo.fw;
+          this.current_fw_list = this.fw_list;
         } else {
-          this.current_fw_list = this.shopInfo.fw.filter(m => {
+          this.current_fw_list = this.fw_list.filter(m => {
             return m.fw_id == fwId;
           })
         }
@@ -333,7 +358,8 @@
       betterScroll,
       swiperSlide,
       swiper,
-      Selector
+      Selector,
+      Blur
     }
   };
 
@@ -480,8 +506,7 @@
       width: 100%;
       box-sizing: border-box;
       background: #ffffff;
-      padding: 0 .666667rem/* 50/75 */
-      ;
+      padding: .426667rem /* 32/75 */;
       &:after {
         content: '';
         display: block;
@@ -489,10 +514,8 @@
       }
       .fw2-item {
         float: left;
-        margin-right: .8rem/* 60/75 */
-        ;
-        margin-bottom: .733333rem/* 55/75 */
-        ;
+        margin-right: .333333rem /* 25/75 */;
+        margin-bottom: .36rem /* 27/75 */; 
       }
       .fw2-item {
         &:nth-child(even) {

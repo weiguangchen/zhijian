@@ -3,7 +3,9 @@
     <div class="service-detail">
       <betterScroll>
         <div class="banner">
-          <div class="share"></div>
+          <!-- <div class="share">
+            <i class="iconfont icon-fenxiang" @click="share"></i>
+          </div> -->
           <Swiper height='5.12rem' :show-dots='false'>
             <SwiperItem v-for="(item,index) in fw_info.fw_img" :key="index">
               <img :src="item" alt="" class="img">
@@ -24,10 +26,10 @@
         <span class="count">共{{fw_info.token_num}}个消费评价</span>
       </div> -->
 
-        <div class="address1" @click="toShop(fw_info.shop_id)">
+        <div class="address1" @click="toShop(faceInfo.id)">
           <div class="top">
             <div class="left">
-              <div class="name">{{fw_info.shop_name}}</div>
+              <div class="name">{{faceInfo.face_name}}</div>
               <div class="info">
                 <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
                 <!-- <span class="count">28条</span>
@@ -38,18 +40,18 @@
             <span class="iconfont icon-lianxifangshi"></span>
           </div> -->
           </div>
-          <div class="bottom">
+          <div class="bottom" >
             <span class="iconfont icon-weizhi1"></span>
-            <span class="txt">{{fw_info.adress}}</span>
+            <span class="txt" v-if="faceInfo.map">{{faceInfo.map.poiaddress}}</span>
           </div>
         </div>
 
         <div class="detail">
           <myTitle>
             <span>服务详情</span>
-            <span slot="right">更多图文详情
+            <!-- <span slot="right">更多图文详情
               <i class="iconfont icon-jinru"></i>
-            </span>
+            </span> -->
           </myTitle>
           <div class="content" v-html="fw_info.fw_content[0].fw_content" v-if="fw_info.fw_content">
 
@@ -124,12 +126,13 @@
     data() {
       return {
         enable: true,
-        fw_info: {}
+        fw_info: {},
+        faceInfo:{}
       };
     },
     created() {
-      document.title = "服务详情";
       this.get_fw_info();
+      this.get_face();
     },
     methods: {
       buy() {
@@ -178,12 +181,23 @@
             _this.fw_info.fw_img = arr;
           });
       },
+      get_face(){
+        this.$axios.get(this.API_URL+'/Api/show/get_face',{
+          params:{
+            face_id:this.faceId
+          }
+        }).then(({data})=>{
+          data.face.map = JSON.parse(data.face.map);
+          this.faceInfo = data.face;
+        })
+      },
       toShop(id) {
         this.$router.push("/shangpu/" + id);
       },
       more(id) {
         this.$router.push("/pinglun/" + id);
-      }
+      },
+      share(){}
     },
     watch: {
       $route() {
@@ -194,6 +208,9 @@
     computed: {
       fwId() {
         return this.$route.params.serviceId;
+      },
+      faceId(){
+        return this.$route.params.faceId;
       }
     },
     filters: {
@@ -236,6 +253,14 @@
         height: 1.066667rem;
         background: rgba(#000000, 0.4);
         z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: .4rem /* 30/75 */;
+        .iconfont{
+          color: #ffffff;
+          font-size: .48rem /* 36/75 */;
+        }
       }
       .img {
         width: 100%;
@@ -256,7 +281,6 @@
           color: #e13131;
         }
       }
-      .top,
       .middle,
       .bottom {
         display: flex;
@@ -278,6 +302,7 @@
       @extend %public;
       .top {
         @include font-dpr(17px);
+        line-height: 1.414;
       }
       .bottom {
         opacity: 0.5;

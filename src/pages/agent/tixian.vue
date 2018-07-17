@@ -72,7 +72,7 @@
   export default {
     data() {
       return {
-        safe: true,
+        safe: false,
         phone:15022485790
       }
     },

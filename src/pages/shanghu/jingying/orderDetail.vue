@@ -18,23 +18,36 @@
           </div>
           <div class="line">
             <span class="title">联系方式：</span>
-            <span class="content">{{detail.dianhua}}</span>
+            <span class="content">{{detail.phone}}</span>
           </div>
           <div class="line">
             <span class="title">地址：</span>
-            <span class="content">{{detail.adress}}</span>
+            <span class="content">{{detail.three}} {{detail.adress}}</span>
           </div>
           <div class="line">
             <span class="title">交易数量：</span>
             <span class="content">{{detail.shop_num}}</span>
           </div>
-          <div class="line">
+          <div class="line" >
             <span class="title">交易金额：</span>
-            <span class="content">{{detail.order_price}}</span>
+            <span class="content" v-if="detail.order_price">{{detail.order_price}}</span>
+            <span class="content" v-else>其他支付方式</span>
           </div>
           <div class="line">
             <span class="title">支持门店：</span>
             <span class="content">十一经路</span>
+          </div>
+          <div class="line">
+            <span class="title">车辆牌照：</span>
+            <span class="content">{{detail.car_card}}</span>
+          </div>
+          <div class="line">
+            <span class="title">车辆颜色：</span>
+            <span class="content">{{detail.car_color}}</span>
+          </div>
+          <div class="line">
+            <span class="title">车型：</span>
+            <span class="content">{{detail.car_xing}}</span>
           </div>
         </div>
       </div>

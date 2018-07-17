@@ -1,14 +1,14 @@
 <template>
-  <div class="service-wrapper" @click="toDetail(info.shop_fw_id)">
+  <div class="service-wrapper" @click="toDetail(info.shop_fw_id,faceId)">
     <div class="img-box">
       <img :src="info.fw_img" alt="" class="img">
     </div>
     <div class="info">
       <h1>{{info.fw_mingzi}}</h1>
-      <h2>改价格是按每平米</h2>
+      <h2>{{info.sub_name}}</h2>
       <div class="line">
         <span class="num">
-          <em>{{info.money}}</em>元/平米</span>
+          <em>{{info.money}}</em>元<template v-if="info.fw_gg">/{{info.fw_gg}}</template></span>
         <span class="sold">已售 {{info.buy_number}}</span>
       </div>
     </div>
@@ -28,15 +28,14 @@
       info: {
         default: {}
       },
-
+      faceId:{
+        default:''
+      }
     },
     methods: {
-      toDetail(id) {
+      toDetail(id,faceId) {
         this.$router.push({
-          name: 'serviceDetail',
-          params: {
-            serviceId: id
-          }
+          path: '/serviceDetail/'+id+'/'+faceId
         });
       }
     },

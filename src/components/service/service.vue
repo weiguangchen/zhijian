@@ -1,20 +1,20 @@
 <template>
   <!-- <router-link :to="'/serviceDetail/'+fwInfo.id"> -->
-  <div class="service" @click="toDetail(fwInfo.shop_fw_id)">
+  <div class="service" @click="toDetail(fwInfo.fw.shop_fw_id,fwInfo.face.id)">
     <div class="img-box">
-      <img :src="fwInfo.fw_img" alt="" class="img">
+      <img :src="fwInfo.fw.fw_img" alt="" class="img">
 
     </div>
     <div class="info">
       <div class="intr">
-        <div class="top">{{fwInfo.fw_mingzi}}</div>
+        <div class="top">{{fwInfo.fw.fw_mingzi}}</div>
         <div class="middle">
-          <rater :val='fwInfo.star' :enable='enable'></rater>
+          <rater :val='fwInfo.fw.star' :enable='enable'></rater>
         </div>
         <div class="bottom">
           <span>
-            <span class="iconfont icon-weizhi1"></span>{{fwInfo.adress}}</span>
-          <span>{{fwInfo.fw_name}}</span>
+            <span class="iconfont icon-weizhi1"></span>{{fwInfo.face.face_name}}</span>
+          <span>{{fwInfo.fw.fw_name}}</span>
           <span>{{fwInfo.m}}KM</span>
         </div>
         <div class="tips" v-show="tuan">
@@ -53,10 +53,10 @@
     },
     props: ["fwInfo"],
     methods: {
-      toDetail(id) {
+      toDetail(id,faceId) {
         var _this = this;
         this.$router.push({
-          path: "/serviceDetail/" + id,
+          path: "/serviceDetail/" + id+'/'+faceId,
         });
       }
     },

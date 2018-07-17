@@ -1,6 +1,6 @@
 <template>
-  <div class="page">
-    <div class="pingjia">
+  <div class="page pingjia">
+    <betterScroll>
       <div class="rater-box">
         <img :src="orderDetail.fw_img" alt="" class="thumb">
         <rater :val="star" @changeStar='changeStar' :enable='false'></rater>
@@ -19,12 +19,11 @@
 
       </div> -->
       <uploadImage @uploadComplete='uploadComplete'></uploadImage>
-      <div class="btn-box">
-        <span class="l-btn"></span>
-        <span class="submit-btn" @click="submit">提交评价</span>
-      </div>
+    </betterScroll>
+    <div class="btn-box">
+      <span class="l-btn"></span>
+      <span class="submit-btn" @click="submit">提交评价</span>
     </div>
-
   </div>
 </template>
 
@@ -40,7 +39,8 @@
   import checkLogin from "@/mixins/checkLogin.js";
   import wxConfig from "@/mixins/wxConfig.js";
   import uploadImage from '@/components/uploadImg/index';
-    import setTitle from '@/mixins/setTitle.js'
+  import setTitle from '@/mixins/setTitle.js'
+  import betterScroll from '@/components/betterScroll';
   export default {
     data() {
       return {
@@ -50,14 +50,13 @@
         star: 0,
         content: "",
         tupian: "",
-        localData: "",
-        imgs: ""
+
       };
     },
     created() {
       var _this = this;
       this.checkSystem();
-      // this.$eruda.init();
+      this.$eruda.init();
       if (this.type == 1) {
         this.$axios
           .get(this.API_URL + "/Api/UserShow/order_content1", {
@@ -90,41 +89,49 @@
         console.log(this.userinfo.nickname);
         console.log(this.orderId);
         console.log(this.tupian);
-        this.$axios
-          .get(this.API_URL + "/Api/UserShow/token", {
-            params: {
-              uid: _this.id,
-              u_name: _this.userinfo.nickname,
-              star: _this.star,
-              content: _this.content,
-              order_id: _this.orderId,
-              img: _this.tupian
-            }
-          })
-          .then(res => {
-            if (res.data.status == 1) {
-              this.$vux.alert.show({
-                title: "提示",
-                content: "谢谢评论",
-                onHide() {
-                  _this.$router.replace({
-                    path: "/me/orderList/6"
-                  });
-                }
-              });
-            } else if (res.data.status == 0) {
-              this.$vux.alert.show({
-                title: "提示",
-                content: "评论失败了",
-                onHide() {
-                  _this.$router.replace({
-                    path: "/me/orderList/6"
-                  });
-                }
-              });
-            }
-            console.log(res);
-          });
+
+        if (!this.content) {
+          this.alertWarning('请填写评价！')
+        } else {
+          this.$axios
+            .get(this.API_URL + "/Api/UserShow/token", {
+              params: {
+                uid: _this.id,
+                u_name: _this.userinfo.nickname,
+                star: _this.star,
+                content: _this.content,
+                order_id: _this.orderId,
+                img: _this.tupian,
+                fw_id: _this.orderDetail.shop_fw_id
+              }
+            })
+            .then(res => {
+              if (res.data.status == 1) {
+                this.$vux.alert.show({
+                  title: "提示",
+                  content: "谢谢评论",
+                  onHide() {
+                    _this.$router.replace({
+                      path: "/me/orderList/6"
+                    });
+                  }
+                });
+              } else if (res.data.status == 0) {
+                this.$vux.alert.show({
+                  title: "提示",
+                  content: "评论失败了",
+                  onHide() {
+                    _this.$router.replace({
+                      path: "/me/orderList/6"
+                    });
+                  }
+                });
+              }
+              console.log(res);
+            });
+        }
+
+
       },
       changeStar(v) {
         console.log("星星" + v);
@@ -189,7 +196,15 @@
         }
         console.log("系统：" + this.system);
       },
-      uploadComplete(){}
+      uploadComplete(imgs) {
+        this.tupian = imgs;
+      },
+      alertWarning(text) {
+        this.$vux.alert.show({
+          title: '提示',
+          content: text
+        })
+      }
     },
     components: {
       XInput,
@@ -197,7 +212,8 @@
       XButton,
       XTextarea,
       Group,
-      uploadImage
+      uploadImage,
+      betterScroll
     },
     computed: {
       orderId() {
@@ -207,13 +223,14 @@
         return this.$route.query.type;
       }
     },
-    mixins: [checkLogin,setTitle]
+    mixins: [checkLogin, setTitle]
   };
 
 </script>
 
 <style lang='scss'>
   .pingjia {
+    padding-bottom: 1.333333rem;
     .rater-box {
       display: flex;
       align-items: center;

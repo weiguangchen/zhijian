@@ -169,8 +169,8 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/index/index'], resolve),
       tab: resolve => require(['@/components/tab/tab'], resolve)
     },
-    meta:{
-      title:'首页'
+    meta: {
+      title: '首页'
     }
   }, {
     path: '/shop',
@@ -181,7 +181,7 @@ export const defaultRouterMaps = [{
     },
     meta: {
       keepAlive: true,
-      title:'商城'
+      title: '商城'
     }
   }, {
     path: '/faxian',
@@ -190,8 +190,8 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/faxian/index'], resolve),
       tab: resolve => require(['@/components/tab/tab'], resolve)
     },
-    meta:{
-      title:'发现'
+    meta: {
+      title: '发现'
     }
   }, {
     path: '/shangpu/:shangpuId',
@@ -221,8 +221,8 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/me/index'], resolve),
       tab: resolve => require(['@/components/tab/tab'], resolve)
     },
-    meta:{
-      title:'个人中心'
+    meta: {
+      title: '个人中心'
     }
   }, {
     path: '/youhuijuan',
@@ -230,8 +230,8 @@ export const defaultRouterMaps = [{
     components: {
       default: resolve => require(['@/pages/youhuijuan/index'], resolve),
     },
-    meta:{
-      title:'优惠券'
+    meta: {
+      title: '优惠券'
     }
   }, {
     path: '/me/orderList/:orderStatus',
@@ -247,8 +247,8 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/orderList/orderDetail'], resolve)
       // tab: tab
     },
-    meta:{
-      title:'订单详情'
+    meta: {
+      title: '订单详情'
     }
   }, {
     path: '/queren',
@@ -256,8 +256,8 @@ export const defaultRouterMaps = [{
     components: {
       default: resolve => require(['@/pages/queren/index'], resolve),
     },
-    meta:{
-      title:'确认订单'
+    meta: {
+      title: '确认订单'
     }
   }, {
     path: '/selectJuan',
@@ -265,8 +265,8 @@ export const defaultRouterMaps = [{
     components: {
       default: resolve => require(['@/pages/queren/selectJuan'], resolve),
     },
-    meta:{
-      title:'使用优惠券'
+    meta: {
+      title: '使用优惠券'
     }
   }, {
     path: '/huodongqueren',
@@ -274,8 +274,8 @@ export const defaultRouterMaps = [{
     components: {
       default: resolve => require(['@/pages/queren/huodong'], resolve)
     },
-    meta:{
-      title:'确认订单'
+    meta: {
+      title: '确认订单'
     }
   }, {
     path: '/me/pingjia/:orderNum',
@@ -283,8 +283,8 @@ export const defaultRouterMaps = [{
     components: {
       default: resolve => require(['@/pages/pingjia/index'], resolve),
     },
-    meta:{
-      title:'评论'
+    meta: {
+      title: '评论'
     }
   }, {
     path: '/agent',
@@ -293,8 +293,8 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/agent/index'], resolve),
       // tab: tab
     },
-    meta:{
-      title:'代理商中心'
+    meta: {
+      title: '代理商中心'
     }
   }, {
     path: '/addJms',
@@ -303,8 +303,8 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/agent/add_jms'], resolve),
       // tab: tab
     },
-    meta:{
-      title:'添加加盟商'
+    meta: {
+      title: '添加加盟商'
     }
   }, {
     path: '/addAgent',
@@ -313,18 +313,18 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/agent/add_agent'], resolve),
       // tab: tab
     },
-    meta:{
-      title:'添加代理商'
+    meta: {
+      title: '添加代理商'
     }
-  },{
+  }, {
     path: '/agentTixian',
     name: 'agentTixian',
     components: {
       default: resolve => require(['@/pages/agent/tixian'], resolve),
       // tab: tab
     },
-    meta:{
-      title:'余额提现'
+    meta: {
+      title: '余额提现'
     }
   }, {
     path: '/tixianList',
@@ -333,38 +333,45 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/agent/tixianList'], resolve),
       // tab: tab
     },
-    meta:{
-      title:'提现记录'
+    meta: {
+      title: '提现记录'
     }
-  },{
+  }, {
     path: '/tixianDetail',
     name: 'tixianDetail',
     components: {
       default: resolve => require(['@/pages/agent/tixianDetail'], resolve),
       // tab: tab
     },
-    meta:{
-      title:'提现记录'
+    meta: {
+      title: '提现记录'
     }
-  },{
+  }, {
     path: '/income',
     name: 'income',
     components: {
       default: resolve => require(['@/pages/agent/income'], resolve),
       // tab: tab
     },
-    meta:{
-      title:'收益'
+    meta: {
+      title: '收益'
     }
-  },{
+  }, {
     path: '/incomeList',
     name: 'incomeList',
     components: {
       default: resolve => require(['@/pages/agent/income_list'], resolve),
       // tab: tab
     },
-  },{
-    path: '/serviceDetail/:serviceId',
+  }, {
+    path: '/agentList',
+    name: 'agentList',
+    components: {
+      default: resolve => require(['@/pages/agent/agentList'], resolve),
+      // tab: tab
+    },
+  }, {
+    path: '/serviceDetail/:serviceId/:faceId',
     name: 'serviceDetail',
     component: resolve => require(["@/pages/serviceDetail/index"], resolve)
   }, {
@@ -375,8 +382,8 @@ export const defaultRouterMaps = [{
     path: '/pinglun/:serviceId',
     name: 'pinglun',
     component: resolve => require(['@/pages/pinglun/index'], resolve),
-    meta:{
-      title:'评论列表'
+    meta: {
+      title: '评论列表'
     }
   }, {
     path: '/shangjia',
@@ -406,40 +413,40 @@ export const defaultRouterMaps = [{
     path: '/logining',
     name: 'logining',
     component: resolve => require(['@/pages/logining/index'], resolve),
-    meta:{
-      title:'登录中'
+    meta: {
+      title: '登录中'
     }
   },
   {
     path: '/checkshenfen',
     name: 'checkshenfen',
     component: resolve => require(['@/pages/checkshenfen/index'], resolve),
-    meta:{
-      title:'确认代理商'
+    meta: {
+      title: '确认代理商'
     }
   },
   {
     path: '/checkShanghu',
     name: 'shanghuCheck',
     component: resolve => require(['@/pages/checkshenfen/shanghuCheck'], resolve),
-    meta:{
-      title:'确认商户'
+    meta: {
+      title: '确认商户'
     }
   },
   {
     path: '/checkServicer',
     name: 'checkServicer',
     component: resolve => require(['@/pages/checkshenfen/checkServicer'], resolve),
-    meta:{
-      title:'确认服务员'
+    meta: {
+      title: '确认服务员'
     }
   },
   {
     path: '/warning',
     name: 'checkwarning',
     component: resolve => require(['@/pages/checkshenfen/warning'], resolve),
-    meta:{
-      title:'提示'
+    meta: {
+      title: '提示'
     }
   },
   {
@@ -450,14 +457,16 @@ export const defaultRouterMaps = [{
     path: '/editAddress',
     name: 'editAddress',
     component: resolve => require(['@/pages/address/editAddress'], resolve),
-  },{
+  }, {
     path: '/addressList',
     name: 'addressList',
     component: resolve => require(['@/pages/address/addList'], resolve),
-    meta:{
-      title:'地址列表'
+    meta: {
+      title: '地址列表'
     }
   },
+
+
 
 ]
 
@@ -497,7 +506,7 @@ const adminRouterMaps = [{
         meta: {
           role: 999,
           menu: [],
-          title:''
+          title: ''
         },
       }, {
         path: 'xfm',
@@ -727,37 +736,7 @@ const servicerRouterMaps = [{
         },
       }]
     },
-    // {
-    //   path: 'pingjias',
-    //   name: 'pingjias',
-    //   component: resolve => require(['@/pages/shanghu/pingjias/index'], resolve),
-    //   meta: {
-    //     role: 2
-    //   },
-    //   children: [{
-    //     path: 'index',
-    //     name: 'pingjiaindex',
-    //     component: resolve => require(['@/pages/shanghu/pingjias/index1'], resolve),
-    //     meta: {
-    //       role: 999,
-    //       menu: []
-    //     },
-    //   }, {
-    //     path: 'pingjias',
-    //     name: 'allpingjias',
-    //     component: resolve => require(['@/pages/shanghu/pingjias/pingjias'], resolve),
-    //     meta: {
-    //       role: 21
-    //     },
-    //   }, {
-    //     path: 'pingjiaList/:pingjiaId',
-    //     name: 'pingjiaList',
-    //     component: resolve => require(['@/pages/shanghu/pingjias/pingjiaList'], resolve),
-    //     meta: {
-    //       role: 21
-    //     },
-    //   }, ]
-    // },
+
 
     {
       path: 'jingying',
@@ -803,7 +782,7 @@ const servicerRouterMaps = [{
     {
       path: 'me',
       name: 'shanghume',
-      component: resolve => require(['@/pages/shanghu/me/index1'], resolve),
+      component: resolve => require(['@/pages/fuwuyuan/me/index'], resolve),
       meta: {
         role: 4
       },
@@ -890,185 +869,6 @@ const servicerRouterMaps = [{
     }
   ]
 }]
-
-const asyncRouterMaps = [{
-    path: 'yanzheng',
-    component: resolve => require(['@/pages/shanghu/yanzheng/index'], resolve),
-    name: 'yanzheng',
-    meta: {
-      role: 1
-    },
-    children: [{
-      path: 'index',
-      name: 'yanzhengindex',
-      component: resolve => require(['@/pages/shanghu/yanzheng/index1'], resolve),
-      meta: {
-        role: 999,
-        menu: []
-      },
-    }, {
-      path: 'xfm',
-      name: 'yanzhengxfm',
-      component: resolve => require(['@/pages/shanghu/yanzheng/xfm'], resolve),
-      meta: {
-        role: 11
-      },
-    }, {
-      path: 'huodong',
-      name: 'yanzhenghuodong',
-      component: resolve => require(['@/pages/shanghu/yanzheng/huodong'], resolve),
-      meta: {
-        role: 12
-      },
-    }]
-  },
-  {
-    path: 'pingjias',
-    name: 'pingjias',
-    component: resolve => require(['@/pages/shanghu/pingjias/index'], resolve),
-    meta: {
-      role: 2
-    },
-    children: [{
-      path: 'index',
-      name: 'pingjiaindex',
-      component: resolve => require(['@/pages/shanghu/pingjias/index1'], resolve),
-      meta: {
-        role: 999,
-        menu: []
-      },
-    }, {
-      path: 'pingjias',
-      name: 'allpingjias',
-      component: resolve => require(['@/pages/shanghu/pingjias/pingjias'], resolve),
-      meta: {
-        role: 21
-      },
-    }, {
-      path: 'pingjiaList/:pingjiaId',
-      name: 'pingjiaList',
-      component: resolve => require(['@/pages/shanghu/pingjias/pingjiaList'], resolve),
-      meta: {
-        role: 21
-      },
-    }, ]
-  },
-
-  {
-    path: 'jingying',
-    name: 'jingying',
-    component: resolve => require(['@/pages/shanghu/jingying/index'], resolve),
-    meta: {
-      role: 3,
-    },
-    children: [{
-      path: 'index',
-      name: 'index',
-      component: resolve => require(['@/pages/shanghu/jingying/index1'], resolve),
-      meta: {
-        role: 999,
-        menu: []
-      }
-    }, {
-      path: 'tongji',
-      name: 'tongji',
-      component: resolve => require(['@/pages/shanghu/jingying/tongji'], resolve),
-      meta: {
-        role: 31
-      }
-    }, {
-      path: 'orderGl',
-      name: 'orderGl',
-      component: resolve => require(['@/pages/shanghu/jingying/orderlist'], resolve),
-      meta: {
-        role: 32
-      }
-    }, ]
-
-  },
-
-  {
-    path: 'me',
-    name: 'shanghume',
-    component: resolve => require(['@/pages/shanghu/me/index1'], resolve),
-    meta: {
-      role: 4
-    },
-    children: [{
-      path: 'index',
-      name: 'shanghumeindex',
-      component: resolve => require(['@/pages/shanghu/me/index'], resolve),
-      meta: {
-        role: 999,
-        menu: []
-      }
-    }, {
-      path: 'xmgl',
-      name: 'shanghumexmgl',
-      component: resolve => require(['@/pages/shanghu/me/xmgl'], resolve),
-      meta: {
-        role: 41
-      }
-    }, {
-      path: 'bianjiFw/:fwId',
-      name: 'bianjiFw',
-      component: resolve => require(['@/pages/shanghu/me/bianjiFw'], resolve),
-      meta: {
-        role: 42
-      }
-    }, {
-      path: 'fwList',
-      name: 'shanghumefwlist',
-      component: resolve => require(['@/pages/shanghu/me/fwList'], resolve),
-      meta: {
-        role: 42
-      }
-    }, {
-      path: 'mendian',
-      name: 'shanghumemendian',
-      component: resolve => require(['@/pages/shanghu/me/mendian'], resolve),
-      meta: {
-        role: 44
-      }
-    }, {
-      path: 'addhuodong',
-      name: 'shanghumeaddhuodong',
-      component: resolve => require(['@/pages/shanghu/me/addhuodong'], resolve),
-      meta: {
-        role: 43
-      }
-    }, {
-      path: 'addFace',
-      name: 'shanghumeaddface',
-      component: resolve => require(['@/pages/shanghu/me/addFace'], resolve),
-      meta: {
-        role: 44
-      }
-    }, {
-      path: 'account',
-      name: 'account',
-      component: resolve => require(['@/pages/shanghu/me/account'], resolve),
-      meta: {
-        role: 45
-      }
-    }, {
-      path: 'setAuthority',
-      name: 'setAuthority',
-      component: resolve => require(['@/pages/shanghu/me/authority'], resolve),
-      meta: {
-        role: 45
-      }
-    }, {
-      path: 'addSonAccount',
-      name: 'addSonAccount',
-      component: resolve => require(['@/pages/shanghu/me/addSonAccount'], resolve),
-      meta: {
-        role: 45
-      }
-    }],
-
-  }
-]
 
 
 

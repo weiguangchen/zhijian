@@ -5,9 +5,9 @@
     <bigTitle title="订单管理" @showPopup='showPopup' :icon='false' :right='true'>
       <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="orderType" @on-change='changeType'>
         <iview-op value=''>全部订单</iview-op>
-        <iview-op value='1'>未接订单</iview-op>
-        <iview-op value='1'>未完成订单</iview-op>
-        <iview-op value='2'>已完成订单</iview-op>
+        <iview-op value='2'>未接订单</iview-op>
+        <iview-op value='3'>未完成订单</iview-op>
+        <iview-op value='4'>已完成订单</iview-op>
       </iview-select>
     </bigTitle>
     <div class="order-gl">

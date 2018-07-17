@@ -89,7 +89,7 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .address-select-box {
   width: 100%;
   z-index: 9999;

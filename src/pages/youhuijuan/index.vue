@@ -1,48 +1,23 @@
 <template>
   <div class="youhui">
-    <div class="wrapper" ref="wrapper">
-      <ul class="content">
-        <div class="select">
-          <!-- <div class=" item">全部</div> -->
-          <i class="iconfont icon-a"></i>
-          <div class="item active">活动卡</div>
-          <div class="item">优惠券</div>
-          <div class="item">代金券</div>
-        </div>
-        <div class="juan-list">
-          <div class="juan" v-for="(item,index) in cardList" :key="index">
-            <div class="top">
-              <img :src="item.card_img" alt="" class="thumb">
-              <div class="info">
-                <div class="name">
-                  <span>{{item.shop_name}}</span>
-                  <span class="price">￥{{item.card_money}}</span>
-                </div>
-                <div class="classifiy">{{item.card_name}}</div>
-              </div>
-              <div class="status wsy">未使用</div>
-            </div>
-            <div class="bot">
-              <div class="address">
-                <i class="iconfont"></i>
-                {{item.adress}}
-              </div>
-              <div class="fw-item" v-for="(fw,index1) in item.son" :key="index1">
-                <div class="line">
-                  <span>
-                    <span class="fw-title">服务：</span>{{fw.fw_name}} &nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class="buy" @click="buy(fw.fw_id)">购买</span>
-                  </span>
-                  <span>剩余次数: {{fw.fw_num}}</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </ul>
-    </div>
+    <betterScroll>
+      <div class="select">
+        <!-- <div class=" item">全部</div> -->
+        <i class="iconfont icon-a"></i>
+        <div class="item active">活动卡</div>
+        <div class="item">优惠券</div>
+        <div class="item">代金券</div>
+      </div>
+      <div class="juan-list">
+        <juan v-for="(item,index) in cardList" :key="index" :info='item' @chooseFw='chooseFw'></juan>
+      </div>
+    </betterScroll>
+    <Popup v-model="popupShow" position="center" width="90%">
+      <div class="popup1">
+        <h1>选择门店<i class="iconfont icon-cha" @click='close'></i></h1>
+        <div class="face" v-for="(item,index) in face" :key="index" @click="toDetail(item.face_id)">{{item.face_name}}</div>
+      </div>
+    </Popup>
 
 
     <!-- <Layout>
@@ -54,6 +29,11 @@
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll';
+  import juan from './juan';
+  import {
+    Popup
+  } from 'vue-ydui/dist/lib.px/popup';
   import {
     InfiniteScroll
   } from "vue-ydui/dist/lib.px/infinitescroll";
@@ -61,7 +41,8 @@
     Layout
   } from "vue-ydui/dist/lib.px/layout";
   import {
-    ViewBox
+    ViewBox,
+
   } from "vux";
   import BScroll from "better-scroll";
   import checkLogin from "@/mixins/checkLogin";
@@ -69,7 +50,10 @@
   export default {
     data() {
       return {
-        cardList: []
+        cardList: [],
+        face: [],
+        fwId: '',
+        popupShow: false
       };
     },
     created() {
@@ -109,23 +93,47 @@
             this.cardList[index].son[sonindex].pay_ma = data;
           });
       },
-      buy(id){
+      buy(id) {
         this.$router.push({
-          path:'/serviceDetail/'+id
+          path: '/serviceDetail/' + id
         })
+      },
+      chooseFw(obj) {
+        this.popupShow = true;
+        var _this = this;
+        this.fwId = obj.fwId;
+        this.cardList.map(m => {
+          if (m.bk_id == obj.cardId) {
+            m.son.map(n => {
+              if (n.fw_id == obj.fwId) {
+                _this.face = n.face;
+              }
+            })
+          }
+        })
+      },
+
+      toDetail(faceId) {
+        this.$router.push({
+          path: `/serviceDetail/${this.fwId}/${faceId}`
+        })
+      },
+      close(){
+        this.popupShow = false;
       }
+    },
+    computed: {
+
     },
     components: {
       Layout,
-      InfiniteScroll
+      InfiniteScroll,
+      juan,
+      betterScroll,
+      Popup
     },
     mounted() {
-      this.$nextTick(() => {
-        this.scroll = new BScroll(this.$refs.wrapper, {
-          tap: true,
-          click: true
-        });
-      });
+
     },
     mixins: [checkLogin, setTitle]
   };
@@ -167,152 +175,24 @@
         margin-right: 0.6rem;
       }
     }
-    .juan {
-      box-shadow: 0 0 10px 1px rgba(#000000, 0.4);
-      border-radius: 0.133333rem;
-      overflow: hidden;
-      margin-bottom: 1.2rem;
-      $juanColor: #8ac7ff;
-      .top {
-        position: relative;
-        color: #ffffff;
+    .popup1{
+      background: #ffffff;
+      border-radius: .133333rem /* 10/75 */;
+      font-size: .373333rem /* 28/75 */;
+      h1,.face{
         display: flex;
-        padding: 0.373333rem 0.4rem;
-        background: linear-gradient(#3891dd, $juanColor);
-        .thumb {
-          flex: none;
-          width: 1.333333rem;
-          height: 1.333333rem;
-          border: 1px solid #ffffff;
-          border-radius: 50%;
-          margin-right: 0.266667rem;
-        }
-        .info {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-around;
-          .name {
-            display: flex;
-            justify-content: space-between;
-            .price {
-              @include font-dpr(22px);
-              flex: none;
-              text-align: center;
-            }
-          }
-          .classifiy {
-            @include font-dpr(14px);
-          }
-        }
-        .status {
-          color: #ffffff;
-          position: absolute;
-          text-align: center;
-          width: 1.733333rem;
-          height: 0.64rem;
-          line-height: 0.64rem;
-          right: 0;
-          bottom: 0;
-        }
-        .wsy {
-          background: #43b486;
-        }
+        align-items: center;
+        padding:0 .4rem /* 30/75 */;
       }
-      .bot {
-        .address {
-          height: 1.026667rem;
-          background: #ffffff;
-          display: flex;
-          align-items: center;
-          padding-left: 0.466667rem;
-        }
-        .fw-item {
-          box-sizing: border-box;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          height: 1.666667rem;
-          padding: 0.32rem 0.466667rem;
-          border-top: 1px dashed #acacac;
-          &:nth-child(even) {
-            background: #f7f9f8;
-          }
-          .line {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            .fw-title {
-              display: inline-block;
-              width: 1.573333rem;
-            }
-            .buy {
-              color: #de3232;
-            }
-            .fw-num {
-              @include font-dpr(14px);
-            }
-            .reset-num {
-              background: #dd69ee;
-              text-align: center;
-              line-height: 0.533333rem;
-              height: 0.533333rem;
-              padding: 0 0.053333rem;
-              border-radius: 0.133333rem;
-              color: #ffffff;
-            }
-          }
-        }
-        background: #ffffff;
-        position: relative; // display: flex;
-        // padding: 0.24rem 0 0.4rem 0.4rem;
-        box-sizing: border-box; // height: 1.893333rem;
-        &:after {
-          content: "";
-          height: 0.106667rem;
-          position: absolute;
-          left: 0;
-          top: -0.106667rem;
-          width: 100%;
-          background: url(~img/public/youhuijuan-bg.png);
-        }
-        .message {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          .icon-shijian {
-            @include font-dpr(17px);
-          }
-          .icon-yuechi {
-            margin-left: 0.04rem;
-            @include font-dpr(13px);
-          }
-          .iconfont {
-            margin-right: 0.426667rem;
-          }
-          .ma {
-            @include font-dpr(14px);
-          }
-          &>div {
-            display: flex;
-            align-items: center;
-          }
-        }
-        .times {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 2.08rem;
-          .num {
-            width: 0.64rem;
-            height: 0.64rem;
-            line-height: 0.64rem;
-            text-align: center;
-            border-radius: 0.106667rem;
-            color: #ffffff;
-            background: $juanColor;
-          }
+      h1{
+        height: 1.106667rem /* 83/75 */;
+        justify-content: space-between;
+      } 
+      .face{
+        height: 1.186667rem /* 89/75 */;
+        &:nth-child(even){
+          background: #f8f8f8;
+          border: 1px solid #dedede;
         }
       }
     }

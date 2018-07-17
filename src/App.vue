@@ -6,8 +6,9 @@
  */
 <template>
   <div id="app">
+     
     <keep-alive >
-      <router-view v-if="keepAlive"/>
+       <router-view v-if="keepAlive"/>
     </keep-alive>
     <router-view  v-if='!keepAlive'/>
     <router-view name="tab"></router-view>

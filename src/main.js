@@ -12,17 +12,29 @@ Vue.prototype.$wx = wx;
 
 import 'vue-ydui/dist/ydui.base.css';
 // import 'muse-ui/lib/styles/base.less';
-import { Radio,Checkbox } from 'muse-ui';
+import {
+  Radio,
+  Checkbox,
+  Popover,
+  List,
+} from 'muse-ui';
 // import 'muse-ui/lib/styles/theme.less';
-Vue.component('mu-radio',Radio);
-Vue.component('mu-checkbox',Checkbox);
-
+Vue.component('mu-radio', Radio);
+Vue.component('mu-checkbox', Checkbox);
+Vue.component('mu-popover',Popover)
+Vue.component('mu-list',List)
+Vue.component('mu-list-item',List.ListItem)
 import 'iview/dist/styles/iview.css';
-import { Select , Option,Step,Steps  } from 'iview';
+import {
+  Select,
+  Option,
+  Step,
+  Steps
+} from 'iview';
 Vue.component('iview-select', Select);
-Vue.component('iview-op', Option );
-Vue.component('iview-step', Step );
-Vue.component('iview-steps', Steps );
+Vue.component('iview-op', Option);
+Vue.component('iview-step', Step);
+Vue.component('iview-steps', Steps);
 
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload)
@@ -33,6 +45,9 @@ Vue.use(VueLazyload)
 //   loading: 'dist/loading.gif',
 //   attempt: 1
 // })
+
+import moment from 'moment';
+Vue.prototype.$moment = moment;
 
 import VueHead from 'vue-head'
 Vue.use(VueHead)
@@ -52,7 +67,12 @@ Vue.prototype.$cookies = VueCookies;
 import globaljs from "@/assets/js/global.js";
 Vue.use(globaljs);
 
-import  { AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin  } from 'vux'
+import {
+  AlertPlugin,
+  ConfirmPlugin,
+  LoadingPlugin,
+  ToastPlugin
+} from 'vux'
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
 Vue.use(LoadingPlugin)
@@ -79,4 +99,3 @@ new Vue({
   store,
   render: h => h(App)
 })
-

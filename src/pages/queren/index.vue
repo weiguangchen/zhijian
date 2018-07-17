@@ -4,7 +4,7 @@
       <div class="address-wrapper" @click="toAddList">
         <div class="bg"></div>
         <div class="my-address">
-          <div v-if="moren_add" class="my-add-box">
+          <div v-if="has_add" class="my-add-box">
             <div class="title">
               <i class="iconfont icon-weizhi1"></i>地址信息</div>
             <div class="add-info">
@@ -34,17 +34,18 @@
       </div>
       <div class="fw_num">
         <Group class="form">
-          <XNumber title='购买数量' :min='1' v-model="num" class="xnum"></XNumber>
+          <XNumber title='购买数量' :min='fwInfo.min' v-model="num" class="xnum" :fillable='true'></XNumber>
           <Cell title='总价' :value='money'></Cell>
-          <Cell title='选择服务时间' :isLink='true'></Cell>
-          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectJuan"></Cell>
+          <Cell title='选择服务时间' :isLink='true'>
+            <DateTime v-model="selectDate" :start-date='startdate'></DateTime>
+          </Cell>
+          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectJuan" v-model="cardname"></Cell>
         </Group>
       </div>
 
 
       <XButton class="xbtn" type='warn' @click.native='buy' :disabled='submiting'>结算</XButton>
     </betterScroll>
-    <selectJuan v-show="juanShow" @finish='finish' @set_card='set_card' :fwId='serviceId'></selectJuan>
 
   </div>
 </template>
@@ -57,12 +58,15 @@
     Cell,
     XButton,
     Radio,
-    PopupRadio
+    PopupRadio,
   } from "vux";
   import checkLogin from "@/mixins/checkLogin.js";
   import setTitle from '@/mixins/setTitle.js'
   import betterScroll from '@/components/betterScroll/index';
   import selectJuan from './selectJuan';
+  import {
+    DateTime
+  } from 'vue-ydui/dist/lib.px/datetime';
   export default {
     data() {
       return {
@@ -77,22 +81,27 @@
         lianxiren: "",
         phone: "",
         mapInfo: "",
-        card_val: "",
 
         moren_add: '',
-        juanShow: false
+        add_status:'',
+        juanShow: false,
+        selectDate: '',
+
+        startdate:''
       };
     },
     created() {
       this.get_fw_info();
       this.get_card();
       this.get_moren_add();
+      this.startdate = this.$moment().format("YYYY-MM-DD HH:mm");
+
     },
     methods: {
       buy() {
         var _this = this;
         this.submiting = true;
-
+      
 
 
         if (this.id) {
@@ -104,8 +113,6 @@
             return false;
           } else {
 
-
-
             this.$vux.confirm.show({
               title: "提示",
               content: "是否购买该服务？",
@@ -113,25 +120,24 @@
                 _this.submiting = false;
               },
               onConfirm() {
-                if (_this.card_val) {
+                if (_this.cardVal) {
                   var panduan;
                   for (let i = 0; i < _this.currentCard().son.length; i++) {
                     if (_this.currentCard().son[i].fw_id == _this.serviceId) {
                       panduan = _this.currentCard().son[i];
-                      console.log(panduan)
                       break;
                     }
                   }
-                  // console.log(_this.num)
-                  // console.log(panduan.fw_num)
-                  // console.log(_this.num > panduan.fw_num)
+                  console.log(_this.num)
+                  console.log(panduan.fw_num)
+                  console.log(_this.num > panduan.fw_num)
 
                   if (_this.num > panduan.fw_num) {
                     _this.$vux.alert.show({
                       title: '提示',
                       content: '活动次数不够',
-                      onHide(){
-                            _this.submiting = false;
+                      onHide() {
+                        _this.submiting = false;
                       }
                     })
                   } else {
@@ -149,7 +155,8 @@
                           car_card: _this.moren_add.car_card,
                           car_color: _this.moren_add.car_color,
                           car_xing: _this.moren_add.car_xing,
-                          card_id: _this.card_val
+                          card_id: _this.cardVal,
+                          fw_time: _this.selectDate
                         }
                       })
                       .then(({
@@ -181,7 +188,8 @@
                         three: _this.moren_add.three,
                         car_card: _this.moren_add.car_card,
                         car_color: _this.moren_add.car_color,
-                        car_xing: _this.moren_add.car_xing
+                        car_xing: _this.moren_add.car_xing,
+                        fw_time: _this.selectDate
                       }
                     })
                     .then(({
@@ -281,7 +289,8 @@
           data
         }) => {
           console.log(data);
-          this.moren_add = data[0];
+          this.moren_add = data.adress;
+          this.add_status = data.status
         })
       },
       toAddList() {
@@ -290,26 +299,33 @@
         })
       },
       selectJuan() {
-        this.juanShow = true;
-        // this.$router.push({
-        //   path: '/selectJuan',
-        //   query: {
-        //     fwId: this.serviceId
-        //   }
-        // })
+        var query = {
+          serviceId: this.serviceId,
+          shopid: this.shopid
+        };
+        if(this.cardVal){
+          Object.assign(query,{
+            cardVal:this.cardVal
+          })
+        }
+        this.$router.push({
+          path: '/selectJuan',
+          query
+        })
 
       },
       finish(val) {
         this.juanShow = val;
       },
-      set_card(val) {
-        this.card_val = val;
-      },
+
       currentCard() {
         var _this = this;
-        if (this.card_val) {
+        if (this.cardVal) {
+          console.log('list')
+          console.log(this.card_list)
           for (let i = 0; i < this.card_list.length; i++) {
-            if (this.card_list[i].bk_id == _this.card_val) {
+            if (this.card_list[i].bk_id == _this.cardVal) {
+              console.log(this.card_list[i])
               return this.card_list[i]
             }
           }
@@ -330,9 +346,26 @@
         } else {
           return `${this.num * this.fwInfo.money}元`;
         }
-
       },
-
+      cardVal(){
+        return this.$route.query.cardVal;
+      },
+      cardname() {
+        if (this.$route.query.cardVal) {
+          for (let i = 0; i < this.card_list.length; i++) {
+            if (this.card_list[i].bk_id == this.$route.query.cardVal) {
+              return this.card_list[i].card_name
+            }
+          }
+        }
+      },
+      has_add(){
+        if(this.add_status == 0){
+          return false;
+        }else{
+          return true;
+        }
+      }
     },
     components: {
       XNumber,
@@ -343,7 +376,8 @@
       Radio,
       PopupRadio,
       betterScroll,
-      selectJuan
+      selectJuan,
+      DateTime
     },
     mixins: [checkLogin, setTitle]
   };
@@ -405,6 +439,8 @@
         min-height: 4.266667rem/* 320/75 */
         ;
         background: #ffffff;
+        display: flex;
+        align-items: center;
         .my-add-box {
           padding: .266667rem/* 20/75 */
           0 .266667rem/* 20/75 */
@@ -458,6 +494,7 @@
           }
         }
         .no-add {
+          flex:1;
           display: flex;
           justify-content: center;
           align-items: center;

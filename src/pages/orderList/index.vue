@@ -18,24 +18,31 @@
             </div>
             <div class="content" @click="toOrderDetail(item.order_num,item.zf)">
               <img :src="item.fw_img" alt="" class="thumb">
-              <div class="text">{{item.fw_mingzi}}</div>
+              <div class="text">
+                <span class="fw-mingzi">{{item.fw_mingzi}}</span>
+                <div class="sub-content">{{item.sub_content}}</div>
+              </div>
             </div>
             <div class="price">
-              <span class="count">共1件商品</span>
-              <span v-if="item.zf != 1">需付款：¥{{item.order_price}}</span>
+              <span class="date">{{item.date}}</span>
+
+              <span>
+                <span class="count">共1件商品</span>
+                <template v-if="item.zf != 1">需付款：¥{{item.order_price}}</template>
+              </span>
             </div>
-            <div class="xbtn">
-              <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 0">去支付</XButton> -->
-              <!-- <template v-if="item.status == 1">
+            <!-- <div class="xbtn"> -->
+            <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 0">去支付</XButton> -->
+            <!-- <template v-if="item.status == 1">
                 <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
                 <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(item.order_num,item.zf)">去评价</XButton>
               </template> -->
-              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 1">去退款</XButton>
+            <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 1">去退款</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 2" @click.native="buy(item.shop_fw_id)">再次购买</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="item.status == 3">退款中</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 4"  @click.native="buy(item.shop_fw_id)">再次购买</XButton>
-              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 5"  @click.native="buy(item.shop_fw_id)">再次购买</XButton>
-            </div>
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 5"  @click.native="buy(item.shop_fw_id)">再次购买</XButton> -->
+            <!-- </div> -->
           </div>
         </div>
         <span slot="doneTip">暂无更多订单</span>
@@ -45,6 +52,7 @@
 </template>
 
 <script>
+import betterScroll from '@/components/betterScroll'
   import {
     InfiniteScroll
   } from "vue-ydui/dist/lib.px/infinitescroll";
@@ -91,7 +99,8 @@
       XButton,
       ViewBox,
       InfiniteScroll,
-      Layout
+      Layout,
+      betterScroll
     },
     methods: {
       toOrderDetail(order_num, type) {
@@ -138,11 +147,11 @@
           this.orderList = res.list;
         });
       },
-      pingjia(orderId,type) {
+      pingjia(orderId, type) {
         console.log(orderId);
         this.$router.push({
-          path:"/me/pingjia/" + orderId,
-          query:{
+          path: "/me/pingjia/" + orderId,
+          query: {
             type
           }
         });
@@ -153,10 +162,10 @@
           this.orderList = this.orderList.concat(res.list);
         });
       },
-      buy(id){
+      buy(id) {
         console.log(id)
         this.$router.push({
-          path:'/serviceDetail/'+id
+          path: '/serviceDetail/' + id
         })
       }
     },
@@ -214,22 +223,38 @@
         }
         .text {
           display: flex;
-          align-items: center;
+          flex-direction: column;
+          justify-content: space-between;
           @include font-dpr(14px);
           line-height: 0.506667rem;
           flex: 1;
+          padding-top: .266667rem/* 20/75 */
+          ;
+          .fw-mingzi {
+            font-size: .346667rem/* 26/75 */
+            ;
+            font-weight: bold;
+          }
+          .sub-content {
+            font-size: .293333rem/* 22/75 */
+            ;
+          }
         }
       }
       .price {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         height: 1.173333rem;
         border-bottom: 1px solid #f0f0f0;
-        padding-right: 0.4rem;
+        padding: 0 0.4rem;
         @include font-dpr(14px);
         .count {
           margin-right: 0.426667rem;
+        }
+        .date{
+          font-size: .32rem /* 24/75 */;
+          color: #a6a6a6;
         }
       }
       .xbtn {

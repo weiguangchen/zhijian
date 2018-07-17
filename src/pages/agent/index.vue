@@ -21,18 +21,18 @@
                         <div class="num">
                             <div class="tit">余额</div>
                             <div class="count">1080.10</div>
-                            <XButton :mini='true' type='warn'>提现</XButton>
+                            <XButton :mini='true' type='warn' @click.native="tixian">提现</XButton>
                         </div>
                         <div class="num">
                             <div class="tit">佣金</div>
                             <div class="count">210.00</div>
-                            <XButton :mini='true' type='warn'>查看</XButton>
+                            <XButton :mini='true' type='warn' @click.native='toIncome'>查看</XButton>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="order-term">
-                <div class="title">我的订单</div>
+                <div class="title">我的团队</div>
                 <div class="order-terms">
                     <div class="order-term-item" v-if="userinfo.dl[0].dl_jb == 1">
                         <div class="icon">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="text">区县代理</div>
                     </div>
-                    <div class="order-term-item">
+                    <div class="order-term-item" @click="agentList">
                         <div class="icon">
                             <span class="iconfont icon-jiamengshang"></span>
                         </div>
@@ -85,6 +85,21 @@ export default {
   methods: {
     add_jms() {
       this.$router.push("/addJms");
+    },
+    tixian(){
+      this.$router.push({
+        path:'/agentTixian'
+      })
+    },
+    toIncome(){
+      this.$router.push({
+        path:'/income'
+      })
+    },
+    agentList(){
+      this.$router.push({
+        path:'/agentList'
+      })
     }
   },
   components: { XButton, Group, Cell, ViewBox },

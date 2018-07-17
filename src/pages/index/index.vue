@@ -259,6 +259,7 @@
         @include font-dpr(19px);
         color: #292929;
         .add {
+          font-size: .373333rem /* 28/75 */;
           margin-right: 0.333333rem;
           line-height: 1;
         }
