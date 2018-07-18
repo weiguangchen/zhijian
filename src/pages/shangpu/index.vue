@@ -50,6 +50,7 @@
         <swiper-slide class="fw-wrapper">
           <div class="toggle-btn">
             <div class="selector">
+              <span @click="tuijian">推荐</span>
               <Selector title='类别' :options='classArr' placeholder='类别' v-model="leibie" @on-change='changeFwType'></Selector>
             </div>
             <span>
@@ -203,7 +204,7 @@
       return {
         val: 3,
         shopInfo: "",
-        fw_list:[],
+        fw_list: [],
         current_fw_list: [],
         huodong: [],
         selected: '全部服务',
@@ -216,7 +217,7 @@
         classArr: [],
         leibie: '',
 
-        faceInfo:{},
+        faceInfo: {},
       };
     },
     created() {
@@ -262,10 +263,7 @@
       },
       getClassArr(fw) {
         if (fw.length > 0) {
-          var classArr = [{
-            value: '全部',
-            key: 0
-          }];
+          var classArr = [];
           var classs = [];
           fw.map(m => {
             if (classs.indexOf(m.fw_id) < 0) {
@@ -317,9 +315,7 @@
         })
       },
       changeFwType(fwId) {
-        console.log(fwId)
         if (fwId == 0) {
-          // 全部
           this.current_fw_list = this.fw_list;
         } else {
           this.current_fw_list = this.fw_list.filter(m => {
@@ -327,6 +323,10 @@
           })
         }
 
+      },
+      tuijian() {
+        this.leibie = '';
+        this.current_fw_list = this.fw_list;
       }
     },
     computed: {
@@ -463,6 +463,13 @@
         ;
         align-items: center;
         .selector {
+          display: flex;
+          align-items: center;
+          .vux-selector {
+            &:after {
+              border: none;
+            }
+          }
           .weui-cells {
             margin-top: 0;
             &:after {
@@ -506,7 +513,8 @@
       width: 100%;
       box-sizing: border-box;
       background: #ffffff;
-      padding: .426667rem /* 32/75 */;
+      padding: .426667rem/* 32/75 */
+      ;
       &:after {
         content: '';
         display: block;
@@ -514,8 +522,10 @@
       }
       .fw2-item {
         float: left;
-        margin-right: .333333rem /* 25/75 */;
-        margin-bottom: .36rem /* 27/75 */; 
+        margin-right: .333333rem/* 25/75 */
+        ;
+        margin-bottom: .36rem/* 27/75 */
+        ;
       }
       .fw2-item {
         &:nth-child(even) {

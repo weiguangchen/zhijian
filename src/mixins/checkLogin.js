@@ -11,7 +11,22 @@ export default {
 
     }
   },
+  methods: {
+    ...mapMutations(['SAVE_USERINFO']),
+    get_user() {
+      this.$axios.get(this.API_URL + '/Api/Show/get_user', {
+        params: {
+          id: this.id
+        }
+      }).then(({
+        data
+      }) => {
+        // 该用户有效
+        this.SAVE_USERINFO(data[0]);
+      })
+    }
+  },
   computed: {
-    ...mapState(['id', 'userinfo',"location"])
+    ...mapState(['id', 'userinfo', "location"])
   }
 }

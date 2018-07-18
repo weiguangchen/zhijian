@@ -24,7 +24,7 @@
             </div>
             <div class="line">
               <span class="title">地址：</span>
-              <span class="content">{{detail.adress}}</span>
+              <span class="content">{{detail.three}} {{detail.adress}}</span>
             </div>
             <div class="line">
               <span class="title">交易数量：</span>
@@ -32,7 +32,8 @@
             </div>
             <div class="line">
               <span class="title">交易金额：</span>
-              <span class="content">{{detail.order_price}}</span>
+              <span class="content" v-if="detail.order_price">{{detail.order_price}}</span>
+              <span class="content" v-else>其他支付方式</span>
             </div>
             <div class="line">
               <span class="title">支持门店：</span>
@@ -173,7 +174,7 @@
       var _this = this;
       this.checkSystem();
       this.$emit("showPopup", false);
-      this.$eruda.init();
+      // this.$eruda.init();
       this.get_detail();
     },
     methods: {

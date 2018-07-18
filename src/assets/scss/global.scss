@@ -91,3 +91,7 @@ a {
 .vux-number-selector,.vux-number-input {
   box-sizing: content-box;
 }
+
+[v-cloak] {
+  display: none;
+}

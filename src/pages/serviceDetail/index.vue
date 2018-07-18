@@ -87,7 +87,7 @@
             <i>￥</i>{{fw_info.money}}
             <sup>￥{{fw_info.y_money}}</sup>
           </span> -->
-          <div class="op-item" @click="toShop(fw_info.shop_id)">
+          <div class="op-item" @click="toShop(faceInfo.id)">
             <i class="iconfont icon-dianpu"></i>
             <div>店铺</div>
           </div>

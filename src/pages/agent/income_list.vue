@@ -1,67 +1,75 @@
 <template>
   <div class="income-list">
-    <div class="income-detail">
-      <div class="title">
-        <div class="add">天津市</div>
-        <i class="iconfont icon-jinru"></i>
-      </div>
-      <div class="detail-list">
-        <div class="detail-item">
-          总收益
-          <div class="money">￥100.00</div>
+    <div class="income-wrapper" v-if="list">
+      <div class="income-detail" v-for="(item,index) in list" :key="index">
+        <div class="title">
+          <div class="add">天津市</div>
+          <i class="iconfont icon-jinru"></i>
         </div>
-        <div class="detail-item">
-          总收益
-          <div class="money">￥100.00</div>
-        </div>
-        <div class="detail-item">
-          总收益
-          <div class="money">￥100.00</div>
-        </div>
-      </div>
-    </div>
-    <div class="income-detail">
-      <div class="title">
-        <div class="add">北京市</div>
-        <i class="iconfont icon-jinru"></i>
-      </div>
-      <div class="detail-list">
-        <div class="detail-item">
-          总收益
-          <div class="money">￥100.00</div>
-        </div>
-        <div class="detail-item">
-          总收益
-          <div class="money">￥100.00</div>
-        </div>
-        <div class="detail-item">
-          总收益
-          <div class="money">￥100.00</div>
+        <div class="detail-list">
+          <div class="detail-item">
+            总收益
+            <div class="money">￥100.00</div>
+          </div>
+          <div class="detail-item">
+            总收益
+            <div class="money">￥100.00</div>
+          </div>
+          <div class="detail-item">
+            总收益
+            <div class="money">￥100.00</div>
+          </div>
         </div>
       </div>
     </div>
+    <div v-else>暂无代理商信息</div>
+
   </div>
 </template>
 
 <script>
   import setTitle from '@/mixins/setTitle.js'
-
+  import checkLogin from "@/mixins/checkLogin.js";
   export default {
     data() {
       return {
-
+        list: []
+      }
+    },
+    created() {
+      if (this.cityId) {
+        this.get_qy()
       }
     },
     components: {
 
     },
-    mixins: [setTitle]
+    methods: {
+      get_qy() {
+        return this.$axios.get(this.API_URL + "/Api/DlCore/qy_see_qy", {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
+            city_id: this.cityId
+          }
+        }).then(({
+          data
+        }) => {
+          this.list = data;
+        })
+      }
+    },
+    computed: {
+      cityId() {
+        return this.$route.query.cityId;
+      }
+    },
+    mixins: [setTitle, checkLogin]
   }
 
 </script>
 
 <style lang='scss' scoped>
-  .income-list{
+  .income-list {
     background: #ffffff;
     .income-detail {
       padding: .533333rem/* 40/75 */

@@ -370,7 +370,27 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/agent/agentList'], resolve),
       // tab: tab
     },
-  }, {
+  },  {
+    path: '/wallet',
+    name: 'wallet',
+    components: {
+      default: resolve => require(['@/pages/agent/wallet'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '我的钱包'
+    }
+  },{
+    path: '/shoukuan',
+    name: 'shoukuan',
+    components: {
+      default: resolve => require(['@/pages/agent/shoukuan'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '收款'
+    }
+  },  {
     path: '/serviceDetail/:serviceId/:faceId',
     name: 'serviceDetail',
     component: resolve => require(["@/pages/serviceDetail/index"], resolve)

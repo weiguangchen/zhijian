@@ -1,20 +1,21 @@
 <template>
   <div class="tixianDetail">
     <div class="tu">
-      <iview-steps size='small' direction='vertical' :current='step'>
-        <iview-step title='发起提现申请' content='2018/05/02'></iview-step>
-        <iview-step title='系统审核中' content='预计到账时间05-21  14:20'></iview-step>
-        <iview-step title='到账成功'></iview-step>
+      <iview-steps size='small' direction='vertical' :current='step' >
+        <iview-step title='发起提现申请' :content='detail.time'></iview-step>
+        <iview-step title='系统审核中' ></iview-step>
+        <iview-step title='到账成功' v-if="detail.status == 1"></iview-step>
+        <iview-step title='已拒绝' v-else-if="detail.status == 2" status='error'></iview-step>
       </iview-steps>
     </div>
     <div class="info">
       <div>
         <span>提现金额</span>
-        <span>￥980.00</span>
+        <span>￥{{detail.money}}</span>
       </div>
       <div>
         <span>提现账户：</span>
-        <span>18292093198</span>
+        <span>{{userinfo.uphone}}</span>
       </div>
     </div>
     <XButton type='warn'>完成</XButton>
@@ -22,16 +23,56 @@
 </template>
 
 <script>
-import { XButton } from 'vux';
+  import checkLogin from "@/mixins/checkLogin.js";
+
+  import {
+    XButton
+  } from 'vux';
   export default {
     data() {
       return {
-          step:1
+        detail:{}
+      }
+    },
+    created() {
+      if (this.type == 'tixian') {
+        this.$axios.get(this.API_URL + "/Api/UserShow/give_money_content", {
+          params: {
+            id: this.txId
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          this.detail = data;
+        })
+      } else if (this.type == 'shoukuan') {
+
+      }
+
+    },
+    computed: {
+      type() {
+        return this.$route.query.type;
+      },
+      txId() {
+        return this.$route.query.id;
+      },
+      step(){
+          if(this.detail.status == 0){
+              return 1
+          }else if(this.detail.status == 1 || this.detail.status == 2){
+              return 2
+          }
+      },
+      detailStatus(){
+          
       }
     },
     components: {
-        XButton
-    }
+      XButton
+    },
+    mixins:[checkLogin]
   }
 
 </script>

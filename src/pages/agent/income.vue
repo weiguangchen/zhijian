@@ -4,58 +4,38 @@
       <div class="total">
         <h1>总收益</h1>
         <div class="num">￥
-          <em>10,000.00</em>
+          <em>{{income.z_money}}</em>
         </div>
       </div>
     </div>
     <div class="total-num">
       <div class="total-item">
         <h2>未结算</h2>
-        <div class="num">￥600.00</div>
+        <div class="num">￥{{income.w_money}}</div>
       </div>
       <div class="total-item">
         <h2>已结算</h2>
-        <div class="num">￥600.00</div>
+        <div class="num">￥{{income.y_money}}</div>
       </div>
     </div>
     <div class="area-income">
-      <div class="income-detail">
+      <div class="income-detail" v-for="(item,index) in list" :key="index" @click="checkQu(item.id)" v-cloak>
         <div class="title">
-          <div class="add">天津市</div>
+          <div class="add">{{item.city}}</div>
           <i class="iconfont icon-jinru"></i>
         </div>
         <div class="detail-list">
           <div class="detail-item">
             总收益
-            <div class="money">￥100.00</div>
+            <div class="money">￥{{item.z_money}}</div>
           </div>
           <div class="detail-item">
             未结算
-            <div class="money">￥100.00</div>
+            <div class="money">￥{{item.w_money}}</div>
           </div>
           <div class="detail-item">
             已结算
-            <div class="money">￥100.00</div>
-          </div>
-        </div>
-      </div>
-      <div class="income-detail">
-        <div class="title">
-          <div class="add">北京市</div>
-          <i class="iconfont icon-jinru"></i>
-        </div>
-        <div class="detail-list">
-          <div class="detail-item">
-            总收益
-            <div class="money">￥100.00</div>
-          </div>
-          <div class="detail-item">
-            未结算
-            <div class="money">￥100.00</div>
-          </div>
-          <div class="detail-item">
-            已结算
-            <div class="money">￥100.00</div>
+            <div class="money">￥{{item.y_money}}</div>
           </div>
         </div>
       </div>
@@ -65,17 +45,89 @@
 
 <script>
   import setTitle from '@/mixins/setTitle.js'
+  import checkLogin from "@/mixins/checkLogin.js";
 
   export default {
     data() {
       return {
+        income: {},
+        list: []
+      }
+    },
+    created() {
+      this.get_income();
+      if (this.userinfo.dl[0].dl_jb == 1) {
+        // 股东代理
+        this.$axios.get(this.API_URL + '/Api/DlCore/gd_see_city', {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
+          }
+        }).then(({
+          data
+        }) => {
+          console.log('获取市级代理')
+          console.log(data);
+          this.list = data;
+        })
+      } else if (this.userinfo.dl[0].dl_jb == 2) {
+        // 区域代理
+        this.$axios.get(this.API_URL + '/Api/DlCore/qy_see_qy', {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
+            city_id: this.userinfo.dl[0].city_id
+          }
+        }).then(({
+          data
+        }) => {
+          console.log('获取市级代理')
+          console.log(data);
+          this.list = data;
+        })
+      } else {
+        //   社区代理
+        this.$axios.get(this.API_URL + '/Api/DlCore/qy_see_qy', {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
+            city_id: this.userinfo.dl[0].city_id
+          }
+        }).then(({
+          data
+        }) => {
+          console.log('获取市级代理')
+          console.log(data);
+          this.list = data;
+        })
+      }
 
+    },
+    methods: {
+      get_income() {
+        this.$axios.get(this.API_URL + '/Api/DlCore/shop_core', {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
+            dl_jb: this.userinfo.dl[0].dl_jb
+          }
+        }).then(({
+          data
+        }) => {
+          console.log('获取总数据')
+          this.income = data;
+          console.log(data);
+        })
+      },
+      checkQu(id) {
+        this.$router.push({
+          path: '/incomeList',
+          query:{
+              cityId:id
+          }
+        })
       }
     },
     components: {
 
     },
-    mixins:[setTitle]
+    mixins: [setTitle, checkLogin]
   }
 
 </script>

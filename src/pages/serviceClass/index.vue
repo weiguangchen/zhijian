@@ -1,9 +1,6 @@
 <template>
   <div class="page">
     <ViewBox>
-      <!-- <XHeader title='豪景国际大厦' left-options.showBack='false'>
-        <span class="iconfont icon-shangmenxichesousuo" slot="right"></span>
-      </XHeader> -->
       <classify :classArr='classArr' v-if="classArr.length"></classify>
       <div class="ad">
         <Swiper :aspect-ratio='0.24'>

@@ -1,13 +1,8 @@
 <template>
   <div class="tixian">
     <div class="tx">
-      <h1>到账账户
-        <span>{{userinfo.uphone}}
-          <i> (微信账户)</i>
-        </span>
-      </h1>
       <div class="content">
-        <h2>提现金额</h2>
+        <h2>收款金额</h2>
         <div class="input-wrapper">
           <span>￥</span>
           <div class="input">
@@ -15,14 +10,14 @@
           </div>
         </div>
 
-        <div class="caniuse">可用金额&nbsp;&nbsp;￥{{userinfo.user_money}}&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="caniuse">可用金额&nbsp;&nbsp;￥{{userinfo.dl[0].dl_money}}&nbsp;&nbsp;&nbsp;&nbsp;
           <span class="total" @click="tixian_all">全部提现</span>
         </div>
 
         <div class="xbtn">
-          <XButton @click.native="tixian" :mini='true' type='primary' :disabled='tixianing'>提现</XButton>
+          <XButton @click.native="tixian" :mini='true' type='primary' :disabled='tixianing'>充值</XButton>
         </div>
-        <p @click="tixian_list" class="tixian-list"> 提现记录</p>
+        <p @click="sk_list" class="tixian-list"> 收款记录</p>
 
       </div>
       <Popup v-model='safe' position='center' width='80%'>
@@ -102,9 +97,10 @@
           })
           this.tixianing = false;
         } else {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_give_money', {
+          this.$axios.get(this.API_URL + '/Api/DlCore/dl_get_money', {
             params: {
-              uid: this.id,
+              dl_id: this.userinfo.dl[0].id,
+              user_id: this.id,
               get_money: this.tixian_money
             }
           }).then(({
@@ -121,7 +117,7 @@
               this.$vux.alert.show({
                 title: '提示',
                 content: data.log,
-                onHide() {
+                onHide(){
                   _this.get_user();
                 }
               })
@@ -134,13 +130,13 @@
         this.safe = false;
       },
       tixian_all() {
-        this.tixian_money = this.userinfo.user_money;
+        this.tixian_money = this.userinfo.dl[0].dl_money;
       },
-      tixian_list() {
+      sk_list() {
         this.$router.push({
           path: '/tixianList',
           query:{
-            type:'tixian'
+              type:'shoukuan'
           }
         })
       }

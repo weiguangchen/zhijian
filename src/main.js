@@ -85,10 +85,7 @@ import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css'
 Vue.use(VueAwesomeSwiper);
 
-/* 虚拟数字键盘 */
-// import wcKeyBoard from 'wc-keyboard'
-// import 'wc-keyboard/style.css'
-// Vue.use(wcKeyBoard);
+
 
 Vue.config.productionTip = false;
 
