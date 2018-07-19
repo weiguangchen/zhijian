@@ -370,7 +370,21 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/agent/agentList'], resolve),
       // tab: tab
     },
-  },  {
+  }, {
+    path: '/jmsList',
+    name: 'jmsList',
+    components: {
+      default: resolve => require(['@/pages/agent/jmsList'], resolve),
+      // tab: tab
+    },
+  },{
+    path: '/jmsDetail',
+    name: 'jmsDetail',
+    components: {
+      default: resolve => require(['@/pages/agent/jmsDetail'], resolve),
+      // tab: tab
+    },
+  },   {
     path: '/wallet',
     name: 'wallet',
     components: {

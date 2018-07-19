@@ -1,6 +1,6 @@
 <template>
   <div class="tixianList">
-    <betterScroll>
+    <betterScroll @pullingUp='pullingUp' ref='scroll'>
       <div class="list" v-if="type == 'tixian'">
         <div class="tx-item" @click="toTxDetail(item.id)" v-for="(item,index) in list" :key='index'>
           <div class="account">
@@ -39,160 +39,180 @@
           <div class="date">提现时间:{{item.time}}</div>
         </div>
       </div>
-
+      <span slot="loadingTip">正在加载数据...</span>
+      <span slot="doneTip">暂无更多数据</span>
     </betterScroll>
   </div>
 </template>
 
 <script>
-  import betterScroll from "@/components/betterScroll/index";
-  import checkLogin from "@/mixins/checkLogin.js";
-  export default {
-    data() {
-      return {
-        p: 1,
-        list: []
-      };
+import betterScroll from "@/components/betterScroll/index";
+import checkLogin from "@/mixins/checkLogin.js";
+import { setTimeout } from "timers";
+export default {
+  data() {
+    return {
+      p: 1,
+      list: [],
+      canPullup: true,
+
+      test: 1
+    };
+  },
+  created() {
+    if (this.type == "tixian") {
+      this.setMetaTitle("提现列表");
+      this.get_tx_list();
+    } else if (this.type == "shoukuan") {
+      this.setMetaTitle("收款列表");
+      this.get_sk_list();
+    }
+  },
+  methods: {
+    btn() {
+      this.test = 2;
     },
-    created() {
-      if (this.type == 'tixian') {
-        this.setMetaTitle('提现列表')
-        this.get_tx_list();
-      } else if (this.type == 'shoukuan') {
-        this.setMetaTitle('收款列表')
-        this.get_sk_list();
-      }
+    toTxDetail(id) {
+      this.$router.push({
+        path: "/tixianDetail",
+        query: {
+          type: "tixian",
+          id
+        }
+      });
     },
-    methods: {
-      toTxDetail(id) {
-        this.$router.push({
-          path: '/tixianDetail',
-          query:{
-            type:'tixian',
-            id
-          }
-        })
-      },
-      toSkDetail(id) {
-        this.$router.push({
-          path: '/tixianDetail',
-          query:{
-            type:'shoukuan',
-            id
-          }
-        })
-      },
-      get_tx_list() {
-        this.$axios.get(this.API_URL + '/Api/UserShow/give_money_list', {
+    toSkDetail(id) {
+      this.$router.push({
+        path: "/tixianDetail",
+        query: {
+          type: "shoukuan",
+          id
+        }
+      });
+    },
+    get_tx_list() {
+      this.$axios
+        .get(this.API_URL + "/Api/UserShow/give_money_list", {
           params: {
             uid: this.id,
-            num: 8
+            num: 8,
+            p: this.p
           }
-        }).then(({
-          data
-        }) => {
-          console.log(data)
-          this.list = data.list;
         })
-      },
-      get_sk_list() {
-        var params = {
-          dl_id: this.userinfo.dl[0].id,
-          p: this.p,
-          num: 8
-        };
-        this.$axios.get(this.API_URL + '/Api/DlCore/get_money_log', {
+        .then(({ data }) => {
+          console.log(data);
+          if (data.ok == 1) {
+            console.log("还有数据");
+            this.p = this.p + 1;
+          } else if (data.ok == 0) {
+            console.log("没数据了");
+            this.$refs.scroll.closePullUp();
+          }
+          this.list = this.list.concat(data.list);
+          this.$refs.scroll.pullupLoadend();
+        });
+    },
+    get_sk_list() {
+      var params = {
+        dl_id: this.userinfo.dl[0].id,
+        p: this.p,
+        num: 8
+      };
+      this.$axios
+        .get(this.API_URL + "/Api/DlCore/get_money_log", {
           params
-        }).then(({
-          data
-        }) => {
-          this.list = data.list;
         })
+        .then(({ data }) => {
+          if (data.ok == 1) {
+            console.log("还有数据");
+            this.p = this.p + 1;
+          } else if (data.ok == 0) {
+            console.log("没数据了");
+            this.$refs.scroll.closePullUp();
+          }
+          this.list = this.list.concat(data.list);
+          this.$refs.scroll.pullupLoadend();
+        });
+    },
+    pullingUp() {
+      if (this.type == "tixian") {
+        this.get_tx_list();
+      } else if (this.type == "shoukuan") {
+        this.get_sk_list();
       }
-    },
-    components: {
-      betterScroll
-    },
-    computed: {
-      type() {
-        return this.$route.query.type;
-      }
-    },
-    mixins: [checkLogin]
-  };
 
+      this.$refs.scroll.finishPullupload();
+    }
+  },
+  components: {
+    betterScroll
+  },
+  computed: {
+    type() {
+      return this.$route.query.type;
+    }
+  },
+  mixins: [checkLogin]
+};
 </script>
 
 <style scoped lang='scss'>
-  .tixianList {
-    background: #e4e4e4;
-    height: 100%;
-    .tx-item {
-      margin-top: $bot;
-      padding: 0.666667rem/* 50/75 */
-      0.4rem/* 30/75 */
-      ;
-      background: #ffffff;
-      .account {
-        display: flex;
-        align-items: flex-start;
-        font-size: 0.453333rem/* 34/75 */
-        ;
-        margin-bottom: 0.4rem/* 30/75 */
-        ;
-        .arrow {
-          flex: none;
-          width: 0.533333rem/* 40/75 */
-          ;
-          max-width: none;
-          margin-top: 0.133333rem/* 10/75 */
-          ;
-        }
-        &>div {
-          flex: auto;
-          text-align: center;
-          .phone {
-            margin-top: 0.24rem/* 18/75 */
-            ;
-            color: #a3a3a3;
-            font-size: 0.373333rem/* 28/75 */
-            ;
-          }
-        }
+.tixianList {
+  background: #e4e4e4;
+  height: 100%;
+  .tx-item {
+    margin-top: $bot;
+    padding: 0.666667rem /* 50/75 */ 0.4rem /* 30/75 */;
+    background: #ffffff;
+    .account {
+      display: flex;
+      align-items: flex-start;
+      font-size: 0.453333rem /* 34/75 */;
+      margin-bottom: 0.4rem /* 30/75 */;
+      .arrow {
+        flex: none;
+        width: 0.533333rem /* 40/75 */;
+        max-width: none;
+        margin-top: 0.133333rem /* 10/75 */;
       }
-      .line {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.4rem/* 30/75 */
-        ;
-        .status {
-          width: 1rem/* 75/75 */
-          ;
-          flex: none;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+      & > div {
+        flex: auto;
+        text-align: center;
+        .phone {
+          margin-top: 0.24rem /* 18/75 */;
+          color: #a3a3a3;
+          font-size: 0.373333rem /* 28/75 */;
         }
-        .success {
-          color: #21ad45;
-        }
-        .ing {
-          color: #e39023;
-        }
-        .warn {
-          color: #ed321e;
-        }
-        .txt {
-          margin-right: 0.853333rem/* 64/75 */
-          ;
-        }
-      }
-      .date {
-        padding-left: 1rem/* 75/75 */
-        ;
-        color: #a4a4a4;
       }
     }
+    .line {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.4rem /* 30/75 */;
+      .status {
+        width: 1rem /* 75/75 */;
+        flex: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .success {
+        color: #21ad45;
+      }
+      .ing {
+        color: #e39023;
+      }
+      .warn {
+        color: #ed321e;
+      }
+      .txt {
+        margin-right: 0.853333rem /* 64/75 */;
+      }
+    }
+    .date {
+      padding-left: 1rem /* 75/75 */;
+      color: #a4a4a4;
+    }
   }
-
+}
 </style>
