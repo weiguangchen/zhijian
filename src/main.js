@@ -24,17 +24,21 @@ Vue.component('mu-checkbox', Checkbox);
 Vue.component('mu-popover',Popover)
 Vue.component('mu-list',List)
 Vue.component('mu-list-item',List.ListItem)
+
+
 import 'iview/dist/styles/iview.css';
 import {
   Select,
   Option,
   Step,
-  Steps
+  Steps,
+  DatePicker
 } from 'iview';
 Vue.component('iview-select', Select);
 Vue.component('iview-op', Option);
 Vue.component('iview-step', Step);
 Vue.component('iview-steps', Steps);
+Vue.component('iview-date', DatePicker);
 
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload)

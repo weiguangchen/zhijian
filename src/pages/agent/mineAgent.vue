@@ -16,6 +16,8 @@ import betterScroll from "@/components/betterScroll";
 import checkLogin from "@/mixins/checkLogin.js";
 import agentCity from "./components/agentCity";
 import agentQy from "./components/agentQy";
+ import setTitle from '@/mixins/setTitle.js'
+
 export default {
   data() {
     return {
@@ -49,7 +51,7 @@ export default {
     agentQy,
     betterScroll
   },
-  mixins: [checkLogin]
+  mixins: [checkLogin,setTitle]
 };
 </script>
 

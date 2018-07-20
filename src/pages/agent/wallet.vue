@@ -25,42 +25,101 @@
         </div>
       </div>
     </div>
+    <div class="wallet-list">
+      <betterScroll @pullingUp='pullingUp' ref='scroll'>
+        <div class="list">
+          <div class="item" v-for="(item,index) in list" :key="index">
+            <div class="l">
+              <div class="tit">{{item.log}}</div>
+              <div class="date">{{item.time}}</div>
+            </div>
+            <div class="r" :class="{add:item.zt == 1,down:item.zt == 2}"><i v-if="item.zt == 1">+</i><i v-if="item.zt == 2">-</i>{{item.money}}</div>
+          </div>
+        </div>
+        <span slot="loadingTip">正在加载数据...</span>
+        <span slot="doneTip">暂无更多数据</span>
+      </betterScroll>
+    </div>
+
+
   </div>
 </template>
 
 <script>
- import checkLogin from "@/mixins/checkLogin.js";
-   import setTitle from "@/mixins/setTitle.js";
+  import betterScroll from "@/components/betterScroll";
+  import checkLogin from "@/mixins/checkLogin.js";
+  import setTitle from "@/mixins/setTitle.js";
   export default {
     data() {
       return {
-
+        p: 1,
+        list: []
       }
     },
-    methods:{
-        tixian(){
-            this.$router.push({
-                path:'/agentTixian'
-            })
-        },
-        shoukuan(){
-            this.$router.push({
-                path:'/shoukuan'
-            })
+    created() {
+      this.get_list();
+    },
+    methods: {
+      tixian() {
+        this.$router.push({
+          path: '/agentTixian'
+        })
+      },
+      shoukuan() {
+        this.$router.push({
+          path: '/shoukuan'
+        })
+      },
+      get_list() {
+        this.$axios.get(this.API_URL + '/Api/DlCore/get_list', {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
+            see: 0,
+            num: 8,
+            p: this.p
+          }
+        }).then(({
+          data
+        }) => {
+          if (data.ok == 1) {
+            console.log("还有数据");
+            this.p = this.p + 1;
+          } else if (data.ok == 0) {
+            console.log("没数据了");
+            this.$refs.scroll.closePullUp();
+          }
+          this.list = this.list.concat(data.list);
+          this.$refs.scroll.pullupLoadend();
+        })
+      },
+      pullingUp() {
+        this.get_list();
+        this.$refs.scroll.finishPullupload();
+      }
+    },
+    computed: {
+      params() {
+        var params = {
+
         }
+        return params;
+      }
     },
     components: {
-
+      betterScroll
     },
-    mixins:[checkLogin,setTitle]
+    mixins: [checkLogin, setTitle]
   }
 
 </script>
 
 <style scoped lang='scss'>
   .wallet {
+    display: flex;
+    flex-direction: column;
+
     .wallet-wrapper {
-        background: #ffffff;
+      background: #ffffff;
       padding: .613333rem/* 46/75 */
       .4rem/* 30/75 */
       .4rem/* 30/75 */
@@ -131,9 +190,9 @@
           margin-bottom: .466667rem/* 35/75 */
           ;
         }
-        .s-box{
-            display: flex;
-            justify-content: space-around;
+        .s-box {
+          display: flex;
+          justify-content: space-around;
         }
         span {
           display: inline-block;
@@ -141,13 +200,54 @@
           ;
           height: .8rem/* 60/75 */
           ;
-          line-height: .8rem /* 60/75 */;
+          line-height: .8rem/* 60/75 */
+          ;
           text-align: center;
-          border-radius: .24rem /* 18/75 */;
+          border-radius: .24rem/* 18/75 */
+          ;
         }
         .active {
           background: #5b61fc;
           color: #ffffff;
+        }
+      }
+    }
+    .wallet-list {
+      flex: 1;
+      .list {
+        .item {
+          display: flex;
+          padding: .4rem/* 30/75 */
+          ;
+          background: #ffffff;
+          font-size: .373333rem/* 28/75 */
+          ;
+          margin-top: $bot;
+          .l {
+            width: 6.666667rem/* 500/75 */
+            ;
+            flex: none;
+          }
+          .r {
+            flex: 1;
+            display: flex;
+            align-items: center;
+          }
+          .add {
+            color: #22a955;
+          }
+          .down {
+            color: #ed4239;
+          }
+          .tit {
+            font-weight: bold;
+            margin-bottom: .6rem/* 45/75 */
+            ;
+          }
+          .date {
+            font-size: .24rem/* 18/75 */
+            ;
+          }
         }
       }
     }

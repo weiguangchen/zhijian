@@ -344,7 +344,7 @@ export const defaultRouterMaps = [{
       // tab: tab
     },
     meta: {
-      title: '提现记录'
+      title: '提现详情'
     }
   }, {
     path: '/income',
@@ -369,7 +369,7 @@ export const defaultRouterMaps = [{
     components: {
       default: resolve => require(['@/pages/agent/agentList'], resolve),
       // tab: tab
-    },
+    }
   }, {
     path: '/jmsList',
     name: 'jmsList',
@@ -377,13 +377,16 @@ export const defaultRouterMaps = [{
       default: resolve => require(['@/pages/agent/jmsList'], resolve),
       // tab: tab
     },
+    meta: {
+      title: '加盟商列表'
+    }
   },{
     path: '/jmsDetail',
     name: 'jmsDetail',
     components: {
       default: resolve => require(['@/pages/agent/jmsDetail'], resolve),
       // tab: tab
-    },
+    }
   },   {
     path: '/wallet',
     name: 'wallet',
@@ -424,7 +427,17 @@ export const defaultRouterMaps = [{
     meta: {
       title: '我的加盟商'
     }
-  },   {
+  }, {
+    path: '/baobiao',
+    name: 'baobiao',
+    components: {
+      default: resolve => require(['@/pages/agent/baobiao'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '我的报表'
+    }
+  },  {
     path: '/serviceDetail/:serviceId/:faceId',
     name: 'serviceDetail',
     component: resolve => require(["@/pages/serviceDetail/index"], resolve)

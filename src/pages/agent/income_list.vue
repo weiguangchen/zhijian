@@ -1,67 +1,144 @@
 <template>
-  <div class="income-list">
-    <div class="income-wrapper" v-if="list">
-      <div class="income-detail" v-for="(item,index) in list" :key="index">
-        <div class="title">
-          <div class="add">天津市</div>
-          <i class="iconfont icon-jinru"></i>
-        </div>
-        <div class="detail-list">
-          <div class="detail-item">
-            总收益
-            <div class="money">￥100.00</div>
+  <div class="income-list page">
+    <betterScroll v-if="cityId">
+      <div class="income-wrapper">
+        <div class="income-detail" v-for="(item,index) in list" :key="index" @click="toJms(item.id)">
+          <div class="title">
+            <div class="add">{{item.qy_name}}</div>
+            <i class="iconfont icon-jinru"></i>
           </div>
-          <div class="detail-item">
-            总收益
-            <div class="money">￥100.00</div>
-          </div>
-          <div class="detail-item">
-            总收益
-            <div class="money">￥100.00</div>
+          <div class="detail-list">
+            <div class="detail-item">
+              总收益
+              <div class="money">￥{{item.z_money}}</div>
+            </div>
+            <div class="detail-item">
+              未结算
+              <div class="money">￥{{item.w_money}}</div>
+            </div>
+            <div class="detail-item">
+              已结算
+              <div class="money">￥{{item.y_money}}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-else>暂无代理商信息</div>
-
+    </betterScroll>
+    <betterScroll @pullingUp='pullingUp' ref='scroll' v-else-if="qyId">
+      <div class="income-wrapper">
+        <div class="income-detail" v-for="(item,index) in list" :key="index" @click="toJms(item.id)">
+          <div class="title">
+            <div class="add">{{item.qy_name}}</div>
+            <i class="iconfont icon-jinru"></i>
+          </div>
+          <div class="detail-list">
+            <div class="detail-item">
+              总收益
+              <div class="money">￥{{item.z_money}}</div>
+            </div>
+            <div class="detail-item">
+              未结算
+              <div class="money">￥{{item.w_money}}</div>
+            </div>
+            <div class="detail-item">
+              已结算
+              <div class="money">￥{{item.y_money}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span slot="loadingTip">正在加载数据...</span>
+      <span slot="doneTip">暂无更多数据</span>
+    </betterScroll>
   </div>
 </template>
 
 <script>
+  import betterScroll from "@/components/betterScroll";
   import setTitle from '@/mixins/setTitle.js'
   import checkLogin from "@/mixins/checkLogin.js";
   export default {
     data() {
       return {
+        p: 1,
         list: []
       }
     },
     created() {
       if (this.cityId) {
-        this.get_qy()
+        this.get_qy();
+      } else if (this.qyId) {
+        this.get_jms();
       }
     },
-    components: {
-
+    watch: {
+      $route() {
+        this.list = [];
+        if (this.cityId) {
+          this.get_qy();
+        } else if (this.qyId) {
+          this.get_jms();
+        }
+      }
     },
     methods: {
       get_qy() {
         return this.$axios.get(this.API_URL + "/Api/DlCore/qy_see_qy", {
           params: {
-            dl_id: this.userinfo.dl[0].id,
+            dl_jb: this.userinfo.dl[0].dl_jb,
             city_id: this.cityId
           }
         }).then(({
           data
         }) => {
-          this.list = data;
+          this.list = this.list.concat(data);
         })
+      },
+      get_jms() {
+        return this.$axios.get(this.API_URL + "/Api/DlCore/get_shop", {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
+            tj: 0,
+            num: 8,
+            p:this.p
+          }
+        }).then(({
+          data
+        }) => {
+          if (data.ok == 1) {
+            console.log("还有数据");
+            this.p = this.p + 1;
+          } else if (data.ok == 0) {
+            console.log("没数据了");
+            this.$refs.scroll.closePullUp();
+          }
+          this.list = this.list.concat(data.list);
+          this.$refs.scroll.pullupLoadend();
+        })
+      },
+      toJms(id) {
+        this.$router.push({
+          path: '/incomeList',
+          query: {
+            qyId: id
+          }
+        })
+      },
+      pullingUp() {
+        this.get_qy();
+        this.$refs.scroll.finishPullupload();
       }
     },
     computed: {
       cityId() {
         return this.$route.query.cityId;
+      },
+      qyId() {
+        return this.$route.query.qyId;
       }
+    },
+    components: {
+      betterScroll
     },
     mixins: [setTitle, checkLogin]
   }

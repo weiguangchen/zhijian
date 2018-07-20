@@ -63,7 +63,7 @@
           </Cell>
           <Cell title='我的加盟商' :is-link='true' link='/mineJms'>
           </Cell>
-          <Cell title='我的报表' :is-link='true'>
+          <Cell title='我的报表' :is-link='true' link='/baobiao'>
           </Cell>
           <Cell title='我的钱包' :is-link='true' link='/wallet'>
           </Cell>

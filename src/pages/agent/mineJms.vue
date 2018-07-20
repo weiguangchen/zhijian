@@ -14,6 +14,8 @@
 import betterScroll from "@/components/betterScroll";
 import checkLogin from "@/mixins/checkLogin.js";
 import jms from "./components/jms";
+ import setTitle from '@/mixins/setTitle.js'
+
 export default {
   data() {
     return {
@@ -55,7 +57,7 @@ export default {
     jms,
     betterScroll
   },
-  mixins: [checkLogin]
+  mixins: [checkLogin,setTitle]
 };
 </script>
 

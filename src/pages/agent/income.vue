@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="area-income">
-      <div class="income-detail" v-for="(item,index) in list" :key="index" @click="checkQu(item.id)" v-cloak>
+      <div class="income-detail" v-for="(item,index) in list" :key="index" @click="toDetail(item.id)" v-cloak>
         <div class="title">
           <div class="add">{{item.city}}</div>
           <i class="iconfont icon-jinru"></i>
@@ -58,45 +58,13 @@
       this.get_income();
       if (this.userinfo.dl[0].dl_jb == 1) {
         // 股东代理
-        this.$axios.get(this.API_URL + '/Api/DlCore/gd_see_city', {
-          params: {
-            dl_id: this.userinfo.dl[0].id,
-          }
-        }).then(({
-          data
-        }) => {
-          console.log('获取市级代理')
-          console.log(data);
-          this.list = data;
-        })
+        this.get_city();
       } else if (this.userinfo.dl[0].dl_jb == 2) {
         // 区域代理
-        this.$axios.get(this.API_URL + '/Api/DlCore/qy_see_qy', {
-          params: {
-            dl_id: this.userinfo.dl[0].id,
-            city_id: this.userinfo.dl[0].city_id
-          }
-        }).then(({
-          data
-        }) => {
-          console.log('获取市级代理')
-          console.log(data);
-          this.list = data;
-        })
-      } else {
+        this.get_qy();
+      } else if (this.userinfo.dl[0].dl_jb == 3) {
         //   社区代理
-        this.$axios.get(this.API_URL + '/Api/DlCore/qy_see_qy', {
-          params: {
-            dl_id: this.userinfo.dl[0].id,
-            city_id: this.userinfo.dl[0].city_id
-          }
-        }).then(({
-          data
-        }) => {
-          console.log('获取市级代理')
-          console.log(data);
-          this.list = data;
-        })
+        this.get_jms();
       }
 
     },
@@ -115,13 +83,64 @@
           console.log(data);
         })
       },
-      checkQu(id) {
-        this.$router.push({
-          path: '/incomeList',
-          query:{
-              cityId:id
+      get_city() {
+        this.$axios.get(this.API_URL + '/Api/DlCore/gd_see_city', {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
           }
+        }).then(({
+          data
+        }) => {
+          console.log('获取市级代理')
+          console.log(data);
+          this.list = data;
         })
+      },
+      get_qy() {
+        this.$axios.get(this.API_URL + '/Api/DlCore/qy_see_qy', {
+          params: {
+            dl_jb: this.userinfo.dl[0].dl_jb,
+            city_id: this.userinfo.dl[0].city_id
+          }
+        }).then(({
+          data
+        }) => {
+          console.log('获取市级代理')
+          console.log(data);
+          this.list = data;
+        })
+      },
+      get_jms() {
+        this.$axios.get(this.API_URL + '/Api/DlCore/get_shop', {
+          params: {
+            dl_id: this.userinfo.dl[0].id,
+            tj: 0,
+            num: 8
+          }
+        }).then(({
+          data
+        }) => {
+          console.log('获取市级代理')
+          console.log(data);
+        })
+      },
+      toDetail(id) {
+        if (this.userinfo.dl[0].dl_jb == 1) {
+          this.$router.push({
+            path: '/incomeList',
+            query: {
+              cityId: id
+            }
+          })
+        } else if (this.userinfo.dl[0].dl_jb == 2) {
+          this.$router.push({
+            path: '/incomeList',
+            query: {
+              qyId: id
+            }
+          })
+        }
+
       }
     },
     components: {
