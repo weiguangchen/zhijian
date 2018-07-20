@@ -404,7 +404,27 @@ export const defaultRouterMaps = [{
     meta: {
       title: '收款'
     }
-  },  {
+  }, {
+    path: '/mineAgent',
+    name: 'mineAgent',
+    components: {
+      default: resolve => require(['@/pages/agent/mineAgent'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '我的代理商'
+    }
+  },{
+    path: '/mineJms',
+    name: 'mineJms',
+    components: {
+      default: resolve => require(['@/pages/agent/mineJms'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '我的加盟商'
+    }
+  },   {
     path: '/serviceDetail/:serviceId/:faceId',
     name: 'serviceDetail',
     component: resolve => require(["@/pages/serviceDetail/index"], resolve)

@@ -59,20 +59,15 @@
           </Cell>
           <Cell title='添加加盟商' :is-link='true' link='/addJms' v-if="userinfo.dl[0].dl_jb == 3 " @click="add_jms">
           </Cell>
-          <Cell title='我的代理商' :is-link='true'>
+          <Cell title='我的代理商' :is-link='true' link='/mineAgent' v-if="userinfo.dl[0].dl_jb == 1 || userinfo.dl[0].dl_jb == 2">
           </Cell>
-          <Cell title='我的加盟商' :is-link='true'>
+          <Cell title='我的加盟商' :is-link='true' link='/mineJms'>
           </Cell>
           <Cell title='我的报表' :is-link='true'>
           </Cell>
           <Cell title='我的钱包' :is-link='true' link='/wallet'>
           </Cell>
-          <!-- <Cell title='我的加盟商' :is-link='true'>
-                    </Cell>
-                    <Cell title='我的报表' :is-link='true'>
-                    </Cell>
-                    <Cell title='我的钱包' :is-link='true'>
-                    </Cell> -->
+
         </Group>
       </div>
     </ViewBox>
@@ -82,6 +77,7 @@
 <script>
 import { XButton, Group, Cell, ViewBox } from "vux";
 import checkLogin from "@/mixins/checkLogin.js";
+ import setTitle from '@/mixins/setTitle.js'
 export default {
   data() {
     return {};
@@ -108,10 +104,10 @@ export default {
         }
       });
     },
-    jmsList(){
+    jmsList() {
       this.$router.push({
-        path:'/jmsList'
-      })
+        path: "/jmsList"
+      });
     }
   },
   computed: {
@@ -131,7 +127,7 @@ export default {
     Cell,
     ViewBox
   },
-  mixins: [checkLogin]
+  mixins: [checkLogin,setTitle]
 };
 </script>
 

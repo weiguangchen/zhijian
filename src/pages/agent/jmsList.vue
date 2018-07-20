@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       p: 1,
-      list:[]
+      list: []
     };
   },
   created() {
@@ -64,21 +64,21 @@ export default {
           this.$refs.scroll.pullupLoadend();
         });
     },
-    toDetail(id){
-        this.$router.push({
-            path:'/jmsDetail',
-            query:{
-                id
-            }
-        })
+    toDetail(id) {
+      this.$router.push({
+        path: "/jmsDetail",
+        query: {
+          id
+        }
+      });
     },
     pullingUp() {
-
+      this.get_shop();
       this.$refs.scroll.finishPullupload();
     }
   },
   components: {
-      betterScroll
+    betterScroll
   },
   mixins: [checkLogin]
 };
