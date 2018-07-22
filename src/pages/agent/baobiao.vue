@@ -24,9 +24,9 @@
           <div class="btns">
             <Checker type='radio' v-model="dl" selected-item-class='active' default-item-class='default-span' :radio-required='true'
               @on-change='changeDl'>
-              <CheckerItem :value='1' @on-item-click='dlClick'>市级代理</CheckerItem>
-              <CheckerItem :value='2' @on-item-click='dlClick'>区级代理</CheckerItem>
-              <CheckerItem :value='3' @on-item-click='dlClick'>加盟商</CheckerItem>
+              <CheckerItem :value='1' >市级代理</CheckerItem>
+              <CheckerItem :value='2' >区级代理</CheckerItem>
+              <CheckerItem :value='3' >加盟商</CheckerItem>
             </Checker>
           </div>
         </div>

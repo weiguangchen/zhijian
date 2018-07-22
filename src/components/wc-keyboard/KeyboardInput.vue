@@ -42,9 +42,9 @@
 			<!-- 右侧内容 -->
 			<div class="content">
 				<p class="input">
-					{{value}}
+					{{val}}
 				</p>
-				<p class="placeholder" v-show="value.length === 0">
+				<p class="placeholder" v-show="val.length === 0">
 					{{placeholder}}
 				</p>
 				<!-- 光标 -->
@@ -96,6 +96,11 @@
 				cursorDuration: 600,
 				bodyHeight: '',
 				bodyOverflow: ''
+			}
+		},
+		watch:{
+			value(newval){
+				this.val = newval;
 			}
 		},
 		methods: {
@@ -194,6 +199,7 @@
 				let oldValue = this.val;
 				/*获取新的值*/
 				this.val = this.val + value;
+
 				/*检验新值, 如果没有通过检测, 恢复值*/
 				if (!this.passCheck(this.val)) {
 					this.val = oldValue;

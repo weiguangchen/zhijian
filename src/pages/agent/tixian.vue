@@ -6,12 +6,13 @@
           <i> (微信账户)</i>
         </span>
       </h1>
+
       <div class="content">
         <h2>提现金额</h2>
         <div class="input-wrapper">
           <span>￥</span>
           <div class="input">
-            <wc-keyboard v-model="tixian_money" inter="10" decimal="2" placeholder="请输入金额" class="money-keyboard" />
+            <wc-keyboard :value="tixian_money" @input='KeyboardInput' inter="10" decimal="2" placeholder="请输入金额" class="money-keyboard" />
           </div>
         </div>
 
@@ -85,6 +86,9 @@
     },
     created() {},
     methods: {
+      KeyboardInput(val){
+        this.tixian_money = val;
+      },
       tixian() {
         var _this = this;
         var a = this.tixian_money >= this.userinfo.dl[0].dl_money;
