@@ -3,17 +3,14 @@
     <bigTitle title='经营管理' @showPopup='showPopup'></bigTitle>
     <div class="my-form">
       <div class="form-box">
-        <!-- <Group>
-          <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji' v-if="checkQx(31)"></Cell>
-          <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
-        </Group> -->
-        <Group v-if="shenfenType == 'shanghu'">
-          <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'  ></Cell>
+        <Group>
+          <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'></Cell>
           <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
-        </Group>
-        <Group v-else-if="shenfenType == 'fuwuyuan'">
-          <Cell title='消费统计' :is-link='true' link='/fuwuyuan/jingying/tongji'  ></Cell>
-          <Cell title='订单管理' :is-link='true' link='/fuwuyuan/jingying/orderGl'></Cell>
+          <Cell title='添加服务' :is-link='true' link='/shanghu/me/xmgl'       ></Cell>
+          <Cell title='管理服务' :is-link='true' link='/shanghu/me/fwList'     ></Cell>
+          <Cell title='添加活动' :is-link='true' link='/shanghu/me/addhuodong' ></Cell>
+          <Cell title='管理活动' :is-link='true' link='/shanghu/me/hdList' ></Cell>
+
         </Group>
       </div>
     </div>
@@ -21,58 +18,70 @@
 </template>
 
 <script>
-import { ViewBox, Selector, Group, XButton, XInput, Confirm, Cell } from "vux";
-import bigTitle from "@/components/bigTitle/index";
-import shanghuSelect from "@/components/shanghu_form/face_select";
-import shanghuInput from "@/components/shanghu_form/input";
-import { Popup } from "vue-ydui/dist/lib.px/popup";
-import checkMenuQx from '@/mixins/checkMenuQx.js';
-import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
-export default {
-  data() {
-    return {
-      pay_num: "",
-      face_id: "",
-      faceList: [],
-      alertShow: false,
-      xiaofeijuan: ""
-    };
-  },
-  created() {
-    this.$emit("showPopup", false);
-    console.log()
-  },
-  methods: {
-    showPopup(val) {
-      this.$emit("showPopup", val);
-    }
-  },
-  components: {
-    bigTitle,
+  import {
     ViewBox,
     Selector,
     Group,
-    shanghuSelect,
-    shanghuInput,
     XButton,
     XInput,
     Confirm,
-    Cell,
+    Cell
+  } from "vux";
+  import bigTitle from "@/components/bigTitle/index";
+  import shanghuSelect from "@/components/shanghu_form/face_select";
+  import shanghuInput from "@/components/shanghu_form/input";
+  import {
     Popup
-  },
+  } from "vue-ydui/dist/lib.px/popup";
+  import checkMenuQx from '@/mixins/checkMenuQx.js';
+  import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
+  export default {
+    data() {
+      return {
+        pay_num: "",
+        face_id: "",
+        faceList: [],
+        alertShow: false,
+        xiaofeijuan: ""
+      };
+    },
+    created() {
+      this.$emit("showPopup", false);
+      console.log()
+    },
+    methods: {
+      showPopup(val) {
+        this.$emit("showPopup", val);
+      }
+    },
+    components: {
+      bigTitle,
+      ViewBox,
+      Selector,
+      Group,
+      shanghuSelect,
+      shanghuInput,
+      XButton,
+      XInput,
+      Confirm,
+      Cell,
+      Popup
+    },
 
-  mixins: [checkMenuQx,checkAdminShenfen]
-};
+    mixins: [checkMenuQx, checkAdminShenfen]
+  };
+
 </script>
 
 <style lang='scss' scoped>
-.weui-cell {
-  @include font-dpr(14px);
-  height: 1.28rem;
-  padding-left: 0;
-  padding-right: 0;
-  &::before {
-    left: 0;
+  .weui-cell {
+    @include font-dpr(14px);
+    height: 1.28rem;
+    padding-left: 0;
+    padding-right: 0;
+    &::before {
+      left: 0;
+    }
   }
-}
+
 </style>

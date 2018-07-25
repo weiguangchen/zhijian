@@ -1,56 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
-// 前台
-// import tab from '@/components/tab/tab';
-// import tab2 from '@/components/tab/shangHuTab';
-// import index from '@/pages/index/index'
-// import shangcheng from '@/pages/shangcheng/index';
-// import shangpu from '@/pages/shangpu/index'
-// import serviceClass from '@/pages/serviceClass/index';
-// import serviceList from '@/pages/serviceList/index';
-// import serviceDetail from "@/pages/serviceDetail/index";
-// import huodongDetail from "@/pages/serviceDetail/huodong";
-// import queren from '@/pages/queren/index';
-// import huodongqueren from '@/pages/queren/huodong';
-// import me from '@/pages/me/index';
-// import youhuijuan from '@/pages/youhuijuan/index';
-// import orderList from '@/pages/orderList/index';
-// import orderDetail from '@/pages/orderList/orderDetail';
-// import pingjia from '@/pages/pingjia/index';
-// import pinglun from '@/pages/pinglun/index';
-// import shopCar from '@/pages/shopCar/index';
-// 代理商
-// import agent from '@/pages/agent/index';
-// import addJms from '@/pages/agent/add_jms';
-// import addAgent from '@/pages/agent/add_agent';
-// 图文详情页
-// import twDetail from '@/pages/contentDetail/index';
-
-
-// import applyShanghu from '@/pages/shanghuApply/index';
-// import checkshenfen from '@/pages/checkshenfen/index'
-// import shanghuCheck from '@/pages/checkshenfen/shanghuCheck'
-// import checkwarning from '@/pages/checkshenfen/warning'
-// 商户后台
-// import shanghu from '@/pages/shanghu/index'
-// import yanzheng from '@/pages/shanghu/yanzheng/index'
-// import xfm from '@/pages/shanghu/yanzheng/xfm'
-// import huodongyz from '@/pages/shanghu/yanzheng/huodong'
-// import pingjias from '@/pages/shanghu/pingjias/index'
-// import pingjiaList from '@/pages/shanghu/pingjias/pingjiaList'
-/* 商户后台/我的 */
-// import shanghume from '@/pages/shanghu/me/index1'
-// import shanghumeindex from '@/pages/shanghu/me/index'
-// import mendian from '@/pages/shanghu/me/mendian'
-// import addFace from '@/pages/shanghu/me/addFace'
-// import xmgl from '@/pages/shanghu/me/xmgl'
-// import bianjiFw from '@/pages/shanghu/me/bianjiFw'
-// import fwList from '@/pages/shanghu/me/fwList'
-// import addhuodong from '@/pages/shanghu/me/addhuodong'
-// import account from '@/pages/shanghu/me/account'
-// import setAuthority from '@/pages/shanghu/me/authority'
-// import addSonAccount from '@/pages/shanghu/me/addSonAccount'
 /* 商户后台/经营 */
 import shanghujingying from '@/pages/shanghu/jingying/index';
 import jingyingindex from '@/pages/shanghu/jingying/index1'
@@ -437,7 +387,57 @@ export const defaultRouterMaps = [{
     meta: {
       title: '我的报表'
     }
-  },  {
+  }, {
+    path: '/agentSetting',
+    name: 'agentSetting',
+    components: {
+      default: resolve => require(['@/pages/agent/setting/index'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '设置'
+    }
+  }, {
+    path: '/agentAddress',
+    name: 'agentAddress',
+    components: {
+      default: resolve => require(['@/pages/agent/setting/address'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '修改地址'
+    }
+  },{
+    path: '/agentName',
+    name: 'agentName',
+    components: {
+      default: resolve => require(['@/pages/agent/setting/name'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '修改昵称'
+    }
+  },{
+    path: '/agentPhone',
+    name: 'agentPhone',
+    components: {
+      default: resolve => require(['@/pages/agent/setting/phone'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '绑定新手机'
+    }
+  },{
+    path: '/agentYanzheng',
+    name: 'agentYanzheng',
+    components: {
+      default: resolve => require(['@/pages/agent/setting/yanzheng'], resolve),
+      // tab: tab
+    },
+    meta: {
+      title: '身份验证'
+    }
+  },{
     path: '/serviceDetail/:serviceId/:faceId',
     name: 'serviceDetail',
     component: resolve => require(["@/pages/serviceDetail/index"], resolve)
@@ -753,6 +753,34 @@ const adminRouterMaps = [{
         path: 'addSonAccount',
         name: 'addSonAccount',
         component: resolve => require(['@/pages/shanghu/me/addSonAccount'], resolve),
+        meta: {
+          role: 45
+        }
+      },{
+        path: 'caiwu',
+        name: 'caiwu',
+        component: resolve => require(['@/pages/shanghu/me/caiwu'], resolve),
+        meta: {
+          role: 45
+        }
+      },{
+        path: 'zonge',
+        name: 'zonge',
+        component: resolve => require(['@/pages/shanghu/me/zonge'], resolve),
+        meta: {
+          role: 45
+        }
+      },{
+        path: 'tixian',
+        name: 'tixian',
+        component: resolve => require(['@/pages/shanghu/me/tixian'], resolve),
+        meta: {
+          role: 45
+        }
+      },{
+        path: 'tixianList',
+        name: 'tixianList',
+        component: resolve => require(['@/pages/shanghu/me/tixianList'], resolve),
         meta: {
           role: 45
         }

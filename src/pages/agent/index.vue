@@ -6,7 +6,7 @@
           <span class="left"></span>
           <span class="middle">个人中心</span>
           <span class="right">
-            <span class="iconfont icon-shezhi"></span>
+            <span class="iconfont icon-shezhi" @click="setting"></span>
           </span>
         </div>
         <div class="me-info">
@@ -108,6 +108,11 @@ export default {
       this.$router.push({
         path: "/jmsList"
       });
+    },
+    setting(){
+      this.$router.push({
+        path:'/agentSetting'
+      })
     }
   },
   computed: {

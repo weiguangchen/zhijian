@@ -2,7 +2,7 @@
   <div class="page shop-wrapper">
     <betterScroll>
       <div class="info-wrapper">
-        <img src="~img/shangpu/banner.png" alt="" id="blur-bg" class="blur-bg" @load="load_blur_bg">
+         <img src="~img/shangpu/banner.png" alt="" id="blur-bg" class="blur-bg" @load="load_blur_bg">
         <canvas class="blur-canvas" id="blur-canvas"></canvas>
         <div class="logo">
           <img src="~img/shangpu/banner.png" alt="" class="img">
@@ -20,8 +20,28 @@
           <div>营业时间：周一到周日 08:00 —— 19:00</div>
         </div>
       </div>
+      <!-- <Blur url='~img/shangpu/banner.png'>
+        <div class="info-wrapper">
+         
+          <div class="logo">
+            <img src="~img/shangpu/banner.png" alt="" class="img">
+          </div>
+          <div class="info">
+            <div>{{faceInfo.face_name}}</div>
+            <div>
+              <rater val='4' class="rater"></rater>
+            </div>
+            <div>
+              <span>技术：5.6</span>
+              <span>服务：7.8</span>
+              <span>环境：7.8</span>
+            </div>
+            <div>营业时间：周一到周日 08:00 —— 19:00</div>
+          </div>
+          
+        </div>
+      </Blur> -->
       <swiper :options="swiperOption" ref="mySwiper" class="top-ad">
-        <!-- slides -->
         <swiper-slide v-for="(item,index) in top_ad" :key="index">
           <img :src="item.url" alt="">
         </swiper-slide>

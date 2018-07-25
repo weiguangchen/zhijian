@@ -1,7 +1,8 @@
 <template>
     <div class="jms-list page">
         <betterScroll @pullingUp='pullingUp' ref='scroll'>
-            <div class="jms-item" v-for="(item,index) in list" :key='index' @click='toDetail(item.id)'>
+          <jms :jms='item' v-for="(item,index) in list" :key='index' ></jms>
+            <!-- <div class="jms-item" v-for="(item,index) in list" :key='index' @click='toDetail(item.id)'>
                 <div class="line">
                     <span class="icon">
                         <i class="iconfont icon-jiamengshang"></i>
@@ -19,7 +20,7 @@
                     查看详情
                     <i class="iconfont icon-jinru"></i>
                 </div>
-            </div>
+            </div> -->
             <span slot="loadingTip">正在加载数据...</span>
             <span slot="doneTip">暂无更多数据</span>
         </betterScroll>
@@ -28,6 +29,8 @@
 
 <script>
 import betterScroll from "@/components/betterScroll";
+import jms from "./components/jms";
+ import setTitle from '@/mixins/setTitle.js'
 
 import checkLogin from "@/mixins/checkLogin.js";
 
@@ -40,6 +43,7 @@ export default {
   },
   created() {
     this.get_shop();
+
   },
   methods: {
     get_shop() {
@@ -78,9 +82,10 @@ export default {
     }
   },
   components: {
-    betterScroll
+    betterScroll,
+    jms
   },
-  mixins: [checkLogin]
+  mixins: [checkLogin,setTitle]
 };
 </script>
 

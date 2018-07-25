@@ -119,14 +119,22 @@
             if (data.status == 0) {
               this.$vux.alert.show({
                 title: '提示',
-                content: data.log
+                content: data.log,
+                onHide(){
+                  _this.$router.push({
+                    path:'/tixianList?type=tixian'
+                  })
+                }
               })
             } else if (data.status == 1) {
               this.$vux.alert.show({
                 title: '提示',
                 content: data.log,
                 onHide() {
-                  _this.get_user();
+                  // _this.get_user();
+                  _this.$router.push({
+                    path:'/tixianList?type=tixian'
+                  })
                 }
               })
             }

@@ -11,11 +11,11 @@
         </div>
 
         <div class="caniuse">可用金额&nbsp;&nbsp;￥{{userinfo.dl[0].dl_money}}&nbsp;&nbsp;&nbsp;&nbsp;
-          <span class="total" @click="tixian_all">全部提现</span>
+          <span class="total" @click="tixian_all">全部收款</span>
         </div>
 
         <div class="xbtn">
-          <XButton @click.native="tixian" :mini='true' type='primary' :disabled='tixianing'>充值</XButton>
+          <XButton @click.native="tixian" :mini='true' type='primary' :disabled='tixianing'>收款</XButton>
         </div>
         <p @click="sk_list" class="tixian-list"> 收款记录</p>
 
