@@ -141,6 +141,7 @@
         color: #aaaaaa;
         .iconfont {
           margin-right: 0.133333rem;
+          font-size: .32rem /* 24/75 */;
         }
       }
     }

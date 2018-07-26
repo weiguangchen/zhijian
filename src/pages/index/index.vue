@@ -23,10 +23,7 @@
               <swiper :options="swiperOption2" ref="mySwiper2" @transitionEnd='transitionEnd(2)'>
                 <!-- slides -->
                 <swiper-slide v-for="(item,index) in middle_ad" :key="index">
-                  <router-link to='/serviceDetail/280/42'>
-                    <img v-lazy="item.url" alt="">
-
-                  </router-link>
+                    <img v-lazy="item.url" alt="" @click="to5xiche">
                 </swiper-slide>
                 <!-- Optional controls -->
                 <div class="swiper-pagination" slot="pagination"></div>
@@ -226,7 +223,16 @@
             search: val
           }
         })
+      },
+      to5xiche(){
+        this.$router.push({
+          path: '/searchList',
+          query: {
+            search: 5
+          }
+        })
       }
+        
     },
     computed: {
       ...mapState(["location"]),
