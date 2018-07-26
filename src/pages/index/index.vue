@@ -9,7 +9,8 @@
             <div class="top-ad">
               <div class="top-input">
                 <span class="add" v-if="location">{{location.city}}</span>
-                <input placeholder='请输入商家名或地点' class="search" />
+
+                <Search placeholder='请输入商家名或地点' v-model="search" @on-submit='searchFn'></Search>
               </div>
               <swiper :options="swiperOption1" ref="mySwiper1" @transitionEnd='transitionEnd(1)'>
                 <swiper-slide v-for="(item,index) in top_ad" :key="index">
@@ -22,7 +23,10 @@
               <swiper :options="swiperOption2" ref="mySwiper2" @transitionEnd='transitionEnd(2)'>
                 <!-- slides -->
                 <swiper-slide v-for="(item,index) in middle_ad" :key="index">
-                  <img v-lazy="item.url" alt="">
+                  <router-link to='/serviceDetail/280/42'>
+                    <img v-lazy="item.url" alt="">
+
+                  </router-link>
                 </swiper-slide>
                 <!-- Optional controls -->
                 <div class="swiper-pagination" slot="pagination"></div>
@@ -79,7 +83,8 @@
     XInput,
     Group,
     Swiper,
-    SwiperItem
+    SwiperItem,
+    Search 
   } from "vux";
   import service from "@/components/service/service";
   import classify from "@/components/classify/index";
@@ -117,7 +122,8 @@
         activeListId: "",
         top_ad: [],
         middle_ad: [],
-        hd: []
+        hd: [],
+        search: ''
       };
     },
     created() {
@@ -199,9 +205,9 @@
       transitionEnd(n) {
         var Swiper = this['mySwiper' + n];
         var index = Swiper.activeIndex;
-        if(n == 1){
+        if (n == 1) {
           var l = this.top_ad.length
-        }else if(n == 2){
+        } else if (n == 2) {
           var l = this.middle_ad.length
 
         }
@@ -212,6 +218,14 @@
             Swiper.autoplay.start()
           }, 3000);
         }
+      },
+      searchFn(val) {
+        this.$router.push({
+          path: '/searchList',
+          query: {
+            search: val
+          }
+        })
       }
     },
     computed: {
@@ -237,9 +251,10 @@
       // Swiper,
       // SwiperItem,
       swiperSlide,
-      swiper
+      swiper,
+      Search 
     },
-    mixins: [getLocation,setTitle]
+    mixins: [getLocation, setTitle]
   };
 
 </script>
@@ -258,10 +273,21 @@
         padding: 0.24rem 0.533333rem;
         @include font-dpr(19px);
         color: #292929;
+        .weui-search-bar{
+          padding: 0;
+        }
+        .weui-search-bar__cancel-btn{
+          font-size: .426667rem /* 32/75 */;
+        }
+        .vux-search-fixed{
+          padding: 0.24rem 0.533333rem;
+        }
         .add {
-          font-size: .373333rem /* 28/75 */;
+          font-size: .373333rem/* 28/75 */
+          ;
           margin-right: 0.333333rem;
           line-height: 1;
+          flex:none;
         }
         .search {
           padding-left: 0.266667rem;
@@ -271,6 +297,10 @@
           border-radius: 0.346667rem;
           outline: none;
           @include font-dpr(12px);
+        }
+        form {
+          display: flex;
+          flex: 1;
         }
       }
     }

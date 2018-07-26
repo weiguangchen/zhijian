@@ -1,6 +1,7 @@
 <template>
   <div class="bianjifw">
-    <bigTitle title='编辑项目' @showPopup='showPopup'></bigTitle>
+    <betterScroll>
+          <bigTitle title='编辑项目' @showPopup='showPopup'></bigTitle>
     <div class="form-box">
       <template v-if="step == 1">
         <div class="form-group">
@@ -120,10 +121,14 @@
       <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys">提交</XButton>
       <XButton type='warn' class="xbtn" @click.native="changeFw" v-else-if="step == 3 && querys">完成修改</XButton>
     </div>
+    </betterScroll>
+
   </div>
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll/index';
+
   import {
     ViewBox,
     Selector,
@@ -193,7 +198,7 @@
       var _this = this;
       this.$emit("showPopup", false);
       this.checkSystem();
-      this.$eruda.init();
+      // this.$eruda.init();
 
       this.$axios
         .get(_this.API_URL + "/api/ShopFw/shop_fw", {
@@ -588,7 +593,8 @@
       CheckBox,
       RadioGroup,
       Radio,
-      XDialog
+      XDialog,
+      betterScroll
     },
     mixins: [checkLogin]
   };
@@ -597,6 +603,7 @@
 
 <style lang='scss'>
   .bianjifw {
+    height: 100%;
     .vux-selector {
       .weui-cell__hd {
         visibility: hidden;

@@ -35,10 +35,10 @@
               <span class="content" v-if="detail.order_price">{{detail.order_price}}</span>
               <span class="content" v-else>其他支付方式</span>
             </div>
-            <div class="line">
+            <!-- <div class="line">
               <span class="title">支持门店：</span>
               <span class="content">十一经路</span>
-            </div>
+            </div> -->
             <div class="line">
             <span class="title">车辆牌照：</span>
             <span class="content">{{detail.car_card}}</span>

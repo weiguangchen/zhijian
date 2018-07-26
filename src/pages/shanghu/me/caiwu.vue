@@ -2,16 +2,16 @@
   <div class="caiwu page">
     <bigTitle title="财务管理" :icon='false'></bigTitle>
     <div>
-      <h1>
+      <h1 class="yue">
         <img src="./img/money.png" alt="">
         <span>余额 &nbsp;&nbsp;&nbsp;&nbsp;{{shop.shop_money}}</span>
-        <XButton :mini='true' type='warn'>提现</XButton>
+        <XButton :mini='true' type='warn' @click.native="tixian">提现</XButton>
       </h1>
       <div class="shouyi">
         <div class="line">
           <span class="tit">已结算收益：</span>
           <span>{{info.y_money}}(元)</span>
-          <XButton type='warn' :mini='true'>收款</XButton>
+          <XButton type='warn' :mini='true' @click.native="shoukuan">收款</XButton>
         </div>
         <div class="line">
           <span class="tit">未结算收益: </span>
@@ -88,6 +88,16 @@
               console.log(data)
               this.shop = data;
           })
+      },
+      tixian(){
+        this.$router.push({
+          path:'/shanghu/me/tixian'
+        })
+      },
+      shoukuan(){
+        this.$router.push({
+          path:'/shanghu/me/shoukuan'
+        })
       }
     },
     components: {
@@ -111,7 +121,7 @@
       ;
       flex: none;
     }
-    h1 {
+    .yue {
       background: #ffffff;
       font-size: .453333rem/* 34/75 */
       ;

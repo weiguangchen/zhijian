@@ -1,7 +1,7 @@
 <template>
   <div class="sh-tx-list page">
     <betterScroll @pullingUp='pullingUp' ref='scroll'>
-      <bigTitle title='提款记录' :icon='false'></bigTitle>
+      <bigTitle title='收款记录' :icon='false'></bigTitle>
       <div class="list">
         <div class="tx-item" @click="toTxDetail(item.id)" v-for="(item,index) in list" :key='index'>
           <div class="account">
@@ -12,12 +12,10 @@
             </div>
           </div>
           <div class="line">
-            <div class="status" :class="{ing:item.status == 0,warn:item.status == 2,success:item.status == 1}">
+            <div class="status success">
               <i class="iconfont icon-yuan"></i>
             </div>
-            <span class="txt" v-if='item.status == 0'>审核中</span>
-            <span class="txt" v-else-if="item.status == 1">已完成</span>
-            <span class="txt" v-else-if="item.status == 2">已拒绝</span>
+            <span class="txt">已完成</span>
             ￥{{item.money}}
           </div>
           <div class="date">提现时间:{{item.time}}</div>
@@ -41,43 +39,32 @@
       }
     },
     created() {
-      this.get_tx_list();
+      this.get_list();
     },
     methods: {
       toTxDetail(id) {
-        this.$router.push({
-          path:'/shanghu/me/tixianDetail',
-          query:{
-            id
+
+      },
+      get_list() {
+        this.$axios.get(this.API_URL + '/Api/ShopCore/get_money_list', {
+          params: this.params
+        }).then(({
+          data
+        }) => {
+          console.log(data)
+          if (data.ok == 1) {
+            console.log("还有数据");
+            this.p = this.p + 1;
+          } else if (data.ok == 0) {
+            console.log("没数据了");
+            this.$refs.scroll.closePullUp();
           }
+          this.list = this.list.concat(data.list);
+          this.$refs.scroll.pullupLoadend();
         })
       },
-      get_tx_list() {
-        this.$axios
-          .get(this.API_URL + "/Api/UserShow/give_money_list", {
-            params: {
-              uid: this.id,
-              num: 8,
-              p: this.p
-            }
-          })
-          .then(({
-            data
-          }) => {
-            console.log(data);
-            if (data.ok == 1) {
-              console.log("还有数据");
-              this.p = this.p + 1;
-            } else if (data.ok == 0) {
-              console.log("没数据了");
-              this.$refs.scroll.closePullUp();
-            }
-            this.list = this.list.concat(data.list);
-            this.$refs.scroll.pullupLoadend();
-          });
-      },
       pullingUp() {
-        this.get_tx_list();
+        this.get_list();
         this.$refs.scroll.finishPullupload();
       }
     },

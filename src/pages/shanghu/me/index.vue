@@ -9,8 +9,7 @@
           <Cell title='财务管理' :is-link='true' link='/shanghu/me/caiwu'></Cell>
           <!-- <Cell title='订单总额' :is-link='true' link='/shanghu/me/zonge'></Cell> -->
           <Cell title='提现' :is-link='true' link='/shanghu/me/tixian'></Cell>
-          <Cell title='收款' :is-link='true' link='/shanghu/me/account'></Cell>
-          <Cell title='收款记录' :is-link='true' link='/shanghu/me/account'></Cell>
+          <Cell title='收款' :is-link='true' link='/shanghu/me/shoukuan'></Cell>
         </Group>
       </div>
     </div>

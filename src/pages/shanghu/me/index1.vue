@@ -1,10 +1,6 @@
 <template>
   <div class="shanghu-box">
-    <div class="wrapper shanghu-warpper" ref="wrapper">
-      <ul class="content">
-          <router-view @showPopup='showPopup'></router-view>
-      </ul>
-    </div>
+    <router-view @showPopup='showPopup'></router-view>
     <Popup position='right' v-model="popupShow">
       <div class="popup-list">
         <Group>
@@ -19,52 +15,52 @@
 </template>
 
 <script>
-import { Popup } from "vue-ydui/dist/lib.px/popup";
-import {InfiniteScroll} from 'vue-ydui/dist/lib.px/infinitescroll'; 
-import { ViewBox, Cell, Group } from "vux";
-import BScroll from "better-scroll";
-import checkMenuQx from "@/mixins/checkMenuQx.js";
-export default {
-  data() {
-    return {
-      popupShow: false,
-      scroll: ""
-    };
-  },
-  created() {
-
-  },
-  methods: {
-    showPopup(val) {
-      this.popupShow = val;
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapper, {
-        tap: true,
-        click: true
-      });
-    });
-        console.log('初始化scroll')
-    console.log(this.scroll)
-  },
-  computed: {
-
-  },
-  components: {
+  import {
+    Popup
+  } from "vue-ydui/dist/lib.px/popup";
+  // import {InfiniteScroll} from 'vue-ydui/dist/lib.px/infinitescroll'; 
+  import {
     ViewBox,
-    Popup,
     Cell,
-    Group,
-  },
-  mixins: [checkMenuQx]
-};
+    Group
+  } from "vux";
+  // import BScroll from "better-scroll";
+  import checkMenuQx from "@/mixins/checkMenuQx.js";
+  export default {
+    data() {
+      return {
+        popupShow: false,
+      };
+    },
+    created() {
+
+    },
+    methods: {
+      showPopup(val) {
+        this.popupShow = val;
+      }
+    },
+    mounted() {
+
+    },
+    computed: {
+
+    },
+    components: {
+      ViewBox,
+      Popup,
+      Cell,
+      Group,
+    },
+    mixins: [checkMenuQx]
+  };
+
 </script>
 
 <style lang='scss'>
-.shanghu-box,
-.shanghu-warpper {
-  height: 100%;
-}
+  .shanghu-box,
+  .shanghu-warpper {
+    height: 100%;
+  }
+
 </style>

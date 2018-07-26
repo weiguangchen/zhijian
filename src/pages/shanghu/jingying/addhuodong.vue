@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="creat-huodong">
+  <div class="creat-huodong">
+    <betterScroll>
       <bigTitle title='新建活动' @showPopup='showPopup'></bigTitle>
       <div class="form-box">
         <template v-if="step == 1">
@@ -126,11 +126,13 @@
         <XButton type='warn' class="xbtn" @click.native="submitFn" :disabled='submiting' v-if="step == 2">提交</XButton>
       </div>
 
-    </div>
+    </betterScroll>
+
   </div>
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll/index';
   import {
     TransferDomDirective as TransferDom
   } from "vux";
@@ -610,7 +612,8 @@
       CheckBox,
       RadioGroup,
       Radio,
-      XDialog
+      XDialog,
+      betterScroll
     },
     mixins: [checkLogin]
   };
@@ -649,6 +652,7 @@
   }
 
   .creat-huodong {
+    height: 100%;
     background: #ffffff;
     .fw-item {
       margin: 0 0.426667rem;

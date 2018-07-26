@@ -36,7 +36,7 @@ export default {
   methods: {
     toChange(fwId) {
       this.$router.push({
-        path: "/shanghu/me/bianjiFw/"+fwId
+        path: "/shanghu/jingying/bianjiFw/"+fwId
       });
     },
     xiajia(fwId) {

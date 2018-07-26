@@ -92,12 +92,7 @@
       tixian() {
         var _this = this;
         var a = this.tixian_money >= this.userinfo.dl[0].dl_money;
-        // if(a){
-        //   this.$vux.alert.show({
-        //     title:'提示',
-        //     content:'余额不足，无法提现！'
-        //   })
-        // }
+
         this.tixianing = true;
         if (!this.tixian_money) {
           this.$vux.alert.show({

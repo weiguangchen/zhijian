@@ -34,7 +34,7 @@
       </div>
       <div class="fw_num">
         <Group class="form">
-          <XNumber title='购买数量' :min='fwInfo.min' v-model="num" class="xnum" :fillable='true'></XNumber>
+          <XNumber title='购买数量' :min='fwInfo.min' v-model="num" class="xnum" :fillable='true' v-if="fwInfo.min"></XNumber>
           <Cell title='总价' :value='money'></Cell>
           <Cell title='选择服务时间' :isLink='true'>
             <DateTime v-model="selectDate" :start-date='startdate'></DateTime>
@@ -262,6 +262,7 @@
           .then(({
             data
           }) => {
+            data[0].min = parseInt(data[0].min);
             _this.fwInfo = data[0];
           });
       },

@@ -1,6 +1,7 @@
 <template>
   <div class="account">
-    <bigTitle title='账户管理' @showPopup='showPopup' class="account-title"></bigTitle>
+    <betterScroll>
+          <bigTitle title='账户管理' @showPopup='showPopup' class="account-title"></bigTitle>
     <div class="form-box">
       <div class="title">
         <div>当前登录账号：{{userinfo.nickname}}</div>
@@ -22,11 +23,15 @@
 
       <XButton type='warn' class="xbtn" @click.native='add_son_account'>添加子账户</XButton>
     </div>
+    </betterScroll>
+
 
   </div>
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll/index';
+
   import bigTitle from "@/components/bigTitle/index";
   import myMap from "@/components/map/index";
   import checkLogin from "@/mixins/checkLogin";
@@ -83,7 +88,8 @@
       XInput,
       Group,
       XButton,
-      myMap
+      myMap,
+      betterScroll
     },
     computed: {
       faceId() {
@@ -104,6 +110,7 @@
 
 <style lang='scss'>
   .account {
+    height: 100%;
     @include font-dpr(14px);
     .account-title {
       margin-bottom: 0.586667rem;

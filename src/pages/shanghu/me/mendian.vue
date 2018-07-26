@@ -1,24 +1,28 @@
 <template>
   <div class="face-list">
-    <bigTitle title="门店管理" class="big-title" @showPopup='showPopup'></bigTitle>
-    <div class="form-box">
-      <div v-for="(item,index) in faceList" :key="index" class="face-item">
-        <div class="tit">门店名称：</div>
-        <div class="face_name">{{item.face_name}}</div>
-        <div class="op-btn">
-          <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.id)">编辑</XButton>
-          <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='deleteFace(item.id)' v-if="item.face_status == 1">停用</XButton>
-          <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='startFace(item.id)' v-else>启用</XButton>
+    <betterScroll>
+      <bigTitle title="门店管理" class="big-title" @showPopup='showPopup'></bigTitle>
+      <div class="form-box">
+        <div v-for="(item,index) in faceList" :key="index" class="face-item">
+          <div class="tit">门店名称：</div>
+          <div class="face_name">{{item.face_name}}</div>
+          <div class="op-btn">
+            <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.id)">编辑</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='deleteFace(item.id)' v-if="item.face_status == 1">停用</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='startFace(item.id)' v-else>启用</XButton>
+          </div>
         </div>
-      </div>
-      <XButton type='warn' @click.native="add_face">添加门店</XButton>
+        <XButton type='warn' @click.native="add_face">添加门店</XButton>
 
-    </div>
+      </div>
+    </betterScroll>
+
 
   </div>
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll/index';
   import bigTitle from "@/components/bigTitle/index";
   import checkLogin from "@/mixins/checkLogin.js";
   import {
@@ -108,7 +112,8 @@
     components: {
       ViewBox,
       bigTitle,
-      XButton
+      XButton,
+      betterScroll
     },
     mixins: [checkLogin]
   };
@@ -117,6 +122,7 @@
 
 <style lang='scss'>
   .face-list {
+    height: 100%;
     .big-title {
       margin-bottom: 0.8rem;
     }

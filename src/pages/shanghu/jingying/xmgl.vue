@@ -1,115 +1,119 @@
 <template>
   <div class="xmgl">
-    <bigTitle title='新建项目' @showPopup='showPopup'></bigTitle>
-    <div class="form-box">
-      <template v-if="step == 1">
-        <div class="form-group">
-          <h2 class="sub-title">服务名称</h2>
-          <Group class="reset-vux-input">
-            <XInput v-model="fw_name"></XInput>
-          </Group>
-        </div>
-        <div class="form-group">
-          <h2 class="sub-title">简短名称:
-            <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
-          </h2>
-          <Group class="reset-vux-input">
-            <XInput v-model="fw_short_info"></XInput>
-          </Group>
-        </div>
-        <div class="form-group">
-          <h2 class="sub-title">服务介绍</h2>
-          <Group class="reset-vux-input">
-            <XTextarea :max='50' v-model="fw_intr"></XTextarea>
-          </Group>
-        </div>
+    <betterScroll>
+      <bigTitle title='新建项目' @showPopup='showPopup'></bigTitle>
+      <div class="form-box">
+        <template v-if="step == 1">
+          <div class="form-group">
+            <h2 class="sub-title">服务名称</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="fw_name"></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">简短名称:
+              <span class="tip">用于消费卷，邮件，短信，列表展示的显示</span>
+            </h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="fw_short_info"></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">服务介绍</h2>
+            <Group class="reset-vux-input">
+              <XTextarea :max='50' v-model="fw_intr"></XTextarea>
+            </Group>
+          </div>
 
-      </template>
-      <template v-else-if="step == 2">
-        <div class="form-group">
-          <h2 class="sub-title">分类:</h2>
-          <Group class="reset-vux-input">
-            <Selector title="1" :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass' v-if="one_class_all"
-             ></Selector>
-          </Group>
-        </div>
-        <div class="form-group">
-          <h2 class="sub-title">子分类列表:</h2>
-          <Group class="reset-vux-input">
-            <Selector title='1' :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
-          </Group>
-        </div>
-        <div class="form-group" v-if="two_class_val">
-          <h2 class="sub-title">图文详情:</h2>
-          <div v-for="(item,index) in twList" :key="index" class="radio-box">
-            <mu-radio color='#e03233' :label="item.fw_content_name" v-model="tw" :value='item.id'></mu-radio>
-            <span @click="previewDetail(item.id)" class="yulan">预览</span>
+        </template>
+        <template v-else-if="step == 2">
+          <div class="form-group">
+            <h2 class="sub-title">分类:</h2>
+            <Group class="reset-vux-input">
+              <Selector title="1" :options='one_class_all' :value-map="['id','class_name']" v-model="one_class_val" @on-change='changeOneClass'
+                v-if="one_class_all"></Selector>
+            </Group>
           </div>
-          <span></span>
-          <!-- <mu-radio label='测试' v-model="tw1" value='31' style="display:none;"></mu-radio> -->
-          <div v-transfer-dom class="tw-preview-detail">
-            <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
-              <!-- 123 -->
-              <div v-html="twDetailContent"></div>
-            </XDialog>
+          <div class="form-group">
+            <h2 class="sub-title">子分类列表:</h2>
+            <Group class="reset-vux-input">
+              <Selector title='1' :options='two_class' :value-map="['id','fw_name']" v-model="two_class_val" @on-change='changeTwoClass'></Selector>
+            </Group>
           </div>
-        </div>
-        <div class="form-group">
-          <h2 class="sub-title">支持门店:</h2>
-          <mu-checkbox v-model="face" :value='item.id' v-for="(item,index) in List" :key="index" :label='item.face_name' color='#e03233'></mu-checkbox>
-        </div>
-        <!-- <div class="form-group">
+          <div class="form-group" v-if="two_class_val">
+            <h2 class="sub-title">图文详情:</h2>
+            <div v-for="(item,index) in twList" :key="index" class="radio-box">
+              <mu-radio color='#e03233' :label="item.fw_content_name" v-model="tw" :value='item.id'></mu-radio>
+              <span @click="previewDetail(item.id)" class="yulan">预览</span>
+            </div>
+            <span></span>
+            <!-- <mu-radio label='测试' v-model="tw1" value='31' style="display:none;"></mu-radio> -->
+            <div v-transfer-dom class="tw-preview-detail">
+              <XDialog v-model="twDetailShow" :hide-on-blur='true' :scroll='true'>
+                <!-- 123 -->
+                <div v-html="twDetailContent"></div>
+              </XDialog>
+            </div>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">支持门店:</h2>
+            <mu-checkbox v-model="face" :value='item.id' v-for="(item,index) in List" :key="index" :label='item.face_name' color='#e03233'></mu-checkbox>
+          </div>
+          <!-- <div class="form-group">
             <h2 class="sub-title">服务缩略图:</h2>
             <div class="uploadImage">
               <div class="upload-btn" @click="chooseImg">点击添加<br/>图片</div> -->
-        <!-- 安卓预览图片 -->
-        <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
-        <!-- IOS预览图片 -->
-        <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
-        <!-- </div>
+          <!-- 安卓预览图片 -->
+          <!-- <img :src="imgs || tupian" alt="" class="thumb" v-if="system == 1"> -->
+          <!-- IOS预览图片 -->
+          <!-- <img :src="localData || tupian" alt="" v-else class="thumb"> -->
+          <!-- </div>
           </div> -->
-      </template>
-      <template v-else-if="step == 3">
-        <!-- <div class="form-group">
+        </template>
+        <template v-else-if="step == 3">
+          <!-- <div class="form-group">
             <h2 class="sub-title">有效期(天):</h2>
             <Group class="reset-vux-input">
               <XInput v-model="youxiao" :required='true' placeholder='填写有效期'></XInput>
             </Group>
           </div> -->
-        <div class="form-group">
-          <h2 class="sub-title">原价(元):</h2>
-          <Group class="reset-vux-input">
-            <XInput v-model="yuanjia" :required='true' placeholder='填写原价'></XInput>
-          </Group>
-        </div>
-        <div class="form-group">
-          <h2 class="sub-title">现价(元):</h2>
-          <Group class="reset-vux-input">
-            <XInput v-model="xianjia" :required='true' placeholder='填写现价'></XInput>
-          </Group>
-        </div>
-        <div class="form-group">
-          <h2 class="sub-title">商户结算价(元):</h2>
-          <Group class="reset-vux-input">
-            <XInput v-model="jiesuanjia" :required='true' placeholder='填写商户结算价' :disabled='true'></XInput>
-          </Group>
-        </div>
-        <div class="form-group">
-          <h2 class="sub-title">规格:</h2>
-          <Group class="reset-vux-input">
-            <XInput v-model="fw_gg" :required='true' :disabled='true'></XInput>
-          </Group>
-        </div>
+          <div class="form-group">
+            <h2 class="sub-title">原价(元):</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="yuanjia" :required='true' placeholder='填写原价'></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">现价(元):</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="xianjia" :required='true' placeholder='填写现价'></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">商户结算价(元):</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="jiesuanjia" :required='true' placeholder='填写商户结算价' :disabled='true'></XInput>
+            </Group>
+          </div>
+          <div class="form-group">
+            <h2 class="sub-title">规格:</h2>
+            <Group class="reset-vux-input">
+              <XInput v-model="fw_gg" :required='true' :disabled='true'></XInput>
+            </Group>
+          </div>
 
-      </template>
-      <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
-      <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
-      <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys" :disabled='submiting'>提交</XButton>
-    </div>
+        </template>
+        <XButton type='warn' class="xbtn" @click.native="next1" v-if="step == 1">下一步</XButton>
+        <XButton type='warn' class="xbtn" @click.native="next2" v-else-if="step == 2">下一步</XButton>
+        <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys" :disabled='submiting'>提交</XButton>
+      </div>
+    </betterScroll>
+
   </div>
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll/index';
   import {
     ViewBox,
     Selector,
@@ -284,7 +288,7 @@
                     content: "上传服务成功，请等待审核",
                     onHide() {
                       _this.$router.replace({
-                        path: "/shanghu/me/index"
+                        path: "/shanghu/jingying/index"
                       });
                     }
                   });
@@ -294,7 +298,7 @@
                     content: "上传服务失败，请重新上传",
                     onHide() {
                       _this.$router.replace({
-                        path: "/shanghu/me/index"
+                        path: "/shanghu/jingying/index"
                       });
                     }
                   });
@@ -470,7 +474,8 @@
       CheckBox,
       RadioGroup,
       Radio,
-      XDialog
+      XDialog,
+      betterScroll
     },
     mixins: [checkLogin]
   };
@@ -479,6 +484,7 @@
 
 <style lang='scss'>
   .xmgl {
+    height: 100%;
     .vux-selector {
       .weui-cell__hd {
         visibility: hidden;

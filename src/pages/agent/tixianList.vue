@@ -39,8 +39,7 @@
           <div class="date">提现时间:{{item.time}}</div>
         </div>
       </div>
-      <span slot="loadingTip">正在加载数据...</span>
-      <span slot="doneTip">暂无更多数据</span>
+
     </betterScroll>
   </div>
 </template>

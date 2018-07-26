@@ -1,10 +1,10 @@
 <template>
   <div class="page">
     <ViewBox class="shangcheng">
-      <div class="top-input">
+      <!-- <div class="top-input">
         <span class="add" v-if="location">{{location.city}}</span>
         <input placeholder='请输入商家名或地点' class="search"/>
-      </div>
+      </div> -->
       <ScrollTab class="ScrollTab">
         <ScrollTabPanel :label="item.class_name" v-for="(item,index) in listArr" :key="index">
           <div class="class-wrap">
@@ -56,7 +56,7 @@ export default {
 
 <style lang='scss'>
 .ScrollTab {
-  margin-top: 1.2rem;
+  // margin-top: 1.2rem;
   padding-bottom: 50px;
   .yd-scrolltab-title{
     overflow-y: hidden;

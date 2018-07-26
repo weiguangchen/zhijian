@@ -3,6 +3,10 @@
     <ul class="content">
       <div>
         <slot></slot>
+        <div class="tip">
+          <slot name="loadingTip" v-if="isPullUpLoad">正在加载数据...</slot>
+          <slot name="doneTip" v-else>暂无更多数据</slot>
+        </div>
       </div>
     </ul>
   </div>

@@ -41,7 +41,7 @@
     methods: {
       toChange(hdId) {
         this.$router.push({
-          path: "/shanghu/me/addhuodong",
+          path: "/shanghu/jingying/addhuodong",
           query:{
               hdId
           }

@@ -1,6 +1,5 @@
 <template>
-
-  <betterScroll>
+  <betterScroll @pullingUp='pullingUp' ref='scroll'>
     <div class="order-gl">
       <bigTitle title="订单管理" @showPopup='showPopup' :icon='false' :right='true'>
         <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="orderType" @on-change='changeType'>
@@ -67,7 +66,7 @@
 </template>
 
 <script>
-  import betterScroll from '@/components/betterScroll/index';
+  import betterScroll from '@/components/betterScroll/scroll';
   import {
     Step,
     StepItem
@@ -88,10 +87,7 @@
     created() {
       var _this = this;
       this.$emit("showPopup", false);
-      this.get_order_list().then(res=>{
-        console.log(res)
-        this.list = res.list;
-      })
+      this.get_order_list();
     },
     methods: {
       showPopup(val) {
@@ -99,10 +95,10 @@
       },
       changeType(val) {
         console.log(val)
-        this.get_order_list().then(res=>{
-          console.log(res)
-          this.list = res.list;
-        })
+        this.$refs.scroll.openPullUp();
+        this.list = [];
+        this.p=1;
+        this.get_order_list();
       },
       toDetail(id, zf) {
         this.$router.push({
@@ -131,16 +127,29 @@
             params: {
               fw_shop_id: this.userinfo.shop[0].id,
               status: 6,
-              paidan_status:this.orderType,
-              num: 8,
+              paidan_status: this.orderType,
+              num: 10,
               p: this.p
             }
           })
           .then(({
             data
           }) => {
-            return data;
+            if (data.ok == 1) {
+              console.log("还有数据");
+              this.p = this.p + 1;
+            } else if (data.ok == 0) {
+              console.log("没数据了");
+              this.$refs.scroll.closePullUp();
+            }
+            this.$refs.scroll.pullupLoadend();
+            this.list = this.list.concat(data.list);
           });
+      },
+      pullingUp() {
+        this.get_order_list();
+        this.$refs.scroll.finishPullupload();
+
       }
     },
     computed: {

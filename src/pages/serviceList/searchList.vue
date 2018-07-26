@@ -11,7 +11,7 @@
             </swiper>
           </div>
           <div class="classify-list">
-            <sticky>
+            <!-- <sticky>
               <div class="term">
                 <div class="select-box">
                   <span class="term-item" :class="{active:(selectType == 1&&selectAddShow)}" @click="selectAdd(1)">
@@ -27,12 +27,7 @@
                     <span class="iconfont icon-zhankai1"></span>
                   </span>
                 </div>
-                <!-- <addressSelect class="addressSelect" 
-                :type='selectType' v-if="location" v-show="selectAddShow" :currentInfo='currentSelInfo' 
-                @selectSq='selectSq' 
-                @selectQy='selectQy'
-                @selectOrder='selectOrder'
-                @init='init'></addressSelect> -->
+
                 <div class="address-select-box" v-show="selectAddShow">
                   <div class="add" v-if="selectType == 1">
                     <div class="qy">
@@ -55,10 +50,9 @@
                   </div>
                 </div>
               </div>
-            </sticky>
+            </sticky> -->
             <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
-            <!-- <service class="service" v-for="(item,index) in serviceList1" :key="index" :fwInfo='item'></service>
-            <service class="service" v-for="(item,index) in serviceList2" :key="index" :fwInfo='item'></service> -->
+
           </div>
         </template>
 
@@ -154,7 +148,7 @@
     created() {
       document.title = "";
       var _this = this;
-
+      this.setMetaTitle('搜索结果')
       this.getPosition().then(res => {
         console.log("获取定位成功");
         console.log(res);
@@ -173,10 +167,10 @@
       });
     },
     methods: {
-      get_fw(select) {
+      get_fw() {
         var _this = this;
-        var deafultParams = {
-          fw_id: _this.classId,
+        var params = {
+          tj: this.searchUrlQuery,
           num: 8,
           p: _this.p,
           lng: _this.location.lat,
@@ -184,15 +178,13 @@
           city: this.location.province
         };
 
-        var params = Object.assign(deafultParams, select);
         return this.$axios
-          .get(_this.API_URL + "/Api/Yes/new_two_list", {
+          .get(_this.API_URL + "/Api/Yes/fw_js", {
             params
           })
           .then(({
             data
           }) => {
-            this.setMetaTitle(data.fw_name)
             console.log(data);
             if (data.ok == 1) {
               _this.p++;
@@ -294,7 +286,7 @@
         return obj;
 
       },
-      search(){
+      searchUrlQuery() {
         return this.$route.query.search;
       }
     },

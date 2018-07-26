@@ -5,7 +5,7 @@
     </div>
     <div class="info">
       <h1>{{info.card_name}}</h1>
-      <h2>改价格是按每平米</h2>
+      <h2>{{info.card_subname}}</h2>
       <div class="line">
         <span class="num">
           <span class="money">
