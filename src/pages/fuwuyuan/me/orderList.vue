@@ -1,12 +1,13 @@
 <template>
   <div>
-    <bigTitle title='个人中心' @showPopup='showPopup'></bigTitle>
+    <bigTitle title='订单记录' @showPopup='showPopup'></bigTitle>
     <div class="my-form">
       <div class="form-box">
         <Group>
-          <Cell title='账号与安全' :is-link='true' link='/fuwuyuan/me/safe'></Cell>
-          <Cell title='订单记录' :is-link='true' link='/fuwuyuan/me/orderList'></Cell>
-          <Cell title='用户评价' :is-link='true' link='/shanghu/me/account'></Cell>
+          <Cell title='订单总数'>1</Cell>
+          <Cell title='完成订单数'>2</Cell>
+          <Cell title='未完成订单数'>3</Cell>
+          <Cell title='退单'>4</Cell>
         </Group>
       </div>
 

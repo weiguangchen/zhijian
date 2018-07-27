@@ -46,8 +46,39 @@
       },
       finish() {
         var _this = this;
-     
-      },
+        this.$axios.get(this.API_URL + '/Api/UserShow/ed_son', {
+          params: {
+            id: this.id,
+            phone: this.userinfo.fuwuyuan.phone,
+            sub_name: this.account_name
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          if (data.status == 1) {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '修改成功！',
+              onHide() {
+                _this.$router.replace({
+                  path: '/fuwuyuan/me/index'
+                })
+              }
+            })
+          } else {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '修改失败！',
+              onHide() {
+                _this.$router.replace({
+                  path: '/fuwuyuan/me/index'
+                })
+              }
+            })
+          }
+        })
+      }
     },
     components: {
       bigTitle,

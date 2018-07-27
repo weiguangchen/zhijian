@@ -124,6 +124,13 @@ export default [{
         meta: {
           title: '个人中心'
         }
+      }, {
+        path: 'orderList',
+        name: 'orderList',
+        component: resolve => require(['@/pages/fuwuyuan/me/orderList'], resolve),
+        meta: {
+          title: '个人中心'
+        }
       }],
 
     }

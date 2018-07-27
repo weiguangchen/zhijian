@@ -83,7 +83,12 @@
 
       },
       yanzheng() {
-        if (!this.yzm) {
+        if (this.userinfo.fuwuyuan.phone === this.new_phone) {
+          this.$vux.alert.show({
+            title: '提示',
+            content: '新手机号不能与原手机号相同'
+          })
+        } else if (!this.yzm) {
           this.$vux.alert.show({
             title: '提示',
             content: '请填写验证码'
@@ -93,11 +98,44 @@
             title: '提示',
             content: '请填写正确验证码'
           })
-        } else if(this.yzm == this.code && this.code && this.yzm){
-          this.$router.replace({
-            path: '/fuwuyuan/me/index'
-          })
+        } else if (this.yzm == this.code && this.code && this.yzm) {
+          this.edit_phone();
+
         }
+      },
+      edit_phone() {
+        this.$axios.get(this.API_URL + '/Api/UserShow/ed_son', {
+          params: {
+            id: this.id,
+            phone: this.new_phone,
+            sub_name: this.userinfo.fuwuyuan.sub_name
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          if (data.status == 1) {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '修改成功！',
+              onHide() {
+                _this.$router.replace({
+                  path: '/fuwuyuan/me/index'
+                })
+              }
+            })
+          } else {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '修改失败！',
+              onHide() {
+                _this.$router.replace({
+                  path: '/fuwuyuan/me/index'
+                })
+              }
+            })
+          }
+        })
       }
     },
     components: {
