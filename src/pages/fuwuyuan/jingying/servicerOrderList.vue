@@ -1,8 +1,6 @@
 <template>
-  <!-- <div class="shanghu-page">
-        <ViewBox> -->
-  <div>
-    <bigTitle title="订单管理" @showPopup='showPopup' :icon='false' :right='true'>
+  <div class="fwy-order-list">
+    <bigTitle title="订单管理" @showPopup='showPopup' :icon='false' :right='true' class="">
       <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="orderType" @on-change='changeType'>
         <iview-op value=''>全部订单</iview-op>
         <iview-op value='2'>未接订单</iview-op>
@@ -59,13 +57,10 @@
 
     </div>
   </div>
-
-  <!-- </ViewBox>
-
-    </div> -->
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll/scroll';
   import {
     Step,
     StepItem
@@ -96,9 +91,9 @@
       },
       toDetail(id, zf) {
         console.log('/fuwuyuan/jingying/orderDetail')
-        
+
         this.$router.push({
-          path: '/fuwuyuan/jingying/orderDetail/'+id+'/'+zf,
+          path: '/fuwuyuan/jingying/orderDetail/' + id + '/' + zf,
         })
       },
       changeType(val) {
@@ -139,7 +134,8 @@
       bigTitle,
       ViewBox,
       Step,
-      StepItem
+      StepItem,
+      betterScroll
     },
     mixins: [checkLogin]
   };
@@ -147,54 +143,58 @@
 </script>
 
 <style lang='scss'>
-  .order-gl {
-    line-height: 1;
-    background: #f0f0f0;
-    .order-item {
-      padding-left: 0.533333rem;
-      background: #ffffff;
-      @include font-dpr(12px);
-      box-sizing: border-box;
-      padding-top: 0.56rem;
-      padding-bottom: 0.533333rem;
-      margin-bottom: 0.266667rem;
-      .order-num {
-        border-bottom: 1px solid #f0f0f0;
-        &>div {
-          margin-bottom: 0.266667rem;
-        }
-        .step-wrapper {
-          margin-left: -.533333rem/* 40/75 */
-          ;
-        }
-      }
-      .order-info {
-        padding: 0.266667rem 0;
-        display: flex;
-        .img {
-          width: 2.666667rem;
-          height: 2.133333rem;
-          border-radius: 0.133333rem;
-          margin-right: 0.24rem;
-        }
-
-        .info {
-          display: flex;
-          flex-direction: column;
-          flex: 1;
-          justify-content: space-around;
-        }
-      }
-
-      .count {
-        display: flex;
-        .count-item {
-          flex: 1;
-          .warn {
-            color: #dc3330;
+  .fwy-order-list {
+    height: 100%;
+    .order-gl {
+      height: 100%;
+      line-height: 1;
+      background: #f0f0f0;
+      .order-item {
+        padding-left: 0.533333rem;
+        background: #ffffff;
+        @include font-dpr(12px);
+        box-sizing: border-box;
+        padding-top: 0.56rem;
+        padding-bottom: 0.533333rem;
+        margin-bottom: 0.266667rem;
+        .order-num {
+          border-bottom: 1px solid #f0f0f0;
+          &>div {
+            margin-bottom: 0.266667rem;
           }
-          .success {
-            color: #1e7c28;
+          .step-wrapper {
+            margin-left: -.533333rem/* 40/75 */
+            ;
+          }
+        }
+        .order-info {
+          padding: 0.266667rem 0;
+          display: flex;
+          .img {
+            width: 2.666667rem;
+            height: 2.133333rem;
+            border-radius: 0.133333rem;
+            margin-right: 0.24rem;
+          }
+
+          .info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: space-around;
+          }
+        }
+
+        .count {
+          display: flex;
+          .count-item {
+            flex: 1;
+            .warn {
+              color: #dc3330;
+            }
+            .success {
+              color: #1e7c28;
+            }
           }
         }
       }

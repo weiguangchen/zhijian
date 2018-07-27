@@ -57,8 +57,7 @@
               </div>
             </sticky>
             <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
-            <!-- <service class="service" v-for="(item,index) in serviceList1" :key="index" :fwInfo='item'></service>
-            <service class="service" v-for="(item,index) in serviceList2" :key="index" :fwInfo='item'></service> -->
+
           </div>
         </template>
 
@@ -145,8 +144,7 @@
 
         classArr: [],
         serviceList: [],
-        serviceList1: [],
-        serviceList2: [],
+
         p: 1
       };
     },
@@ -294,9 +292,9 @@
         return obj;
 
       },
-      search(){
-        return this.$route.query.search;
-      }
+      // search(){
+      //   return this.$route.query.search;
+      // }
     },
     components: {
       XHeader,
