@@ -104,6 +104,12 @@
             </Group>
           </div>
           <div class="form-group">
+            <h2 class="sub-title">单卡最大购买量(0为不限制):</h2>
+            <Group class="reset-vux-input">
+              <XNumber v-model="card_max_num" title='' :fillable='true' :min='0'></XNumber>
+            </Group>
+          </div>
+          <div class="form-group">
             <h2 class="sub-title">原价:</h2>
             <Group class="reset-vux-input">
               <XInput v-model="yuanjia"></XInput>
@@ -199,9 +205,10 @@
         tw: "",
         tw1: '',
         fw_selceted: [],
+        card_max_num: 0,
         yuanjia: 0,
         huodongjia: 0,
-        // jiesuanjia: 0
+        // jiesuanjia: 0,
       };
     },
     created() {
@@ -273,19 +280,22 @@
         var _this = this;
         var params = {
           card_img: this.tupian,
-          card_name: _this.huodongname,
-          card_money: _this.huodongjia,
+          card_name: this.huodongname,
+          card_money: this.huodongjia,
           card_shopid: this.userinfo.shop[0].id,
-          card_money: _this.huodongjia,
-          card_ymoney: _this.yuanjia,
-          card_class_id: _this.one_class_val,
-          card_content_id: _this.tw,
-          city_id: _this.cityVal,
-          qy_id: _this.qyVal,
-          sq_id: _this.sqVal,
-          bk_num: _this.fw_num,
-          card_subname: _this.sub_name,
-          face: _this.faceVal
+          card_money: this.huodongjia,
+          card_ymoney: this.yuanjia,
+          card_class_id: this.one_class_val,
+          card_content_id: this.tw,
+          city_id: this.cityVal,
+          qy_id: this.qyVal,
+          sq_id: this.sqVal,
+          bk_num: this.fw_num,
+          card_subname: this.sub_name,
+          face: this.faceVal,
+          card_face_id:this.faceVal[0],
+          card_max_num: this.card_max_num,
+          card_fw_num: this.card_fw_num
         }
         this.checkStep2().then(
           res => {
@@ -312,7 +322,7 @@
                       content: "修改活动成功!",
                       onHide() {
                         _this.$router.replace({
-                          path: "/shanghu/me/hdList"
+                          path: "/shanghu/jingying/hdList"
                         });
                       }
                     });
@@ -322,7 +332,7 @@
                       content: "修改活动失败!",
                       onHide() {
                         _this.$router.replace({
-                          path: "/shanghu/me/hdList"
+                          path: "/shanghu/jingying/hdList"
                         });
                       }
                     });
@@ -348,7 +358,7 @@
                       content: "添加活动成功!",
                       onHide() {
                         _this.$router.replace({
-                          path: "/shanghu/me/hdList"
+                          path: "/shanghu/jingying/hdList"
                         });
                       }
                     });
@@ -358,7 +368,7 @@
                       content: "添加活动失败!",
                       onHide() {
                         _this.$router.replace({
-                          path: "/shanghu/me/hdList"
+                          path: "/shanghu/jingying/hdList"
                         });
                       }
                     });
@@ -569,26 +579,25 @@
             item[0] = m.fw_mingzi;
             item[1] = m.shop_fw_id;
             item[2] = this.fw_selceted[index];
-            //   item = JSON.stringify(item);
             arr.push(item);
           }
         });
-        //   arr = JSON.stringify(arr);
         return arr;
       },
-      // step1submit() {
-      //   if (this.tupian) {
-      //     return false;
-      //   } else {
-      //     return true;
-      //   }
-      // },
+      card_fw_num() {
+        var len = 0;
+        this.fw_selceted.map(m => {
+          len += m;
+        })
+        return len;
+      },
       jiesuanjia() {
         return (this.huodongjia * (1 - this.jsPrecent)).toFixed(2);
       },
       hdId() {
         return this.$route.query.hdId;
-      }
+      },
+
     },
     directives: {
       TransferDom

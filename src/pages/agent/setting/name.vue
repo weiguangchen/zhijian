@@ -24,6 +24,9 @@
         name: ''
       }
     },
+    created(){
+      this.name = this.userinfo.dl[0].xingming;
+    },
     methods: {
       finish() {
         var _this = this;

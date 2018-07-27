@@ -1,28 +1,28 @@
 <template>
   <div class="account">
     <betterScroll>
-          <bigTitle title='账户管理' @showPopup='showPopup' class="account-title"></bigTitle>
-    <div class="form-box">
-      <div class="title">
-        <div>当前登录账号：{{userinfo.nickname}}</div>
-        <div>可管理账号列表：</div>
-      </div>
-      <div class="account-list">
-        <Group class="reset-vux-input account-item" v-for="(item,index) in accountList" :key="index">
-          <div class="tit">账号的名称：{{item.sub_name}}</div>
-          <div class="tit">管理的门店：
-            <span v-for="(item,index) in item.face" :key="index">{{item.face_name}}&nbsp;&nbsp;&nbsp;</span>
-          </div>
-          <!-- <div class="tit last-tit">账号说明：李海东</div> -->
-          <div class="xbtn-box">
-            <!-- <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton> -->
-            <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="edit_son(item.phone,item.id)">编辑</XButton>
-          </div>
-        </Group>
-      </div>
+      <bigTitle title='账户管理' @showPopup='showPopup' class="account-title"></bigTitle>
+      <div class="form-box">
+        <div class="title">
+          <div>当前登录账号：{{userinfo.nickname}}</div>
+          <div>可管理账号列表：</div>
+        </div>
+        <div class="account-list">
+          <Group class="reset-vux-input account-item" v-for="(item,index) in accountList" :key="index">
+            <div class="tit">账号的名称：{{item.sub_name}}</div>
+            <div class="tit">管理的门店：
+              <span v-for="(item,index) in item.face" :key="index">{{item.face_name}}&nbsp;&nbsp;&nbsp;</span>
+            </div>
+            <!-- <div class="tit last-tit">账号说明：李海东</div> -->
+            <div class="xbtn-box">
+              <!-- <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton> -->
+              <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="edit_son(item.phone,item.id)">编辑</XButton>
+            </div>
+          </Group>
+        </div>
 
-      <XButton type='warn' class="xbtn" @click.native='add_son_account'>添加子账户</XButton>
-    </div>
+        <XButton type='warn' class="xbtn" @click.native='add_son_account'>添加子账户</XButton>
+      </div>
     </betterScroll>
 
 
@@ -67,7 +67,7 @@
       showPopup(val) {
         this.$emit("showPopup", val);
       },
-      edit_son(phone,id) {
+      edit_son(phone, id) {
         this.$router.push({
           path: '/shanghu/me/addSonAccount',
           query: {

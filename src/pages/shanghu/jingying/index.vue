@@ -2,8 +2,10 @@
   <div class="shanghu-box">
     <!-- <div class="wrapper shanghu-warpper" ref="wrapper">
       <ul class="content"> -->
-        <router-view @showPopup='showPopup' @showTextarea='showTextarea'></router-view>
-      <!-- </ul>
+    <transition name='router'>
+      <router-view @showPopup='showPopup' @showTextarea='showTextarea'></router-view>
+    </transition>
+    <!-- </ul>
     </div> -->
 
     <Popup position='right' v-model="popupShow">
@@ -22,7 +24,7 @@
         </Group>
       </div>
     </Popup>
-    
+
   </div>
 </template>
 
@@ -48,7 +50,7 @@
   } from 'vue-ydui/dist/lib.px/textarea';
   // import BScroll from "better-scroll";
   import checkMenuQx from '@/mixins/checkMenuQx.js';
-import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
+  import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
 
   export default {
     data() {
@@ -69,7 +71,7 @@ import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
       showTextarea(val) {
         this.alertShow = val;
       },
-      submit_tuidan(){
+      submit_tuidan() {
         // this.$axios.get(this.API_URL+'/api/order/jj_order',{
 
         // }).then(({data})=>{
@@ -99,7 +101,7 @@ import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
       Popup,
       XTextarea
     },
-    mixins: [checkMenuQx,checkAdminShenfen]
+    mixins: [checkMenuQx, checkAdminShenfen]
   };
 
 </script>

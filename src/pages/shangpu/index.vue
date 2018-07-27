@@ -486,7 +486,7 @@
           display: flex;
           align-items: center;
           .vux-selector {
-            &:after {
+            &:after,&:before {
               border: none;
             }
           }

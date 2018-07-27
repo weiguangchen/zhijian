@@ -129,7 +129,6 @@ import servicerRouterMaps from './routerMap/servicerRouterMaps.js'
 
 
 
-
 const router = new Router({
   linkActiveClass: 'active-router',
   mode: 'history',
@@ -173,12 +172,10 @@ router.beforeEach((to, from, next) => {
   if (!userId) {
     // 没有cookies
     // // 进入后台判断是商户还是服务员   0商户1服务员
-    // VueCookies.set('shanghuType',)
     VueCookies.set('enterBeforeUrl', to.fullPath);
     console.log(window.location.href)
     var windowUrl = window.location.href;
     var state;
-    console.log(/\/http:qd.daonian.cn/.test(windowUrl))
     if (/http:\/\/qd.daonian.cn/.test(windowUrl)) {
       // 线上
       state = 0;

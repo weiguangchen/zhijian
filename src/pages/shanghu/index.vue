@@ -1,7 +1,9 @@
 <template>
   <div class="sh-page">
     <div class="shanghu-page">
-      <router-view></router-view>
+      <transition name='router'>
+        <router-view></router-view>
+      </transition>
     </div>
     <tabbar></tabbar>
     <router-view name="tab"></router-view>
@@ -9,17 +11,20 @@
 </template>
 
 <script>
-import tabbar from "@/components/tab/shangHuTab";
-export default {
-  data() {
-    return {};
-  },
-  created() {},
-  components: {
-    tabbar
-  }
-};
+  import tabbar from "@/components/tab/shangHuTab";
+  export default {
+    data() {
+      return {};
+    },
+    created() {},
+    components: {
+      tabbar
+    }
+  };
+
 </script>
 
 <style lang='scss'>
+
+
 </style>

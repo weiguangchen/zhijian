@@ -21,8 +21,11 @@
   export default {
     data() {
       return {
-        add: ''
+        add:''
       }
+    },
+    created(){
+      this.add =  this.userinfo.dl[0].adress; 
     },
     methods: {
       finish() {

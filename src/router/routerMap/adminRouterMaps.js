@@ -95,6 +95,13 @@ export default [{
           role: 31
         }
       }, {
+        path: 'mendianTongji',
+        name: 'mendianTongji',
+        component: resolve => require(['@/pages/shanghu/jingying/mendianTongji'], resolve),
+        meta: {
+          role: 31
+        }
+      }, {
         path: 'orderGl',
         name: 'orderGl',
         component: resolve => require(['@/pages/shanghu/jingying/orderlist'], resolve),
@@ -247,7 +254,42 @@ export default [{
         meta: {
           role: 45
         }
-      }, ],
+      },{
+        path: 'setting',
+        name: 'setting',
+        component: resolve => require(['@/pages/shanghu/me/setting/index'], resolve),
+        meta: {
+          title:'设置'
+        },
+      },{
+        path: 'phone',
+        name: 'phone',
+        component: resolve => require(['@/pages/shanghu/me/setting/phone'], resolve),
+        meta: {
+          title:'修改手机号'
+        }
+      },{
+        path: 'yanzheng',
+        name: 'yanzheng',
+        component: resolve => require(['@/pages/shanghu/me/setting/yanzheng'], resolve),
+        meta: {
+          title:'验证身份'
+        }
+      },{
+        path: 'name',
+        name: 'name',
+        component: resolve => require(['@/pages/shanghu/me/setting/name'], resolve),
+        meta: {
+          title:'修改姓名'
+        }
+      },{
+        path: 'address',
+        name: 'address',
+        component: resolve => require(['@/pages/shanghu/me/setting/address'], resolve),
+        meta: {
+          title:'修改地址'
+        }
+      }],
 
     }
   ]

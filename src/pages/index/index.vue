@@ -276,21 +276,32 @@
         box-sizing: border-box;
         display: flex;
         align-items: center;
-        padding: 0.24rem 0.533333rem;
+        padding: .266667rem /* 20/75 */ .4rem /* 30/75 */ .266667rem /* 20/75 */ .533333rem /* 40/75 */;
         @include font-dpr(19px);
         color: #292929;
+        .weui-search-bar__form{
+          border-radius: .346667rem /* 26/75 */;
+          border: 1px solid #000000;
+          overflow: hidden;
+        }
+        .weui-search-bar__cancel-btn{
+          font-size: .32rem /* 24/75 */;
+        }
         .weui-search-bar{
           padding: 0;
+          background: transparent;
+          &::before,&::after{
+            display: none;
+          }
         }
         .weui-search-bar__cancel-btn{
           font-size: .426667rem /* 32/75 */;
         }
         .vux-search-fixed{
-          padding: 0.24rem 0.533333rem;
+          padding: .266667rem /* 20/75 */ .4rem /* 30/75 */ .266667rem /* 20/75 */ .533333rem /* 40/75 */;
         }
         .add {
-          font-size: .373333rem/* 28/75 */
-          ;
+          font-size: .48rem /* 36/75 */;
           margin-right: 0.333333rem;
           line-height: 1;
           flex:none;

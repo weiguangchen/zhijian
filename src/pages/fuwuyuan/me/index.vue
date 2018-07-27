@@ -1,19 +1,18 @@
 <template>
-  <div>
-    <bigTitle title='个人中心' @showPopup='showPopup'></bigTitle>
-    <div class="my-form">
-      <div class="form-box">
+  <div class="shanghu-box">
+    <transition name='router'>
+      <router-view @showPopup='showPopup'></router-view>
+    </transition>
+    <Popup position='right' v-model="popupShow">
+      <div class="popup-list">
         <Group>
-          <!-- <Cell title='添加服务' :is-link='true' link='/shanghu/me/xmgl'></Cell>
-          <Cell title='管理服务' :is-link='true' link='/shanghu/me/fwList'></Cell>
-          <Cell title='添加活动' :is-link='true' link='/shanghu/me/addhuodong'></Cell>
-          <Cell title='管理活动' :is-link='true' link='/shanghu/me/hdList'></Cell>
-          <Cell title='门店管理' :is-link='true' link='/shanghu/me/mendian'></Cell>
-          <Cell title='账户管理' :is-link='true' link='/shanghu/me/account'></Cell> -->
+          <Cell title='添加项目' link='/shanghu/me/xmgl'></Cell>
+          <Cell title='管理服务' link='/shanghu/me/fwList'></Cell>
+          <Cell title='添加活动' link='/shanghu/me/addhuodong'></Cell>
+          <Cell title='门店管理' link='/shanghu/me/mendian'></Cell>
         </Group>
       </div>
-
-    </div>
+    </Popup>
   </div>
 </template>
 
@@ -21,67 +20,49 @@
   import {
     Popup
   } from "vue-ydui/dist/lib.px/popup";
-
+  // import {InfiniteScroll} from 'vue-ydui/dist/lib.px/infinitescroll'; 
   import {
     ViewBox,
-    Selector,
-    Group,
-    XButton,
-    XInput,
-    Confirm,
-    Cell
+    Cell,
+    Group
   } from "vux";
-  import bigTitle from "@/components/bigTitle/index";
-  import shanghuSelect from "@/components/shanghu_form/face_select";
-  import shanghuInput from "@/components/shanghu_form/input";
+  // import BScroll from "better-scroll";
   import checkMenuQx from "@/mixins/checkMenuQx.js";
   export default {
     data() {
       return {
-        pay_num: "",
-        face_id: "",
-        faceList: [],
-        alertShow: false,
-        xiaofeijuan: ""
+        popupShow: false,
       };
     },
     created() {
-      this.$emit("showPopup", false);
-      console.log('menu')
-      console.log(this.menuqx)
+
     },
     methods: {
       showPopup(val) {
-        this.$emit("showPopup", val);
+        this.popupShow = val;
       }
     },
+    mounted() {
+
+    },
+    computed: {
+
+    },
     components: {
-      bigTitle,
       ViewBox,
-      Selector,
-      Group,
-      shanghuSelect,
-      shanghuInput,
-      XButton,
-      XInput,
-      Confirm,
+      Popup,
       Cell,
-      Popup
+      Group,
     },
     mixins: [checkMenuQx]
   };
 
 </script>
 
-<style lang='scss' scoped>
-  .weui-cell {
-    @include font-dpr(14px);
-    height: 1.28rem;
-    padding-left: 0;
-    padding-right: 0;
-    &::before {
-      left: 0;
-    }
+<style lang='scss'>
+  .shanghu-box,
+  .shanghu-warpper {
+    height: 100%;
   }
 
 </style>
