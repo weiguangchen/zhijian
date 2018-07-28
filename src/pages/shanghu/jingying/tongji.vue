@@ -29,19 +29,19 @@
             <div class="count">
               <div class="count-item">
                 <div class="tit">销售量</div>
-                <span>{{item.buy_number}}</span>
+                <span>{{item.all_num}}</span>
               </div>
               <div class="count-item">
                 <div class="tit">验证量</div>
-                <span>{{item.yz_number}}</span>
+                <span>{{item.yz_num}}</span>
               </div>
               <div class="count-item">
                 <div class="tit">退款量</div>
-                <span>{{item.tuihuo_number}}</span>
+                <span>{{item.t_num}}</span>
               </div>
               <div class="count-item">
                 <div class="tit">总额</div>
-                <span>￥{{item.y_money}}</span>
+                <span>￥{{item.all_money}}</span>
               </div>
             </div>
           </div>
@@ -97,12 +97,12 @@
         this.$emit("showPopup", val);
       },
       toDetail(id){
-        this.$router.push({
-          path:'/shanghu/jingying/mendianTongji',
-          query:{
-            id
-          }
-        })
+        // this.$router.push({
+        //   path:'/shanghu/jingying/mendianTongji',
+        //   query:{
+        //     id
+        //   }
+        // })
       }
     },
     components: {

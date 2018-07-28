@@ -4,7 +4,9 @@
     <div class="form-box">
       <Group>
         <Cell title='账号名称：' :isLink='true' link='/fuwuyuan/me/name'>{{userinfo.fuwuyuan.sub_name}}</Cell>
-        <Cell title='所属门店'>测试门店</Cell>
+        <Cell title='所属门店'>
+            <span v-for="(item,index) in userinfo.face" :key="index">{{item.face_name}}&nbsp;&nbsp;</span>
+        </Cell>
         <Cell title='修改手机号' :isLink='true' link='/fuwuyuan/me/yanzheng'>{{userinfo.fuwuyuan.phone}}</Cell>
       </Group>
     </div>
@@ -13,6 +15,7 @@
 
 <script>
   import betterScroll from '@/components/betterScroll/index';
+
   import bigTitle from "@/components/bigTitle/index";
   import myMap from "@/components/map/index";
   import checkLogin from "@/mixins/checkLogin";

@@ -5,7 +5,7 @@
       <div class="form-box">
         <Group>
           <Cell title='账号与安全' :is-link='true' link='/fuwuyuan/me/safe'></Cell>
-          <Cell title='订单记录' :is-link='true' link='/fuwuyuan/me/orderList'></Cell>
+          <!-- <Cell title='订单记录' :is-link='true' link='/fuwuyuan/me/orderList'></Cell> -->
           <Cell title='用户评价' :is-link='true' link='/shanghu/me/account'></Cell>
         </Group>
       </div>

@@ -18,7 +18,7 @@
           </div>
           <div class="line">
             <span class="title">联系方式：</span>
-            <span class="content">{{detail.phone}}</span>
+            <span class="content">{{detail.dianhua}}</span>
           </div>
           <div class="line">
             <span class="title">地址：</span>

@@ -7,12 +7,15 @@
           <div>当前登录账号：{{userinfo.nickname}}</div>
           <div>可管理账号列表：</div>
         </div>
+        <XButton type='warn' class="xbtn" @click.native='add_son_account'>添加子账户</XButton>
         <div class="account-list">
           <Group class="reset-vux-input account-item" v-for="(item,index) in accountList" :key="index">
             <div class="tit">账号的名称：{{item.sub_name}}</div>
             <div class="tit">管理的门店：
               <span v-for="(item,index) in item.face" :key="index">{{item.face_name}}&nbsp;&nbsp;&nbsp;</span>
             </div>
+            <div class="tit">手机号：{{item.phone}}</div>
+            <div class="tit">绑定微信：<img :src="item.wx.headimgurl" alt="" class="avatar">{{item.wx.nickname}}</div>
             <!-- <div class="tit last-tit">账号说明：李海东</div> -->
             <div class="xbtn-box">
               <!-- <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton> -->
@@ -21,7 +24,6 @@
           </Group>
         </div>
 
-        <XButton type='warn' class="xbtn" @click.native='add_son_account'>添加子账户</XButton>
       </div>
     </betterScroll>
 
@@ -122,18 +124,27 @@
     }
     .account-list {
       .account-item {
-        margin-bottom: 1.066667rem;
+        padding: .666667rem /* 50/75 */ .333333rem /* 25/75 */;
+        margin-bottom: 1rem;
+        font-size: .373333rem /* 28/75 */;
         .weui-cells:after {
           border: none;
         }
         .tit {
+          display: flex;
+          align-items: center;
           @include font-dpr(14px);
-          margin-bottom: 0.533333rem;
+          margin-bottom: .56rem /* 42/75 */;
+          .avatar{
+            width: .6rem /* 45/75 */;
+            height: .6rem /* 45/75 */;
+            border-radius: 50%;
+            margin-right: .4rem /* 30/75 */;
+          }
         }
         .last-tit {
           margin-bottom: 0;
         }
-        padding: 0.266667rem 0.333333rem;
         .xbtn-box {
           margin-top: 0.6rem;
           display: flex;
@@ -146,6 +157,9 @@
           }
         }
       }
+    }
+    .xbtn{
+      margin-bottom: .933333rem /* 70/75 */;
     }
   }
 

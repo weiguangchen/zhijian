@@ -89,7 +89,25 @@
         });
       },
       add_face() {
-        this.$router.push("/shanghu/me/addFace");
+        var _this = this;
+        this.$axios.get(this.API_URL + '/Api/Shop/yes_face', {
+          params: {
+            shop_id: this.userinfo.shop[0].id
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          this.$vux.alert.show({
+            title: '提示',
+            content: data.log,
+            onHide() {
+              if (data.status == 1) {
+                _this.$router.push("/shanghu/me/addFace");
+              }
+            }
+          })
+        })
       },
       get_face() {
         var _this = this;

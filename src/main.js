@@ -32,13 +32,18 @@ import {
   Option,
   Step,
   Steps,
-  DatePicker
+  DatePicker,
+  Tag,
+  Button
 } from 'iview';
 Vue.component('iview-select', Select);
 Vue.component('iview-op', Option);
 Vue.component('iview-step', Step);
 Vue.component('iview-steps', Steps);
 Vue.component('iview-date', DatePicker);
+Vue.component('iview-date', DatePicker);
+Vue.component('iview-tag',Tag);
+Vue.component('iview-button',Button);
 
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload)

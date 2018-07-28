@@ -1,34 +1,58 @@
 <template>
   <div class="add-face">
-    <bigTitle title='修改门店' @showPopup='showPopup' v-if="faceId"></bigTitle>
-    <bigTitle title='添加门店' @showPopup='showPopup' v-else></bigTitle>
-    <div class="form-box">
-      <h2 class="sub-title">门店名称:</h2>
-      <Group class="reset-vux-input">
-        <XInput v-model="face_name"></XInput>
-      </Group>
-      <h2 class="sub-title">门店位置:</h2>
-      <Group class="reset-vux-input">
-        <XInput v-model="map.poiaddress" @click.native='selectAdd'></XInput>
-      </Group>
-      <h2 class="sub-title">详细地址:</h2>
-      <Group class="reset-vux-input">
-        <XInput v-model="address"></XInput>
-      </Group>
+    <betterScroll>
+      <bigTitle title='修改门店' @showPopup='showPopup' v-if="faceId"></bigTitle>
+      <bigTitle title='添加门店' @showPopup='showPopup' v-else></bigTitle>
+      <div class="form-box">
+        <h2 class="sub-title">门店名称:</h2>
+        <Group class="reset-vux-input">
+          <XInput v-model="face_name"></XInput>
+        </Group>
+        <h2 class="sub-title">门店位置:</h2>
+        <Group class="reset-vux-input">
+          <XInput v-model="map.poiaddress" @click.native='selectAdd'></XInput>
+        </Group>
+        <h2 class="sub-title">详细地址:</h2>
+        <Group class="reset-vux-input">
+          <XInput v-model="address"></XInput>
+        </Group>
+        <h2 class="sub-title">标签:</h2>
+        <div>
+          <div class="tag1">
+            <mu-checkbox value='1' v-model="tag1" label='WIFI' color='#e03233'></mu-checkbox>
+            <mu-checkbox value='2' v-model="tag1" label='刷卡' color='#e03233'></mu-checkbox>
+            <mu-checkbox value='3' v-model="tag1" label='手机支付' color='#e03233'></mu-checkbox>
+          </div>
+          <div class="tag2" >
+            <iview-tag closable v-for="(item,index) in tag2" :key="index" :name='item' @on-close='delTag'>{{item}}</iview-tag>
+            <iview-button type="dashed" size="small" @click="showAddTag">添加标签</iview-button>
+          </div>
+        </div>
+        <Group>
+          <Cell title='加盟城市' v-model="cityKey"></Cell>
+          <Cell title='加盟区域' v-model="qyKey"></Cell>
+          <Selector :options='sqList' title='加盟社区' :value-map="['id','sq_name']" direction='rtl' @on-change='changeSq' v-model='sqVal'></Selector>
+        </Group>
+        <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
+        <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='submiting'>增加门店</XButton>
+        <XButton type='warn' class="xbtn" @click.native='change_face' v-else :disabled='submiting'>提交修改</XButton>
+      </div>
+    </betterScroll>
+    <Popup v-model="alertShow" position='center'>
       <Group>
-        <Cell title='加盟城市' v-model="cityKey"></Cell>
-        <Cell title='加盟区域' v-model="qyKey"></Cell>
-        <Selector :options='sqList' title='加盟社区' :value-map="['id','sq_name']" direction='rtl' @on-change='changeSq' v-model='sqVal'></Selector>
+        <XInput v-model="tagVal"></XInput>
+        <XButton @click.native='addTag' :mini='true' class="tag-btn">提交</XButton>
       </Group>
-      <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
-      <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='submiting'>增加门店</XButton>
-      <XButton type='warn' class="xbtn" @click.native='change_face' v-else :disabled='submiting'>提交修改</XButton>
-    </div>
+    </Popup>
 
   </div>
 </template>
 
 <script>
+  import {
+    Popup
+  } from 'vue-ydui/dist/lib.px/popup';
+  import betterScroll from '@/components/betterScroll';
   import bigTitle from "@/components/bigTitle/index";
   import myMap from "@/components/map/index";
   import wxConfig from "@/mixins/wxConfig.js";
@@ -45,11 +69,15 @@
       return {
         submiting: false,
         mapShow: false,
-        sqList: [],
+        sqList: [], 
+        alertShow:false,
+        tagVal:'',
 
         face_name: "",
         map: "",
         address: "",
+        tag1: [],
+        tag2:[],
         cityVal: "",
         cityKey: "",
         qyVal: "",
@@ -244,7 +272,7 @@
           } else if (!this.sqVal) {
             _this.alertWarning("请选择加盟社区！");
             reject();
-          }else{
+          } else {
             resolve()
           }
         });
@@ -257,6 +285,20 @@
       },
       changeSq(val) {
         this.sqVal = val;
+      },
+      showAddTag(){
+        this.alertShow = true;
+      },
+      addTag(){
+        this.tag2 = this.tag2.concat(this.tagVal);
+        this.alertShow = false;
+        this.tagVal = '';
+      },
+      delTag(e,name){
+        var index = this.tag2.indexOf(name);
+        this.tag2.splice(index,1);
+          console.log(e)
+          console.log(name)
       }
     },
     components: {
@@ -266,7 +308,9 @@
       XButton,
       Selector,
       myMap,
-      Cell
+      Cell,
+      betterScroll,
+      Popup
     },
     computed: {
       faceId() {
@@ -287,8 +331,24 @@
 
 <style lang='scss'>
   .add-face {
+    height: 100%;
     .xbtn {
       margin-top: 0.666667rem;
+    }
+    .tag1 {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      .mu-checkbox {
+        margin-right: 1rem/* 75/75 */
+        ;
+      }
+    }
+    .tag2{
+      padding:.666667rem /* 50/75 */ 0; 
+    }
+    .tag-btn{
+      display: block;
+      margin-top: .6rem /* 45/75 */;
     }
   }
 
