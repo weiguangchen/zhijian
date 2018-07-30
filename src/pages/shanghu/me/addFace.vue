@@ -23,7 +23,7 @@
             <mu-checkbox value='2' v-model="tag1" label='刷卡' color='#e03233'></mu-checkbox>
             <mu-checkbox value='3' v-model="tag1" label='手机支付' color='#e03233'></mu-checkbox>
           </div>
-          <div class="tag2" >
+          <div class="tag2">
             <iview-tag closable v-for="(item,index) in tag2" :key="index" :name='item' @on-close='delTag'>{{item}}</iview-tag>
             <iview-button type="dashed" size="small" @click="showAddTag">添加标签</iview-button>
           </div>
@@ -69,15 +69,15 @@
       return {
         submiting: false,
         mapShow: false,
-        sqList: [], 
-        alertShow:false,
-        tagVal:'',
+        sqList: [],
+        alertShow: false,
+        tagVal: '',
 
         face_name: "",
         map: "",
         address: "",
         tag1: [],
-        tag2:[],
+        tag2: [],
         cityVal: "",
         cityKey: "",
         qyVal: "",
@@ -99,14 +99,16 @@
             data
           }) => {
             console.log(data);
-            _this.face_name = data[0].face_name;
-            if (data[0].map) {
-              _this.map = JSON.parse(data[0].map);
+            _this.face_name = data.face_name;
+            if (data.map) {
+              _this.map = JSON.parse(data.map);
             }
-            _this.address = data[0].adress;
-            if (data[0].sq_id) {
-              _this.sqVal = data[0].sq_id;
+            _this.address = data.adress;
+            if (data.sq_id) {
+              _this.sqVal = data.sq_id;
             }
+            this.tag1 = data.tag1;
+            this.tag2 = data.tag2;
           });
       }
 
@@ -144,21 +146,25 @@
         this.submiting = true;
         var _this = this;
         console.log("提交");
+
         this.checkForm().then(res => {
+          var params = {
+            face_name: this.face_name,
+            jd: this.map.latlng.lat,
+            wd: this.map.latlng.lng,
+            map: this.map,
+            adress: this.address,
+            city: this.cityVal,
+            qy: this.qyVal,
+            sq: this.sqVal,
+            fw_shop_id: this.userinfo.shop[0].id,
+            phone: this.userinfo.uphone,
+            tag1: this.tag1,
+            tag2: this.tag2
+          };
           this.$axios
             .get(this.API_URL + "/Api/Shop/add_face", {
-              params: {
-                face_name: this.face_name,
-                jd: this.map.latlng.lat,
-                wd: this.map.latlng.lng,
-                map: this.map,
-                adress: this.address,
-                city: this.cityVal,
-                qy: this.qyVal,
-                sq: this.sqVal,
-                fw_shop_id: this.userinfo.shop[0].id,
-                phone: this.userinfo.uphone
-              }
+              params
             })
             .then(
               ({
@@ -213,7 +219,9 @@
                 sq: this.sqVal,
                 adress: this.address,
                 fw_shop_id: this.userinfo.shop[0].id,
-                phone: this.userinfo.uphone
+                phone: this.userinfo.uphone,
+                tag1: this.tag1,
+                tag2: this.tag2
               }
             })
             .then(({
@@ -286,19 +294,20 @@
       changeSq(val) {
         this.sqVal = val;
       },
-      showAddTag(){
+      showAddTag() {
         this.alertShow = true;
       },
-      addTag(){
-        this.tag2 = this.tag2.concat(this.tagVal);
+      addTag() {
+        if (this.tagVal != '') {
+          this.tag2 = this.tag2.concat(this.tagVal);
+        }
         this.alertShow = false;
         this.tagVal = '';
       },
-      delTag(e,name){
+      delTag(e, name) {
         var index = this.tag2.indexOf(name);
-        this.tag2.splice(index,1);
-          console.log(e)
-          console.log(name)
+        this.tag2.splice(index, 1);
+
       }
     },
     components: {
@@ -343,12 +352,14 @@
         ;
       }
     }
-    .tag2{
-      padding:.666667rem /* 50/75 */ 0; 
+    .tag2 {
+      padding: .666667rem/* 50/75 */
+      0;
     }
-    .tag-btn{
+    .tag-btn {
       display: block;
-      margin-top: .6rem /* 45/75 */;
+      margin-top: .6rem/* 45/75 */
+      ;
     }
   }
 

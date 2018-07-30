@@ -1,86 +1,90 @@
 <template>
   <div class="page">
     <div class="service-detail">
-      <betterScroll>
-        <div class="banner">
-          <!-- <div class="share">
+      <div class="wrapper my-warpper" ref="wrapper">
+        <ul class="content">
+          <div>
+            <div class="banner">
+              <!-- <div class="share">
             <i class="iconfont icon-fenxiang" @click="share"></i>
           </div> -->
-          <Swiper height='5.12rem' :show-dots='false'>
-            <SwiperItem v-for="(item,index) in fw_info.fw_img" :key="index">
-              <img :src="item" alt="" class="img">
-            </SwiperItem>
-          </Swiper>
-        </div>
-        <div class="sp-info">
-          <div class="top">
-            <span class="price">
-              <span class="num">{{fw_info.money}}</span>元
-              <span v-if="fw_info.fw_gg">/{{fw_info.fw_gg}}</span>
-            </span>{{fw_info.fw_mingzi}}</div>
-          <div class="bottom">{{fw_info.sub_content}}</div>
-        </div>
-
-        <!-- <div class="comment">
+              <Swiper height='5.12rem' :show-dots='false'>
+                <SwiperItem v-for="(item,index) in fw_info.fw_img" :key="index">
+                  <img :src="item" alt="" class="img">
+                </SwiperItem>
+              </Swiper>
+            </div>
+            <div class="sp-info">
+              <div class="top">
+                <span class="price">
+                  <span class="num">{{fw_info.money}}</span>元
+                  <span v-if="fw_info.fw_gg">/{{fw_info.fw_gg}}</span>
+                </span>{{fw_info.fw_mingzi}}</div>
+              <div class="bottom">{{fw_info.sub_content}}</div>
+            </div>
+            <!-- <div class="comment">
         <span class="iconfont icon-fuwuxiangqingzan">好评率97%</span>
         <span class="count">共{{fw_info.token_num}}个消费评价</span>
       </div> -->
 
-        <div class="address1" @click="toShop(faceInfo.id)">
-          <div class="top">
-            <div class="left">
-              <div class="name">{{faceInfo.face_name}}</div>
-              <div class="info">
-                <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
-                <!-- <span class="count">28条</span>
+            <div class="address1" @click="toShop(faceInfo.id)">
+              <div class="top">
+                <div class="left">
+                  <div class="name">{{faceInfo.face_name}}</div>
+                  <div class="info">
+                    <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
+                    <!-- <span class="count">28条</span>
               <span class="juli">5.5KM</span> -->
-              </div>
-            </div>
-            <!-- <div class="right">
+                  </div>
+                </div>
+                <!-- <div class="right">
             <span class="iconfont icon-lianxifangshi"></span>
           </div> -->
-          </div>
-          <div class="bottom" >
-            <span class="iconfont icon-weizhi1"></span>
-            <span class="txt" v-if="faceInfo.map">{{faceInfo.map.poiaddress}}</span>
-          </div>
-        </div>
+              </div>
+              <div class="bottom">
+                <span class="iconfont icon-weizhi1"></span>
+                <span class="txt" v-if="faceInfo.map">{{faceInfo.map.poiaddress}}</span>
+              </div>
+            </div>
 
-        <div class="detail">
-          <myTitle>
-            <span>服务详情</span>
-            <!-- <span slot="right">更多图文详情
+            <div class="detail">
+              <myTitle>
+                <span>服务详情</span>
+                <!-- <span slot="right">更多图文详情
               <i class="iconfont icon-jinru"></i>
             </span> -->
-          </myTitle>
-          <div class="content" v-html="fw_info.fw_content[0].fw_content" v-if="fw_info.fw_content">
-
-          </div>
-        </div>
-
-        <div class="pingjia">
-          <Group>
-            <Cell :title="'网友点评('+fw_info.token_num+')'">
-              <span @click="more(fwId)">更多</span>
-            </Cell>
-          </Group>
-          <!-- <div class="title">
+              </myTitle>
+              <div class="content">
+                <img :src="item.url" alt="" v-for="(item,index) in fw_info.fw_content" :key="index">
+              </div>
+            </div>
+            <div class="pingjia">
+              <Group>
+                <Cell :title="'网友点评('+fw_info.token_num+')'">
+                  <span @click="more(fwId)">更多</span>
+                </Cell>
+              </Group>
+              <!-- <div class="title">
                     <div class="left">网友点评(28)</div>
                     <span class="iconfont icon-jinru"></span>
                 </div> -->
-          <div class="list">
-            <pinglun :info='item' v-for="(item,index) in fw_info.token" :key="index"></pinglun>
-          </div>
-        </div>
+              <div class="list">
+                <pinglun :info='item' v-for="(item,index) in fw_info.token" :key="index"></pinglun>
+              </div>
+            </div>
 
-        <!-- <div class="hot">
+            <!-- <div class="hot">
         <div class="title">小伙伴们还喜欢</div>
         <friendLike :friendLike='fw_info.friend_like'></friendLike>
 
       </div> -->
 
+          </div>
+        </ul>
+      </div>
 
-      </betterScroll>
+
+      <!-- </betterScroll> -->
       <div class="buy-btn">
         <div class="opbtn">
           <!-- <span>
@@ -91,10 +95,11 @@
             <i class="iconfont icon-dianpu"></i>
             <div>店铺</div>
           </div>
-          <div class="op-item">
-            <i class="iconfont icon-shoucangweixuan"></i>
+          <button class="op-item" @click="collect" :disabled='collecting'>
+            <i class="iconfont icon-shoucang1" v-if="ifCollect"></i>
+            <i class="iconfont icon-shoucangweixuan" v-else></i>
             <div>收藏</div>
-          </div>
+          </button>
           <!-- <div class="op-item">
             <i class="iconfont icon-dianpu"></i>
             <div>购物车</div>
@@ -104,7 +109,6 @@
       </div>
     </div>
 
-
   </div>
 </template>
 <script>
@@ -113,7 +117,7 @@
     SwiperItem,
     ViewBox,
     Cell,
-    Group
+    Group,
   } from "vux";
   import rater from "@/components/star/index";
   import tuangou from "@/components/service/serviceTuan.vue";
@@ -122,17 +126,28 @@
   import checkLogin from "@/mixins/checkLogin.js";
   import friendLike from "@/components/friendLike/index";
   import betterScroll from '@/components/betterScroll/index';
+  import BScroll from "better-scroll";
+
   export default {
     data() {
       return {
         enable: true,
         fw_info: {},
-        faceInfo:{}
+        faceInfo: {},
+        testimg: [],
+        ifCollect: false,
+        collecting: false,
+        collect_id: {},
+
+        mountedStatus: false,
+        imgLoaded: false,
       };
     },
     created() {
+      this.$dialog.loading.open();
       this.get_fw_info();
       this.get_face();
+      this.collect_status();
     },
     methods: {
       buy() {
@@ -176,17 +191,21 @@
               arr.push(res.data[0].fw_img);
               res.data[0].fw_img = arr;
             }
-              this.setMetaTitle(res.data[0].fw_mingzi)
+            this.setMetaTitle(res.data[0].fw_mingzi)
             _this.fw_info.token = res.data[0].token.slice(0, 2);
             _this.fw_info.fw_img = arr;
+
+            this.preloadImages()
           });
       },
-      get_face(){
-        this.$axios.get(this.API_URL+'/Api/show/get_face',{
-          params:{
-            face_id:this.faceId
+      get_face() {
+        this.$axios.get(this.API_URL + '/Api/show/get_face', {
+          params: {
+            face_id: this.faceId
           }
-        }).then(({data})=>{
+        }).then(({
+          data
+        }) => {
           data.face.map = JSON.parse(data.face.map);
           this.faceInfo = data.face;
         })
@@ -197,20 +216,125 @@
       more(id) {
         this.$router.push("/pinglun/" + id);
       },
-      share(){}
+      share() {},
+      collect() {
+        this.collecting = true;
+        if (this.ifCollect) {
+          this.$axios.get(this.API_URL + '/Api/UserShow/user_dlike', {
+            params: {
+              id: this.collect_id
+            }
+          }).then(({
+            data
+          }) => {
+            console.log(data);
+            if (data.status == 1) {
+              this.ifCollect = false;
+            } else {
+              this.ifCollect = true;
+            }
+            this.collecting = false;
+          })
+        } else {
+          this.$axios.get(this.API_URL + '/Api/UserShow/user_like', {
+            params: this.collect_params
+          }).then(({
+            data
+          }) => {
+            console.log(data);
+            this.collecting = false;
+            if (data.status == 1) {
+              this.ifCollect = true;
+            } else {
+              this.ifCollect = false;
+            }
+            this.collect_id = data.id;
+          })
+        }
+
+      },
+      collect_status() {
+        this.$axios.get(this.API_URL + '/Api/UserShow/yes_like', {
+          params: this.collect_params
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          if (data.status == 1) {
+            this.ifCollect = true;
+          } else {
+            this.ifCollect = false;
+          }
+          this.collect_id = data.zhi.id;
+        })
+      },
+      preloadImages() {
+        var loadednum = 0;
+        var newimg = [];
+        var imgarr = this.fw_info.fw_content;
+        console.log(imgarr)
+        if (imgarr) {
+          for (let i = 0; i < imgarr.length; i++) {
+            newimg[i] = new Image();
+            newimg[i].src = imgarr[i].url
+            newimg[i].onload = () => {
+              loadednum++;
+              if (loadednum == imgarr.length) {
+                console.log('加载完了')
+                this.imgLoaded = true;
+
+              }
+            }
+            newimg[i].onerror = () => {}
+          }
+        } else {
+          this.$dialog.loading.close();
+        }
+
+
+      }
+    },
+    mounted() {
+      this.mountedStatus = true;
+
+
     },
     watch: {
       $route() {
         this.get_fw_info();
 
+      },
+      isInitBetterScroll(newval) {
+        console.log('触发初始化')
+        console.log(newval)
+        this.isLoading = false;
+        if (newval) {
+          this.scroll = new BScroll(this.$refs.wrapper, {
+            tap: true,
+            click: true,
+          });
+          this.$dialog.loading.close();
+
+        }
       }
     },
     computed: {
       fwId() {
         return this.$route.params.serviceId;
       },
-      faceId(){
+      faceId() {
         return this.$route.params.faceId;
+      },
+      collect_params() {
+        return {
+          uid: this.id,
+          sid: this.fwId,
+          face_id:this.faceId,
+          tj: 1
+        }
+      },
+      isInitBetterScroll() {
+        return this.mountedStatus && this.imgLoaded;
       }
     },
     filters: {
@@ -229,7 +353,7 @@
       myTitle,
       pinglun,
       friendLike,
-      betterScroll
+      betterScroll,
     },
     mixins: [checkLogin]
   };
@@ -241,6 +365,9 @@
     height: 100%;
     box-sizing: border-box;
     padding-bottom: 1.333333rem;
+    .my-warpper {
+      height: 100%;
+    }
     .banner {
       height: 5.12rem;
       overflow: hidden;
@@ -256,10 +383,12 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        padding-right: .4rem /* 30/75 */;
-        .iconfont{
+        padding-right: .4rem/* 30/75 */
+        ;
+        .iconfont {
           color: #ffffff;
-          font-size: .48rem /* 36/75 */;
+          font-size: .48rem/* 36/75 */
+          ;
         }
       }
       .img {
@@ -448,10 +577,14 @@
         .op-item {
           flex: 1;
           text-align: center;
+          border: none;
           .iconfont {
             display: inline-block;
             @include font-dpr(16px);
             margin-bottom: 0.133333rem;
+          }
+          .icon-shoucang1 {
+            color: #ff1b36;
           }
         }
       }

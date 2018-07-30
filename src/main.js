@@ -13,6 +13,14 @@ Vue.prototype.$wx = wx;
 import 'vue-ydui/dist/ydui.base.css';
 // import 'muse-ui/lib/styles/base.less';
 import {
+  Loading
+} from 'vue-ydui/dist/lib.px/dialog';
+Vue.prototype.$dialog = {
+  loading: Loading,
+};
+
+
+import {
   Radio,
   Checkbox,
   Popover,

@@ -15,7 +15,7 @@
               <span v-for="(item,index) in item.face" :key="index">{{item.face_name}}&nbsp;&nbsp;&nbsp;</span>
             </div>
             <div class="tit">手机号：{{item.phone}}</div>
-            <div class="tit">绑定微信：<img :src="item.wx.headimgurl" alt="" class="avatar">{{item.wx.nickname}}</div>
+            <div class="tit" v-if="item.wx">绑定微信：<img :src="item.wx.headimgurl" alt="" class="avatar" >{{item.wx.nickname}}</div>
             <!-- <div class="tit last-tit">账号说明：李海东</div> -->
             <div class="xbtn-box">
               <!-- <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton> -->

@@ -1,58 +1,58 @@
 <template>
   <div class="page service-detail">
-    <betterScroll>
-      <div class="banner">
-        <div class="share"></div>
-        <!-- <Swiper height='5.12rem' :show-dots='false'> -->
-        <!-- <SwiperItem v-for="(item,index) in huodong_info.cardImg" :key="index"><img :src="item" alt=""></SwiperItem> -->
-        <!-- </Swiper> -->
-        <img :src="huodong_info.content[0].hd_img" alt="">
-      </div>
-      <div class="sp-info">
-        <div class="top">
-          <span class="price">
-            <span class="num">{{huodong_info.card_money}}</span>元</span>{{huodong_info.card_name}}</div>
-        <div class="bottom">{{huodong_info.card_subname}}</div>
-      </div>
+    <div class="wrapper my-warpper" ref="wrapper">
+      <ul class="content">
+        <div>
+          <div class="banner">
+            <div class="share"></div>
+            <img :src="huodong_info.hd_img" alt="" class="img">
+          </div>
+          <div class="sp-info">
+            <div class="top">
+              <span class="price">
+                <span class="num">{{huodong_info.card_money}}</span>元</span>{{huodong_info.card_name}}</div>
+            <div class="bottom">{{huodong_info.card_subname}}</div>
+          </div>
 
-      <!-- <div class="comment">
+          <!-- <div class="comment">
                 <span class="iconfont icon-fuwuxiangqingzan">好评率97%</span>
                 <span class="count">共{{fw_info.token_num}}个消费评价</span>
             </div> -->
 
-      <div class="address1" @click="toShop(huodong_info.shop[0].id)">
-        <div class="top">
-          <div class="left">
-            <div class="name">{{huodong_info.shop[0].shop_name}}</div>
-            <!-- <div class="info">
+          <div class="address1" @click="toShop(huodong_info.card_face_id)">
+            <div class="top">
+              <div class="left">
+                <div class="name" v-if="huodong_info.shop">{{huodong_info.shop[0].shop_name}}</div>
+                <!-- <div class="info">
                             <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
                             <span class="count">28条</span>
                             <span class="juli">5.5KM</span>
                         </div> -->
-          </div>
-          <!-- <div class="right">
+              </div>
+              <!-- <div class="right">
                         <span class="iconfont icon-lianxifangshi"></span>
                     </div> -->
-        </div>
-        <!-- <div class="bottom">
+            </div>
+            <!-- <div class="bottom">
                     <span class="iconfont icon-weizhi1"></span>
                     <span class="txt">卫国道泰兴路益寿东里37号楼底商（近仁爱医院）</span>
                 </div> -->
-      </div>
+          </div>
+          <div class="detail">
+            <myTitle>
+              <span>服务详情</span>
+              <!-- <span slot="right">更多图文详情
+                <i class="iconfont icon-jinru"></i>
+              </span> -->
+            </myTitle>
+            <div class="content">
+              <!-- v-if="huodong_info.content[0].hd_content" v-html="huodong_info.content[0].hd_content" -->
+              <img :src="item.url" alt="" v-for="(item,index) in huodong_info.content" :key="index">
 
-      <div class="detail">
-        <myTitle>
-          <span>服务详情</span>
-          <span slot="right">更多图文详情
-            <i class="iconfont icon-jinru"></i>
-          </span>
-        </myTitle>
-        <div class="content" v-if="huodong_info.content[0].hd_content" v-html="huodong_info.content[0].hd_content">
+            </div>
+          </div>
 
-        </div>
-      </div>
-
-      <!-- <div class="pingjia">
+          <!-- <div class="pingjia">
         <Group>
           <Cell :title="'网友点评('+fw_info.token_num+')'">
             <span @click="more(fwId)">更多</span>
@@ -70,29 +70,35 @@
 
       </div> -->
 
- 
-    </betterScroll>
-     <div class="buy-btn">
-        <div class="opbtn">
-          <!-- <span>
+        </div>
+      </ul>
+    </div>
+
+
+
+    <div class="buy-btn">
+      <div class="opbtn">
+        <!-- <span>
             <i>￥</i>{{fw_info.money}}
             <sup>￥{{fw_info.y_money}}</sup>
           </span> -->
-          <div class="op-item" @click="toShop(huodong_info.shop[0].id)">
-            <i class="iconfont icon-dianpu"></i>
-            <div>店铺</div>
-          </div>
-          <div class="op-item">
-            <i class="iconfont icon-shoucangweixuan"></i>
-            <div>收藏</div>
-          </div>
-          <!-- <div class="op-item">
+        <div class="op-item" @click="toShop(huodong_info.card_face_id)">
+          <i class="iconfont icon-dianpu"></i>
+          <div>店铺</div>
+        </div>
+        <button class="op-item" :disabled='collecting' @click="collect">
+          <i class="iconfont icon-shoucang1" v-if="ifCollect"></i>
+          <i class="iconfont icon-shoucangweixuan" v-else></i>
+          <div>收藏</div>
+        </button>
+        <!-- <div class="op-item">
             <i class="iconfont icon-dianpu"></i>
             <div>购物车</div>
           </div> -->
-        </div>
-        <div class="buy" @click="buy">立即购买</div>
       </div>
+      <div class="buy" @click="buy">立即购买</div>
+    </div>
+
   </div>
 </template>
 <script>
@@ -101,7 +107,7 @@
     SwiperItem,
     ViewBox,
     Cell,
-    Group
+    Group,
   } from "vux";
   import rater from "@/components/star/index";
   import tuangou from "@/components/service/serviceTuan.vue";
@@ -110,15 +116,25 @@
   import checkLogin from "@/mixins/checkLogin.js";
   import friendLike from "@/components/friendLike/index";
   import betterScroll from '@/components/betterScroll/index';
+  import BScroll from "better-scroll";
+
   export default {
     data() {
       return {
         enable: true,
-        huodong_info: {}
+        huodong_info: {},
+        ifCollect: false,
+        collecting: false,
+        collect_id: {},
+        mountedStatus: false,
+        imgLoaded: false,
+        isLoading: true
       };
     },
     created() {
       document.title = "活动详情";
+      this.$dialog.loading.open();
+      this.collect_status();
       this.get_hd_info();
     },
     methods: {
@@ -156,6 +172,13 @@
           }) => {
             console.log(data);
             _this.huodong_info = data[0];
+            this.preloadImages();
+            // this.preloadImages().then(() => {
+            //   this.scroll = new BScroll(this.$refs.wrapper, {
+            //     tap: true,
+            //     click: true,
+            //   });
+            // })
           });
       },
       toShop(id) {
@@ -163,17 +186,134 @@
       },
       more(id) {
         this.$router.push("/pinglun/" + id);
-      }
+      },
+      preloadImages() {
+        var loadednum = 0;
+        var newimg = [];
+        var imgarr = this.huodong_info.content;
+        console.log(imgarr)
+        for (let i = 0; i < imgarr.length; i++) {
+          newimg[i] = new Image();
+          newimg[i].src = imgarr[i].url
+          newimg[i].onload = () => {
+            loadednum++;
+            console.log(loadednum)
+            console.log(imgarr.length)
+            if (loadednum == imgarr.length) {
+              console.log('加载完了')
+              this.imgLoaded = true;
+              // resolve();
+            }
+          }
+          newimg[i].onerror = () => {
+            // reject();
+          }
+        }
+        // return new Promise((resolve, reject) => {
+        //   for (let i = 0; i < imgarr.length; i++) {
+        //     newimg[i] = new Image();
+        //     newimg[i].src = imgarr[i].url
+        //     newimg[i].onload = () => {
+        //       loadednum++;
+        //       if (loadednum = imgarr.length) {
+        //         console.log('加载完了')
+        //         this.imgLoaded = true;
+        //         resolve();
+        //       }
+        //     }
+        //     newimg[i].onerror = () => {
+        //       reject();
+        //     }
+        //   }
+
+        // })
+      },
+      collect() {
+        this.collecting = true;
+        if (this.ifCollect) {
+          this.$axios.get(this.API_URL + '/Api/UserShow/user_dlike', {
+            params: {
+              id: this.collect_id
+            }
+          }).then(({
+            data
+          }) => {
+            console.log(data);
+            if (data.status == 1) {
+              this.ifCollect = false;
+            } else {
+              this.ifCollect = true;
+            }
+            this.collecting = false;
+          })
+        } else {
+          this.$axios.get(this.API_URL + '/Api/UserShow/user_like', {
+            params: this.collect_params
+          }).then(({
+            data
+          }) => {
+            console.log(data);
+            this.collecting = false;
+            if (data.status == 1) {
+              this.ifCollect = true;
+            } else {
+              this.ifCollect = false;
+            }
+            this.collect_id = data.id;
+          })
+        }
+
+      },
+      collect_status() {
+        this.$axios.get(this.API_URL + '/Api/UserShow/yes_like', {
+          params: this.collect_params
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          if (data.status == 1) {
+            this.ifCollect = true;
+          } else {
+            this.ifCollect = false;
+          }
+          this.collect_id = data.zhi.id;
+        })
+      },
+    },
+    mounted() {
+      this.mountedStatus = true;
     },
     watch: {
       $route() {
         this.get_hd_info();
+      },
+      isInitBetterScroll(newval) {
+        console.log('触发初始化')
+        console.log(newval)
+        if (newval) {
+          this.scroll = new BScroll(this.$refs.wrapper, {
+            tap: true,
+            click: true,
+          });
+          this.$dialog.loading.close();
+        }
       }
     },
     computed: {
       huodongId() {
         return this.$route.params.huodongId;
-      }
+      },
+      isInitBetterScroll() {
+        return this.mountedStatus && this.imgLoaded;
+      },
+      collect_params() {
+        return {
+          uid: this.id,
+          sid: this.huodongId,
+          face_id:this.huodong_info.card_face_id,
+          tj: 2
+        }
+      },
     },
 
     components: {
@@ -187,7 +327,7 @@
       myTitle,
       pinglun,
       friendLike,
-      betterScroll
+      betterScroll,
     },
     mixins: [checkLogin]
   };
@@ -196,6 +336,10 @@
 
 <style lang='scss'>
   .service-detail {
+    padding-bottom: 1.333333rem;
+    .my-warpper {
+      height: 100%;
+    }
     .banner {
       height: 5.12rem;
       overflow: hidden;
@@ -208,6 +352,9 @@
         height: 1.066667rem;
         background: rgba(#000000, 0.4);
         z-index: 999;
+      }
+      .img {
+        width: 100%;
       }
     }
 
@@ -389,10 +536,14 @@
         .op-item {
           flex: 1;
           text-align: center;
+          border: none;
           .iconfont {
             display: inline-block;
             @include font-dpr(16px);
             margin-bottom: 0.133333rem;
+          }
+           .icon-shoucang1 {
+            color: #ff1b36;
           }
         }
       }

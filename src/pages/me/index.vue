@@ -78,8 +78,7 @@
                     </Cell>
                     <Cell :title='shop_status' v-else-if='userinfo.shop_status == 1' link='shanghu/me'>
                     </Cell> -->
-          <!-- <Cell title='历史收藏'>
-                    </Cell> -->
+          <Cell title='我的收藏'  link='collect'></Cell>
           <Cell title='我的优惠券' link='youhuijuan'>
           </Cell>
           <Cell title='管理地址' link='addressList'>

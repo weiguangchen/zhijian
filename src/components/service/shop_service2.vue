@@ -94,9 +94,15 @@
         }
       }
       h1 {
+        font-size: .373333rem/* 28/75 */
+        ;
         line-height: 1.6;
         margin-bottom: .133333rem/* 10/75 */
         ;
+                width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .price {
         color: #ff1119;

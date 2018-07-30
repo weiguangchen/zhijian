@@ -82,9 +82,9 @@
       flex-direction: column;
       justify-content: space-between;
       h1 {
-        font-size: .373333rem/* 28/75 */
-        ;
+        font-size: .373333rem/* 28/75 */;
         font-weight: bold;
+
       }
       h2 {
         font-size: .32rem/* 24/75 */

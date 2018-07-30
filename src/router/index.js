@@ -277,11 +277,12 @@ router.beforeEach((to, from, next) => {
           if (store.state.userinfo.shenfen == 0) {
             console.log('是最高权限');
             router.addRoutes(adminRouterMaps);
+            muta.SET_ROUTER_STATUS(store.state, true);
           } else if (store.state.userinfo.shenfen == 1) {
             console.log('是服务员');
             router.addRoutes(servicerRouterMaps);
+            muta.SET_ROUTER_STATUS(store.state, true);
           }
-          muta.SET_ROUTER_STATUS(store.state, true);
         }
 
 

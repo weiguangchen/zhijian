@@ -2,12 +2,11 @@
 */
 <template>
   <div id="app">
-
-    <keep-alive>
-      <transition name='router'>
+    <transition name='router'>
+      <keep-alive>
         <router-view v-if="keepAlive" />
-      </transition>
-    </keep-alive>
+      </keep-alive>
+    </transition>
     <transition name='router'>
       <router-view v-if='!keepAlive' />
     </transition>
@@ -61,7 +60,7 @@
     width: 100%;
   }
 
-  .router-enter-active{
+  .router-enter-active {
     transition: transform .3s ease-in-out;
   }
 

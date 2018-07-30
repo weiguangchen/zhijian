@@ -181,6 +181,7 @@
         font-size: .373333rem/* 28/75 */
         ;
         h1 {
+          font-size: .373333rem /* 28/75 */;
           margin-bottom: .266667rem/* 20/75 */
           ;
         }

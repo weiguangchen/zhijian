@@ -40,6 +40,9 @@ export default [{
       default: resolve => require(['@/pages/shangpu/index'], resolve),
       tab: resolve => require(['@/components/tab/tab'], resolve)
     },
+    meta:{
+      // keepAlive:true
+    }
   }, {
     path: '/serviceClass/:classId',
     name: 'serviceClass',
@@ -427,6 +430,13 @@ export default [{
     component: resolve => require(['@/pages/address/addList'], resolve),
     meta: {
       title: '地址列表'
+    }
+  },{
+    path: '/collect',
+    name: 'collect',
+    component: resolve => require(['@/pages/collection/index'], resolve),
+    meta: {
+      title: '我的收藏'
     }
   },
 
