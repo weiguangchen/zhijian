@@ -2,7 +2,7 @@
   <div class="page shop-wrapper">
     <betterScroll>
       <div class="info-wrapper">
-         <img src="~img/shangpu/banner.png" alt="" id="blur-bg" class="blur-bg" @load="load_blur_bg">
+        <img src="~img/shangpu/banner.png" alt="" id="blur-bg" class="blur-bg" @load="load_blur_bg">
         <canvas class="blur-canvas" id="blur-canvas"></canvas>
         <div class="logo">
           <img src="~img/shangpu/banner.png" alt="" class="img">
@@ -19,6 +19,12 @@
           </div>
           <div>营业时间：周一到周日 08:00 —— 19:00</div>
         </div>
+        <button class="guanzhu" :disabled='collecting'>
+          <img src="./img/weiguanzhu.png" alt="" @click='collect'  v-if="!ifCollect">
+          <img src="./img/guanzhu.png" alt="" @click='collect' v-else>
+        </button>
+
+
       </div>
       <!-- <Blur url='~img/shangpu/banner.png'>
         <div class="info-wrapper">
@@ -94,64 +100,8 @@
         <swiper-slide>
           <div class="pingjia">
             <div class="list">
-              <div class="item">
-                <div class="left">
-                  <img src="~img/shangpu/avatar.png" alt="" class="avatar">
-                </div>
-                <div class="right">
-                  <div class="tit">
-                    <span class="name">黑夜的味道</span>
-                    <span class="date">2017年11月28日</span>
-                  </div>
-                  <rater val='4' class="rater"></rater>
-                  <div class="content">
-                    <div class="txt">
-                      家门口的修理厂，巴拉巴拉北京佛无法就我IE分级加尔文覅金额外，非法金额为飞机。
-                    </div>
-                    <div class="imgs">
-                      <img src="~img/shangpu/pl1.png" alt="">
-                      <img src="~img/shangpu/pl2.png" alt="">
-                      <img src="~img/shangpu/pl3.png" alt="">
+              <pinglun :info='item'  v-for="(item,index) in pl" :key="index"></pinglun>
 
-                    </div>
-                  </div>
-                  <div class="click">
-                    <span>浏览2059</span>
-                    <span>132
-                      <i class="iconfont icon-dianzan"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="left">
-                  <img src="~img/shangpu/avatar.png" alt="" class="avatar">
-                </div>
-                <div class="right">
-                  <div class="tit">
-                    <span class="name">黑夜的味道</span>
-                    <span class="date">2017年11月28日</span>
-                  </div>
-                  <rater val='1' class="rater"></rater>
-                  <div class="content">
-                    <div class="txt">
-                      家门口的修理厂，巴拉巴拉北京佛无法就我IE分级加尔文覅金额外，非法金额为飞机。
-                    </div>
-                    <div class="imgs">
-                      <img src="~img/shangpu/pl1.png" alt="">
-                      <img src="~img/shangpu/pl2.png" alt="">
-                      <img src="~img/shangpu/pl3.png" alt="">
-
-                    </div>
-                  </div>
-                  <div class="click">
-                    <span>浏览2059</span>
-                    <span>132
-                      <i class="iconfont icon-dianzan"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </swiper-slide>
@@ -159,24 +109,21 @@
           <div class="sp-info2">
             <div class="top">
               <span class="iconfont icon-yingyeshijian"></span>营业时间：周一到周日 08:00 —— 19:00</div>
-            <div class="middle">
-              <span class="txt">WIFI</span>
-              <span class="txt">刷卡</span>
-              <span class="txt">手机支付</span>
+            <div class="middle" v-if="faceInfo.tag1">
+              <span class="txt" v-for="(item,index) in faceInfo.tag1" :key="index">{{item}}</span>
+
             </div>
-            <div class="bottom">
-              <span class="txt">内饰清洗</span>
-              <span class="txt">抛光</span>
-              <span class="txt">清洗</span>
-              <span class="txt">补胎</span>
+            <div class="bottom" v-if="faceInfo.tag2">
+              <span class="txt" v-for="(item,index) in faceInfo.tag2" :key="index">{{item}}</span>
+
             </div>
           </div>
           <div class="address" v-if="faceInfo.map">
             <div class="left">
               <div class="top">
-                <span class="iconfont icon-weizhi1"></span>{{faceInfo.map.poiaddress}}</div>
+                <span class="iconfont icon-weizhi1"></span>{{faceInfo.map.poiname}}</div>
               <div class="bottom">
-                {{faceInfo.map.poiname}}
+                {{faceInfo.map.poiaddress}}
               </div>
             </div>
             <div class="right">
@@ -213,6 +160,9 @@
   import fw from "@/components/service/shop_service.vue";
   import fw2 from "@/components/service/shop_service2.vue";
   import hd from "@/components/service/shop_huodong.vue";
+  import checkLogin from "@/mixins/checkLogin.js";
+  import pinglun from "@/components/pinglun/index";
+
   var StackBlur = require("stackblur-canvas");
   import {
     Slider,
@@ -222,6 +172,9 @@
   export default {
     data() {
       return {
+        ifCollect: false,
+        collecting: false,
+        collect_id: {},
         val: 3,
         shopInfo: "",
         fw_list: [],
@@ -238,33 +191,18 @@
         leibie: '',
 
         faceInfo: {},
+        pl:[],
+        tag1:[],
+        tag2:[]
       };
     },
     created() {
       var _this = this;
       this.get_shop();
-      // 获取所有活动
-      this.$axios
-        .get(this.API_URL + "/Api/Show/get_card", {
-          params: {
-            shop_id: _this.shopId
-          }
-        })
-        .then(({
-          data
-        }) => {
-          console.log(data);
-          _this.huodong = data;
-        });
-
-      this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({
-        data
-      }) => {
-        // 获取头部广告
-        this.top_ad = data.list_banner;
-      });
-      // 获取门店信息
-      this.get_face_info()
+      this.collect_status();
+      this.get_card();
+      this.get_gg();
+      this.get_face_info();
     },
     methods: {
       load_blur_bg() {
@@ -315,6 +253,29 @@
             // this.current_fw_list = data[0].fw;
           });
       },
+      get_card() {
+        // 获取所有活动
+        this.$axios
+          .get(this.API_URL + "/Api/Show/get_card", {
+            params: {
+              shop_id: this.shopId
+            }
+          })
+          .then(({
+            data
+          }) => {
+            console.log(data);
+            this.huodong = data;
+          });
+      },
+      get_gg() {
+        this.$axios.get(this.API_URL + "/Api/Show/get_gg").then(({
+          data
+        }) => {
+          // 获取头部广告
+          this.top_ad = data.list_banner;
+        });
+      },
       get_face_info() {
         this.$axios.get(this.API_URL + '/Api/show/get_face', {
           params: {
@@ -323,8 +284,6 @@
         }).then(({
           data
         }) => {
-          console.log('123')
-          console.log(data)
           data.face.map = JSON.parse(data.face.map);
           this.faceInfo = data.face;
           this.fw_list = data.fw;
@@ -332,6 +291,18 @@
           this.getClassArr(data.fw);
           this.current_fw_list = data.fw;
           this.huodong = data.hd;
+          this.get_pl();
+        })
+      },
+      get_pl(){
+        this.$axios.get(this.API_URL+'/Api/Show/shop_get_token',{
+          params:{
+            shop_id:this.faceInfo.fw_shop_id
+          }
+        }).then(({data})=>{
+          console.log(data)
+          this.pl = data;
+
         })
       },
       changeFwType(fwId) {
@@ -347,7 +318,58 @@
       tuijian() {
         this.leibie = '';
         this.current_fw_list = this.fw_list;
-      }
+      },
+      collect() {
+        this.collecting = true;
+        if (this.ifCollect) {
+          this.$axios.get(this.API_URL + '/Api/UserShow/user_dlike', {
+            params: {
+              id: this.collect_id
+            }
+          }).then(({
+            data
+          }) => {
+            console.log(data);
+            if (data.status == 1) {
+              this.ifCollect = false;
+            } else {
+              this.ifCollect = true;
+            }
+            this.collecting = false;
+          })
+        } else {
+          this.$axios.get(this.API_URL + '/Api/UserShow/user_like', {
+            params: this.collect_params
+          }).then(({
+            data
+          }) => {
+            console.log(data);
+            this.collecting = false;
+            if (data.status == 1) {
+              this.ifCollect = true;
+            } else {
+              this.ifCollect = false;
+            }
+            this.collect_id = data.id;
+          })
+        }
+
+      },
+      collect_status() {
+        this.$axios.get(this.API_URL + '/Api/UserShow/yes_like', {
+          params: this.collect_params
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          if (data.status == 1) {
+            this.ifCollect = true;
+          } else {
+            this.ifCollect = false;
+          }
+          this.collect_id = data.zhi.id;
+        })
+      },
     },
     computed: {
       shopId() {
@@ -356,6 +378,14 @@
       swiper() {
         return this.$refs.mySwiper.swiper
       },
+      collect_params() {
+        return {
+          uid: this.id,
+          sid: this.shopId,
+          face_id: this.shopId,
+          tj: 0
+        }
+      }
     },
     mounted() {
 
@@ -379,8 +409,10 @@
       swiperSlide,
       swiper,
       Selector,
-      Blur
-    }
+      Blur,
+      pinglun
+    },
+    mixins: [checkLogin]
   };
 
 </script>
@@ -438,6 +470,15 @@
         top: 0;
         left: 0;
       }
+      .guanzhu {
+        position: absolute;
+        top: 0;
+        right: .48rem/* 36/75 */
+        ;
+        z-index: 9999;
+        width: 1rem;
+        border: none;
+      }
     }
     .x-tab {
       .vux-tab,
@@ -486,7 +527,8 @@
           display: flex;
           align-items: center;
           .vux-selector {
-            &:after,&:before {
+            &:after,
+            &:before {
               border: none;
             }
           }

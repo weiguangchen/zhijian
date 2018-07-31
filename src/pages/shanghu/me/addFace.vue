@@ -19,9 +19,9 @@
         <h2 class="sub-title">标签:</h2>
         <div>
           <div class="tag1">
-            <mu-checkbox value='1' v-model="tag1" label='WIFI' color='#e03233'></mu-checkbox>
-            <mu-checkbox value='2' v-model="tag1" label='刷卡' color='#e03233'></mu-checkbox>
-            <mu-checkbox value='3' v-model="tag1" label='手机支付' color='#e03233'></mu-checkbox>
+            <mu-checkbox value='WIFI' v-model="tag1" label='WIFI' color='#e03233'></mu-checkbox>
+            <mu-checkbox value='刷卡' v-model="tag1" label='刷卡' color='#e03233'></mu-checkbox>
+            <mu-checkbox value='手机支付' v-model="tag1" label='手机支付' color='#e03233'></mu-checkbox>
           </div>
           <div class="tag2">
             <iview-tag closable v-for="(item,index) in tag2" :key="index" :name='item' @on-close='delTag'>{{item}}</iview-tag>
@@ -107,8 +107,12 @@
             if (data.sq_id) {
               _this.sqVal = data.sq_id;
             }
-            this.tag1 = data.tag1;
-            this.tag2 = data.tag2;
+            if (data.tag1) {
+              this.tag1 = data.tag1;
+            }
+            if (data.tag2) {
+              this.tag2 = data.tag2;
+            }
           });
       }
 

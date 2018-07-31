@@ -1,5 +1,5 @@
 <template>
-  <div class="service-wrapper" @click="toDetail(info.bk_id)">
+  <div class="service-wrapper" @click="toDetail(info.bk_id,info.card_face_id)">
     <div class="img-box">
       <img :src="info.img" alt="" class="img">
     </div>
@@ -34,11 +34,12 @@
       }
     },
     methods: {
-      toDetail(id) {
+      toDetail(id,faceId) {
         this.$router.push({
           name: "huodongDetail",
           params: {
-            huodongId: id
+            huodongId: id,
+            faceId
           }
         });
       }

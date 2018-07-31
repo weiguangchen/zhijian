@@ -1,5 +1,5 @@
 <template>
-  <div class="collect-hd" @click="toDetail(hd.hd.bk_id)">
+  <div class="collect-hd" @click="toDetail(hd.hd.bk_id,hd.face_id)">
     <img :src="hd.hd.hd_img" alt="" class="img">
     <div class="info">
       <div class="info-warpper">
@@ -45,9 +45,9 @@
           }
         })
       },
-      toDetail(hdId) {
+      toDetail(hdId,faceId) {
         this.$router.push({
-          path: '/huodongDetail/' + hdId
+          path: '/huodongDetail/' + hdId+'/'+faceId
         })
       }
     },

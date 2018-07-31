@@ -342,7 +342,7 @@ export default [{
     name: 'serviceDetail',
     component: resolve => require(["@/pages/serviceDetail/index"], resolve)
   }, {
-    path: '/huodongDetail/:huodongId',
+    path: '/huodongDetail/:huodongId/:faceId',
     name: 'huodongDetail',
     component: resolve => require(["@/pages/serviceDetail/huodong"], resolve)
   }, {

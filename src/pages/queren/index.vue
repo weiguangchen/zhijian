@@ -23,6 +23,7 @@
         <div class="bg"></div>
 
       </div>
+
       <div class="fw_info">
         <div class="img-box">
           <img :src="fwInfo.fw_img" alt="" class="thumb">
@@ -34,7 +35,7 @@
       </div>
       <div class="fw_num">
         <Group class="form">
-          <XNumber title='购买数量' :min='fwInfo.min' v-model="num" class="xnum" :fillable='true' v-if="fwInfo.min"></XNumber>
+          <XNumber title='购买数量' :min='fwInfo.min' v-model="num" class="xnum" :fillable='true'></XNumber>
           <Cell title='总价' :value='money'></Cell>
           <Cell title='选择服务时间' :isLink='true'>
             <DateTime v-model="selectDate" :start-date='startdate'></DateTime>
@@ -43,7 +44,7 @@
         </Group>
       </div>
 
-
+    
       <XButton class="xbtn" type='warn' @click.native='buy' :disabled='submiting'>结算</XButton>
     </betterScroll>
 
@@ -83,11 +84,11 @@
         mapInfo: "",
 
         moren_add: '',
-        add_status:'',
+        add_status: '',
         juanShow: false,
         selectDate: '',
 
-        startdate:''
+        startdate: ''
       };
     },
     created() {
@@ -101,87 +102,53 @@
       buy() {
         var _this = this;
         this.submiting = true;
-      
 
+        if (this.add_status == 0) {
+          this.$vux.alert.show({
+            title: '提示',
+            content: '请填写地址!',
+            onHide() {
+              _this.toAddList();
+            }
+          })
+          return false;
+        } else {
 
-        if (this.id) {
-          if (this.moren_add == '') {
-            this.$vux.alert.show({
-              title: '提示',
-              content: '请填写地址!'
-            })
-            return false;
-          } else {
+          this.$vux.confirm.show({
+            title: "提示",
+            content: "是否购买该服务？",
+            onCancel() {
+              _this.submiting = false;
+            },
+            onConfirm() {
+              if (_this.cardVal) {
+                var panduan;
+                for (let i = 0; i < _this.currentCard().son.length; i++) {
+                  if (_this.currentCard().son[i].fw_id == _this.serviceId) {
+                    panduan = _this.currentCard().son[i];
+                    break;
+                  }
+                }
+                console.log(_this.num)
+                console.log(panduan.fw_num)
+                console.log(_this.num > panduan.fw_num)
 
-            this.$vux.confirm.show({
-              title: "提示",
-              content: "是否购买该服务？",
-              onCancel() {
-                _this.submiting = false;
-              },
-              onConfirm() {
-                if (_this.cardVal) {
-                  var panduan;
-                  for (let i = 0; i < _this.currentCard().son.length; i++) {
-                    if (_this.currentCard().son[i].fw_id == _this.serviceId) {
-                      panduan = _this.currentCard().son[i];
-                      break;
+                if (_this.num > panduan.fw_num) {
+                  _this.$vux.alert.show({
+                    title: '提示',
+                    content: '活动次数不够',
+                    onHide() {
+                      _this.submiting = false;
                     }
-                  }
-                  console.log(_this.num)
-                  console.log(panduan.fw_num)
-                  console.log(_this.num > panduan.fw_num)
-
-                  if (_this.num > panduan.fw_num) {
-                    _this.$vux.alert.show({
-                      title: '提示',
-                      content: '活动次数不够',
-                      onHide() {
-                        _this.submiting = false;
-                      }
-                    })
-                  } else {
-                    _this.$axios
-                      .get(_this.API_URL + "/api/BkPay/bk_pay", {
-                        params: {
-                          fw_id: _this.serviceId,
-                          num: _this.num,
-                          uid: _this.id,
-                          shop_id: _this.shopid,
-                          adress: _this.moren_add.adress,
-                          dianhua: _this.moren_add.phone,
-                          xingming: _this.moren_add.name,
-                          three: _this.moren_add.three,
-                          car_card: _this.moren_add.car_card,
-                          car_color: _this.moren_add.car_color,
-                          car_xing: _this.moren_add.car_xing,
-                          card_id: _this.cardVal,
-                          fw_time: _this.selectDate
-                        }
-                      })
-                      .then(({
-                        data
-                      }) => {
-                        _this.$vux.alert.show({
-                          title: "提示",
-                          content: "购买成功,请在我的订单中查看消费码！",
-                          onHide() {
-                            _this.$router.push({
-                              path: "/me"
-                            });
-                          }
-                        });
-                      });
-                  }
-
-
+                  })
                 } else {
                   _this.$axios
-                    .get(_this.API_URL + "/api/WxPay/pay", {
+                    .get(_this.API_URL + "/api/BkPay/bk_pay", {
                       params: {
-                        shop_fw_id: _this.serviceId,
+                        fw_id: _this.serviceId,
                         num: _this.num,
                         uid: _this.id,
+                        shop_id: _this.shopId,
                         adress: _this.moren_add.adress,
                         dianhua: _this.moren_add.phone,
                         xingming: _this.moren_add.name,
@@ -189,42 +156,14 @@
                         car_card: _this.moren_add.car_card,
                         car_color: _this.moren_add.car_color,
                         car_xing: _this.moren_add.car_xing,
-                        fw_time: _this.selectDate
+                        card_id: _this.cardVal,
+                        fw_time: _this.selectDate,
+                        face_face: _this.faceId
                       }
                     })
                     .then(({
                       data
                     }) => {
-                      _this.orderNum = data.pay_order_id;
-                      return new Promise((resolve, reject) => {
-                        _this.$wx.chooseWXPay({
-                          timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                          nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
-                          package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
-                          signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                          paySign: data.paySign, // 支付签名
-                          success: function (res) {
-                            // 支付成功后的回调函数
-                            resolve(res);
-                          },
-                          cancel: function (res) {
-                            _this.submiting = false;
-                          }
-                        });
-                      });
-                    })
-                    .then(res => {
-                      console.log("支付成功回调");
-                      console.log(res);
-                      return _this.$axios.get(_this.API_URL + "/api/WxPay/fs", {
-                        params: {
-                          order_num: _this.orderNum
-                        }
-                      });
-                    })
-                    .then(res => {
-                      console.log("回调结束");
-                      console.log(res);
                       _this.$vux.alert.show({
                         title: "提示",
                         content: "购买成功,请在我的订单中查看消费码！",
@@ -236,20 +175,74 @@
                       });
                     });
                 }
+
+
+              } else {
+                _this.$axios
+                  .get(_this.API_URL + "/api/WxPay/pay", {
+                    params: {
+                      shop_fw_id: _this.serviceId,
+                      num: _this.num,
+                      uid: _this.id,
+                      adress: _this.moren_add.adress,
+                      dianhua: _this.moren_add.phone,
+                      xingming: _this.moren_add.name,
+                      three: _this.moren_add.three,
+                      car_card: _this.moren_add.car_card,
+                      car_color: _this.moren_add.car_color,
+                      car_xing: _this.moren_add.car_xing,
+                      fw_time: _this.selectDate,
+                      face_face: _this.faceId
+                    }
+                  })
+                  .then(({
+                    data
+                  }) => {
+                    _this.orderNum = data.pay_order_id;
+                    return new Promise((resolve, reject) => {
+                      _this.$wx.chooseWXPay({
+                        timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                        nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
+                        package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                        signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                        paySign: data.paySign, // 支付签名
+                        success: function (res) {
+                          // 支付成功后的回调函数
+                          resolve(res);
+                        },
+                        cancel: function (res) {
+                          _this.submiting = false;
+                        }
+                      });
+                    });
+                  })
+                  .then(res => {
+                    console.log("支付成功回调");
+                    console.log(res);
+                    return _this.$axios.get(_this.API_URL + "/api/WxPay/fs", {
+                      params: {
+                        order_num: _this.orderNum
+                      }
+                    });
+                  })
+                  .then(res => {
+                    console.log("回调结束");
+                    console.log(res);
+                    _this.$vux.alert.show({
+                      title: "提示",
+                      content: "购买成功,请在我的订单中查看消费码！",
+                      onHide() {
+                        _this.$router.push({
+                          path: "/me"
+                        });
+                      }
+                    });
+                  });
               }
-            });
-          }
-        } else {
-          this.$vux.alert.show({
-            title: "提示",
-            content: "请先登录",
-            onHide() {
-              _this.$router.push({
-                path: "/me"
-              });
             }
           });
         }
+
       },
       get_fw_info() {
         var _this = this;
@@ -302,11 +295,12 @@
       selectJuan() {
         var query = {
           serviceId: this.serviceId,
-          shopid: this.shopid
+          faceId:this.faceId,
+          shopId: this.shopId
         };
-        if(this.cardVal){
-          Object.assign(query,{
-            cardVal:this.cardVal
+        if (this.cardVal) {
+          Object.assign(query, {
+            cardVal: this.cardVal
           })
         }
         this.$router.push({
@@ -338,8 +332,11 @@
       serviceId() {
         return this.$route.query.serviceId;
       },
-      shopid() {
-        return this.$route.query.shopid;
+      faceId() {
+        return this.$route.query.faceId;
+      },
+      shopId(){
+        return this.$route.query.shopId;
       },
       money() {
         if (this.fwInfo.fw_gg) {
@@ -348,7 +345,7 @@
           return `${this.num * this.fwInfo.money}元`;
         }
       },
-      cardVal(){
+      cardVal() {
         return this.$route.query.cardVal;
       },
       cardname() {
@@ -360,10 +357,10 @@
           }
         }
       },
-      has_add(){
-        if(this.add_status == 0){
+      has_add() {
+        if (this.add_status == 0) {
           return false;
-        }else{
+        } else {
           return true;
         }
       }
@@ -495,7 +492,7 @@
           }
         }
         .no-add {
-          flex:1;
+          flex: 1;
           display: flex;
           justify-content: center;
           align-items: center;

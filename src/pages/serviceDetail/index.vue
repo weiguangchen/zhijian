@@ -46,7 +46,6 @@
                 <span class="txt" v-if="faceInfo.map">{{faceInfo.map.poiaddress}}</span>
               </div>
             </div>
-
             <div class="detail">
               <myTitle>
                 <span>服务详情</span>
@@ -157,8 +156,9 @@
           this.$router.push({
             path: "/queren",
             query: {
-              serviceId: _this.fwId,
-              shopid: _this.fw_info.shop_id
+              serviceId: this.fwId,
+              faceId: this.faceId,
+              shopId:this.fw_info.shop_id
             }
           });
         } else {
@@ -329,7 +329,7 @@
         return {
           uid: this.id,
           sid: this.fwId,
-          face_id:this.faceId,
+          face_id: this.faceId,
           tj: 1
         }
       },

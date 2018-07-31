@@ -94,7 +94,8 @@
                       uid: _this.id,
                       // address: _this.mapInfo.poiaddress,
                       dianhua: _this.phone,
-                      xingming: _this.lianxiren
+                      xingming: _this.lianxiren,
+                      face_face: _this.faceId
                     }
                   })
                   .then(({
@@ -171,6 +172,9 @@
     computed: {
       huodongId() {
         return this.$route.query.huodongId;
+      },
+      faceId(){
+        return this.$route.query.faceId;
       },
       money() {
         return `${this.num * this.huodongInfo.card_money}元`;

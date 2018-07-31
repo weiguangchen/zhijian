@@ -99,9 +99,10 @@
         this.$axios
           .get(_this.API_URL + "/Api/Yes/two_jl", {
             params: {
-              fid: _this.classId,
-              lng: _this.location.lat,
-              lat: _this.location.lng
+              fid: this.classId,
+              lng: this.location.lat,
+              lat: this.location.lng,
+              city:this.location.city
             }
           })
           .then(({

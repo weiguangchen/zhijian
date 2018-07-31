@@ -84,7 +84,8 @@
       change(val) {
         var query = {
           serviceId: this.serviceId,
-          shopid: this.shopid,
+          faceId:this.faceId,
+          shopId: this.shopId,
         }
         if (val != 'nocard') {
           Object.assign(query,{
@@ -104,8 +105,11 @@
       serviceId() {
         return this.$route.query.serviceId;
       },
-      shopid() {
-        return this.$route.query.shopid;
+      faceId() {
+        return this.$route.query.faceId;
+      },
+      shopId() {
+        return this.$route.query.shopId;
       },
       cardVal(){
         return this.$route.query.cardVal;
@@ -175,6 +179,9 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
+            h1{
+              font-size: .373333rem /* 28/75 */;
+            }
           }
           .right {
             flex: 1;

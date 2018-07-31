@@ -144,7 +144,8 @@
           this.$router.push({
             path: "/huodongqueren",
             query: {
-              huodongId: _this.huodongId
+              huodongId: this.huodongId,
+              faceId:this.faceId
             }
           });
         } else {
@@ -302,6 +303,9 @@
     computed: {
       huodongId() {
         return this.$route.params.huodongId;
+      },
+      faceId(){
+        return this.$route.params.faceId;
       },
       isInitBetterScroll() {
         return this.mountedStatus && this.imgLoaded;

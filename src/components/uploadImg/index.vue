@@ -78,6 +78,7 @@
         this.originImgs.splice(index, 1);
         this.previewImgs.splice(index, 1);
         this.tupian.splice(index, 1);
+        this.$emit('uploadComplete', this.tupian);
       },
       checkSystem() {
         var u = navigator.userAgent;

@@ -214,65 +214,7 @@ router.beforeEach((to, from, next) => {
       })
       .then(res => {
 
-        // if (store.state.routerMap.length <= 0) {
-        //   // 没有生成权限
-        //   // 根据权限获取路由
-        //   var qx = store.state.userinfo.qx[0].content;
-        //   if (qx) {
-        //     qx = JSON.parse(qx)
-        //   }
-        //   console.log('权限')
-        //   console.log(qx)
-        //   var routerQxMap = [];
-        //   for (let i = 0; i < qx.length; i++) {
-        //     var routeritem = {};
-        //     for (let f = 0; f < asyncRouterMaps.length; f++) {
-        //       if (qx[i].id == asyncRouterMaps[f].meta.role) {
-        //         routeritem.path = asyncRouterMaps[f].path;
-        //         routeritem.name = asyncRouterMaps[f].name;
-        //         routeritem.meta = asyncRouterMaps[f].meta;
-        //         routeritem.component = asyncRouterMaps[f].component;
-        //         if (qx[i].son.length > 0) {
-        //           var children = [];
-
-        //           for (let s = 0; s < qx[i].son.length; s++) {
-        //             for (let c = 0; c < asyncRouterMaps[f].children.length; c++) {
-        //               if (qx[i].son[s] == asyncRouterMaps[f].children[c].meta.role) {
-        //                 children.push(asyncRouterMaps[f].children[c])
-        //               }
-        //             }
-        //           }
-
-        //           for (let c = 0; c < asyncRouterMaps[f].children.length; c++) {
-        //             if (asyncRouterMaps[f].children[c].meta.role == 999) {
-        //               asyncRouterMaps[f].children[c].meta.menu = qx[i].son
-        //               children.push(asyncRouterMaps[f].children[c])
-        //             }
-        //           }
-
-        //           routeritem.children = children
-
-        //         }
-        //       }
-        //     }
-        //     routerQxMap.push(routeritem)
-        //   }
-
-        //   console.log('生成权限')
-        //   console.log(routerQxMap)
-        //   var shanghuRouter = {
-        //     path: '/shanghu',
-        //     component: resolve => require(['@/pages/shanghu/index'], resolve),
-        //     name: 'shanghu'
-        //   }
-        //   shanghuRouter.children = routerQxMap;
-        //   shanghuRouter = [].concat(shanghuRouter);
-        //   // 添加到路由树中
-        //   console.log(shanghuRouter)
-        //   router.addRoutes(shanghuRouter)
-        //   // 把路由权限存到vuex
-        //   muta.SET_ROUTER(store.state, shanghuRouter)
-        // }
+        
         if (!store.state.routerStatus) {
           if (store.state.userinfo.shenfen == 0) {
             console.log('是最高权限');
@@ -341,7 +283,6 @@ router.beforeEach((to, from, next) => {
 
 
 
-  // next();
 
 
 

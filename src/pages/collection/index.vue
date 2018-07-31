@@ -32,7 +32,7 @@
         <swiper-slide>
           <betterScroll @pullingUp='pullingUp' ref='scroll2'>
             <div class="list1">
-              <md v-for="(item,index) in mdList" :key="index" :md='item'></md>
+              <md v-for="(item,index) in mdList" :key="index" :md='item'  @deleteMd='deleteMd'></md>
             </div>
           </betterScroll>
         </swiper-slide>
@@ -68,7 +68,7 @@
         swiperOption: {},
         p0: 1,
         p1: 1,
-        p2: 3,
+        p2: 1,
         fwList: [],
         hdList: [],
         mdList: []
@@ -80,8 +80,6 @@
         this.mdList = this.mdList.concat(data);
       })
       this.get_list(0).then(data => {
-        console.log('上啦获取得知')
-        console.log(data)
         this.fwList = this.fwList.concat(data);
       })
       this.get_list(1).then(data => {
@@ -121,6 +119,9 @@
       },
       deleteHd(i) {
         this.hdList.splice(i, 1);
+      },
+      deleteMd(i){
+        this.mdList.splice(i, 1);
       },
       pullingUp() {
         this.get_list(this.tabActiveIndex).then(data => {
