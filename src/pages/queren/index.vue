@@ -14,6 +14,7 @@
                 <div>
                   <span class="txt">服务地址：</span>{{moren_add.adress}}</div>
                 <div class="car-info">车辆信息：{{moren_add.car_card}}{{moren_add.car_color}} {{moren_add.car_xing}}</div>
+                <div>车位： {{moren_add.car_wei}}</div>
               </div>
               <i class="iconfont icon-jinru"></i>
             </div>
@@ -44,7 +45,6 @@
         </Group>
       </div>
 
-    
       <XButton class="xbtn" type='warn' @click.native='buy' :disabled='submiting'>结算</XButton>
     </betterScroll>
 
@@ -68,6 +68,11 @@
   import {
     DateTime
   } from 'vue-ydui/dist/lib.px/datetime';
+  import {
+    mapMutations,
+    mapState
+  } from 'vuex';
+
   export default {
     data() {
       return {
@@ -94,54 +99,34 @@
     created() {
       this.get_fw_info();
       this.get_card();
-      this.get_moren_add();
+      if (this.if_moren_add) {
+        this.get_moren_add();
+      } else {
+        this.moren_add = this.selected_add;
+        this.add_status = 1;
+      }
       this.startdate = this.$moment().format("YYYY-MM-DD HH:mm");
-
     },
     methods: {
       buy() {
         var _this = this;
-        this.submiting = true;
-
-        if (this.add_status == 0) {
-          this.$vux.alert.show({
-            title: '提示',
-            content: '请填写地址!',
-            onHide() {
-              _this.toAddList();
-            }
-          })
-          return false;
-        } else {
-
-          this.$vux.confirm.show({
-            title: "提示",
-            content: "是否购买该服务？",
-            onCancel() {
-              _this.submiting = false;
-            },
-            onConfirm() {
-              if (_this.cardVal) {
-                var panduan;
-                for (let i = 0; i < _this.currentCard().son.length; i++) {
-                  if (_this.currentCard().son[i].fw_id == _this.serviceId) {
-                    panduan = _this.currentCard().son[i];
-                    break;
-                  }
-                }
-                console.log(_this.num)
-                console.log(panduan.fw_num)
-                console.log(_this.num > panduan.fw_num)
-
-                if (_this.num > panduan.fw_num) {
-                  _this.$vux.alert.show({
-                    title: '提示',
-                    content: '活动次数不够',
-                    onHide() {
-                      _this.submiting = false;
-                    }
-                  })
-                } else {
+        // this.submiting = true;
+        this.checkAdd().then(() => {
+          console.log('333')
+          return this.checkCard();
+        }).then(res => {
+          console.log(res)
+          if (res.status == 1) {
+            // 卡内余额足够
+            this.$vux.confirm.show({
+              title: "提示",
+              content: "是否购买该服务？",
+              onCancel() {
+                _this.submiting = false;
+              },
+              onConfirm() {
+                if (_this.cardVal) {
+                  // 用卡支付
                   _this.$axios
                     .get(_this.API_URL + "/api/BkPay/bk_pay", {
                       params: {
@@ -174,75 +159,112 @@
                         }
                       });
                     });
-                }
 
-
-              } else {
-                _this.$axios
-                  .get(_this.API_URL + "/api/WxPay/pay", {
-                    params: {
-                      shop_fw_id: _this.serviceId,
-                      num: _this.num,
-                      uid: _this.id,
-                      adress: _this.moren_add.adress,
-                      dianhua: _this.moren_add.phone,
-                      xingming: _this.moren_add.name,
-                      three: _this.moren_add.three,
-                      car_card: _this.moren_add.car_card,
-                      car_color: _this.moren_add.car_color,
-                      car_xing: _this.moren_add.car_xing,
-                      fw_time: _this.selectDate,
-                      face_face: _this.faceId
-                    }
-                  })
-                  .then(({
-                    data
-                  }) => {
-                    _this.orderNum = data.pay_order_id;
-                    return new Promise((resolve, reject) => {
-                      _this.$wx.chooseWXPay({
-                        timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                        nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
-                        package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
-                        signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                        paySign: data.paySign, // 支付签名
-                        success: function (res) {
-                          // 支付成功后的回调函数
-                          resolve(res);
-                        },
-                        cancel: function (res) {
-                          _this.submiting = false;
+                } else {
+                  // 微信支付
+                  _this.$axios
+                    .get(_this.API_URL + "/api/WxPay/pay", {
+                      params: {
+                        shop_fw_id: _this.serviceId,
+                        num: _this.num,
+                        uid: _this.id,
+                        adress: _this.moren_add.adress,
+                        dianhua: _this.moren_add.phone,
+                        xingming: _this.moren_add.name,
+                        three: _this.moren_add.three,
+                        car_card: _this.moren_add.car_card,
+                        car_color: _this.moren_add.car_color,
+                        car_xing: _this.moren_add.car_xing,
+                        fw_time: _this.selectDate,
+                        face_face: _this.faceId
+                      }
+                    })
+                    .then(({
+                      data
+                    }) => {
+                      _this.orderNum = data.pay_order_id;
+                      return new Promise((resolve, reject) => {
+                        _this.$wx.chooseWXPay({
+                          timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                          nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
+                          package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                          signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                          paySign: data.paySign, // 支付签名
+                          success: function (res) {
+                            // 支付成功后的回调函数
+                            resolve(res);
+                          },
+                          cancel: function (res) {
+                            _this.submiting = false;
+                          }
+                        });
+                      });
+                    })
+                    .then(res => {
+                      console.log("支付成功回调");
+                      console.log(res);
+                      return _this.$axios.get(_this.API_URL + "/api/WxPay/fs", {
+                        params: {
+                          order_num: _this.orderNum
+                        }
+                      });
+                    })
+                    .then(res => {
+                      console.log("回调结束");
+                      console.log(res);
+                      _this.$vux.alert.show({
+                        title: "提示",
+                        content: "购买成功,请在我的订单中查看消费码！",
+                        onHide() {
+                          _this.$router.push({
+                            path: "/me"
+                          });
                         }
                       });
                     });
-                  })
-                  .then(res => {
-                    console.log("支付成功回调");
-                    console.log(res);
-                    return _this.$axios.get(_this.API_URL + "/api/WxPay/fs", {
-                      params: {
-                        order_num: _this.orderNum
-                      }
-                    });
-                  })
-                  .then(res => {
-                    console.log("回调结束");
-                    console.log(res);
-                    _this.$vux.alert.show({
-                      title: "提示",
-                      content: "购买成功,请在我的订单中查看消费码！",
-                      onHide() {
-                        _this.$router.push({
-                          path: "/me"
-                        });
-                      }
-                    });
-                  });
+                }
               }
-            }
-          });
-        }
+            });
+          } else {
+            // 卡内次数不够
+          }
+        })
 
+
+
+
+      },
+      checkCard() {
+        return this.$axios.get(this.API_URL + '/Api/BkPay/yes_num', {
+          params: {
+            user_id: this.id,
+            fw_id: this.serviceId,
+            card_id: this.cardVal,
+            num: this.num
+          }
+        }).then(({
+          data
+        }) => {
+          return data
+        })
+      },
+      checkAdd() {
+        var _this = this;
+        return new Promise((resolve, rejcet) => {
+          if (_this.add_status == 0) {
+            _this.$vux.alert.show({
+              title: '提示',
+              content: '请填写地址!',
+              onHide() {
+                _this.toAddList();
+              }
+            })
+            reject();
+
+          } else {
+            resolve();
+          }
+        })
       },
       get_fw_info() {
         var _this = this;
@@ -295,7 +317,7 @@
       selectJuan() {
         var query = {
           serviceId: this.serviceId,
-          faceId:this.faceId,
+          faceId: this.faceId,
           shopId: this.shopId
         };
         if (this.cardVal) {
@@ -329,14 +351,18 @@
       }
     },
     computed: {
+      ...mapState(['if_moren_add', 'selected_add']),
       serviceId() {
         return this.$route.query.serviceId;
       },
       faceId() {
         return this.$route.query.faceId;
       },
-      shopId(){
+      shopId() {
         return this.$route.query.shopId;
+      },
+      mrAdd() {
+        return this.$route.query.mrAdd;
       },
       money() {
         if (this.fwInfo.fw_gg) {
@@ -358,11 +384,7 @@
         }
       },
       has_add() {
-        if (this.add_status == 0) {
-          return false;
-        } else {
-          return true;
-        }
+        return this.add_status == 0 ? false : true;
       }
     },
     components: {

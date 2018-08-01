@@ -6,6 +6,7 @@
         <Group>
           <Cell title='消费统计' :is-link='true' link='/shanghu/jingying/tongji'></Cell>
           <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
+          <Cell title='活动卡订单管理' :is-link='true' link='/shanghu/jingying/cardOrderList'></Cell>
           <Cell title='添加服务' :is-link='true' link='/shanghu/jingying/xmgl'       ></Cell>
           <Cell title='管理服务' :is-link='true' link='/shanghu/jingying/fwList'     ></Cell>
           <Cell title='添加活动' :is-link='true' link='/shanghu/jingying/addhuodong' ></Cell>

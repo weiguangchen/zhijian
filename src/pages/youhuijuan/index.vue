@@ -185,6 +185,7 @@
         padding:0 .4rem /* 30/75 */;
       }
       h1{
+        font-size: .426667rem /* 32/75 */;
         height: 1.106667rem /* 83/75 */;
         justify-content: space-between;
       } 

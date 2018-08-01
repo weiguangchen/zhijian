@@ -58,8 +58,7 @@
               </div>
             </sticky>
             <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
-            <!-- <service class="service" v-for="(item,index) in serviceList1" :key="index" :fwInfo='item'></service>
-            <service class="service" v-for="(item,index) in serviceList2" :key="index" :fwInfo='item'></service> -->
+
           </div>
         </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <Rater :font-size='8' :value='val' :margin='10' :active-color='starColor' class="rater" star='<span class="iconfont icon-shoucang"></span>' :disabled='enable' @input='change'></Rater>
+    <Rater :font-size='8' :value='val' :margin='10' :active-color='starColor' class="rater" star='<span class="iconfont icon-shoucang"></span>' :disabled='enable' @input='input'></Rater>
 </template>
 
 <script>
@@ -11,8 +11,8 @@ export default {
     };
   },
   methods: {
-    change(v){
-      this.$emit('changeStar',v)
+    input(v){
+      this.$emit('input',v)
     }
   },
   props: {

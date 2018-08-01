@@ -126,6 +126,7 @@
   import friendLike from "@/components/friendLike/index";
   import betterScroll from '@/components/betterScroll/index';
   import BScroll from "better-scroll";
+import {mapMutations,mapState} from 'vuex';
 
   export default {
     data() {
@@ -149,29 +150,18 @@
       this.collect_status();
     },
     methods: {
+      ...mapMutations(['SET_IF_MRADD']),
       buy() {
         var _this = this;
-
-        if (this.id) {
-          this.$router.push({
-            path: "/queren",
-            query: {
-              serviceId: this.fwId,
-              faceId: this.faceId,
-              shopId:this.fw_info.shop_id
-            }
-          });
-        } else {
-          this.$vux.alert.show({
-            title: "提示",
-            content: "请先登录",
-            onHide() {
-              _this.$router.push({
-                path: "/me"
-              });
-            }
-          });
-        }
+        this.SET_IF_MRADD(true);
+        this.$router.push({
+          path: "/queren",
+          query: {
+            serviceId: this.fwId,
+            faceId: this.faceId,
+            shopId: this.fw_info.shop_id,
+          }
+        });
       },
       toDetail(id) {
         this.$router.replace("/serviceDetail/" + id);
@@ -216,7 +206,6 @@
       more(id) {
         this.$router.push("/pinglun/" + id);
       },
-      share() {},
       collect() {
         this.collecting = true;
         if (this.ifCollect) {
@@ -319,6 +308,7 @@
       }
     },
     computed: {
+      ...mapState(['if_moren_add']),
       fwId() {
         return this.$route.params.serviceId;
       },

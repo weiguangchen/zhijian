@@ -17,13 +17,13 @@
           <div class="add">车辆信息：{{orderDetail.car_card}}&nbsp;&nbsp;{{orderDetail.car_color}}&nbsp;&nbsp;{{orderDetail.car_xing}}&nbsp;&nbsp;</div>
         </div>
         <div class="order-item">
-          <div class="title" @click="toMendian(orderDetail.fw_shop_id)">
+          <div class="title" @click="toMendian(orderDetail.face_face)">
             <span class="shop-name">
               <i class="iconfont icon-dianpu"></i>{{orderDetail.shop_name}}
               <i class="iconfont icon-jinru"></i>
             </span>
           </div>
-          <div class="content" @click="toDetail(orderDetail.shop_fw_id)">
+          <div class="content" @click="toDetail(orderDetail.fw_id,orderDetail.face_face)">
             <img :src="orderDetail.fw_img" alt="" class="thumb">
             <div class="text">
               <span class="fw-mingzi">{{orderDetail.fw_mingzi}}</span>
@@ -126,8 +126,10 @@
           }
         });
       },
-      toDetail(id) {
-        // this.$toDetail(id);
+      toDetail(id,faceId) {
+        this.$router.push({
+          path:'/serviceDetail/'+id+'/'+faceId
+        });
       },
       toMendian(id){
         this.$router.push({

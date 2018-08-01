@@ -109,6 +109,20 @@ export default [{
           role: 32
         }
       }, {
+        path: 'cardOrderList',
+        name: 'cardOrderList',
+        component: resolve => require(['@/pages/shanghu/jingying/cardOrderList'], resolve),
+        meta: {
+          role: 32
+        }
+      }, {
+        path: 'cardOrderDetail',
+        name: 'cardOrderDetail',
+        component: resolve => require(['@/pages/shanghu/jingying/cardOrderDetail'], resolve),
+        meta: {
+          role: 32
+        }
+      },  {
         path: 'orderDetail',
         name: 'shanghuOrderDetail',
         component: resolve => require(['@/pages/shanghu/jingying/orderDetail'], resolve),

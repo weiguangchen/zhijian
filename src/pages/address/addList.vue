@@ -1,14 +1,14 @@
 <template>
   <div class="address-list">
     <betterScroll>
-      <div class="address-item" v-for="(item,index) in list" :key="index">
-        <div class="name">
+      <div class="address-item" v-for="(item,index) in list" :key="index" >
+        <div class="name" @click="select_add(item)">
           <span>{{item.name}}</span>
           <span>{{item.phone}}</span>
         </div>
-        <div class="address">
+        <div class="address" @click="select_add(item)">
           <div class="add">服务地址：{{item.three}}{{item.adress}}</div>
-          <div class="info">车辆信息：{{item.car_card}}&nbsp;&nbsp;{{item.car_xing}}&nbsp;&nbsp;{{item.car_color}}</div>
+          <div class="info">车辆信息：{{item.car_card}}&nbsp;&nbsp;{{item.car_xing}}&nbsp;&nbsp;{{item.car_color}}&nbsp;&nbsp;{{item.car_wei}}</div>
         </div>
         <div class="handler">
           <mu-radio label='设为默认地址' v-model="moren" :value='item.id' @change='set_moren'></mu-radio>
@@ -33,6 +33,8 @@
   import betterScroll from '@/components/betterScroll';
   import checkLogin from "@/mixins/checkLogin.js";
   import setTitle from '@/mixins/setTitle.js'
+import {mapMutations,mapState} from 'vuex';
+
   export default {
     data() {
       return {
@@ -41,9 +43,11 @@
       }
     },
     created() {
+      this.SET_TX_MAP({})    /* 清空地址 */
       this.get_List();
     },
     methods: {
+      ...mapMutations(['SET_IF_MRADD','SET_SELECTED_ADD','SET_TX_MAP']),
       get_List() {
         this.$axios.get(this.API_URL + '/Api/Adress/get_adress', {
           params: {
@@ -52,8 +56,12 @@
         }).then(({
           data
         }) => {
-          console.log(data)
           this.list = data;
+          this.list.map(m=>{
+            console.log(m.map)
+            m.map = JSON.parse(m.map);
+          })
+          console.log(this.list)
           data.map(m => {
             if (m.status == 1) {
               this.moren = m.id;
@@ -77,7 +85,6 @@
         }).then(({
           data
         }) => {
-
         })
       },
       deleteAdd(val) {
@@ -109,9 +116,11 @@
           }
         })
       },
-      select_add() {
-        console.log(1)
-        this.cityShow = true;
+      select_add(add) {
+        console.log(add);
+        this.SET_IF_MRADD(false);
+        this.SET_SELECTED_ADD(add);
+        this.$router.go(-1);
       }
     },
     components: {

@@ -3,6 +3,7 @@
     <Group class="box1">
       <XInput placeholder='联系人姓名' :required='true' v-model="lianxiren" :show-clear='true' type='text'></XInput>
       <XInput placeholder='手机号' is-type='china-mobile' required v-model="phone" :show-clear='true'></XInput>
+      <XInput placeholder='定位' :value="map_address" @on-focus='openMap'></XInput>
       <XInput placeholder='省、市、区' @click.stop.native="select_add" v-model="ssq" :readonly='true'>
         <i class="iconfont icon-jinru" slot="right"></i>
       </XInput>
@@ -12,14 +13,22 @@
       <XInput placeholder='车辆牌照' v-model="paizhao" :show-clear='true'></XInput>
       <XInput placeholder='品牌车型' v-model="chexing" :show-clear='true'></XInput>
       <XInput placeholder='车辆颜色' v-model="color" :show-clear='true'></XInput>
+      <XInput placeholder='车位' v-model="chewei" :show-clear='true'></XInput>
     </Group>
     <XButton type='warn' @click.native="save_add" :disabled='submiting' class="xbtn">保存地址</XButton>
     <XButton type='warn' @click.native="edit_add" class="xbtn" v-if="addressId">编辑地址</XButton>
     <CitySelect v-model="cityShow" :callback="finishSelectCity" :items="District"></CitySelect>
+    <tx-map @finishAdd='finishAdd' v-if="showMap"></tx-map>
   </div>
 </template>
 
 <script>
+  import map from '@/components/map/index';
+
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex';
   import {
     XInput,
     Group,
@@ -32,29 +41,37 @@
   import District from "ydui-district/dist/jd_province_city_area_id";
   import 'vue-ydui/dist/ydui.base.css';
   import checkLogin from "@/mixins/checkLogin.js";
-    import setTitle from '@/mixins/setTitle.js'
+  import setTitle from '@/mixins/setTitle.js'
   export default {
     data() {
       return {
         cityShow: false,
         District,
         submiting: false,
+        showMap:false,
 
         lianxiren: '',
         phone: '',
+        map: {},
         ssq: '',
         addDetail: '',
         paizhao: '',
         chexing: '',
-        color: ''
+        color: '',
+        chewei: ''
       }
     },
     created() {
       if (this.addressId) {
         this.get_old_info()
       }
+      this.map = this.tx_map_info;
+      console.log('123')
+      console.log(this.map)
+
     },
     methods: {
+      ...mapMutations(['SET_TX_MAP']),
       finishSelectCity(ret) {
         this.ssq = ret.itemName1 + ' ' + ret.itemName2 + ' ' + ret.itemName3;
       },
@@ -62,19 +79,9 @@
         this.submiting = true;
         var _this = this;
         this.checkForm().then(res => {
-          var params = {
-            uid: this.id,
-            name: this.lianxiren,
-            phone: this.phone,
-            three: this.ssq,
-            adress: this.addDetail,
-            car_card: this.paizhao,
-            car_color: this.color,
-            car_xing: this.chexing
-          };
-          console.log(params)
+
           this.$axios.get(this.API_URL + '/Api/Adress/add_adress', {
-            params
+            params: this.params
           }).then(({
             data
           }) => {
@@ -84,9 +91,8 @@
                 title: '提示',
                 content: data.msg,
                 onHide() {
-                  _this.$router.replace({
-                    path: '/addressList'
-                  })
+                  _this.SET_TX_MAP({});
+                  _this.$router.go(-1)
                 }
               })
             }
@@ -102,20 +108,8 @@
       edit_add() {
         var _this = this;
         this.checkForm().then(res => {
-          var params = {
-            uid: this.id,
-            id: this.addressId,
-            name: this.lianxiren,
-            phone: this.phone,
-            three: this.ssq,
-            adress: this.addDetail,
-            car_card: this.paizhao,
-            car_color: this.color,
-            car_xing: this.chexing
-          };
-          console.log(params)
           this.$axios.get(this.API_URL + '/Api/Adress/edit_adress', {
-            params
+            params: this.params
           }).then(({
             data
           }) => {
@@ -125,9 +119,7 @@
                 title: '提示',
                 content: data.msg,
                 onHide() {
-                  _this.$router.replace({
-                    path: '/addressList'
-                  })
+                  _this.$router.go(-1)
                 }
               })
             }
@@ -153,6 +145,12 @@
           }
         })
 
+      },
+      openMap() {
+        // this.$router.push({
+        //   path: '/map'
+        // })
+        this.showMap = true;
       },
       alertTip(text) {
         this.$vux.alert.show({
@@ -181,12 +179,53 @@
           this.paizhao = data[0].car_card;
           this.chexing = data[0].car_xing;
           this.color = data[0].car_color;
+          this.chewei = data[0].car_wei;
+          if (data[0].map) {
+            this.map = JSON.parse(data[0].map);
+          } else {
+            this.map = {}
+          }
         })
+      },
+      finishAdd(map){
+        this.showMap = false;
+        this.map = map
       }
     },
     computed: {
+      ...mapState(['tx_map_info']),
       addressId() {
         return this.$route.query.id;
+      },
+      params() {
+        return {
+          uid: this.id,
+          id: this.addressId,
+          name: this.lianxiren,
+          phone: this.phone,
+          three: this.ssq,
+          adress: this.addDetail,
+          car_card: this.paizhao,
+          car_color: this.color,
+          car_xing: this.chexing,
+          car_wei: this.chewei,
+          jd: this.map.latlng.lat,
+          wd: this.map.latlng.lng,
+          map: this.map
+        };
+      },
+      map_address() {
+        console.log('555')
+        console.log(this.map)
+        console.log(Object.keys(this.map).length)
+        if (Object.keys(this.map).length > 0) {
+          return this.map.poiaddress
+        } else {
+          return '';
+        }
+      },
+      map_lat(){
+
       }
     },
     components: {
@@ -194,9 +233,10 @@
       XInput,
       CitySelect,
       XTextarea,
-      XButton
+      XButton,
+      'tx-map':map
     },
-    mixins: [checkLogin,setTitle]
+    mixins: [checkLogin, setTitle]
   }
 
 </script>

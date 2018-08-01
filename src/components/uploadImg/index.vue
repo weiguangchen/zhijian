@@ -111,6 +111,8 @@
     background: #ffffff;
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: -.48rem/* 36/75 */
+      ;
     .upload-btn,
     .img-box {
       margin-right: .48rem/* 36/75 */

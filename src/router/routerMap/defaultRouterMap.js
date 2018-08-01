@@ -111,7 +111,7 @@ export default [{
     }
   }, {
     path: '/selectJuan',
-    name: 'queren',
+    name: 'selectJuan',
     components: {
       default: resolve => require(['@/pages/queren/selectJuan'], resolve),
     },
@@ -120,7 +120,7 @@ export default [{
     }
   }, {
     path: '/huodongqueren',
-    name: 'queren',
+    name: 'huodongqueren',
     components: {
       default: resolve => require(['@/pages/queren/huodong'], resolve)
     },
@@ -437,6 +437,13 @@ export default [{
     component: resolve => require(['@/pages/collection/index'], resolve),
     meta: {
       title: '我的收藏'
+    }
+  },{
+    path: '/map',
+    name: 'map',
+    component: resolve => require(['@/pages/address/selectAdd'], resolve),
+    meta: {
+      title: '选择地址'
     }
   },
 

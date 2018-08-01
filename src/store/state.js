@@ -13,6 +13,12 @@ const state = {
     
     index_hd_id:'',   /* 首页活动 */
     
-    publicQuery:{}      /* 临时传参 */
+    publicQuery:{},      /* 临时传参 */
+
+    if_moren_add:true,     /* 从服务详请下单时获取默认地址 */
+    selected_add:{},
+
+
+    tx_map_info:{}        /* 用来存储各种定位信息 */
 } 
 export default state;

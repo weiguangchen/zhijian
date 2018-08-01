@@ -25,6 +25,15 @@ const mutations = {
   },
   SET_PUBLICQUERY:(state,preload)=>{
     state.publicQuery = preload;
+  },
+  SET_IF_MRADD:(state,preload)=>{
+    state.if_moren_add = preload;
+  },
+  SET_SELECTED_ADD:(state,preload)=>{
+    state.selected_add = preload;
+  },
+  SET_TX_MAP:(state,preload)=>{
+    state.tx_map_info = preload;
   }
 }
 

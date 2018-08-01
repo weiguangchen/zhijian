@@ -11,10 +11,11 @@
               </span>
               <!-- <span class="status" v-if="item.status == 0">等待付款</span> -->
               <span class="status" v-if="item.status == 1">未使用</span>
-              <span class="iconfont icon-lajixiang" v-else-if="item.status == 2"></span>
+              <!-- <span class="iconfont icon-lajixiang" v-else-if="item.status == 2 || item.status == 7"></span> -->
               <span class="status" v-else-if="item.status == 3">申请退款中</span>
               <span class="status" v-else-if="item.status == 4">已退款</span>
               <span class="status" v-else-if="item.status == 5">已过期</span>
+              <span class="status" v-else-if="item.status == 2 || item.status == 7">已完成</span>
             </div>
             <div class="content" @click="toOrderDetail(item.order_num,item.zf)">
               <img :src="item.fw_img" alt="" class="thumb">
