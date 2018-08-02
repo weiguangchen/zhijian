@@ -80,7 +80,7 @@
         var _this = this;
         this.checkForm().then(res => {
 
-          this.$axios.get(this.API_URL + '/Api/Adress/add_adress', {
+          this.$axios.get( '/Api/Adress/add_adress', {
             params: this.params
           }).then(({
             data
@@ -108,7 +108,7 @@
       edit_add() {
         var _this = this;
         this.checkForm().then(res => {
-          this.$axios.get(this.API_URL + '/Api/Adress/edit_adress', {
+          this.$axios.get( '/Api/Adress/edit_adress', {
             params: this.params
           }).then(({
             data
@@ -163,7 +163,7 @@
         this.cityShow = true;
       },
       get_old_info() {
-        this.$axios.get(this.API_URL + '/Api/Adress/get_adress', {
+        this.$axios.get( '/Api/Adress/get_adress', {
           params: {
             uid: this.id,
             id: this.addressId

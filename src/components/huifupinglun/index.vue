@@ -25,7 +25,7 @@ export default {
     huifuFn() {
       var _this = this;
       this.$axios
-        .get(this.API_URL + "/Api/ShopFw/huifu", {
+        .get("/Api/ShopFw/huifu", {
           params: {
             token_id: _this.plId,
             h_content: _this.huifu

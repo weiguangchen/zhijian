@@ -83,7 +83,7 @@
     },
     methods: {
       get_qy() {
-        return this.$axios.get(this.API_URL + "/Api/DlCore/qy_see_qy", {
+        return this.$axios.get( "/Api/DlCore/qy_see_qy", {
           params: {
             dl_jb: this.userinfo.dl[0].dl_jb,
             city_id: this.cityId
@@ -95,7 +95,7 @@
         })
       },
       get_jms() {
-        return this.$axios.get(this.API_URL + "/Api/DlCore/get_shop", {
+        return this.$axios.get( "/Api/DlCore/get_shop", {
           params: {
             dl_id: this.userinfo.dl[0].id,
             tj: 0,

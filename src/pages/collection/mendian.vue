@@ -29,7 +29,7 @@
     },
     methods: {
       deleteMd(id) {
-        this.$axios.get(this.API_URL + '/Api/UserShow/user_dlike', {
+        this.$axios.get( '/Api/UserShow/user_dlike', {
           params: {
             id
           }

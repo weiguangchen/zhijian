@@ -95,6 +95,13 @@ export default [{
           role: 31
         }
       }, {
+        path: 'hdTongji',
+        name: 'hdTongji',
+        component: resolve => require(['@/pages/shanghu/jingying/hdTongji'], resolve),
+        meta: {
+          role: 31
+        }
+      }, {
         path: 'mendianTongji',
         name: 'mendianTongji',
         component: resolve => require(['@/pages/shanghu/jingying/mendianTongji'], resolve),

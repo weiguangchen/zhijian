@@ -64,7 +64,7 @@
       })
 
       // this.$axios
-      //   .get(_this.API_URL + "/api/Show/two_class", {
+      //   .get( "/api/Show/two_class", {
       //     params: {
       //       fid: _this.classId
       //     }
@@ -76,14 +76,14 @@
       //     _this.loading = false;
       //   });
 
-      this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({
+      this.$axios.get( "/Api/Show/get_gg").then(({
         data
       }) => {
         this.ad = data.smeta;
       });
 
       // this.$axios
-      //   .get(_this.API_URL + "/api/Show/one_fw", {
+      //   .get( "/api/Show/one_fw", {
       //     params: {
       //       fw_cid: _this.classId
       //     }
@@ -97,7 +97,7 @@
       get_fw() {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/Api/Yes/two_jl", {
+          .get( "/Api/Yes/two_jl", {
             params: {
               fid: this.classId,
               lng: this.location.lat,

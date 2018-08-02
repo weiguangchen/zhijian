@@ -5,9 +5,9 @@
         <ul class="content">
           <div>
             <div class="banner">
-              <!-- <div class="share">
-            <i class="iconfont icon-fenxiang" @click="share"></i>
-          </div> -->
+              <div class="share">
+                <i class="iconfont icon-fenxiang" @click="share"></i>
+              </div>
               <Swiper height='5.12rem' :show-dots='false'>
                 <SwiperItem v-for="(item,index) in fw_info.fw_img" :key="index">
                   <img :src="item" alt="" class="img">
@@ -126,7 +126,10 @@
   import friendLike from "@/components/friendLike/index";
   import betterScroll from '@/components/betterScroll/index';
   import BScroll from "better-scroll";
-import {mapMutations,mapState} from 'vuex';
+  import {
+    mapMutations,
+    mapState
+  } from 'vuex';
 
   export default {
     data() {
@@ -144,6 +147,7 @@ import {mapMutations,mapState} from 'vuex';
       };
     },
     created() {
+      this.$eruda.init();
       this.$dialog.loading.open();
       this.get_fw_info();
       this.get_face();
@@ -169,7 +173,7 @@ import {mapMutations,mapState} from 'vuex';
       get_fw_info() {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/api/Show/fw_content", {
+          .get("/api/Show/fw_content", {
             params: {
               id: _this.fwId
             }
@@ -189,7 +193,7 @@ import {mapMutations,mapState} from 'vuex';
           });
       },
       get_face() {
-        this.$axios.get(this.API_URL + '/Api/show/get_face', {
+        this.$axios.get('/Api/show/get_face', {
           params: {
             face_id: this.faceId
           }
@@ -209,7 +213,7 @@ import {mapMutations,mapState} from 'vuex';
       collect() {
         this.collecting = true;
         if (this.ifCollect) {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_dlike', {
+          this.$axios.get('/Api/UserShow/user_dlike', {
             params: {
               id: this.collect_id
             }
@@ -225,7 +229,7 @@ import {mapMutations,mapState} from 'vuex';
             this.collecting = false;
           })
         } else {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_like', {
+          this.$axios.get('/Api/UserShow/user_like', {
             params: this.collect_params
           }).then(({
             data
@@ -243,7 +247,7 @@ import {mapMutations,mapState} from 'vuex';
 
       },
       collect_status() {
-        this.$axios.get(this.API_URL + '/Api/UserShow/yes_like', {
+        this.$axios.get('/Api/UserShow/yes_like', {
           params: this.collect_params
         }).then(({
           data
@@ -281,6 +285,27 @@ import {mapMutations,mapState} from 'vuex';
         }
 
 
+      },
+      share() {
+        var windowUrl = window.location.href;
+        var url;
+        if(/http:\/\/qd.daonian.cn/.test(windowUrl)){
+          // 线上环境
+          url = this.production_url;
+        }else{
+          // 线下环境
+          url = this.development_url;
+        }
+        this.$wx.onMenuShareAppMessage({
+          title: this.fw_info.fw_mingzi, // 分享标题
+          desc: '', // 分享描述
+          link: url+this.$route.fullPath, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: this.fw_info.fw_img[0], // 分享图标
+          type: 'link', // 分享类型,music、video或link，不填默认为link
+          success: function () {
+            // 用户点击了分享后执行的回调函数
+          }
+        });
       }
     },
     mounted() {

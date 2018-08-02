@@ -46,7 +46,7 @@
 
       },
       get_list() {
-        this.$axios.get(this.API_URL + '/Api/ShopCore/get_money_list', {
+        this.$axios.get( '/Api/ShopCore/get_money_list', {
           params: this.params
         }).then(({
           data

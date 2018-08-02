@@ -70,7 +70,7 @@
     },
     methods: {
       get_income() {
-        this.$axios.get(this.API_URL + '/Api/DlCore/shop_core', {
+        this.$axios.get( '/Api/DlCore/shop_core', {
           params: {
             dl_id: this.userinfo.dl[0].id,
             dl_jb: this.userinfo.dl[0].dl_jb
@@ -84,7 +84,7 @@
         })
       },
       get_city() {
-        this.$axios.get(this.API_URL + '/Api/DlCore/gd_see_city', {
+        this.$axios.get( '/Api/DlCore/gd_see_city', {
           params: {
             dl_id: this.userinfo.dl[0].id,
           }
@@ -97,7 +97,7 @@
         })
       },
       get_qy() {
-        this.$axios.get(this.API_URL + '/Api/DlCore/qy_see_qy', {
+        this.$axios.get( '/Api/DlCore/qy_see_qy', {
           params: {
             dl_jb: this.userinfo.dl[0].dl_jb,
             city_id: this.userinfo.dl[0].city_id
@@ -111,7 +111,7 @@
         })
       },
       get_jms() {
-        this.$axios.get(this.API_URL + '/Api/DlCore/get_shop', {
+        this.$axios.get( '/Api/DlCore/get_shop', {
           params: {
             dl_id: this.userinfo.dl[0].id,
             tj: 0,

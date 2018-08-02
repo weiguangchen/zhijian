@@ -71,7 +71,7 @@ export default {
     },
     get_all_pl() {
       var _this = this;
-      return this.$axios(this.API_URL + "/Api/Show/token_all", {
+      return this.$axios( "/Api/Show/token_all", {
         params: {
           fw_shop_id: _this.fwId,
           num: 4,

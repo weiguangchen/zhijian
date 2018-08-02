@@ -31,7 +31,7 @@ export default {
   methods: {
     get_all_agent() {
       this.$axios
-        .get(this.API_URL + "/Api/DlCore/get_all_dl", {
+        .get( "/Api/DlCore/get_all_dl", {
           params: {
             dl_jb: this.userinfo.dl[0].dl_jb,
             dl_id: this.userinfo.dl[0].id,

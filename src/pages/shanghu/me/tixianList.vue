@@ -54,7 +54,7 @@
       },
       get_tx_list() {
         this.$axios
-          .get(this.API_URL + "/Api/UserShow/give_money_list", {
+          .get( "/Api/UserShow/give_money_list", {
             params: {
               uid: this.id,
               num: 8,

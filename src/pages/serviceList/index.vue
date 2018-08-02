@@ -161,7 +161,7 @@
           this.serviceList = res.list;
         });
 
-        this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({
+        this.$axios.get( "/Api/Show/get_gg").then(({
           data
         }) => {
           // 获取头部广告
@@ -184,7 +184,7 @@
 
         var params = Object.assign(deafultParams, select);
         return this.$axios
-          .get(_this.API_URL + "/Api/Yes/new_two_list", {
+          .get( "/Api/Yes/new_two_list", {
             params
           })
           .then(({

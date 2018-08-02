@@ -57,7 +57,7 @@
     created() {
       var _this = this;
       this.$axios
-        .get(_this.API_URL + "/Api/ShopFw/get_face", {
+        .get( "/Api/ShopFw/get_face", {
           params: {
             phone: this.userinfo.uphone
           }
@@ -71,7 +71,7 @@
       yanzheng() {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/api/ShopFw/pay_num_ok", {
+          .get( "/api/ShopFw/pay_num_ok", {
             params: {
               fw_shop_id: this.userinfo.shop[0].id,
               pay_num: _this.pay_num,

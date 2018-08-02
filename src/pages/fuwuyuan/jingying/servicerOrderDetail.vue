@@ -183,7 +183,7 @@
       },
       jiedan() {
         this.$axios
-          .get(this.API_URL + "/Api/order/js_order", {
+          .get( "/Api/order/js_order", {
             params: {
               zf: this.zf,
               id: this.orderId
@@ -214,7 +214,7 @@
           })
           this.td_submiting = false;
         } else {
-          this.$axios.get(this.API_URL + '/Api/order/jj_order', {
+          this.$axios.get( '/Api/order/jj_order', {
             params: {
               phone: this.userinfo.uphone,
               tui_liyou: this.tuidan_info,
@@ -242,7 +242,7 @@
       },
       get_son() {
         this.$axios
-          .get(this.API_URL + "/Api/UserShow/get_son", {
+          .get( "/Api/UserShow/get_son", {
             params: {
               shop_id: this.userinfo.shop[0].id
             }
@@ -254,7 +254,7 @@
       },
       get_detail() {
         this.$axios
-          .get(this.API_URL + "/Api/Order/get_order_content", {
+          .get( "/Api/Order/get_order_content", {
             params: {
               id: this.orderId,
               zf: this.zf
@@ -336,7 +336,7 @@
           success: function (res) {
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get(_this.API_URL + "/api/wechat/bcimg", {
+              .get( "/api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }
@@ -416,7 +416,7 @@
             content: '请上传服务后图片'
           })
         } else {
-          this.$axios.get(this.API_URL + '/Api/order/yes_order', {
+          this.$axios.get( '/Api/order/yes_order', {
             params: {
               zf: this.zf,
               id: this.orderId,

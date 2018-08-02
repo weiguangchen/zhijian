@@ -44,7 +44,7 @@
           mobile: _this.userinfo.uphone
         };
         this.$axios
-          .get(_this.API_URL + "/Api/UserShow/fsyzm", {
+          .get( "/Api/UserShow/fsyzm", {
             params
           })
           .then(({

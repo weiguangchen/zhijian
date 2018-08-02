@@ -48,7 +48,7 @@ export default {
   methods: {
     get_shop() {
       this.$axios
-        .get(this.API_URL + "/Api/DlCore/dl_get_shop", {
+        .get( "/Api/DlCore/dl_get_shop", {
           params: {
             dl_jb: this.userinfo.dl[0].dl_jb,
             dl_id: this.userinfo.dl[0].id,

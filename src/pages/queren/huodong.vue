@@ -86,7 +86,7 @@
             onCancel() {},
             onConfirm() {
               _this.$axios
-                .get(_this.API_URL + "/api/BkPay/pay", {
+                .get( "/api/BkPay/pay", {
                   params: {
                     bk_id: _this.huodongId,
                     // num: _this.num,
@@ -118,7 +118,7 @@
                 .then(res => {
                   console.log("支付成功回调");
                   console.log(res);
-                  return _this.$axios.get(_this.API_URL + "/api/BkPay/fs", {
+                  return _this.$axios.get( "/api/BkPay/fs", {
                     params: {
                       order_num: _this.orderNum
                     }
@@ -145,7 +145,7 @@
       get_fw_info() {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/Api/Show/get_hd_content", {
+          .get( "/Api/Show/get_hd_content", {
             params: {
               id: _this.huodongId
             }

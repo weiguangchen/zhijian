@@ -49,7 +49,7 @@ import {mapMutations,mapState} from 'vuex';
     methods: {
       ...mapMutations(['SET_IF_MRADD','SET_SELECTED_ADD','SET_TX_MAP']),
       get_List() {
-        this.$axios.get(this.API_URL + '/Api/Adress/get_adress', {
+        this.$axios.get( '/Api/Adress/get_adress', {
           params: {
             uid: this.id
           }
@@ -80,7 +80,7 @@ import {mapMutations,mapState} from 'vuex';
           id: val
         }
         console.log(val);
-        this.$axios.get(this.API_URL + '/Api/Adress/sz_mr_adress', {
+        this.$axios.get( '/Api/Adress/sz_mr_adress', {
           params
         }).then(({
           data
@@ -91,7 +91,7 @@ import {mapMutations,mapState} from 'vuex';
         var params = {
           id: val
         }
-        this.$axios.get(this.API_URL + '/Api/Adress/delete_adress', {
+        this.$axios.get( '/Api/Adress/delete_adress', {
           params
         }).then(({
           data

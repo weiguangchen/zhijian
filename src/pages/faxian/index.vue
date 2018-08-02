@@ -191,7 +191,7 @@ import { mapState,mapMutations } from 'vuex';
         }
 
 
-        this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({
+        this.$axios.get( "/Api/Show/get_gg").then(({
           data
         }) => {
           // 获取头部广告
@@ -223,7 +223,7 @@ import { mapState,mapMutations } from 'vuex';
         var params = Object.assign(deafultParams, select);
 
         return this.$axios
-          .get(_this.API_URL + "/Api/See/two_list", {
+          .get( "/Api/See/two_list", {
             params
           })
           .then(({
@@ -250,7 +250,7 @@ import { mapState,mapMutations } from 'vuex';
         };
 
         return this.$axios
-          .get(_this.API_URL + "/Api/See/get_hd", {
+          .get( "/Api/See/get_hd", {
             params
           })
           .then(({

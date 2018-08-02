@@ -67,7 +67,7 @@
       get_card() {
         var _this = this;
         return this.$axios
-          .get(_this.API_URL + "/Api/YouHui/see_card", {
+          .get( "/Api/YouHui/see_card", {
             params: {
               uid: _this.id
             }
@@ -81,7 +81,7 @@
       },
       cz_card(id, index, sonindex) {
         this.$axios
-          .get(this.API_URL + "/Api/YouHui/cz_card", {
+          .get( "/Api/YouHui/cz_card", {
             params: {
               id
             }

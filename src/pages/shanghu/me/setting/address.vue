@@ -43,7 +43,7 @@
             xingming: this.userinfo.dl[0].xingming,
             adress: this.add
           }
-          this.$axios.get(this.API_URL + '/Api/DlCore/dl_sz', {
+          this.$axios.get( '/Api/DlCore/dl_sz', {
             params
           }).then(({
             data

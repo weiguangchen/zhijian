@@ -1,52 +1,34 @@
 <template>
   <div class="page">
-    <bigTitle title="消费统计" @showPopup='showPopup'></bigTitle>
+    <bigTitle title="活动卡统计" @showPopup='showPopup'></bigTitle>
     <div class="tongji-info">
       <div class="order-total">
-        <div class="top">
-          <h1>订单总额</h1>
-          <div class="line">
-            <span>已完成订单</span>
-            <span>￥{{count.y_money}}</span>
-          </div>
-          <div class="line">
-            <span>未完成订单</span>
-            <span>￥{{count.w_money}}</span>
-          </div>
-        </div>
         <div class="bot">
           <div class="line">
-            <span>总计</span>
+            <span>活动卡总额</span>
             <span class="total">￥{{count.z_money}}</span>
           </div>
         </div>
       </div>
       <div class="tj-list">
         <div class="tongji-item" v-for="(item,index) in list" :key="index" @click="toDetail(item.fw_id)">
-          <img :src="item.fw_img" alt="" class="img">
+          <img :src="item.hd_img" alt="" class="img">
           <div class="info">
-            <div class="mingzi">{{item.fw_mingzi}}</div>
+            <div class="mingzi">{{item.card_name}}</div>
             <div class="count">
               <div class="count-item">
-                <div class="tit">销售量</div>
-                <span>{{item.all_num}}</span>
+                <div class="tit">数量</div>
+                <span>{{item.all_pay}}</span>
               </div>
               <div class="count-item">
-                <div class="tit">验证量</div>
-                <span>{{item.yz_num}}</span>
+                <div class="tit">已使用金额</div>
+                <span>{{item.bk_ok_jmoney}}</span>
               </div>
               <div class="count-item">
-                <div class="tit">退款量</div>
-                <span>{{item.t_num}}</span>
-              </div>
-              <div class="count-item">
-                <div class="tit">总额</div>
-                <span>￥{{item.all_money}}</span>
+                <div class="tit">出售金额</div>
+                <span>{{item.jmoney}}</span>
               </div>
             </div>
-          </div>
-          <div class="icon">
-            <i class="iconfont icon-jinru"></i>
           </div>
 
         </div>
@@ -72,7 +54,7 @@
       this.$emit("showPopup", false);
       this.get_count();
       this.$axios
-        .get( "/Api/Shop/shop_fw", {
+        .get("/Api/ShopCore/get_bk_content", {
           params: {
             shop_id: this.userinfo.shop[0].id
           }
@@ -96,14 +78,7 @@
       showPopup(val) {
         this.$emit("showPopup", val);
       },
-      toDetail(id){
-        // this.$router.push({
-        //   path:'/shanghu/jingying/mendianTongji',
-        //   query:{
-        //     id
-        //   }
-        // })
-      }
+
     },
     components: {
       bigTitle
@@ -173,24 +148,23 @@
         }
         .info {
           flex: 1;
+          padding-right: 1.733333rem /* 130/75 */;
         }
         .mingzi {
-          width: 4.8rem /* 360/75 */;
           flex: none;
           height: 1.146667rem;
           border-bottom: 1px solid #f0f0f0;
           overflow: hidden;
         }
         .count {
-          width: 5.866667rem /* 440/75 */;
           display: flex;
+          justify-content: space-between;
           .count-item {
+              text-align: center;
             .tit{
               margin-bottom: .133333rem /* 10/75 */;
             }
             padding-top: .266667rem /* 20/75 */;
-            flex: 1;
-            text-align: center;
           }
         }
         .icon {

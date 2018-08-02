@@ -1,6 +1,6 @@
 <template>
   <!-- <router-link :to="'/serviceDetail/'+fwInfo.id"> -->
-  <div class="service" @click="toDetail(fwInfo.bk_id)">
+  <div class="hd-card" @click="toDetail(fwInfo.bk_id)">
     <div class="img-box">
       <img :src="fwInfo.hd_img" alt="" class="img">
     </div>
@@ -70,7 +70,7 @@
 </script>
 
 <style lang='scss'>
-  .service {
+  .hd-card {
     display: flex;
     background: #ffffff;
     padding: 0.36rem 0 0.36rem 0.4rem;
@@ -106,7 +106,6 @@
       }
       .top {
         font-size: .4rem /* 30/75 */;
-        line-height: 1.6;
         flex: 1;
         @extend %text-overflow;
       }

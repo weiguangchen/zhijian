@@ -125,7 +125,7 @@ export default {
       var _this = this;
 
       this.$axios
-        .get(this.API_URL + "/api/UserShow/add_shop", {
+        .get( "/api/UserShow/add_shop", {
           params: {
             shop_name: this.shop_name,
             zj_img: this.tupian,
@@ -212,7 +212,7 @@ export default {
         success: function(res) {
           var serverId = res.serverId; // 返回图片的服务器端ID
           _this.$axios
-            .get(_this.API_URL + "/api/wechat/bcimg", {
+            .get( "/api/wechat/bcimg", {
               params: {
                 imgs: res.serverId
               }

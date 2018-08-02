@@ -33,7 +33,7 @@ export default {
   created() {
     this.setMetaTitle('商城');
     var _this = this;
-    this.$axios.get(this.API_URL + "/api/Show/ot_class").then(({ data }) => {
+    this.$axios.get( "/api/Show/ot_class").then(({ data }) => {
       _this.listArr = data;
     });
   },

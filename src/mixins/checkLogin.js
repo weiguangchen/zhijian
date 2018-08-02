@@ -14,7 +14,7 @@ export default {
   methods: {
     ...mapMutations(['SAVE_USERINFO']),
     get_user() {
-      this.$axios.get(this.API_URL + '/Api/Show/get_user', {
+      this.$axios.get( '/Api/Show/get_user', {
         params: {
           id: this.id
         }

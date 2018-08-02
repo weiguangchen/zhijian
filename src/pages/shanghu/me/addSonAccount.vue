@@ -94,7 +94,7 @@
       this.$emit("showPopup", false);
 
       this.$axios
-        .get(this.API_URL + "/Api/UserShow/son_add", {
+        .get( "/Api/UserShow/son_add", {
           params: {
             shop_id: _this.userinfo.shop[0].id
           }
@@ -109,7 +109,7 @@
     mounted() {
       var _this = this;
       this.$axios
-        .get(_this.API_URL + "/Api/UserShow/son_edit", {
+        .get( "/Api/UserShow/son_edit", {
           params: {
             phone: this.queryPhone
           }
@@ -156,7 +156,7 @@
                 id: this.accountId
               });
               this.$axios
-                .get(_this.API_URL + "/Api/UserShow/edit_son", {
+                .get( "/Api/UserShow/edit_son", {
                   params
                 })
                 .then(({
@@ -188,7 +188,7 @@
             } else {
               // 新增
               this.$axios
-                .get(_this.API_URL + "/Api/UserShow/add_son", {
+                .get( "/Api/UserShow/add_son", {
                   params
                 })
                 .then(({

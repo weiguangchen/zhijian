@@ -1,7 +1,8 @@
 <template>
   <div>
+    <transition name='router'>
     <router-view @showPopup='showPopup'></router-view>
-
+</transition>
     <Popup v-model="popupShow" position='right'>
       <div class="popup-list">
         <Group v-if="shenfenType == 'shanghu'">
@@ -33,7 +34,7 @@ export default {
   created() {
     var _this = this;
     this.$axios
-      .get(_this.API_URL + "/api/ShopFw/shop_fw", {
+      .get( "/api/ShopFw/shop_fw", {
         params: { shop_id: 1 }
       })
       .then(res => {
@@ -51,7 +52,7 @@ export default {
     //   console.log(1);
     //   var _this = this;
     //   this.$axios
-    //     .get(_this.API_URL + "/api/ShopFw/pay_num_ok", {
+    //     .get( "/api/ShopFw/pay_num_ok", {
     //       params: {
     //         fw_shop_id: 1,
     //         pay_num: _this.pay_num,
@@ -98,6 +99,13 @@ export default {
   .tip-content {
     padding-left: 0.4rem;
     line-height: 0.533333rem;
+  }
+   .router-enter-active {
+    transition: transform .3s ease-in-out;
+  }
+
+  .router-enter {
+    transform: translateX(100%);
   }
 }
 </style>

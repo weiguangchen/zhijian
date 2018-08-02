@@ -46,7 +46,7 @@
       },
       finish() {
         var _this = this;
-        this.$axios.get(this.API_URL + '/Api/UserShow/ed_son', {
+        this.$axios.get( '/Api/UserShow/ed_son', {
           params: {
             id: this.id,
             phone: this.userinfo.fuwuyuan.phone,

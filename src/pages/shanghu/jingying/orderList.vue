@@ -3,11 +3,11 @@
     <div class="order-gl">
       <bigTitle title="订单管理" @showPopup='showPopup' :icon='false' :right='true'>
         <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="orderType" @on-change='changeType'>
-          <iview-op value='6'>全部订单</iview-op>
-          <iview-op value='1'>未派单订单</iview-op>
-          <iview-op value='2'>已派发订单</iview-op>
-          <iview-op value='3'>已接单订单</iview-op>
-          <iview-op value='4'>已完成订单</iview-op>
+          <iview-op value='6'>全部订单({{orderStatus.all}})</iview-op>
+          <iview-op value='1'>未派单订单({{orderStatus.wp}})</iview-op>
+          <iview-op value='2'>已派发订单({{orderStatus.yp}})</iview-op>
+          <iview-op value='3'>已接单订单({{orderStatus.yj}})</iview-op>
+          <iview-op value='4'>已完成订单({{orderStatus.ywc}})</iview-op>
           <iview-op value='5'>正在退款订单</iview-op>
         </iview-select>
       </bigTitle>
@@ -79,6 +79,7 @@
   export default {
     data() {
       return {
+        orderStatus:{},
         orderType: 6,
         list: [],
         p: 1
@@ -88,6 +89,7 @@
       var _this = this;
       this.$emit("showPopup", false);
       this.get_order_list();
+      this.get_order_total();
     },
     methods: {
       showPopup(val) {
@@ -123,7 +125,7 @@
       get_order_list() {
         var _this = this;
         return this.$axios
-          .get(this.API_URL + "/Api/ShopFw/get_order", {
+          .get( "/Api/ShopFw/get_order", {
             params: {
               fw_shop_id: this.userinfo.shop[0].id,
               status: 6,
@@ -145,6 +147,16 @@
             this.$refs.scroll.pullupLoadend();
             this.list = this.list.concat(data.list);
           });
+      },
+      get_order_total(){
+        this.$axios.get('/Api/ShopCore/get_status',{
+          params:{
+            shop_id:this.userinfo.shop[0].id
+          }
+        }).then(({data})=>{
+          console.log(data)
+          this.orderStatus = data;
+        })
       },
       pullingUp() {
         this.get_order_list();

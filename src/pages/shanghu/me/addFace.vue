@@ -131,7 +131,7 @@
       this.$emit("showPopup", false);
       if (this.faceId) {
         this.$axios
-          .get(this.API_URL + "/Api/Shop/face_edit", {
+          .get( "/Api/Shop/face_edit", {
             params: {
               id: _this.faceId
             }
@@ -158,7 +158,7 @@
           });
       }
 
-      this.$axios.get(this.API_URL + "/Api/UserShow/city").then(({
+      this.$axios.get( "/Api/UserShow/city").then(({
         data
       }) => {
         console.log(data);
@@ -196,7 +196,7 @@
         this.checkForm().then(res => {
 
           this.$axios
-            .get(this.API_URL + "/Api/Shop/add_face", {
+            .get( "/Api/Shop/add_face", {
               params: this.params
             })
             .then(
@@ -240,7 +240,7 @@
         this.submiting = true;
         this.checkForm().then(res => {
           this.$axios
-            .get(this.API_URL + "/Api/Shop/edit_face", {
+            .get( "/Api/Shop/edit_face", {
               params: this.params
             })
             .then(({

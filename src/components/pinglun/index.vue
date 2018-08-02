@@ -8,7 +8,7 @@
         <span class="name">{{info.u_name}}</span>
         <span class="date">{{info.date}}</span>
       </div>
-      <rater :val='info.star' class="rater"></rater>
+      <rater :val='info.pingjun_star' class="rater"></rater>
       <div class="content">
         <div class="txt">{{info.content}}</div>
         <div class="imgs">

@@ -28,7 +28,7 @@ export default {
   created() {
     var _this = this;
     this.$axios
-      .get(this.API_URL + "/Api/Shop/shop_fw", {
+      .get( "/Api/Shop/shop_fw", {
         params: {
           shop_id: this.userinfo.shop[0].id
         }

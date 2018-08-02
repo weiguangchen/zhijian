@@ -93,7 +93,7 @@
       var _this = this;
       if (this.zf == 1) {
         this.$axios
-          .get(this.API_URL + "/Api/UserShow/order_content1", {
+          .get( "/Api/UserShow/order_content1", {
             params: {
               order_num: _this.order_num
             }
@@ -104,7 +104,7 @@
           });
       } else {
         this.$axios
-          .get(this.API_URL + "/Api/UserShow/order_content", {
+          .get( "/Api/UserShow/order_content", {
             params: {
               order_num: _this.order_num
             }
@@ -149,7 +149,7 @@
           content: '是否确认服务？',
           onCancel() {},
           onConfirm() {
-            _this.$axios.get(_this.API_URL + "/Api/Order/yes_ok", {
+            _this.$axios.get( "/Api/Order/yes_ok", {
               params: {
                 zf: _this.zf,
                 id: _this.orderDetail.id

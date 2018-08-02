@@ -56,7 +56,7 @@ export default {
         mobile: _this.phone
       };
       this.$axios
-        .get(_this.API_URL + "/Api/UserShow/fsyzm", {
+        .get( "/Api/UserShow/fsyzm", {
           params
         })
         .then(({ data }) => {
@@ -81,7 +81,7 @@ export default {
         return false;
       } else {
         this.$axios
-          .get(_this.API_URL + "/Api/UserShow/yzm_ok", {
+          .get( "/Api/UserShow/yzm_ok", {
             params: {
               uphone: _this.phone,
               id: _this.id

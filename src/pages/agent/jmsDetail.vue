@@ -36,7 +36,7 @@ export default {
   methods: {
     get_jms_detail() {
       this.$axios
-        .get(this.API_URL + "/Api/ShopCore/get_shop", {
+        .get( "/Api/ShopCore/get_shop", {
           params: {
             shop_id: this.shopId
           }

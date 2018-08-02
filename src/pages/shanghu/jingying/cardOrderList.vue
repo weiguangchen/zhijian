@@ -1,5 +1,5 @@
 <template>
-  <div class="page order-gl">
+  <div class="page card-order-gl">
     <betterScroll @pullingUp='pullingUp' ref='scroll'>
       <div class="">
 
@@ -58,7 +58,7 @@
       get_card_list() {
         var _this = this;
         return this.$axios
-          .get(this.API_URL + "/Api/ShopCore/pay_card_list", {
+          .get( "/Api/ShopCore/pay_card_list", {
             params: {
               shop_id: this.userinfo.shop[0].id,
               num: 10,
@@ -95,7 +95,7 @@
 </script>
 
 <style lang='scss'>
-  .order-gl {
+  .card-order-gl {
     line-height: 1;
     background: #f0f0f0;
     .select-wrapper {

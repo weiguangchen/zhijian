@@ -101,7 +101,7 @@
           })
           this.tixianing = false;
         } else {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_give_money', {
+          this.$axios.get( '/Api/UserShow/user_give_money', {
             params: {
               uid: this.id,
               get_money: this.tixian_money

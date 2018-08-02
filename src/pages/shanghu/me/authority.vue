@@ -85,7 +85,7 @@ export default {
       console.log(authList);
 
       this.$axios
-        .get(this.API_URL + "/Api/UserShow/add_userqx", {
+        .get( "/Api/UserShow/add_userqx", {
           //   baseURL: "http://zj.daonian.cn",
           params: {
             content: authList,

@@ -46,7 +46,7 @@
       deleteFace(id) {
         var _this = this;
         this.$axios
-          .get(this.API_URL + "/Api/Shop/delete_face", {
+          .get( "/Api/Shop/delete_face", {
             params: {
               id
             }
@@ -90,7 +90,7 @@
       },
       add_face() {
         var _this = this;
-        this.$axios.get(this.API_URL + '/Api/Shop/yes_face', {
+        this.$axios.get( '/Api/Shop/yes_face', {
           params: {
             shop_id: this.userinfo.shop[0].id
           }
@@ -113,7 +113,7 @@
         var _this = this;
 
         this.$axios
-          .get(this.API_URL + "/Api/Shop/get_face", {
+          .get( "/Api/Shop/get_face", {
             params: {
               shop_id: _this.userinfo.shop[0].id, //商户id
               phone: this.userinfo.uphone

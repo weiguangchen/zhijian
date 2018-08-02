@@ -2,10 +2,9 @@
   <div class="page shop-wrapper">
     <betterScroll>
       <div class="info-wrapper">
-        <img src="~img/shangpu/banner.png" alt="" id="blur-bg" class="blur-bg" @load="load_blur_bg">
-        <canvas class="blur-canvas" id="blur-canvas"></canvas>
+        <img :src="faceInfo.face_img[0] ||'./img/mr_face.jpg'" alt="" class="blur-bg1" v-if="faceInfo.face_img">
         <div class="logo">
-          <img src="~img/shangpu/banner.png" alt="" class="img">
+          <img :src="faceInfo.face_img[0] || './img/mr_face.jpg'" alt="" class="img" v-if="faceInfo.face_img">
         </div>
         <div class="info">
           <div>{{faceInfo.face_name}}</div>
@@ -17,7 +16,7 @@
             <span>速度：{{format_fenshu(faceInfo.sd_star)}}</span>
             <span>质量：{{format_fenshu(faceInfo.zl_star)}}</span>
           </div>
-          <div>营业时间：{{faceInfo.start_day}}到{{faceInfo.end_day}} {{faceInfo.start_time}} —— {{faceInfo.end_time}}</div>
+          <div>营业时间：<template v-if="faceInfo.start_day">{{faceInfo.start_day}}到{{faceInfo.end_day}} {{faceInfo.start_time}} —— {{faceInfo.end_time}}</template></div>
         </div>
         <button class="guanzhu" :disabled='collecting'>
           <img src="./img/weiguanzhu.png" alt="" @click='collect' v-if="!ifCollect">
@@ -218,7 +217,7 @@
       },
       get_shop() {
         this.$axios
-          .get(this.API_URL + "/Api/Show/get_shop", {
+          .get( "/Api/Show/get_shop", {
             params: {
               shop_id: this.shopId
             }
@@ -236,7 +235,7 @@
       get_card() {
         // 获取所有活动
         this.$axios
-          .get(this.API_URL + "/Api/Show/get_card", {
+          .get( "/Api/Show/get_card", {
             params: {
               shop_id: this.shopId
             }
@@ -249,7 +248,7 @@
           });
       },
       get_gg() {
-        this.$axios.get(this.API_URL + "/Api/Show/get_gg").then(({
+        this.$axios.get( "/Api/Show/get_gg").then(({
           data
         }) => {
           // 获取头部广告
@@ -257,7 +256,7 @@
         });
       },
       get_face_info() {
-        this.$axios.get(this.API_URL + '/Api/show/get_face', {
+        this.$axios.get( '/Api/show/get_face', {
           params: {
             face_id: this.shopId
           }
@@ -275,7 +274,7 @@
         })
       },
       get_pl() {
-        this.$axios.get(this.API_URL + '/Api/Show/shop_get_token', {
+        this.$axios.get( '/Api/Show/shop_get_token', {
           params: {
             shop_id: this.faceInfo.fw_shop_id
           }
@@ -304,7 +303,7 @@
       collect() {
         this.collecting = true;
         if (this.ifCollect) {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_dlike', {
+          this.$axios.get( '/Api/UserShow/user_dlike', {
             params: {
               id: this.collect_id
             }
@@ -320,7 +319,7 @@
             this.collecting = false;
           })
         } else {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_like', {
+          this.$axios.get( '/Api/UserShow/user_like', {
             params: this.collect_params
           }).then(({
             data
@@ -338,7 +337,7 @@
 
       },
       collect_status() {
-        this.$axios.get(this.API_URL + '/Api/UserShow/yes_like', {
+        this.$axios.get( '/Api/UserShow/yes_like', {
           params: this.collect_params
         }).then(({
           data
@@ -354,7 +353,7 @@
       },
       format_fenshu(num) {
         if (num) {
-          return (num.toString()).indexOf('.') < 0 ? `${num}.0`:num
+          return (num.toString()).indexOf('.') < 0 ? `${num}.0` : num
         }
       }
     },
@@ -444,6 +443,14 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
+      }
+      .blur-bg1{
+        position:absolute;
+        width: 100%;
+        top: -50%;
+        left:0;
+        transform: translateY(-50%);
+        filter: blur(30px);
       }
       .blur-bg {
         position: absolute;

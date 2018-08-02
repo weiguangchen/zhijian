@@ -1,10 +1,12 @@
 <template>
   <div class="shanghu-box">
-    <div class="wrapper shanghu-warpper" ref="wrapper">
-      <ul class="content">
+    <!-- <div class="wrapper shanghu-warpper" ref="wrapper">
+      <ul class="content"> -->
+        <transition name='router'>
         <router-view @showPopup='showPopup'></router-view>
-      </ul>
-    </div>
+        </transition>
+      <!-- </ul>
+    </div> -->
     <Popup position='right' v-model="popupShow">
       <div class="popup-list">
         <Group>
@@ -31,7 +33,7 @@ export default {
   created() {
     var _this = this;
     this.$axios
-      .get(this.API_URL + "/Api/Shop/shop_fw", {
+      .get( "/Api/Shop/shop_fw", {
         params: {
           shop_id: this.userinfo.shop[0].id
         }
@@ -42,12 +44,12 @@ export default {
       });
   },
   mounted() {
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapper, {
-        tap: true,
-        click: true
-      });
-    });
+    // this.$nextTick(() => {
+    //   this.scroll = new BScroll(this.$refs.wrapper, {
+    //     tap: true,
+    //     click: true
+    //   });
+    // });
   },
   methods: {
     showPopup(val) {
@@ -68,6 +70,13 @@ export default {
 
 .pingjia-list {
   padding-left: 0.533333rem;
+    .router-enter-active {
+    transition: transform .3s ease-in-out;
+  }
+
+  .router-enter {
+    transform: translateX(100%);
+  }
   .pingjia-item {
     @include font-dpr(12px);
     display: flex;

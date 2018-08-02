@@ -40,7 +40,7 @@
       }
     },
     created() {
-      this.$axios.get(this.API_URL + "/Api/UserShow/give_money_content", {
+      this.$axios.get( "/Api/UserShow/give_money_content", {
         params: {
           id: this.txId
         }

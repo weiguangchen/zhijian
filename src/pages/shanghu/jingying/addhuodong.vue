@@ -220,7 +220,7 @@
         this.getOldInfo()
       }
       this.$axios
-        .get(this.API_URL + "/Api/YouHui/card_add", {
+        .get( "/Api/YouHui/card_add", {
           params: {
             phone: _this.userinfo.uphone
           }
@@ -262,7 +262,7 @@
       changeOneClass(val) {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/Api/YouHui/get_hd_content", {
+          .get( "/Api/YouHui/get_hd_content", {
             params: {
               id: val
             }
@@ -305,7 +305,7 @@
               })
               // 修改活动
               this.$axios
-                .get(_this.API_URL + "/Api/Card/card_edit", {
+                .get( "/Api/Card/card_edit", {
                   headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                   },
@@ -341,7 +341,7 @@
             } else {
               // 添加活动
               this.$axios
-                .get(_this.API_URL + "/Api/YouHui/add_card", {
+                .get( "/Api/YouHui/add_card", {
                   headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                   },
@@ -457,7 +457,7 @@
         var _this = this;
         console.log(id);
         this.$axios
-          .get(_this.API_URL + "/Api/YouHui/content", {
+          .get( "/Api/YouHui/content", {
             params: {
               id
             }
@@ -472,7 +472,7 @@
       },
       // 获取已有数据
       getOldInfo() {
-        this.$axios.get(this.API_URL + '/Api/card/edit_card', {
+        this.$axios.get( '/Api/card/edit_card', {
           params: {
             id: this.hdId
           }
@@ -536,7 +536,7 @@
           success: function (res) {
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get(_this.API_URL + "/api/wechat/bcimg", {
+              .get( "/api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }

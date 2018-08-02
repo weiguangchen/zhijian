@@ -1,5 +1,6 @@
 export const API_URL = 'http://zj.daonian.cn';
-export const default_url = 'http://qd.daonian.cn';
+export const production_url = 'http://qd.daonian.cn';
+export const development_url = 'http://192.168.31.76:8081';
 const $toDetail = function (id) {
   var _this = this;
   this.$router.push({
@@ -10,7 +11,7 @@ const $toDetail = function (id) {
 const wxConfig = function () {
   var _this = this;
   this.$axios
-    .get(_this.API_URL + "/api/wechat/sharewx", {
+    .get("/api/wechat/sharewx", {
       params: {
         url: _this.ios_wx_url
       }
@@ -65,5 +66,7 @@ export default {
     Vue.prototype.$toDetail = $toDetail;
     Vue.prototype.wxConfig = wxConfig;
     Vue.prototype.setMetaTitle = setMetaTitle;
+    Vue.prototype.$production_url = production_url;
+    Vue.prototype.$development_url = development_url;
   }
 };

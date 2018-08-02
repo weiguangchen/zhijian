@@ -19,7 +19,7 @@ import axios from "axios";
 import VueCookies from 'vue-cookie'
 import {
   API_URL,
-  default_url
+  production_url
 } from '@/assets/js/global.js';
 import wx from 'weixin-js-sdk';
 
@@ -85,7 +85,12 @@ function wxConfig(url) {
           "uploadImage",
           "getLocalImgData",
           "getLocation",
-          "openLocation"
+          "openLocation",
+          "onMenuShareTimeline",
+          "onMenuShareAppMessage",
+          "onMenuShareQQ",
+          "onMenuShareWeibo",
+          "onMenuShareQZone"
         ] // 必填，需要使用的JS接口列表
       });
     });
@@ -107,23 +112,11 @@ function wxConfig(url) {
 }
 
 
-
+// 默认路由
 import defaultRouterMaps from './routerMap/defaultRouterMap.js';
-
-/*  
-    权限列表
-    1验证管理
-    11验证消费码12验证活动
-    2评价管理
-    21消费评价22活动评价
-    3经营管理
-    31消费统计32订单管理33活动统计
-    4商户中心
-    41项目管理42编辑服务43添加活动44门店管理45账户管理
-*/
-
+// 商户路由
 import adminRouterMaps from './routerMap/adminRouterMaps.js';
-
+// 服务员路由
 import servicerRouterMaps from './routerMap/servicerRouterMaps.js'
 
 
@@ -153,7 +146,7 @@ router.beforeEach((to, from, next) => {
     wxConfig(store.state.entryUrl);
   } else {
     // 安卓微信    
-    var url = default_url + to.fullPath;
+    var url = production_url + to.fullPath;
     wxConfig(url);
   }
 

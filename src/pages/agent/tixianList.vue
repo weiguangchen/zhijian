@@ -91,7 +91,7 @@ export default {
     },
     get_tx_list() {
       this.$axios
-        .get(this.API_URL + "/Api/UserShow/give_money_list", {
+        .get( "/Api/UserShow/give_money_list", {
           params: {
             uid: this.id,
             num: 8,
@@ -118,7 +118,7 @@ export default {
         num: 8
       };
       this.$axios
-        .get(this.API_URL + "/Api/DlCore/get_money_log", {
+        .get( "/Api/DlCore/get_money_log", {
           params
         })
         .then(({ data }) => {

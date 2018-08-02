@@ -97,7 +97,7 @@
         Object.assign(params, {
           tj: this.format(type) /* 0门店1服务2活动 */
         })
-        return this.$axios.get(this.API_URL + '/Api/UserShow/get_like_list', {
+        return this.$axios.get( '/Api/UserShow/get_like_list', {
           params
         }).then(({
           data

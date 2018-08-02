@@ -85,7 +85,7 @@ export default {
     },
     get_list() {
       this.$axios
-        .get(this.API_URL + "/Api/DlCore/get_list", {
+        .get( "/Api/DlCore/get_list", {
           params: this.params
         })
         .then(({ data }) => {

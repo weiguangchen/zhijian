@@ -133,7 +133,7 @@
         this.get_fw();
       });
 
-      this.$axios.get(_this.API_URL + "/Api/Show/get_gg").then(({
+      this.$axios.get("/Api/Show/get_gg").then(({
         data
       }) => {
         // 获取头部广告
@@ -169,7 +169,7 @@
       get_fw() {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/Api/Yes/one_jl", {
+          .get("/Api/Yes/one_jl", {
             params: {
               lng: this.location.lat,
               lat: this.location.lng,

@@ -72,7 +72,7 @@
         this.alertShow = val;
       },
       submit_tuidan() {
-        // this.$axios.get(this.API_URL+'/api/order/jj_order',{
+        // this.$axios.get('/api/order/jj_order',{
 
         // }).then(({data})=>{
 

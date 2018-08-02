@@ -117,7 +117,7 @@ import betterScroll from '@/components/betterScroll'
         var _this = this;
         // jf=0微信支付if=1卡支付
         return this.$axios
-          .get(this.API_URL + "/Api/UserShow/get_order", {
+          .get( "/Api/UserShow/get_order", {
             params: {
               uid: _this.id,
               status: _this.orderStatus,

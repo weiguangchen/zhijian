@@ -80,7 +80,7 @@
     methods: {
       get_city() {
         this.$axios
-          .get(this.API_URL + "/Api/DlCore/gd_city", {
+          .get( "/Api/DlCore/gd_city", {
             params: {
               gd_id: this.userinfo.dl[0].id
             }
@@ -94,7 +94,7 @@
       },
       get_qy() {
         this.$axios
-          .get(this.API_URL + "/Api/DlCore/gd_qy", {
+          .get( "/Api/DlCore/gd_qy", {
             params: {
               gd_id: this.userinfo.dl[0].id
             }
@@ -108,7 +108,7 @@
       },
       get_city_qy() {
         this.$axios
-          .get(this.API_URL + "/Api/DlCore/city_qy", {
+          .get( "/Api/DlCore/city_qy", {
             params: {
               qy_id: this.userinfo.dl[0].id
             }

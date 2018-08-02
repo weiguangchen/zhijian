@@ -58,7 +58,7 @@
         this.sk_money = val;
       },
       get_shop() {
-        this.$axios.get(this.API_URL + '/Api/ShopCore/get_shop', {
+        this.$axios.get( '/Api/ShopCore/get_shop', {
           params: {
             shop_id: this.userinfo.shop[0].id
           }
@@ -70,7 +70,7 @@
         })
       },
       get_money() {
-        this.$axios.get(this.API_URL + '/Api/ShopCore/shop_core', {
+        this.$axios.get( '/Api/ShopCore/shop_core', {
           params: {
             shop_id: this.userinfo.shop[0].id
           }
@@ -91,7 +91,7 @@
           })
           this.sking = false;
         } else {
-          this.$axios.get(this.API_URL + '/Api/ShopCore/shop_get_money', {
+          this.$axios.get( '/Api/ShopCore/shop_get_money', {
             params: {
               shop_id: this.userinfo.shop[0].id,
               user_id: this.userinfo.id,

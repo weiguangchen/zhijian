@@ -13,7 +13,7 @@ export default {
   created() {
     var _this = this;
     this.$axios
-      .get(_this.API_URL + "Api/YouHui/get_hd_content", {
+      .get( "Api/YouHui/get_hd_content", {
         params: {
           id: _this.twId
         }

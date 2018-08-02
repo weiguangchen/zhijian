@@ -63,7 +63,7 @@
       get_card() {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/Api/BkPay/yes_card", {
+          .get( "/Api/BkPay/yes_card", {
             params: {
               user_id: this.id,
               fw_id: this.serviceId

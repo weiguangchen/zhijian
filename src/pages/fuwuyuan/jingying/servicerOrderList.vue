@@ -103,7 +103,7 @@
       },
       get_order() {
         return this.$axios
-          .get(this.API_URL + "/Api/order/fwy_order", {
+          .get( "/Api/order/fwy_order", {
             params: {
               phone: this.userinfo.uphone,
               paidan_status: this.orderType,

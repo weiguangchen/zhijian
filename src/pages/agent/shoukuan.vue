@@ -97,7 +97,7 @@
           })
           this.tixianing = false;
         } else {
-          this.$axios.get(this.API_URL + '/Api/DlCore/dl_get_money', {
+          this.$axios.get( '/Api/DlCore/dl_get_money', {
             params: {
               dl_id: this.userinfo.dl[0].id,
               user_id: this.id,

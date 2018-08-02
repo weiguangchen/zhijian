@@ -163,7 +163,7 @@
       get_hd_info() {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/Api/Show/get_hd_content", {
+          .get( "/Api/Show/get_hd_content", {
             params: {
               id: _this.huodongId
             }
@@ -232,7 +232,7 @@
       collect() {
         this.collecting = true;
         if (this.ifCollect) {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_dlike', {
+          this.$axios.get( '/Api/UserShow/user_dlike', {
             params: {
               id: this.collect_id
             }
@@ -248,7 +248,7 @@
             this.collecting = false;
           })
         } else {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_like', {
+          this.$axios.get( '/Api/UserShow/user_like', {
             params: this.collect_params
           }).then(({
             data
@@ -266,7 +266,7 @@
 
       },
       collect_status() {
-        this.$axios.get(this.API_URL + '/Api/UserShow/yes_like', {
+        this.$axios.get( '/Api/UserShow/yes_like', {
           params: this.collect_params
         }).then(({
           data

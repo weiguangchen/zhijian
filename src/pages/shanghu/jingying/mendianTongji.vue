@@ -65,7 +65,7 @@
         this.$emit("showPopup", val);
       },
       get_fw_mendian(){
-        //   this.$axios.get(this.API_URL+'/Api/')
+        //   this.$axios.get('/Api/')
       }
     },
     computed:{

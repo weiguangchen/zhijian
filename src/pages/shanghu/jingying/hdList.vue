@@ -50,7 +50,7 @@
       xiajia(fwId) {
         var _this = this;
         this.$axios
-          .get(this.API_URL + "/Api/card/down", {
+          .get( "/Api/card/down", {
             params: {
               id: fwId
             }
@@ -81,7 +81,7 @@
       shangjia(hdId) {
         var _this = this;
         this.$axios
-          .get(this.API_URL + "/Api/card/up", {
+          .get( "/Api/card/up", {
             params: {
               id: hdId
             }
@@ -112,7 +112,7 @@
       get_hd_list() {
         var _this = this;
         this.$axios
-          .get(this.API_URL + "/Api/Card/get_card", {
+          .get( "/Api/Card/get_card", {
             params: {
               shop_id: this.userinfo.shop[0].id,
               num: 8,

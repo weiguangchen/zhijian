@@ -125,7 +125,7 @@
     created() {
       var _this = this;
       // 获取地区三级联动数据
-      this.$axios.get(this.API_URL + "/Api/UserShow/city").then(({
+      this.$axios.get( "/Api/UserShow/city").then(({
         data
       }) => {
         console.log(data);
@@ -161,7 +161,7 @@
         // 股东代理
         this.level = "市级代理";
         // 获取代理区域
-        this.$axios.get(this.API_URL + "/Api/Dl/get_city").then(({
+        this.$axios.get( "/Api/Dl/get_city").then(({
           data
         }) => {
           console.log(data);
@@ -171,7 +171,7 @@
         // 市级代理
         this.level = "区域代理";
         // 获取代理区域
-        this.$axios.get(this.API_URL + "/Api/Dl/get_city").then(({
+        this.$axios.get( "/Api/Dl/get_city").then(({
           data
         }) => {
           console.log(data);
@@ -227,7 +227,7 @@
                 res => {
                   console.log(params);
                   this.$axios
-                    .get(this.API_URL + "/Api/Dl/add_dl", {
+                    .get( "/Api/Dl/add_dl", {
                       params
                     })
                     .then(({
@@ -302,7 +302,7 @@
 
         return new Promise((resolve, reject) => {
           this.$axios
-            .get(this.API_URL + "/Api/Dl/adress_yes", {
+            .get( "/Api/Dl/adress_yes", {
               params: {
                 id: id,
                 status: _this.cityApiType
@@ -335,7 +335,7 @@
         var _this = this;
         return new Promise((resolve, reject) => {
           this.$axios
-            .get(this.API_URL + "/Api/Dl/phone_yes", {
+            .get( "/Api/Dl/phone_yes", {
               params: {
                 phone: this.phone
               }
@@ -364,7 +364,7 @@
       changeCity(val) {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/Api/Dl/get_city", {
+          .get( "/Api/Dl/get_city", {
             params: {
               city_id: val
             }
@@ -430,7 +430,7 @@
           success: function (res) {
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get(_this.API_URL + "/api/wechat/bcimg", {
+              .get( "/api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }

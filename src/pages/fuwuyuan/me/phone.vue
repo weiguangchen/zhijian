@@ -64,7 +64,7 @@
             mobile: this.new_phone
           };
           this.$axios
-            .get(_this.API_URL + "/Api/UserShow/fsyzm", {
+            .get( "/Api/UserShow/fsyzm", {
               params
             })
             .then(({
@@ -104,7 +104,7 @@
         }
       },
       edit_phone() {
-        this.$axios.get(this.API_URL + '/Api/UserShow/ed_son', {
+        this.$axios.get( '/Api/UserShow/ed_son', {
           params: {
             id: this.id,
             phone: this.new_phone,

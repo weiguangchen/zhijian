@@ -1,6 +1,8 @@
 <template>
   <div class="shanghu-box">
+    <transition name='router'>
     <router-view @showPopup='showPopup'></router-view>
+    </transition>
     <Popup position='right' v-model="popupShow">
       <div class="popup-list">
         <Group>
@@ -61,6 +63,13 @@
   .shanghu-box,
   .shanghu-warpper {
     height: 100%;
+     .router-enter-active {
+    transition: transform .3s ease-in-out;
+  }
+
+  .router-enter {
+    transform: translateX(100%);
+  }
   }
 
 </style>

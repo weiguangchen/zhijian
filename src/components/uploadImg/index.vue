@@ -35,14 +35,18 @@
         default: true
       },
       oldImgs: {
-        default: []
+        required:false,
+        default(){
+          return []
+        }
       }
     },
     created() {
       this.checkSystem();
       console.log('初始化upload')
-      this.old = this.oldImgs;
-      console.log(this.old)
+      if (this.oldImgs) {
+        this.old = this.oldImgs;
+      }
       if (this.multiple) {
         // 多图上传
       } else {
@@ -92,7 +96,7 @@
             console.log(res);
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get(_this.API_URL + "/Api/wechat/bcimg", {
+              .get( "/Api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }

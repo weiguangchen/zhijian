@@ -50,7 +50,7 @@
     },
     methods: {
         get_detail(){
-            this.$axios.get(this.API_URL+'/Api/ShopCore/get_card_content',{
+            this.$axios.get('/Api/ShopCore/get_card_content',{
                 params:{
                     order_num:this.order_num
                 }

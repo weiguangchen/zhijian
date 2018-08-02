@@ -147,7 +147,7 @@
       },
       get_son() {
         this.$axios
-          .get(this.API_URL + "/Api/UserShow/get_son", {
+          .get( "/Api/UserShow/get_son", {
             params: {
               shop_id: this.userinfo.shop[0].id
             }
@@ -159,7 +159,7 @@
       },
       get_detail() {
         this.$axios
-          .get(this.API_URL + "/Api/Order/get_order_content", {
+          .get( "/Api/Order/get_order_content", {
             params: {
               id: this.orderId,
               zf: this.zf
@@ -172,7 +172,7 @@
       },
       paidan() {
         var _this = this;
-        this.$axios.get(this.API_URL + '/Api/Order/pf_order', {
+        this.$axios.get( '/Api/Order/pf_order', {
           params: {
             zf: this.zf,
             phone: this.pf_phone,
@@ -190,7 +190,7 @@
         })
       },
       rePaidan() {
-        this.$axios.get(this.API_URL + '/Api/Order/new_order', {
+        this.$axios.get( '/Api/Order/new_order', {
           params: {
             zf: this.zf,
             phone: this.detail.fw_user_phone,
@@ -210,7 +210,7 @@
       },
       agree_tui() {
         var _this = this;
-        this.$axios.get(this.API_URL + '/Api/order/ty_tui', {
+        this.$axios.get( '/Api/order/ty_tui', {
           params: {
             zf: this.zf,
             order_id: this.orderId,

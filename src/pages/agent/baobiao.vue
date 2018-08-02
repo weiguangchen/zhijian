@@ -137,7 +137,7 @@
     },
     methods: {
       get_city() {
-        this.$axios.get(this.API_URL + '/Api/DlCore/dl_bb_sd', {
+        this.$axios.get( '/Api/DlCore/dl_bb_sd', {
           params: this.tiaojian
         }).then(({
           data
@@ -147,7 +147,7 @@
         })
       },
       get_qy() {
-        this.$axios.get(this.API_URL + '/Api/DlCore/dl_bb_qy', {
+        this.$axios.get( '/Api/DlCore/dl_bb_qy', {
           params: this.tiaojian
         }).then(({
           data
@@ -157,7 +157,7 @@
         })
       },
       get_jms() {
-        this.$axios.get(this.API_URL + '/Api/DlCore/get_shop', {
+        this.$axios.get( '/Api/DlCore/get_shop', {
           params: this.tiaojian
         }).then(({
           data

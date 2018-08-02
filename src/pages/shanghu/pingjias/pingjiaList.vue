@@ -1,5 +1,4 @@
 <template>
-
   <Layout class="pingjia-detail">
     <InfiniteScroll :callback="loadList" ref="infinitescroll">
       <div slot="list">
@@ -16,11 +15,11 @@
             <div class="star-info">
               <div class="star-line">
                 5星
-                <starprogress :total='all_token' :num='starinfo.one' class="progress"></starprogress>{{starinfo.one}}
+                <starprogress :total='all_token' :num='starinfo.five' class="progress"></starprogress>{{starinfo.five}}
               </div>
               <div class="star-line">
                 4星
-                <starprogress :total='all_token' :num='starinfo.two' class="progress"></starprogress>{{starinfo.two}}
+                <starprogress :total='all_token' :num='starinfo.four' class="progress"></starprogress>{{starinfo.four}}
               </div>
               <div class="star-line">
                 3星
@@ -28,11 +27,11 @@
               </div>
               <div class="star-line">
                 2星
-                <starprogress :total='all_token' :num='starinfo.four' class="progress"></starprogress>{{starinfo.four}}
+                <starprogress :total='all_token' :num='starinfo.two' class="progress"></starprogress>{{starinfo.two}}
               </div>
               <div class="star-line">
                 1星
-                <starprogress :total='all_token' :num='starinfo.five' class="progress"></starprogress>{{starinfo.five}}
+                <starprogress :total='all_token' :num='starinfo.one' class="progress"></starprogress>{{starinfo.one}}
               </div>
             </div>
           </div>
@@ -108,7 +107,7 @@
       getInfo() {
         var _this = this;
         this.$axios
-          .get(this.API_URL + "/Api/Shop/fw_token", {
+          .get( "/Api/Shop/fw_token", {
             params: {
               fw_shop_id: _this.fwId
             }
@@ -129,7 +128,7 @@
       getList() {
         var _this = this;
         return this.$axios
-          .get(this.API_URL + "/Api/Shop/p_fw_token", {
+          .get( "/Api/Shop/p_fw_token", {
             params: {
               fw_shop_id: _this.fwId,
               num: 4,
@@ -172,7 +171,6 @@
 
 <style lang='scss'>
   .pingjia-detail {
-    padding-bottom: 50px;
     .big-title {
       margin-bottom: 0.533333rem;
     }

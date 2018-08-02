@@ -201,7 +201,7 @@
       // this.$eruda.init();
 
       this.$axios
-        .get(_this.API_URL + "/api/ShopFw/shop_fw", {
+        .get( "/api/ShopFw/shop_fw", {
           params: {
             shop_id: this.userinfo.shop[0].id,
             phone: _this.userinfo.uphone
@@ -304,7 +304,7 @@
         this.checkForm().then(
           res => {
             this.$axios
-              .get(_this.API_URL + "/api/ShopFw/add_shop_fw", {
+              .get( "/api/ShopFw/add_shop_fw", {
                 params: {
                   fw_mingzi: this.fw_name,
                   sub_name: this.fw_short_info,
@@ -362,7 +362,7 @@
           res => {
             console.log("成功");
             this.$axios
-              .get(_this.API_URL + "/api/ShopFw/update_shop_fw", {
+              .get( "/api/ShopFw/update_shop_fw", {
                 params: {
                   fw_mingzi: this.fw_name,
                   sub_name: this.fw_short_info,
@@ -450,7 +450,7 @@
       changeTwoClass(id) {
         var _this = this;
         this.$axios
-          .get(_this.API_URL + "/Api/ShopFw/get_fw_content", {
+          .get( "/Api/ShopFw/get_fw_content", {
             params: {
               id
             }
@@ -469,7 +469,7 @@
         // this.twDetailShow = true;
 
         this.$axios
-          .get(_this.API_URL + "/Api/ShopFw/content", {
+          .get( "/Api/ShopFw/content", {
             params: {
               id
             }
@@ -527,7 +527,7 @@
           success: function (res) {
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get(_this.API_URL + "/api/wechat/bcimg", {
+              .get( "/api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }
@@ -544,7 +544,7 @@
       getOldInfo() {
         var _this = this;
         return this.$axios
-          .get(this.API_URL + "/Api/ShopFw/edit_fw", {
+          .get( "/Api/ShopFw/edit_fw", {
             params: {
               id: _this.querys,
               phone: _this.userinfo.uphone

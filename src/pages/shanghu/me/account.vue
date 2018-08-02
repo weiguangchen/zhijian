@@ -53,7 +53,7 @@
       var _this = this;
       this.$emit("showPopup", false);
       this.$axios
-        .get(this.API_URL + "/Api/UserShow/get_son", {
+        .get( "/Api/UserShow/get_son", {
           params: {
             shop_id: _this.userinfo.shop[0].id
           }

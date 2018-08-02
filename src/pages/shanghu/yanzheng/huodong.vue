@@ -49,7 +49,7 @@ export default {
   created() {
     var _this = this;
     this.$axios
-      .get(_this.API_URL + "/Api/ShopFw/get_face", {
+      .get( "/Api/ShopFw/get_face", {
         params: { phone:this.userinfo.uphone }
       })
       .then(res => {
@@ -61,7 +61,7 @@ export default {
     yanzheng() {
       var _this = this;
       this.$axios
-        .get(_this.API_URL + "/api/ShopFw/hd_ok", {
+        .get( "/api/ShopFw/hd_ok", {
           params: {
             fw_shop_id: this.userinfo.shop[0].id ,
             pay_num: _this.pay_num,

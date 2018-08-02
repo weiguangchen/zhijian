@@ -70,7 +70,7 @@
       // this.$eruda.init();
       if (this.type == 1) {
         this.$axios
-          .get(this.API_URL + "/Api/UserShow/order_content1", {
+          .get( "/Api/UserShow/order_content1", {
             params: {
               order_num: _this.orderId
             }
@@ -81,7 +81,7 @@
           });
       } else if (this.type == 0) {
         this.$axios
-          .get(this.API_URL + "/Api/UserShow/order_content", {
+          .get( "/Api/UserShow/order_content", {
             params: {
               order_num: _this.orderId
             }
@@ -111,7 +111,7 @@
         console.log(params)
 
         this.$axios
-          .get(this.API_URL + "/Api/UserShow/token", {
+          .get( "/Api/UserShow/token", {
             params
           })
           .then(res => {

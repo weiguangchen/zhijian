@@ -6,6 +6,7 @@ import store from './store'
 /* axios插件 */
 import axios from "axios";
 Vue.prototype.$axios = axios;
+axios.defaults.baseURL = 'http://zj.daonian.cn';
 /* 引入微信jssdk */
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;

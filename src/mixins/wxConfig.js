@@ -13,7 +13,7 @@ export default {
   created() {
     var _this = this;
     this.$axios
-      .get(_this.API_URL + "/api/wechat/sharewx", {
+      .get( "/api/wechat/sharewx", {
         params: {
           url: _this.ios_wx_url
         }
@@ -47,7 +47,7 @@ export default {
 
 export function wxConfig(url) {
   this.$axios
-    .get(_this.API_URL + "/api/wechat/sharewx", {
+    .get( "/api/wechat/sharewx", {
       params: {
         url
       }

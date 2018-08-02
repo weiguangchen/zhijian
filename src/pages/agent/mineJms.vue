@@ -54,7 +54,7 @@
     },
     methods: {
       get_add() {
-        this.$axios.get(this.API_URL + '/Api/DlCore/get_name', {
+        this.$axios.get( '/Api/DlCore/get_name', {
           params: {
             dl_id: this.userinfo.dl[0].id,
             dl_jb: this.userinfo.dl[0].dl_jb
@@ -75,7 +75,7 @@
       },
       get_shop() {
         return this.$axios
-          .get(this.API_URL + "/Api/DlCore/dl_get_shop", {
+          .get( "/Api/DlCore/dl_get_shop", {
             params: this.params
           })
           .then(({

@@ -68,7 +68,7 @@
           })
           this.txing = false;
         } else {
-          this.$axios.get(this.API_URL + '/Api/UserShow/user_give_money', {
+          this.$axios.get( '/Api/UserShow/user_give_money', {
             params: {
               uid: this.id,
               get_money: this.tixian_money
@@ -105,7 +105,7 @@
 
       },
       get_shop() {
-        this.$axios.get(this.API_URL + '/Api/ShopCore/get_shop', {
+        this.$axios.get( '/Api/ShopCore/get_shop', {
           params: {
             shop_id: this.userinfo.shop[0].id
           }

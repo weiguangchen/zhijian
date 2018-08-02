@@ -127,7 +127,7 @@
       // this.$eruda.init();
       var _this = this;
       // 获取城市信息
-      this.$axios.get(this.API_URL + "/Api/UserShow/city").then(({
+      this.$axios.get( "/Api/UserShow/city").then(({
         data
       }) => {
         console.log(data);
@@ -154,7 +154,7 @@
       });
 
       this.$axios
-        .get(this.API_URL + "/Api/ShopFw/fw_shop_class")
+        .get( "/Api/ShopFw/fw_shop_class")
         .then(({
           data
         }) => {
@@ -185,7 +185,7 @@
 
             console.log(params);
             this.$axios
-              .get(this.API_URL + "/Api/ShopFw/add_fw_shop", {
+              .get( "/Api/ShopFw/add_fw_shop", {
                 params
               })
               .then(({
@@ -312,7 +312,7 @@
           success: function (res) {
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get(_this.API_URL + "/api/wechat/bcimg", {
+              .get( "/api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }

@@ -54,7 +54,7 @@
           mobile: this.userinfo.fuwuyuan.phone
         };
         this.$axios
-          .get(_this.API_URL + "/Api/UserShow/fsyzm", {
+          .get( "/Api/UserShow/fsyzm", {
             params
           })
           .then(({

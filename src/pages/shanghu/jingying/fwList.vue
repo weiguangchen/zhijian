@@ -42,7 +42,7 @@ export default {
     xiajia(fwId) {
       var _this = this;
       this.$axios
-        .get(this.API_URL + "/Api/ShopFw/xj_shop_fw", {
+        .get( "/Api/ShopFw/xj_shop_fw", {
           params: {
             id: fwId
           }
@@ -71,7 +71,7 @@ export default {
     shangjia(fwId) {
       var _this = this;
       this.$axios
-        .get(this.API_URL + "/Api/ShopFw/sj_shop_fw", {
+        .get( "/Api/ShopFw/sj_shop_fw", {
           params: {
             id: fwId
           }
@@ -100,7 +100,7 @@ export default {
     get_fw_list() {
       var _this = this;
       this.$axios
-        .get(this.API_URL + "/Api/ShopFw/fw_list", {
+        .get( "/Api/ShopFw/fw_list", {
           params: {
             shop_id: this.userinfo.shop[0].id
           }
