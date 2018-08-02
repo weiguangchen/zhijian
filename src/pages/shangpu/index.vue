@@ -10,14 +10,14 @@
         <div class="info">
           <div>{{faceInfo.face_name}}</div>
           <div>
-            <rater val='4' class="rater"></rater>
+            <rater :val='faceInfo.star' class="rater"></rater>
           </div>
           <div>
-            <span>技术：5.6</span>
-            <span>服务：7.8</span>
-            <span>环境：7.8</span>
+            <span>态度：{{format_fenshu(faceInfo.td_star)}}</span>
+            <span>速度：{{format_fenshu(faceInfo.sd_star)}}</span>
+            <span>质量：{{format_fenshu(faceInfo.zl_star)}}</span>
           </div>
-          <div>营业时间：周一到周日 08:00 —— 19:00</div>
+          <div>营业时间：{{faceInfo.start_day}}到{{faceInfo.end_day}} {{faceInfo.start_time}} —— {{faceInfo.end_time}}</div>
         </div>
         <button class="guanzhu" :disabled='collecting'>
           <img src="./img/weiguanzhu.png" alt="" @click='collect' v-if="!ifCollect">
@@ -26,27 +26,7 @@
 
 
       </div>
-      <!-- <Blur url='~img/shangpu/banner.png'>
-        <div class="info-wrapper">
-         
-          <div class="logo">
-            <img src="~img/shangpu/banner.png" alt="" class="img">
-          </div>
-          <div class="info">
-            <div>{{faceInfo.face_name}}</div>
-            <div>
-              <rater val='4' class="rater"></rater>
-            </div>
-            <div>
-              <span>技术：5.6</span>
-              <span>服务：7.8</span>
-              <span>环境：7.8</span>
-            </div>
-            <div>营业时间：周一到周日 08:00 —— 19:00</div>
-          </div>
-          
-        </div>
-      </Blur> -->
+
       <swiper :options="swiperOption" ref="mySwiper" class="top-ad">
         <swiper-slide v-for="(item,index) in top_ad" :key="index">
           <img :src="item.url" alt="">
@@ -157,9 +137,9 @@
   import rater from "@/components/star/index";
   import tuangou from "@/components/service/serviceTuan.vue";
   import huodong from "@/components/service/huodong.vue";
-  import fw from "@/components/service/shop_service.vue";
-  import fw2 from "@/components/service/shop_service2.vue";
-  import hd from "@/components/service/shop_huodong.vue";
+  import fw from "./components/shop_service.vue";
+  import fw2 from "./components/shop_service2.vue";
+  import hd from "./components/shop_huodong.vue";
   import checkLogin from "@/mixins/checkLogin.js";
   import pinglun from "@/components/pinglun/index";
 
@@ -372,6 +352,11 @@
           this.collect_id = data.zhi.id;
         })
       },
+      format_fenshu(num) {
+        if (num) {
+          return (num.toString()).indexOf('.') < 0 ? `${num}.0`:num
+        }
+      }
     },
     computed: {
       shopId() {

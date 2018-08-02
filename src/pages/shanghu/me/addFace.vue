@@ -28,11 +28,20 @@
             <iview-button type="dashed" size="small" @click="showAddTag">添加标签</iview-button>
           </div>
         </div>
+        <h2 class="sub-title">营业时间:</h2>
+        <div>
+          <Selector :options='date_list' title='开始日期' direction='rtl' v-model='start_day'></Selector>
+          <Selector :options='date_list' title='结束日期' direction='rtl' v-model='end_day'></Selector>
+          <Datetime format='HH:mm' title='开始营业时间' v-model="start_time"></Datetime>
+          <Datetime format='HH:mm' title='开始营业时间' v-model="end_time"></Datetime>
+        </div>
         <Group>
           <Cell title='加盟城市' v-model="cityKey"></Cell>
           <Cell title='加盟区域' v-model="qyKey"></Cell>
           <Selector :options='sqList' title='加盟社区' :value-map="['id','sq_name']" direction='rtl' @on-change='changeSq' v-model='sqVal'></Selector>
         </Group>
+        <h2 class="sub-title">门店图片：</h2>
+        <uploadImage @uploadComplete='uploadComplete' :multiple='false' :oldImgs='tupian' v-if="tupian.length>0"></uploadImage>
         <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
         <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='submiting'>增加门店</XButton>
         <XButton type='warn' class="xbtn" @click.native='change_face' v-else :disabled='submiting'>提交修改</XButton>
@@ -61,9 +70,12 @@
     Group,
     XButton,
     Selector,
-    Cell
+    Cell,
+    Datetime
   } from "vux";
   import checkLogin from "@/mixins/checkLogin.js";
+  import uploadImage from '@/components/uploadImg/index';
+
   export default {
     data() {
       return {
@@ -72,21 +84,50 @@
         sqList: [],
         alertShow: false,
         tagVal: '',
-
+        date_list: [{
+            key: '星期一',
+            value: '星期一'
+          }, {
+            key: '星期二',
+            value: '星期二'
+          }, {
+            key: '星期三',
+            value: '星期三'
+          }, {
+            key: '星期四',
+            value: '星期四'
+          },
+          {
+            key: '星期五',
+            value: '星期五'
+          }, {
+            key: '星期六',
+            value: '星期六'
+          }, {
+            key: '星期日',
+            value: '星期日'
+          },
+        ],
         face_name: "",
         map: "",
         address: "",
         tag1: [],
         tag2: [],
+        start_day: '星期一',
+        end_day: '星期日',
+        start_time: '00:00',
+        end_time: '24:00',
         cityVal: "",
         cityKey: "",
         qyVal: "",
         qyKey: "",
-        sqVal: ""
+        sqVal: "",
+        tupian:[]
       };
     },
     created() {
       var _this = this;
+      // this.$eruda.init();
       this.$emit("showPopup", false);
       if (this.faceId) {
         this.$axios
@@ -99,20 +140,21 @@
             data
           }) => {
             console.log(data);
+
             _this.face_name = data.face_name;
             if (data.map) {
               _this.map = JSON.parse(data.map);
             }
-            _this.address = data.adress;
-            if (data.sq_id) {
-              _this.sqVal = data.sq_id;
-            }
-            if (data.tag1) {
-              this.tag1 = data.tag1;
-            }
-            if (data.tag2) {
-              this.tag2 = data.tag2;
-            }
+            this.address = data.adress;
+            this.sqVal = data.sq_id;
+            this.tag1 = data.tag1;
+            this.tag2 = data.tag2;
+            this.start_day = data.start_day;
+            this.end_day = data.end_day;
+            this.start_time = data.start_time;
+            this.end_time = data.end_time;
+            this.tupian = data.face_img;
+            console.log('获取old图片')
           });
       }
 
@@ -152,23 +194,10 @@
         console.log("提交");
 
         this.checkForm().then(res => {
-          var params = {
-            face_name: this.face_name,
-            jd: this.map.latlng.lat,
-            wd: this.map.latlng.lng,
-            map: this.map,
-            adress: this.address,
-            city: this.cityVal,
-            qy: this.qyVal,
-            sq: this.sqVal,
-            fw_shop_id: this.userinfo.shop[0].id,
-            phone: this.userinfo.uphone,
-            tag1: this.tag1,
-            tag2: this.tag2
-          };
+
           this.$axios
             .get(this.API_URL + "/Api/Shop/add_face", {
-              params
+              params: this.params
             })
             .then(
               ({
@@ -212,21 +241,7 @@
         this.checkForm().then(res => {
           this.$axios
             .get(this.API_URL + "/Api/Shop/edit_face", {
-              params: {
-                face_name: _this.face_name,
-                jd: _this.map.latlng.lat,
-                wd: _this.map.latlng.lng,
-                id: _this.faceId,
-                map: this.map,
-                city: this.cityVal,
-                qy: this.qyVal,
-                sq: this.sqVal,
-                adress: this.address,
-                fw_shop_id: this.userinfo.shop[0].id,
-                phone: this.userinfo.uphone,
-                tag1: this.tag1,
-                tag2: this.tag2
-              }
+              params: this.params
             })
             .then(({
               data
@@ -312,6 +327,9 @@
         var index = this.tag2.indexOf(name);
         this.tag2.splice(index, 1);
 
+      },
+      uploadComplete(imgs){
+        this.tupian = imgs;
       }
     },
     components: {
@@ -323,7 +341,9 @@
       myMap,
       Cell,
       betterScroll,
-      Popup
+      Popup,
+      Datetime,
+      uploadImage
     },
     computed: {
       faceId() {
@@ -334,6 +354,28 @@
           return false;
         } else {
           return true;
+        }
+      },
+      params() {
+        return {
+          face_name: this.face_name,
+          jd: this.map.latlng.lat,
+          wd: this.map.latlng.lng,
+          map: this.map,
+          adress: this.address,
+          city: this.cityVal,
+          qy: this.qyVal,
+          sq: this.sqVal,
+          fw_shop_id: this.userinfo.shop[0].id,
+          id: this.faceId,
+          phone: this.userinfo.uphone,
+          tag1: this.tag1,
+          tag2: this.tag2,
+          start_day: this.start_day,
+          end_day: this.end_day,
+          start_time: this.start_time,
+          end_time: this.end_time,
+          face_img:this.tupian
         }
       }
     },

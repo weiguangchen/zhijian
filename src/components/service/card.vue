@@ -2,19 +2,18 @@
   <!-- <router-link :to="'/serviceDetail/'+fwInfo.id"> -->
   <div class="service" @click="toDetail(fwInfo.bk_id)">
     <div class="img-box">
-        <img :src="fwInfo.hd_img" alt="" class="img">
+      <img :src="fwInfo.hd_img" alt="" class="img">
     </div>
     <div class="info">
       <!-- <div class="intr"> -->
       <div class="top">{{fwInfo.card_name}}</div>
-      <!-- <div class="middle">
-          <rater :val='fwInfo.star' :enable='enable'></rater>
-        </div> -->
-      <div class="bottom">
-        <span>
-          <span class="iconfont icon-weizhi1"></span>{{fwInfo.shop[0].adress}}</span>
-        <span>{{fwInfo.class[0].class_name}}</span>
+      <div class="middle">
+                <span>{{fwInfo.class[0].class_name}}</span>
         <span>{{fwInfo.m}}KM</span>
+      </div>
+      <div class="bottom">
+          <span class="iconfont icon-weizhi1"></span>{{fwInfo.shop[0].adress}}
+
       </div>
       <div class="tips" v-if="tuan">
         <div class="tip">内饰清洗</div>
@@ -77,43 +76,51 @@
     padding: 0.36rem 0 0.36rem 0.4rem;
     border-bottom: 1px solid #dfdfdf;
     .img-box {
+      flex:none;
       overflow: hidden;
       width: 2.346667rem;
       height: 2.346667rem;
       margin-right: 0.32rem;
-      .img{
+      .img {
         height: 100%;
         max-width: none;
         transform: translateX(-15%);
       }
     }
     .info {
+      flex: 1; 
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      flex: 1; // display: flex;
-      // flex-direction: column;
-      // justify-content: space-between;
-      padding-top: 0.24rem;
       color: #2b2b2b;
+      width: 0;
+      %text-overflow{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
       .top,
       .middle,
       .bottom {
         padding-right: 0.36rem;
       }
       .top {
-        @include font-dpr(17px);
-        line-height: 1;
-        margin-bottom: 0.4rem;
+        font-size: .4rem /* 30/75 */;
+        line-height: 1.6;
+        flex: 1;
+        @extend %text-overflow;
       }
       .middle {
-        margin-bottom: 0.466667rem;
+        flex: none;
+        @extend %text-overflow;
       }
       .bottom {
+        flex: 1;
         display: flex;
-        justify-content: space-between;
-        @include font-dpr(12px);
+        align-items: center;
+        font-size: .32rem /* 24/75 */;
         opacity: 0.5;
+        @extend %text-overflow;
       }
       .tips {
         margin-top: 0.453333rem;

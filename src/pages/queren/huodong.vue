@@ -67,91 +67,80 @@
       },
       buy() {
         var _this = this;
-        if (this.id) {
-          if (!this.lianxiren) {
-            this.$vux.toast.show({
-              text: "请输入联系人",
-              position: "middle"
-            });
-            return false;
-          } else if (!this.phone) {
-            this.$vux.toast.show({
-              text: "请输入联系人手机号",
-              position: "middle"
-            });
-            return false;
-          } else {
-            this.$vux.confirm.show({
-              title: "提示",
-              content: "是否购买该活动？",
-              onCancel() {},
-              onConfirm() {
-                _this.$axios
-                  .get(_this.API_URL + "/api/BkPay/pay", {
-                    params: {
-                      bk_id: _this.huodongId,
-                      // num: _this.num,
-                      uid: _this.id,
-                      // address: _this.mapInfo.poiaddress,
-                      dianhua: _this.phone,
-                      xingming: _this.lianxiren,
-                      face_face: _this.faceId
-                    }
-                  })
-                  .then(({
-                    data
-                  }) => {
-                    _this.orderNum = data.pay_order_id;
-                    return new Promise((resolve, reject) => {
-                      _this.$wx.chooseWXPay({
-                        timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                        nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
-                        package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
-                        signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                        paySign: data.paySign, // 支付签名
-                        success: function (res) {
-                          // 支付成功后的回调函数
-                          resolve(res);
-                        }
-                      });
-                    });
-                  })
-                  .then(res => {
-                    console.log("支付成功回调");
-                    console.log(res);
-                    return _this.$axios.get(_this.API_URL + "/api/BkPay/fs", {
-                      params: {
-                        order_num: _this.orderNum
-                      }
-                    });
-                  })
-                  .then(res => {
-                    console.log("回调结束");
-                    console.log(res);
-                    _this.$vux.alert.show({
-                      title: "提示",
-                      content: "购买成功,请在我的优惠券中查看！",
-                      onHide() {
-                        _this.$router.push({
-                          path: "/youhuijuan"
-                        });
+        if (!this.lianxiren) {
+          this.$vux.toast.show({
+            text: "请输入联系人",
+            position: "middle"
+          });
+          return false;
+        } else if (!this.phone) {
+          this.$vux.toast.show({
+            text: "请输入联系人手机号",
+            position: "middle"
+          });
+          return false;
+        } else {
+          this.$vux.confirm.show({
+            title: "提示",
+            content: "是否购买该活动？",
+            onCancel() {},
+            onConfirm() {
+              _this.$axios
+                .get(_this.API_URL + "/api/BkPay/pay", {
+                  params: {
+                    bk_id: _this.huodongId,
+                    // num: _this.num,
+                    uid: _this.id,
+                    // address: _this.mapInfo.poiaddress,
+                    dianhua: _this.phone,
+                    xingming: _this.lianxiren,
+                    face_face: _this.faceId
+                  }
+                })
+                .then(({
+                  data
+                }) => {
+                  _this.orderNum = data.pay_order_id;
+                  return new Promise((resolve, reject) => {
+                    _this.$wx.chooseWXPay({
+                      timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                      nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
+                      package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                      signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                      paySign: data.paySign, // 支付签名
+                      success: function (res) {
+                        // 支付成功后的回调函数
+                        resolve(res);
                       }
                     });
                   });
-              }
-            });
-          }
-        } else {
-          this.$vux.alert.show({
-            title: "提示",
-            content: "请先登录",
-            onHide() {
-              _this.$router.push({
-                path: "/me"
-              });
+                })
+                .then(res => {
+                  console.log("支付成功回调");
+                  console.log(res);
+                  return _this.$axios.get(_this.API_URL + "/api/BkPay/fs", {
+                    params: {
+                      order_num: _this.orderNum
+                    }
+                  });
+                })
+                .then(res => {
+                  console.log("回调结束");
+                  console.log(res);
+                  _this.$vux.alert.show({
+                    title: "提示",
+                    content: "购买成功,请在我的优惠券中查看！",
+                    onHide() {
+                      _this.$router.push({
+                        path: "/youhuijuan"
+                      });
+                    }
+                  });
+                });
             }
           });
         }
+
       },
       get_fw_info() {
         var _this = this;
@@ -173,7 +162,7 @@
       huodongId() {
         return this.$route.query.huodongId;
       },
-      faceId(){
+      faceId() {
         return this.$route.query.faceId;
       },
       money() {

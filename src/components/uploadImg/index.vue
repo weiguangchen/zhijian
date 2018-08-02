@@ -3,10 +3,17 @@
     <div class="upload-btn" @click="chooseImg">
       <img src="~img/public/uploadImgBtn.png" alt="" class="img">
     </div>
-    <template v-if="previewImgs.length>0">
-      <div class="img-box" v-for="(item,index) in previewImgs" :key="index" @click="previewImg(item,previewImgs)">
+
+    <template v-if="old.length>0">
+      <div class="img-box" v-for="(item,index) in old" :key="index" @click="previewImg(item,all_tupian)">
         <img :src="item" alt="" class="thumb">
-        <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index)"></i>
+        <i class="iconfont icon-shanchuguanbicha2" @click="deleteOldImg(index)" v-if="multiple"></i>
+      </div>
+    </template>
+    <template v-if="previewImgs.length>0">
+      <div class="img-box" v-for="(item,index) in previewImgs" :key="index" @click="previewImg(item,all_tupian)">
+        <img :src="item" alt="" class="thumb">
+        <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index)" v-if="multiple"></i>
       </div>
     </template>
   </div>
@@ -17,13 +24,31 @@
     data() {
       return {
         system: 1,
+        old: [],
         originImgs: [],
         previewImgs: [],
         tupian: []
       }
     },
+    props: {
+      multiple: {
+        default: true
+      },
+      oldImgs: {
+        default: []
+      }
+    },
     created() {
       this.checkSystem();
+      console.log('初始化upload')
+      this.old = this.oldImgs;
+      console.log(this.old)
+      if (this.multiple) {
+        // 多图上传
+      } else {
+        // 单图上传
+      }
+
     },
     methods: {
       chooseImg() {
@@ -34,6 +59,12 @@
           sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
           success: function (res) {
             // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            if (!_this.multiple) {
+              _this.originImgs = [];
+              _this.previewImgs = [];
+              _this.tupian = [];
+              _this.old = [];
+            }
             _this.originImgs = _this.originImgs.concat(res.localIds);
             if (_this.system == 1) {
               // 安卓
@@ -61,7 +92,7 @@
             console.log(res);
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get(_this.API_URL+"/Api/wechat/bcimg", {
+              .get(_this.API_URL + "/Api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }
@@ -69,7 +100,7 @@
               .then(res => {
                 console.log(res);
                 _this.tupian = _this.tupian.concat(res.data);
-                _this.$emit('uploadComplete', _this.tupian);
+                _this.$emit('uploadComplete', _this.all_tupian);
               });
           }
         });
@@ -78,7 +109,11 @@
         this.originImgs.splice(index, 1);
         this.previewImgs.splice(index, 1);
         this.tupian.splice(index, 1);
-        this.$emit('uploadComplete', this.tupian);
+        this.$emit('uploadComplete', this.all_tupian);
+      },
+      deleteOldImg(index) {
+        this.old.splice(index, 1);
+        this.$emit('uploadComplete', this.all_tupian);
       },
       checkSystem() {
         var u = navigator.userAgent;
@@ -98,6 +133,11 @@
         });
       },
     },
+    computed: {
+      all_tupian() {
+        return this.old.concat(this.tupian);
+      }
+    },
     components: {
 
     }
@@ -112,7 +152,7 @@
     display: flex;
     flex-wrap: wrap;
     margin-bottom: -.48rem/* 36/75 */
-      ;
+    ;
     .upload-btn,
     .img-box {
       margin-right: .48rem/* 36/75 */
