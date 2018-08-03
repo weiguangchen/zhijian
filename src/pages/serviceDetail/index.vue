@@ -5,9 +5,9 @@
         <ul class="content">
           <div>
             <div class="banner">
-              <div class="share">
+              <!-- <div class="share">
                 <i class="iconfont icon-fenxiang" @click="share"></i>
-              </div>
+              </div> -->
               <Swiper height='5.12rem' :show-dots='false'>
                 <SwiperItem v-for="(item,index) in fw_info.fw_img" :key="index">
                   <img :src="item" alt="" class="img">
@@ -15,17 +15,17 @@
               </Swiper>
             </div>
             <div class="sp-info">
-              <div class="top">
-                <span class="price">
-                  <span class="num">{{fw_info.money}}</span>元
-                  <span v-if="fw_info.fw_gg">/{{fw_info.fw_gg}}</span>
-                </span>{{fw_info.fw_mingzi}}</div>
-              <div class="bottom">{{fw_info.sub_content}}</div>
+              <div class="top">{{fw_info.fw_mingzi}}</div>
+              <div class="middle">{{fw_info.sub_content}}</div>
+              <div class="bottom">
+                <span class="left"><em>{{fw_info.money}}</em>&nbsp;&nbsp;元<template v-if="fw_info.fw_gg">/{{fw_info.fw_gg}}</template></span>
+                <span class="right">已售132单</span>  
+              </div>
             </div>
             <!-- <div class="comment">
-        <span class="iconfont icon-fuwuxiangqingzan">好评率97%</span>
-        <span class="count">共{{fw_info.token_num}}个消费评价</span>
-      </div> -->
+              <span class="iconfont icon-fuwuxiangqingzan">好评率97%</span>
+              <span class="count">共{{fw_info.token_num}}个消费评价</span>
+            </div> -->
 
             <div class="address1" @click="toShop(faceInfo.id)">
               <div class="top">
@@ -34,12 +34,12 @@
                   <div class="info">
                     <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
                     <!-- <span class="count">28条</span>
-              <span class="juli">5.5KM</span> -->
+                    <span class="juli">5.5KM</span> -->
                   </div>
                 </div>
-                <!-- <div class="right">
-            <span class="iconfont icon-lianxifangshi"></span>
-          </div> -->
+                <div class="right">
+                  <a class="iconfont icon-lianxifangshi" href='tel:15000000000'></a>
+                </div>
               </div>
               <div class="bottom">
                 <span class="iconfont icon-weizhi1"></span>
@@ -147,11 +147,29 @@
       };
     },
     created() {
-      this.$eruda.init();
+      var _this = this;
+      // this.$eruda.init();
       this.$dialog.loading.open();
-      this.get_fw_info();
+      this.get_fw_info().then(data => {
+        this.setMetaTitle(data.fw_mingzi)
+        this.fw_info = data;
+        if (typeof data.fw_img == "string") {
+          var arr = [];
+          arr.push(data.fw_img);
+          data.fw_img = arr;
+        }
+        this.fw_info.token = data.token.slice(0, 2);
+        this.fw_info.fw_img = arr;
+
+        this.preloadImages();
+        this.$wx.ready(function () {
+          console.log('jssdk配置ok')
+          _this.share();
+        })
+      })
       this.get_face();
       this.collect_status();
+
     },
     methods: {
       ...mapMutations(['SET_IF_MRADD']),
@@ -172,24 +190,16 @@
       },
       get_fw_info() {
         var _this = this;
-        this.$axios
+        return this.$axios
           .get("/api/Show/fw_content", {
             params: {
               id: _this.fwId
             }
           })
-          .then(res => {
-            _this.fw_info = res.data[0];
-            if (typeof res.data[0].fw_img == "string") {
-              var arr = [];
-              arr.push(res.data[0].fw_img);
-              res.data[0].fw_img = arr;
-            }
-            this.setMetaTitle(res.data[0].fw_mingzi)
-            _this.fw_info.token = res.data[0].token.slice(0, 2);
-            _this.fw_info.fw_img = arr;
-
-            this.preloadImages()
+          .then(({
+            data
+          }) => {
+            return data[0];
           });
       },
       get_face() {
@@ -288,24 +298,56 @@
       },
       share() {
         var windowUrl = window.location.href;
-        var url;
-        if(/http:\/\/qd.daonian.cn/.test(windowUrl)){
-          // 线上环境
-          url = this.production_url;
-        }else{
-          // 线下环境
-          url = this.development_url;
-        }
-        this.$wx.onMenuShareAppMessage({
-          title: this.fw_info.fw_mingzi, // 分享标题
-          desc: '', // 分享描述
-          link: url+this.$route.fullPath, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: this.fw_info.fw_img[0], // 分享图标
-          type: 'link', // 分享类型,music、video或link，不填默认为link
-          success: function () {
-            // 用户点击了分享后执行的回调函数
-          }
+        var url = this.$production_url;
+        this.$wxShare({
+          title: this.fw_info.fw_mingzi,
+          desc: this.fw_info.sub_content,
+          link: url + this.$route.fullPath,
+          imgUrl: this.fw_info.fw_img[0],
         });
+        // this.$wx.onMenuShareAppMessage({
+        //   title: this.fw_info.fw_mingzi, // 分享标题
+        //   desc: this.fw_info.sub_content, // 分享描述
+        //   link: url + this.$route.fullPath, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        //   imgUrl: this.fw_info.fw_img[0], // 分享图标
+        //   type: 'link', // 分享类型,music、video或link，不填默认为link
+        //   success: function () {
+        //     // 用户点击了分享后执行的回调函数
+        //   }
+        // });
+        // this.$wx.onMenuShareTimeline({
+        //   title: this.fw_info.fw_mingzi, // 分享标题
+        //   link: url + this.$route.fullPath, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        //   imgUrl: this.fw_info.fw_img[0], // 分享图标
+        //   success: function () {
+        //     // 用户点击了分享后执行的回调函数
+        //   }
+        // })
+        // this.$wx.onMenuShareQQ({
+        //   title: this.fw_info.fw_mingzi, // 分享标题
+        //   desc: this.fw_info.sub_content, // 分享描述
+        //   link: url + this.$route.fullPath, // 分享链接
+        //   imgUrl: this.fw_info.fw_img[0], // 分享图标
+        //   success: function () {
+        //     // 用户确认分享后执行的回调函数
+        //   },
+        //   cancel: function () {
+        //     // 用户取消分享后执行的回调函数
+        //   }
+        // });
+        // this.$wx.onMenuShareWeibo({
+        //   title: this.fw_info.fw_mingzi, // 分享标题
+        //   desc: this.fw_info.sub_content, // 分享描述
+        //   link: url + this.$route.fullPath, // 分享链接
+        //   imgUrl: this.fw_info.fw_img[0], // 分享图标
+        //   success: function () {
+        //     // 用户确认分享后执行的回调函数
+        //   },
+        //   cancel: function () {
+        //     // 用户取消分享后执行的回调函数
+        //   }
+        // });
+
       }
     },
     mounted() {
@@ -412,69 +454,88 @@
     }
 
     %public {
-      padding: 0.373333rem 0.4rem;
       background: #ffffff;
       border-bottom: 1px solid #dfdfdf;
-      line-height: 1;
-      color: #2b2b2b;
-      .top {
-        .price {
-          margin-right: 0.213333rem;
-        }
-        .num {
-          color: #e13131;
-        }
-      }
-      .middle,
-      .bottom {
-        display: flex;
-        align-items: center;
-      }
-      .top,
-      .middle {
-        margin-bottom: 0.32rem;
-      }
-      .middle,
-      .bottom {
-        .txt {
-          color: #2b2b2b;
-          opacity: 0.5;
-        }
-      }
+      // line-height: 1;
+      // color: #2b2b2b;
+      // .top {
+      //   .price {
+      //     margin-right: 0.213333rem;
+      //   }
+      //   .num {
+      //     color: #e13131;
+      //   }
+      // }
+      // .middle,
+      // .bottom {
+      //   display: flex;
+      //   align-items: center;
+      // }
+      // .top,
+      // .middle {
+      //   margin-bottom: 0.32rem;
+      // }
+      // .middle,
+      // .bottom {
+      //   .txt {
+      //     color: #2b2b2b;
+      //     opacity: 0.5;
+      //   }
+      // }
     }
     .sp-info {
       @extend %public;
+      padding: 0.373333rem 0.4rem;
       .top {
-        @include font-dpr(17px);
+        font-size: .453333rem /* 34/75 */;
+        font-weight: bold;
         line-height: 1.414;
+        margin-bottom: 0.32rem;
+      }
+      .middle{
+        font-size: .346667rem /* 26/75 */;
+        color: #a3a3a3;
+        margin-bottom: 0.32rem;
       }
       .bottom {
-        opacity: 0.5;
-        @include font-dpr(14px);
-        line-height: 0.56rem;
-      }
-    }
-    .comment {
-      box-sizing: border-box;
-      @extend %public;
-      height: 1.16rem;
-      @include font-dpr(14px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .iconfont {
-        @include font-dpr(14px);
-        &::before {
-          margin-right: 0.506667rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        .left{
+        font-size: .32rem /* 24/75 */;
+          color: #f12522;
+          em{
+            font-weight: bold;
+            font-size: .48rem /* 36/75 */;
+          }
+        }
+        .right{
+          font-size: .346667rem /* 26/75 */;
+          color: #a3a3a3;
         }
       }
-      .count {
-        opacity: 0.5;
-      }
     }
+    // .comment {
+    //   box-sizing: border-box;
+    //   height: 1.16rem;
+    //   @include font-dpr(14px);
+    //   display: flex;
+    //   justify-content: space-between;
+    //   align-items: center;
+    //   .iconfont {
+    //     @include font-dpr(14px);
+    //     &::before {
+    //       margin-right: 0.506667rem;
+    //     }
+    //   }
+    //   .count {
+    //     opacity: 0.5;
+    //   }
+    // }
     .address1 {
       @extend %public;
       margin-bottom: 0.373333rem;
+      padding: 0.373333rem 0 0.373333rem 0.4rem;
       .top {
         display: flex;
         align-items: stretch;
@@ -483,7 +544,7 @@
         .left {
           flex: 1;
           .name {
-            @include font-dpr(17px);
+            font-size: .4rem /* 30/75 */;
             margin-bottom: 0.426667rem;
           }
           .info {
@@ -500,13 +561,17 @@
           }
         }
         .right {
+          width: 1.973333rem /* 148/75 */;
           display: flex;
           justify-content: center;
           align-items: center;
           flex: none;
-          width: 1.546667rem;
           border-left: 1px solid #7f7f7f;
-          @include font-dpr(25px);
+          .iconfont{
+          font-size: .64rem /* 48/75 */;
+          color: #292929;
+
+          }
         }
         .icon-weizhi1 {
           margin-right: 0.24rem;

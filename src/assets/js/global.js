@@ -1,3 +1,4 @@
+import wx from 'weixin-js-sdk';
 export const API_URL = 'http://zj.daonian.cn';
 export const production_url = 'http://qd.daonian.cn';
 export const development_url = 'http://192.168.31.76:8081';
@@ -59,6 +60,33 @@ export function setMetaTitle(title) {
   }
 }
 
+export function wxShare(config) {
+  // 分享给朋友
+  var onMenuShareAppMessageConfig = Object.assign(config,{
+    success(){},
+  })
+  wx.onMenuShareAppMessage(onMenuShareAppMessageConfig);
+  // 分享到朋友圈
+  var onMenuShareTimelineConfig = Object.assign(config,{
+    success(){},
+  })
+  wx.onMenuShareTimeline(onMenuShareTimelineConfig);
+  // 分享到qq
+  var onMenuShareQQConfig = Object.assign(config,{
+    success(){},
+  })
+  wx.onMenuShareQQ(onMenuShareQQConfig);
+  // 分享到微博
+  var onMenuShareWeiboConfig = Object.assign(config,{
+    success(){},
+  })
+  wx.onMenuShareWeibo(onMenuShareWeiboConfig);
+  // 分享到qq空间
+  var onMenuShareQZoneConfig = Object.assign(config,{
+    success(){},
+  })
+  wx.onMenuShareQZone(onMenuShareQZoneConfig);
+}
 
 export default {
   install(Vue) {
@@ -68,5 +96,6 @@ export default {
     Vue.prototype.setMetaTitle = setMetaTitle;
     Vue.prototype.$production_url = production_url;
     Vue.prototype.$development_url = development_url;
+    Vue.prototype.$wxShare = wxShare;
   }
 };

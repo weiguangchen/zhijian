@@ -4,7 +4,7 @@
       <div class="me-box">
         <div class="title">
           <span class="left"></span>
-          <span class="middle">个人中心</span>
+          <span class="middle">{{agentTitle}}代理</span>
           <span class="right">
             <span class="iconfont icon-shezhi" @click="setting"></span>
           </span>
@@ -123,6 +123,15 @@ export default {
         return "市级代理";
       } else if (this.userinfo.dl[0].dl_jb == 3) {
         return "区级代理";
+      }
+    },
+    agentTitle(){
+      if (this.userinfo.dl[0].dl_jb == 1) {
+        return "股东";
+      } else if (this.userinfo.dl[0].dl_jb == 2) {
+        return `${this.userinfo.dl[0].sheng}`;
+      } else if (this.userinfo.dl[0].dl_jb == 3) {
+        return `${this.userinfo.dl[0].shi}`;
       }
     }
   },

@@ -5,7 +5,7 @@
         <i class="iconfont icon-jiamengshang"></i>
       </span>
       <span class="tit">加盟商</span>
-      <span>{{jms.shop_name}}&nbsp;&nbsp;&nbsp;&nbsp;{{jms.shop_phone}}</span>
+      <span>{{jms.xingming}}&nbsp;&nbsp;&nbsp;&nbsp;{{jms.shop_phone}}</span>
     </div>
     <div class="line1">
       <span class="tit">地址</span>
