@@ -8,10 +8,12 @@
           <Cell title='活动卡统计' :is-link='true' link='/shanghu/jingying/hdTongji'></Cell>
           <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
           <Cell title='活动卡订单管理' :is-link='true' link='/shanghu/jingying/cardOrderList'></Cell>
-          <Cell title='添加服务' :is-link='true' link='/shanghu/jingying/xmgl'       ></Cell>
-          <Cell title='管理服务' :is-link='true' link='/shanghu/jingying/fwList'     ></Cell>
+          <Cell title='添加服务' :is-link='true' link='/shanghu/jingying/xmgl'></Cell>
+          <Cell title='管理服务' :is-link='true' link='/shanghu/jingying/fwList'></Cell>
           <Cell title='添加活动' :is-link='true' link='/shanghu/jingying/addhuodong' ></Cell>
           <Cell title='管理活动' :is-link='true' link='/shanghu/jingying/hdList' ></Cell>
+          <Cell title='创建优惠券' :is-link='true' link='/shanghu/jingying/createdYhj' ></Cell>
+          <Cell title='优惠券管理' :is-link='true' link='/shanghu/jingying/hdList' ></Cell>
 
         </Group>
       </div>

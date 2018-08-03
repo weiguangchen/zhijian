@@ -171,6 +171,13 @@ export default [{
         meta: {
           role: 43
         }
+      }, {
+        path: 'createdYhj',
+        name: 'createdYhj',
+        component: resolve => require(['@/pages/shanghu/jingying/createdYhj'], resolve),
+        meta: {
+          role: 43
+        }
       }, ]
 
     },

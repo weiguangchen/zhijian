@@ -1,9 +1,11 @@
 <template>
   <div class="sh-page">
     <div class="shanghu-page">
-      <transition name='router'>
-        <router-view></router-view>
-      </transition>
+      <betterScroll>
+        <transition name='router'>
+          <router-view></router-view>
+        </transition>
+      </betterScroll>
     </div>
     <tabbar></tabbar>
     <router-view name="tab"></router-view>
@@ -11,6 +13,7 @@
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll/index';
   import tabbar from "@/components/tab/shangHuTab";
   export default {
     data() {
@@ -18,13 +21,20 @@
     },
     created() {},
     components: {
-      tabbar
+      tabbar,
+      betterScroll
     }
   };
 
 </script>
 
 <style lang='scss'>
+  .router-enter-active {
+    transition: transform .3s ease-in-out;
+  }
 
+  .router-enter {
+    transform: translateX(100%);
+  }
 
 </style>

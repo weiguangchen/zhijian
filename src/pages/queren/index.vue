@@ -106,6 +106,7 @@
         this.moren_add = this.selected_add;
         this.add_status = 1;
       }
+
       this.startdate = this.$moment().format("YYYY-MM-DD HH:mm");
     },
     methods: {
@@ -285,6 +286,9 @@
           }) => {
             data[0].min = parseInt(data[0].min);
             _this.fwInfo = data[0];
+            if (this.fwInfo.min > 0) {
+              this.num = this.fwInfo.min;
+            }
           });
       },
       get_card() {
@@ -371,7 +375,7 @@
         return this.$route.query.mrAdd;
       },
       money() {
-          return `${(this.num * this.fwInfo.money).toFixed(2)}元`;
+        return `${(this.num * this.fwInfo.money).toFixed(2)}元`;
       },
       cardVal() {
         return this.$route.query.cardVal;
