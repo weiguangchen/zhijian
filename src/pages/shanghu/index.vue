@@ -1,11 +1,7 @@
 <template>
   <div class="sh-page">
     <div class="shanghu-page">
-      <betterScroll>
-        <transition name='router'>
-          <router-view></router-view>
-        </transition>
-      </betterScroll>
+      <router-view></router-view>
     </div>
     <tabbar></tabbar>
     <router-view name="tab"></router-view>

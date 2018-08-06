@@ -57,7 +57,11 @@
           </div>
           <div class="form-group">
             <h2 class="sub-title">支持门店:</h2>
-            <mu-checkbox v-model="face" :value='item.id' v-for="(item,index) in List" :key="index" :label='item.face_name' color='#e03233'></mu-checkbox>
+            <!-- <mu-checkbox v-model="face" :value='item.id' v-for="(item,index) in List" :key="index" :label='item.face_name' color='#e03233'></mu-checkbox> -->
+            <div class="class-list">
+              <mu-checkbox :value='item.id' v-for="(item,index) in List" :key="index" v-model="face" :label='item.face_name'
+               ></mu-checkbox>
+            </div>
           </div>
           <!-- <div class="form-group">
             <h2 class="sub-title">服务缩略图:</h2>
@@ -190,7 +194,7 @@
 
       /* 获取表单所需列表 */
       this.$axios
-        .get( "/api/ShopFw/shop_fw", {
+        .get("/api/ShopFw/shop_fw", {
           params: {
             shop_id: _this.userinfo.shop[0].id,
             phone: _this.userinfo.uphone
@@ -198,10 +202,10 @@
         })
         .then(res => {
           console.log(res);
-          _this.List = res.data.face;
+          this.List = res.data.face;
           console.log(this.faceList);
-          _this.one_class_all = res.data.fw_class;
-          _this.two_class_all = res.data.fw;
+          this.one_class_all = res.data.fw_class;
+          this.two_class_all = res.data.fw;
         });
     },
     watch: {
@@ -261,7 +265,7 @@
         this.checkForm().then(
           res => {
             this.$axios
-              .get( "/api/ShopFw/add_shop_fw", {
+              .get("/api/ShopFw/add_shop_fw", {
                 params: {
                   fw_mingzi: this.fw_name,
                   sub_name: this.fw_short_info,
@@ -313,7 +317,7 @@
       previewDetail(id) {
         var _this = this;
         this.$axios
-          .get( "/Api/ShopFw/content", {
+          .get("/Api/ShopFw/content", {
             params: {
               id
             }
@@ -364,7 +368,7 @@
       changeTwoClass(id) {
         var _this = this;
         this.$axios
-          .get( "/Api/ShopFw/get_fw_content", {
+          .get("/Api/ShopFw/get_fw_content", {
             params: {
               id
             }
@@ -424,7 +428,7 @@
           success: function (res) {
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get( "/api/wechat/bcimg", {
+              .get("/api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }

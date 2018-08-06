@@ -1,8 +1,7 @@
 <template>
   <div class="add-account">
     <betterScroll>
-      <bigTitle title='添加子账户' @showPopup='showPopup' v-if="!queryPhone"></bigTitle>
-      <bigTitle title='编辑子账户' @showPopup='showPopup' v-else></bigTitle>
+      <bigTitle :title="queryPhone?'':'添加子账户'" @showPopup='showPopup' v-if="!queryPhone"></bigTitle>
       <div class="form-box">
 
         <div class="form-group">
@@ -89,12 +88,13 @@
     created() {
       console.log('路由')
       console.log(this.$router)
-      // this.$eruda.init();
       var _this = this;
       this.$emit("showPopup", false);
-
+      if(this.queryPhone){
+        this.get_old_info();
+      }
       this.$axios
-        .get( "/Api/UserShow/son_add", {
+        .get("/Api/UserShow/son_add", {
           params: {
             shop_id: _this.userinfo.shop[0].id
           }
@@ -108,29 +108,7 @@
     },
     mounted() {
       var _this = this;
-      this.$axios
-        .get( "/Api/UserShow/son_edit", {
-          params: {
-            phone: this.queryPhone
-          }
-        })
-        .then(({
-          data
-        }) => {
-          console.log("旧数据");
-          console.log(data);
 
-
-          _this.sf = parseInt(data[0].shenfen);
-
-          _this.test = data[0].shenfen;
-          data[0].face.map(m => {
-            this.faceVal.push(m.face_id);
-          });
-          _this.account_name = data[0].sub_name;
-          _this.phone = data[0].phone;
-          _this.rephone = data[0].phone;
-        });
     },
     methods: {
       showPopup(val) {
@@ -156,7 +134,7 @@
                 id: this.accountId
               });
               this.$axios
-                .get( "/Api/UserShow/edit_son", {
+                .get("/Api/UserShow/edit_son", {
                   params
                 })
                 .then(({
@@ -188,7 +166,7 @@
             } else {
               // 新增
               this.$axios
-                .get( "/Api/UserShow/add_son", {
+                .get("/Api/UserShow/add_son", {
                   params
                 })
                 .then(({
@@ -245,6 +223,29 @@
           title: "提示",
           content: text
         });
+      },
+      get_old_info() {
+        this.$axios
+          .get("/Api/UserShow/son_edit", {
+            params: {
+              phone: this.queryPhone
+            }
+          })
+          .then(({
+            data
+          }) => {
+            console.log("旧数据");
+            console.log(data);
+            this.sf = parseInt(data[0].shenfen);
+
+            this.test = data[0].shenfen;
+            data[0].face.map(m => {
+              this.faceVal.push(m.face_id);
+            });
+            this.account_name = data[0].sub_name;
+            this.phone = data[0].phone;
+            this.rephone = data[0].phone;
+          });
       }
     },
     computed: {

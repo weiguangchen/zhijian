@@ -85,7 +85,8 @@ export default [{
         component: resolve => require(['@/pages/shanghu/jingying/index1'], resolve),
         meta: {
           role: 999,
-          menu: []
+          menu: [],
+          index:true
         }
       }, {
         path: 'tongji',
@@ -175,6 +176,20 @@ export default [{
         path: 'createdYhj',
         name: 'createdYhj',
         component: resolve => require(['@/pages/shanghu/jingying/createdYhj'], resolve),
+        meta: {
+          role: 43
+        }
+      }, {
+        path: 'yhjList',
+        name: 'yhjList',
+        component: resolve => require(['@/pages/shanghu/jingying/yhjList'], resolve),
+        meta: {
+          role: 43
+        }
+      }, {
+        path: 'yhjHandle',
+        name: 'yhjHandle',
+        component: resolve => require(['@/pages/shanghu/jingying/yhjHandle'], resolve),
         meta: {
           role: 43
         }

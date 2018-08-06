@@ -18,10 +18,11 @@
         </Group>
         <h2 class="sub-title">标签:</h2>
         <div>
+          tag1{{tag1}}
           <div class="tag1">
-            <mu-checkbox value='WIFI' v-model="tag1" label='WIFI' color='#e03233'></mu-checkbox>
-            <mu-checkbox value='刷卡' v-model="tag1" label='刷卡' color='#e03233'></mu-checkbox>
-            <mu-checkbox value='手机支付' v-model="tag1" label='手机支付' color='#e03233'></mu-checkbox>
+            <mu-checkbox value='1' v-model="tag1" label='WIFI' color='#e03233'></mu-checkbox>
+            <mu-checkbox value='2' v-model="tag1" label='刷卡' color='#e03233'></mu-checkbox>
+            <mu-checkbox value='3' v-model="tag1" label='手机支付' color='#e03233'></mu-checkbox>
           </div>
           <div class="tag2">
             <iview-tag closable v-for="(item,index) in tag2" :key="index" :name='item' @on-close='delTag'>{{item}}</iview-tag>
@@ -122,7 +123,7 @@
         qyVal: "",
         qyKey: "",
         sqVal: "",
-        tupian:[]
+        tupian: []
       };
     },
     created() {
@@ -131,7 +132,7 @@
       this.$emit("showPopup", false);
       if (this.faceId) {
         this.$axios
-          .get( "/Api/Shop/face_edit", {
+          .get("/Api/Shop/face_edit", {
             params: {
               id: _this.faceId
             }
@@ -147,7 +148,11 @@
             }
             this.address = data.adress;
             this.sqVal = data.sq_id;
-            this.tag1 = data.tag1;
+            if (data.tag1) {
+              this.tag1 = data.tag1;
+            }else{
+              this.tag1 = [];
+            }
             this.tag2 = data.tag2;
             this.start_day = data.start_day;
             this.end_day = data.end_day;
@@ -158,7 +163,7 @@
           });
       }
 
-      this.$axios.get( "/Api/UserShow/city").then(({
+      this.$axios.get("/Api/UserShow/city").then(({
         data
       }) => {
         console.log(data);
@@ -196,7 +201,7 @@
         this.checkForm().then(res => {
 
           this.$axios
-            .get( "/Api/Shop/add_face", {
+            .get("/Api/Shop/add_face", {
               params: this.params
             })
             .then(
@@ -240,7 +245,7 @@
         this.submiting = true;
         this.checkForm().then(res => {
           this.$axios
-            .get( "/Api/Shop/edit_face", {
+            .get("/Api/Shop/edit_face", {
               params: this.params
             })
             .then(({
@@ -328,7 +333,7 @@
         this.tag2.splice(index, 1);
 
       },
-      uploadComplete(imgs){
+      uploadComplete(imgs) {
         this.tupian = imgs;
       }
     },
@@ -375,7 +380,7 @@
           end_day: this.end_day,
           start_time: this.start_time,
           end_time: this.end_time,
-          face_img:this.tupian
+          face_img: this.tupian
         }
       }
     },

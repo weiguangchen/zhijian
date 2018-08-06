@@ -1,12 +1,13 @@
 <template>
   <div class="shanghu-box">
-    <!-- <div class="wrapper shanghu-warpper" ref="wrapper">
-      <ul class="content"> -->
-    <transition name='router'>
+    <betterScroll v-if="isIndex">
+      <transition name='router'>
+        <router-view @showPopup='showPopup' @showTextarea='showTextarea'></router-view>
+      </transition>
+    </betterScroll>
+    <transition name='router' v-else>
       <router-view @showPopup='showPopup' @showTextarea='showTextarea'></router-view>
     </transition>
-    <!-- </ul>
-    </div> -->
 
     <Popup position='right' v-model="popupShow">
       <div class="popup-list">
@@ -14,14 +15,14 @@
           <Cell title='消费统计' link='/shanghu/jingying/tongji'  v-if="checkQx(31)"></Cell>
           <Cell title='订单管理' link='/shanghu/jingying/orderGl' v-if="checkQx(32)"></Cell>
         </Group> -->
-        <Group v-if="shenfenType == 'shanghu'">
+        <!-- <Group v-if="shenfenType == 'shanghu'">
           <Cell title='消费统计' link='/shanghu/jingying/tongji'></Cell>
           <Cell title='订单管理' link='/shanghu/jingying/orderGl'></Cell>
         </Group>
         <Group v-else-if="shenfenType == 'fuwuyuan'">
           <Cell title='消费统计' link='/fuwuyuan/jingying/tongji'></Cell>
           <Cell title='订单管理' link='/fuwuyuan/jingying/orderGl'></Cell>
-        </Group>
+        </Group> -->
       </div>
     </Popup>
 
@@ -51,6 +52,7 @@
   // import BScroll from "better-scroll";
   import checkMenuQx from '@/mixins/checkMenuQx.js';
   import checkAdminShenfen from '@/mixins/checkAdminShenfen.js';
+  import betterScroll from '@/components/betterScroll';
 
   export default {
     data() {
@@ -87,6 +89,11 @@
       //   });
       // });
     },
+    computed: {
+      isIndex() {
+        return this.$route.meta.index;
+      }
+    },
     components: {
       bigTitle,
       ViewBox,
@@ -99,7 +106,8 @@
       Confirm,
       Cell,
       Popup,
-      XTextarea
+      XTextarea,
+      betterScroll
     },
     mixins: [checkMenuQx, checkAdminShenfen]
   };

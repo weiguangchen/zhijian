@@ -1,7 +1,7 @@
 <template>
   <betterScroll @pullingUp='pullingUp' ref='scroll'>
     <div class="order-gl">
-      <bigTitle title="订单管理" @showPopup='showPopup' :icon='false' :right='true'>
+      <bigTitle title="管理优惠券" @showPopup='showPopup' :icon='false' :right='true'>
         <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="orderType" @on-change='changeType'>
           <iview-op value='6'>全部订单({{orderStatus.all}})</iview-op>
           <iview-op value='1'>未派单订单({{orderStatus.wp}})</iview-op>
@@ -11,55 +11,41 @@
           <iview-op value='5'>正在退款订单</iview-op>
         </iview-select>
       </bigTitle>
-      <div class="order-item" v-for="(item,index) in list" :key="index" @click="toDetail(item.id,item.zf)">
-        <div class="order-num">
-          <div>订单号：{{item.order_num}}</div>
-          <div>交易时间：{{item.date}}</div>
-          <Step :current='item.paidan_status' class="step-wrapper">
-            <StepItem>
-              <span slot="top">未派单</span>
-            </StepItem>
-            <StepItem>
-              <span slot="top">已派单</span>
-            </StepItem>
-            <StepItem>
-              <span slot="top">已接单</span>
-            </StepItem>
-            <StepItem>
-              <span slot="top">已完成</span>
-            </StepItem>
-          </Step>
-        </div>
-        <div class="order-info">
-          <img :src="item.fw_img" alt="" class="img">
-          <div class="info">
-            <div class="mingzi">{{item.fw_mingzi}}</div>
-            <div class="mingzi">下单会员：{{item.xingming}}</div>
-            <div class="mingzi">手机号：{{item.dianhua}}</div>
+      <div class="yhj-item">
+        <div class="info">
+          <div>
+            <span class="tit">名称：</span>
+            <span>洗车优惠劵</span>
+          </div>
+          <div>
+            <span class="tit">面额：</span>
+            <span>20元</span>
+          </div>
+          <div>
+            <span class="tit">有效期：</span>
+            <span>10天</span>
+          </div>
+          <div>
+            <span class="tit">条件：</span>
+            <span>
+              <span>满减</span>
+              <span>指定类型</span>
+              <span>指定服务</span>
+            </span>
+          </div>
+          <div>
+            <span class="tit">数量：</span>
+            <span>1000张</span>
           </div>
         </div>
-        <div class="count">
-          <div class="count-item" v-if="item.zf != 1">
-            结算价：¥{{item.order_jprice}}
-          </div>
-          <div class="count-item" v-if="item.zf != 1">
-            数量：{{item.shop_num}}
-          </div>
-          <div class="count-item">
-            <div v-if="item.status == 0">状态：
-              <span class="warn">未支付</span>
-            </div>
-            <div v-else-if="item.status == 1">状态：未使用</div>
-            <div v-else-if="item.status == 2">状态：
-              <span class="success">已使用</span>
-            </div>
-            <div v-else-if="item.status == 3">状态：申请退款</div>
-            <div v-else-if="item.status == 4">状态：已退款</div>
-            <div v-else-if="item.status == 5">状态：已过期</div>
-          </div>
+        <div class="total">
+          <span class="active">领取：100张</span>
+          <span>使用：80张</span>
+          <span>过期：20张</span>
         </div>
-      </div>
 
+
+      </div>
     </div>
   </betterScroll>
 
@@ -189,52 +175,45 @@
       font-size: .373333rem/* 28/75 */
       ;
     }
-    .order-item {
-      padding-left: 0.533333rem;
+    .yhj-item {
+      margin-bottom: $bot;
+      padding-left: .4rem/* 30/75 */
+      ;
       background: #ffffff;
-      @include font-dpr(12px);
-      box-sizing: border-box;
-      padding-top: 0.56rem;
-      padding-bottom: 0.533333rem;
-      margin-bottom: 0.266667rem;
-      .order-num {
+      font-size: .373333rem/* 28/75 */
+      ;
+      .info {
+        line-height: .986667rem/* 74/75 */
+        ;
         border-bottom: 1px solid #f0f0f0;
-        &>div {
-          margin-bottom: 0.266667rem;
-        }
-        .step-wrapper {
-          margin-left: -.533333rem/* 40/75 */
+        padding-bottom: .4rem/* 30/75 */
+        ;
+        margin-bottom: .533333rem/* 40/75 */
+        ;
+        .tit {
+          flex: none;
+          width: 1.666667rem/* 125/75 */
           ;
         }
-      }
-      .order-info {
-        padding: 0.266667rem 0;
-        display: flex;
-        .img {
-          width: 2.666667rem;
-          height: 2.133333rem;
-          border-radius: 0.133333rem;
-          margin-right: 0.24rem;
-        }
-
-        .info {
+        &>div {
           display: flex;
-          flex-direction: column;
-          flex: 1;
-          justify-content: space-around;
         }
       }
-
-      .count {
+      .total {
+        padding-right: .4rem/* 30/75 */
+        ;
         display: flex;
-        .count-item {
-          flex: 1;
-          .warn {
-            color: #dc3330;
-          }
-          .success {
-            color: #1e7c28;
-          }
+        justify-content: space-between;
+        &>span {
+          display: inline-block;
+          padding: .133333rem/* 10/75 */
+          ;
+        }
+        .active {
+          border-radius: .186667rem/* 14/75 */
+          ;
+          box-shadow: 0 4px 10px rgba(#000000, .4);
+          color: #11be7a;
         }
       }
     }
