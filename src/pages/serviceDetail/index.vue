@@ -27,9 +27,9 @@
               <span class="count">共{{fw_info.token_num}}个消费评价</span>
             </div> -->
 
-            <div class="address1" @click="toShop(faceInfo.id)">
+            <div class="address1" >
               <div class="top">
-                <div class="left">
+                <div class="left" @click="toShop(faceInfo.id)">
                   <div class="name">{{faceInfo.face_name}}</div>
                   <div class="info">
                     <rater :val='fw_info.token_pj' class="rater" :enable='enable'></rater>
@@ -38,7 +38,7 @@
                   </div>
                 </div>
                 <div class="right">
-                  <a class="iconfont icon-lianxifangshi" href='tel:15000000000'></a>
+                  <a class="iconfont icon-lianxifangshi" :href="'tel:'+faceInfo.face_phone"></a>
                 </div>
               </div>
               <div class="bottom">

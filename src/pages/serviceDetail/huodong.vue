@@ -1,5 +1,5 @@
 <template>
-  <div class="page service-detail">
+  <div class="page hd-detail">
     <div class="wrapper my-warpper" ref="wrapper">
       <ul class="content">
         <div>
@@ -339,7 +339,7 @@
 </script>
 
 <style lang='scss'>
-  .service-detail {
+  .hd-detail {
     padding-bottom: 1.333333rem;
     .my-warpper {
       height: 100%;

@@ -1,16 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
-/* 商户后台/经营 */
-import shanghujingying from '@/pages/shanghu/jingying/index';
-import jingyingindex from '@/pages/shanghu/jingying/index1'
-import tongji from '@/pages/shanghu/jingying/tongji'
-import orderGl from '@/pages/shanghu/jingying/orderlist'
 
-import shangjia from '@/pages/shanghu/shangjia/index';
-import huifupinglun from '@/components/huifupinglun/index';
-// 登录等待页
-import logining from '@/pages/logining/index';
 
 // 插件
 import store from '@/store/index';
@@ -111,7 +102,13 @@ function wxConfig(url) {
 
 }
 
+function getPosition() {
+  return new Promise((resolve, reject) => {
+    var geolocation = new qq.maps.Geolocation('62KBZ-2WXKQ-5GI53-GDT33-LKMPV-34FWO', 'mykey');
+    geolocation.getLocation(resolve);
+  })
 
+}
 // 默认路由
 import defaultRouterMaps from './routerMap/defaultRouterMap.js';
 // 商户路由
@@ -161,6 +158,8 @@ router.beforeEach((to, from, next) => {
   }
 
 
+
+
   var userId = VueCookies.get("user");
   if (!userId) {
     // 没有cookies
@@ -184,30 +183,20 @@ router.beforeEach((to, from, next) => {
     // 有cookies
     // 获取用户信息
 
-    axios.get(API_URL + '/api/Show/get_user', {
-        params: {
-          id: userId
-        }
-      }).then(res => {
-        console.log('获取信息')
-        console.log(res)
-        if (res.data[0].is_user == 1) {
-          // 该用户有效
-          muta.SAVE_ID(store.state, userId);
-          muta.SAVE_USERINFO(store.state, res.data[0]);
-          next();
-        } else {
-          // 该用户无效
-          console.log('无效cookie，删除')
-          VueCookies.delete('user');
-          muta.SAVE_ID(store.state, '');
-          muta.SAVE_USERINFO(store.state, {});
-          next('/index');
-        }
-      })
-      .then(res => {
-
-        
+    axios.get('/Api/Show/get_user', {
+      params: {
+        id: userId
+      }
+    }).then(res => {
+      console.log('获取信息')
+      console.log(res)
+      if (res.data[0].is_user == 1) {
+        console.log('用户有效')
+        // 该用户有效
+        muta.SAVE_ID(store.state, userId);
+        muta.SAVE_USERINFO(store.state, res.data[0]);
+        // next();
+        // 创建路由树
         if (!store.state.routerStatus) {
           if (store.state.userinfo.shenfen == 0) {
             console.log('是最高权限');
@@ -243,17 +232,8 @@ router.beforeEach((to, from, next) => {
 
           if (store.state.userinfo.is_shop == 1) {
             console.log('2')
-            // 是商户
-            // var routerMap = JSON.parse(store.state.userinfo.qx[0].content);
-            // console.log('路由权限')
-            // console.log(routerMap);
-            // if (!store.state.routerMap) {
-            //   // 未设定路由权限
-
-            // } else {
-
-            // }
             next()
+
           } else {
             next('/checkShanghu');
 
@@ -268,17 +248,35 @@ router.beforeEach((to, from, next) => {
             next('/checkServicer');
           }
         }
+      } else {
+        // 该用户无效
+        console.log('无效cookie，删除')
+        VueCookies.delete('user');
+        muta.SAVE_ID(store.state, '');
+        muta.SAVE_USERINFO(store.state, {});
+        next('/index');
+      }
 
-        next();
-
-      })
+    })
   }
 
 
 
+  // 获取定位
+  console.log('store.location')
+  console.log(store.state.location)
+  if (!store.state.location) {
+    getPosition().then(res=>{
+      console.log('获取到定位')
+      console.log(res)
+      muta.SET_LOCATION(store.state,res)
+      console.log(111)
+      console.log(store.state.location)
+      next();
+    })
+  }
 
-
-
+  next();
 
 
 })

@@ -1,72 +1,66 @@
 <template>
-  <betterScroll @pullingUp='pullingUp' ref='scroll'>
-    <div class="order-gl">
-      <bigTitle title="管理优惠券" @showPopup='showPopup' :icon='false' :right='true'>
-        <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="orderType" @on-change='changeType'>
-          <iview-op value='6'>全部订单({{orderStatus.all}})</iview-op>
-          <iview-op value='1'>未派单订单({{orderStatus.wp}})</iview-op>
-          <iview-op value='2'>已派发订单({{orderStatus.yp}})</iview-op>
-          <iview-op value='3'>已接单订单({{orderStatus.yj}})</iview-op>
-          <iview-op value='4'>已完成订单({{orderStatus.ywc}})</iview-op>
-          <iview-op value='5'>正在退款订单</iview-op>
-        </iview-select>
-      </bigTitle>
-      <div class="yhj-item">
-        <div class="info">
-          <div>
-            <span class="tit">名称：</span>
-            <span>洗车优惠劵</span>
+  <div class="order-gl">
+    <bigTitle title="管理优惠券" @showPopup='showPopup' :icon='false' :right='true'>
+      <iview-select slot="right" class="select-wrapper" size='large' placeholder='选择优惠券类型' v-model="yhjType" @on-change='changeType'>
+        <iview-op :value="1">使用中</iview-op>
+        <iview-op :value="2">未使用</iview-op>
+
+      </iview-select>
+    </bigTitle>
+    <div class="scroll-wrapper">
+      <scroller :on-infinite="infinite" ref="myscroller">
+        <div class="yhj-item" v-for="item in list" :key="item.id">
+          <div class="info">
+            <div>
+              <span class="tit">名称：</span>
+              <span>{{item.yh_name}}</span>
+            </div>
+            <div>
+              <span class="tit">面额：</span>
+              <span>{{item.yh_money}}元</span>
+            </div>
+            <div>
+              <span class="tit">有效期：</span>
+              <span>{{item.yes_day}}天</span>
+            </div>
+            <div>
+              <span class="tit">条件：</span>
+              <span>
+                <span v-if="item.yh_status == 1">指定类别</span>
+                <span v-else-if="item.yh_status == 2">指定服务</span>
+                <span v-else-if="item.yh_status == 3">店铺通用</span>
+
+              </span>
+            </div>
+            <div>
+              <span class="tit">数量：</span>
+              <span v-if="item.yh_num_status == 1">一人一张</span>
+              <span v-else>{{item.yh_num}}</span>
+            </div>
           </div>
-          <div>
-            <span class="tit">面额：</span>
-            <span>20元</span>
+          <div class="total">
+            <span class="active">领取：{{item.ok_num}}张</span>
+            <span>使用：{{item.yes_num}}张</span>
+            <span>过期：{{item.no_num}}张</span>
           </div>
-          <div>
-            <span class="tit">有效期：</span>
-            <span>10天</span>
-          </div>
-          <div>
-            <span class="tit">条件：</span>
-            <span>
-              <span>满减</span>
-              <span>指定类型</span>
-              <span>指定服务</span>
-            </span>
-          </div>
-          <div>
-            <span class="tit">数量：</span>
-            <span>1000张</span>
-          </div>
-        </div>
-        <div class="total">
-          <span class="active">领取：100张</span>
-          <span>使用：80张</span>
-          <span>过期：20张</span>
-        </div>
 
 
-      </div>
+        </div>
+      </scroller>
     </div>
-  </betterScroll>
+
+  </div>
 
 </template>
 
 <script>
-  import betterScroll from '@/components/betterScroll/scroll';
-  import {
-    Step,
-    StepItem
-  } from 'vue-ydui/dist/lib.px/step';
-  import {
-    ViewBox
-  } from "vux";
   import bigTitle from "@/components/bigTitle/index";
   import checkLogin from '@/mixins/checkLogin.js';
   export default {
     data() {
       return {
-        orderStatus: {},
-        orderType: 6,
+        yhjType: 1,
+        noData: false,
         list: [],
         p: 1
       };
@@ -74,93 +68,60 @@
     created() {
       var _this = this;
       this.$emit("showPopup", false);
-      this.get_order_list();
-      this.get_order_total();
+      this.get_list();
     },
     methods: {
+      infinite(done) {
+        this.get_list(done);
+      },
+      get_list(fn) {
+        if (this.noData) {
+          // 没有数据了
+          this.$refs.myscroller.finishInfinite(true);
+          return
+        } else {
+          // 还有数据
+          this.$axios.get('/Api/Yhq/get_yhq', {
+            params: {
+              shop_id: this.userinfo.shop[0].id,
+              status:3,
+              p: this.p,
+              num: 8
+            }
+          }).then(({
+            data
+          }) => {
+            console.log(data)
+            if (data.ok == 1) {
+              //   还有数据
+              this.p++;
+            } else {
+              //   没有数据
+              this.noData = true;
+            }
+            this.list = this.list.concat(data.list);
+            if (fn) fn();
+          })
+        }
+      },
+
       showPopup(val) {
         this.$emit("showPopup", val);
       },
       changeType(val) {
-        console.log(val)
-        this.$refs.scroll.openPullUp();
-        this.list = [];
-        this.p = 1;
-        this.get_order_list();
-      },
-      toDetail(id, zf) {
-        this.$router.push({
-          path: '/shanghu/jingying/orderDetail',
-          query: {
-            id,
-            zf
+          if(val == 2){
+              this.$router.push({
+                  path:'/shanghu/jingying/yhjHandle'
+              })
           }
-        })
       },
-      getStep(status) {
-        if (status == 1) {
-          return 1
-        } else if (status == 2) {
-          return 2
-        } else if (status == 3) {
-          return 3
-        } else if (status == 4) {
-          return 4
-        }
-      },
-      get_order_list() {
-        var _this = this;
-        return this.$axios
-          .get("/Api/ShopFw/get_order", {
-            params: {
-              fw_shop_id: this.userinfo.shop[0].id,
-              status: 6,
-              paidan_status: this.orderType,
-              num: 10,
-              p: this.p
-            }
-          })
-          .then(({
-            data
-          }) => {
-            if (data.ok == 1) {
-              console.log("还有数据");
-              this.p = this.p + 1;
-            } else if (data.ok == 0) {
-              console.log("没数据了");
-              this.$refs.scroll.closePullUp();
-            }
-            this.$refs.scroll.pullupLoadend();
-            this.list = this.list.concat(data.list);
-          });
-      },
-      get_order_total() {
-        this.$axios.get('/Api/ShopCore/get_status', {
-          params: {
-            shop_id: this.userinfo.shop[0].id
-          }
-        }).then(({
-          data
-        }) => {
-          console.log(data)
-          this.orderStatus = data;
-        })
-      },
-      pullingUp() {
-        this.get_order_list();
-        this.$refs.scroll.finishPullupload();
 
-      }
-    },
-    computed: {
+
 
     },
+
     components: {
       bigTitle,
-      ViewBox,
-      Step,
-      StepItem,
-      betterScroll
     },
     mixins: [checkLogin]
   };
@@ -169,8 +130,15 @@
 
 <style lang='scss'>
   .order-gl {
-    line-height: 1;
+    height: 100%;
     background: #f0f0f0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    .scroll-wrapper {
+      flex: 1;
+      position: relative;
+    }
     .select-wrapper {
       font-size: .373333rem/* 28/75 */
       ;
@@ -178,6 +146,8 @@
     .yhj-item {
       margin-bottom: $bot;
       padding-left: .4rem/* 30/75 */
+      ;
+      padding-bottom: .6rem/* 45/75 */
       ;
       background: #ffffff;
       font-size: .373333rem/* 28/75 */

@@ -16,9 +16,12 @@
         <Group class="reset-vux-input">
           <XInput v-model="address"></XInput>
         </Group>
+        <h2 class="sub-title">门店联系电话：</h2>
+        <Group class="reset-vux-input">
+          <XInput v-model="face_phone"></XInput>
+        </Group>
         <h2 class="sub-title">标签:</h2>
         <div>
-          tag1{{tag1}}
           <div class="tag1">
             <mu-checkbox value='1' v-model="tag1" label='WIFI' color='#e03233'></mu-checkbox>
             <mu-checkbox value='2' v-model="tag1" label='刷卡' color='#e03233'></mu-checkbox>
@@ -112,6 +115,7 @@
         face_name: "",
         map: "",
         address: "",
+        face_phone:'',
         tag1: [],
         tag2: [],
         start_day: '星期一',
@@ -159,6 +163,7 @@
             this.start_time = data.start_time;
             this.end_time = data.end_time;
             this.tupian = data.face_img;
+            this.face_phone = data.face_phone;
             console.log('获取old图片')
           });
       }
@@ -368,6 +373,7 @@
           wd: this.map.latlng.lng,
           map: this.map,
           adress: this.address,
+          face_phone:this.face_phone,
           city: this.cityVal,
           qy: this.qyVal,
           sq: this.sqVal,

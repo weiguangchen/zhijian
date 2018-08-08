@@ -14,7 +14,6 @@
           <Cell title='管理活动' :is-link='true' link='/shanghu/jingying/hdList' ></Cell>
           <Cell title='创建优惠券' :is-link='true' link='/shanghu/jingying/createdYhj' ></Cell>
           <Cell title='优惠券管理' :is-link='true' link='/shanghu/jingying/yhjList' ></Cell>
-          <Cell title='操作优惠券' :is-link='true' link='/shanghu/jingying/yhjHandle' ></Cell>
         </Group>
       </div>
     </div>

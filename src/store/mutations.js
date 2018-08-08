@@ -11,8 +11,14 @@ const mutations = {
   SET_ROUTER:(state,preload)=>{
     state.routerMap = preload;
   },
-  SET_LOCATION:(state,preload)=>{
+  SET_CURRENTLOCTION_TYPE:(state,preload)=>{            /* 设置当前地址 */
+    state.locationType = preload;
+  },
+  SET_LOCATION:(state,preload)=>{              /* 设置当前定位 */
     state.location = preload;
+  },
+  SET_CITYLOCATION:(state,preload)=>{          /* 设置选择城市信息 */
+    state.cityLocation = preload;
   },
   SET_ISLOADING:(state,preload)=>{
     state.isLoading = preload;

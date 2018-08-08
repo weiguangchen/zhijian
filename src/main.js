@@ -6,8 +6,8 @@ import store from './store'
 /* axios插件 */
 import axios from "axios";
 Vue.prototype.$axios = axios;
-// axios.defaults.baseURL = 'http://zj.daonian.cn';
-axios.defaults.baseURL = 'http://zjdw.liuhetc.cn';
+axios.defaults.baseURL = 'http://zj.daonian.cn';
+// axios.defaults.baseURL = 'http://zjdw.liuhetc.cn';
 /* 引入微信jssdk */
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
@@ -31,9 +31,9 @@ import {
 // import 'muse-ui/lib/styles/theme.less';
 Vue.component('mu-radio', Radio);
 Vue.component('mu-checkbox', Checkbox);
-Vue.component('mu-popover',Popover)
-Vue.component('mu-list',List)
-Vue.component('mu-list-item',List.ListItem)
+Vue.component('mu-popover', Popover)
+Vue.component('mu-list', List)
+Vue.component('mu-list-item', List.ListItem)
 
 
 import 'iview/dist/styles/iview.css';
@@ -52,8 +52,8 @@ Vue.component('iview-step', Step);
 Vue.component('iview-steps', Steps);
 Vue.component('iview-date', DatePicker);
 Vue.component('iview-date', DatePicker);
-Vue.component('iview-tag',Tag);
-Vue.component('iview-button',Button);
+Vue.component('iview-tag', Tag);
+Vue.component('iview-button', Button);
 
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload)
@@ -90,12 +90,14 @@ import {
   AlertPlugin,
   ConfirmPlugin,
   LoadingPlugin,
-  ToastPlugin
+  ToastPlugin,
+  DatetimePlugin 
 } from 'vux'
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
+Vue.use(DatetimePlugin)
 import 'babel-polyfill'
 
 
@@ -104,7 +106,8 @@ import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css'
 Vue.use(VueAwesomeSwiper);
 
-
+import VueScroller from 'vue-scroller';
+Vue.use(VueScroller);
 
 Vue.config.productionTip = false;
 

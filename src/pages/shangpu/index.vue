@@ -2,9 +2,11 @@
   <div class="page shop-wrapper">
     <betterScroll>
       <div class="info-wrapper">
-        <img :src="faceInfo.face_img[0] ||'./img/mr_face.jpg'" alt="" class="blur-bg1" v-if="faceInfo.face_img">
+        <!-- <img :src="faceInfo.face_img[0]" alt="" class="blur-bg1" v-if="faceInfo.face_img"> -->
+        <img src='~img/shangpu/banner.png' alt="" class="blur-bg1">
         <div class="logo">
-          <img :src="faceInfo.face_img[0] || './img/mr_face.jpg'" alt="" class="img" v-if="faceInfo.face_img">
+          <img :src="faceInfo.face_img[0]" alt="" class="img" v-if="faceInfo.face_img">
+          <img src="./img/mr_face.jpg" alt="" class="img" v-else>
         </div>
         <div class="info">
           <div>{{faceInfo.face_name}}</div>
@@ -434,7 +436,7 @@
         overflow: hidden;
         flex: none;
         .img {
-          height: 100%;
+          width: 100%;
         }
       }
       .info {
@@ -447,10 +449,9 @@
       .blur-bg1{
         position:absolute;
         width: 100%;
-        top: -50%;
+        top:0;
         left:0;
-        transform: translateY(-50%);
-        filter: blur(30px);
+        filter: blur(5px);
       }
       .blur-bg {
         position: absolute;
@@ -485,21 +486,17 @@
         flex-direction: column;
 
         .iconfont {
-          font-size: .8rem/* 60/75 */
-          ;
+          font-size: .6rem /* 45/75 */;
+        }
+        span{
+          line-height: 1;
+          font-size: .32rem /* 24/75 */;
         }
         .icon-yonghupingjiaweixuanzhong {
-          font-size: .666667rem/* 50/75 */
+          font-size: .533333rem /* 40/75 */
           ;
         }
-        .icon-shangpuxiangqingxuanzhong {
-          font-size: .733333rem/* 55/75 */
-          ;
-        }
-        span {
-          margin-top: -.533333rem/* 40/75 */
-          ;
-        }
+
       }
 
     }

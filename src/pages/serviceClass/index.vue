@@ -17,7 +17,8 @@
 
 <script>
   import {
-    mapState
+    mapState,
+    mapGetters
   } from "vuex";
   import tuijian from "@/components/tuijian/index";
   import classify from "@/components/classify/index2";
@@ -31,7 +32,6 @@
     Loading
   } from "vux";
   import checkLogin from "@/mixins/checkLogin.js";
-  import getLocation from "@/mixins/getLocation.js";
   export default {
     data() {
       return {
@@ -54,73 +54,58 @@
     },
     created() {
       var _this = this;
-      console.log("classid" + this.classId);
-      document.title='';
+      document.title = '';
+      this.get_fw();
+      this.get_gg();
+      this.get_two_class();
 
-      this.getPosition().then(res => {
-        this.SET_LOCATION(res);
 
-        this.get_fw();
-      })
-
-      // this.$axios
-      //   .get( "/api/Show/two_class", {
-      //     params: {
-      //       fid: _this.classId
-      //     }
-      //   })
-      //   .then(res => {
-      //     console.log("二级类");
-      //     _this.classArr = res.data.class;
-      //     _this.serviceList = res.data.info;
-      //     _this.loading = false;
-      //   });
-
-      this.$axios.get( "/Api/Show/get_gg").then(({
-        data
-      }) => {
-        this.ad = data.smeta;
-      });
-
-      // this.$axios
-      //   .get( "/api/Show/one_fw", {
-      //     params: {
-      //       fw_cid: _this.classId
-      //     }
-      //   })
-      //   .then(res => {
-      //     _this.serviceList = res.data;
-      //     console.log(res);
-      //   });
     },
     methods: {
       get_fw() {
         var _this = this;
         this.$axios
-          .get( "/Api/Yes/two_jl", {
+          .get("/Api/Yes/two_jl", {
             params: {
               fid: this.classId,
-              lng: this.location.lat,
-              lat: this.location.lng,
-              city:this.location.city
+              lng: this.currentLocation.lat,
+              lat: this.currentLocation.lng,
+              city: this.currentLocation.city
             }
           })
           .then(({
             data
           }) => {
-            _this.classArr = data.class;
-            _this.serviceList = data.info;
-            this.setMetaTitle(data.ming)
+            this.serviceList = data.info;
           });
+      },
+      get_two_class(){
+        this.$axios.get('/Api/Yes/two',{
+          params:{
+            fid:this.classId
+          }
+        }).then(({data})=>{
+          console.log(data)
+          this.classArr = data.class;
+          this.setMetaTitle(data.ming)
+        })
+      },
+      get_gg() {
+        this.$axios.get("/Api/Show/get_gg").then(({
+          data
+        }) => {
+          this.ad = data.smeta;
+        });
       }
     },
     computed: {
       ...mapState(["location"]),
+      ...mapGetters(['currentLocation']),
       classId() {
         return this.$route.params.classId;
       }
     },
-    mixins: [checkLogin, getLocation]
+    mixins: [checkLogin]
   };
 
 </script>

@@ -28,6 +28,7 @@
     "vue-head": "^2.0.12",
     "vue-num-keyboard": "^1.1.4",
     "vue-router": "^3.0.1",
+    "vue-scroller": "^2.2.4",
     "vue-ydui": "^1.2.2",
     "vuex": "^3.0.1",
     "vux": "^2.9.1",

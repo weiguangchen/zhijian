@@ -1,75 +1,75 @@
 <template>
-  <div class="page service-list" ref="lay">
-    <Layout>
-      <InfiniteScroll ref="infinitescroll" :callback="loadList">
-        <template slot="list">
-          <div class="ad">
-            <swiper :options="swiperOption" ref="mySwiper">
-              <swiper-slide v-for="(item,index) in top_ad" :key="index">
-                <img :src="item.url" alt="">
-              </swiper-slide>
-            </swiper>
-          </div>
-          <div class="classify-list">
-            <sticky>
-              <div class="term">
-                <div class="select-box">
-                  <span class="term-item" :class="{active:(selectType == 1&&selectAddShow)}" @click="selectAdd(1)">
-                    <span class="text">{{currentInfo.area.sq.val}}</span>
-                    <span class="iconfont icon-zhankai1"></span>
-                  </span>
-                  <span class="term-item" :class="{active:(selectType == 2&&selectAddShow)}" @click="selectAdd(2)">
-                    <span class="text">{{currentInfo.order.val}}</span>
-                    <span class="iconfont icon-zhankai1"></span>
-                  </span>
-                  <span class="term-item" :class="{active:(selectType == 3&&selectAddShow)}" @click="selectAdd(3)">
-                    <span class="text">{{currentInfo.search.val}}</span>
-                    <span class="iconfont icon-zhankai1"></span>
-                  </span>
-                </div>
-                <!-- <addressSelect class="addressSelect" 
-                :type='selectType' v-if="location" v-show="selectAddShow" :currentInfo='currentSelInfo' 
-                @selectSq='selectSq' 
-                @selectQy='selectQy'
-                @selectOrder='selectOrder'
-                @init='init'></addressSelect> -->
-                <div class="address-select-box" v-show="selectAddShow">
-                  <div class="add" v-if="selectType == 1">
-                    <div class="qy">
-                      <div class="item" :class="{active:qyVal.key == 0}" @click="fujin">附近</div>
-                      <div class="item" @click="selectQy(item)" v-for="(item,index) in qy" :key="index" :class="{active:qyVal.key== item.id}">{{item.qy_name}}</div>
-                    </div>
-                    <div class="sq">
-                      <template v-if="sq.length>0">
-                        <div class="item" :class="{active:sqVal.key == item.id}" v-for="(item,index) in sq" :key="index" @click="selectSq(item)">{{item.sq_name}}</div>
-                      </template>
-                      <div class="item" v-else>暂未开通</div>
-                    </div>
-
-                  </div>
-                  <div class="order-type" v-else-if="selectType == 2">
-                    <div class="item" :class="{active:orderVal.key == item.key}" @click="selectOrder(item)" v-for="(item,index) in order" :key="index">{{item.val}}</div>
-                  </div>
-                  <div class="select" v-else-if='selectType == 3'>
-                    <div class="item" :class="{active:searchVal.key == item.key}" v-for="(item,index) in search" :key="index">{{item.val}}</div>
-                  </div>
-                </div>
-              </div>
-            </sticky>
-            <service class="service" v-for="(item,index) in serviceList" :key="index" :fwInfo='item'></service>
+  <div class="page service-list">
+    <div class="top1">
+      <div class="ad">
+        <swiper :options="swiperOption" ref="mySwiper">
+          <swiper-slide v-for="(item,index) in top_ad" :key="index">
+            <img :src="item.url" alt="">
+          </swiper-slide>
+        </swiper>
+      </div>
+      <div class="term">
+        <div class="select-box">
+          <span class="term-item" :class="{active:(selectType == 1&&selectAddShow)}" @click="selectAdd(1)">
+            <span class="text">{{currentInfo.area.sq.val}}</span>
+            <span class="iconfont icon-zhankai1"></span>
+          </span>
+          <span class="term-item" :class="{active:(selectType == 2&&selectAddShow)}" @click="selectAdd(2)">
+            <span class="text">{{currentInfo.order.val}}</span>
+            <span class="iconfont icon-zhankai1"></span>
+          </span>
+          <span class="term-item" :class="{active:(selectType == 3&&selectAddShow)}" @click="selectAdd(3)">
+            <span class="text">{{currentInfo.search.val}}</span>
+            <span class="iconfont icon-zhankai1"></span>
+          </span>
+        </div>
+        <!-- <addressSelect class="addressSelect" 
+              :type='selectType' v-if="location" v-show="selectAddShow" :currentInfo='currentSelInfo' 
+              @selectSq='selectSq' 
+              @selectQy='selectQy'
+              @selectOrder='selectOrder'
+              @init='init'></addressSelect> -->
+        <div class="address-select-box" v-show="selectAddShow">
+          <div class="add" v-if="selectType == 1">
+            <div class="qy">
+              <div class="item" :class="{active:qyVal.key == 0}" @click="fujin">附近</div>
+              <div class="item" @click="selectQy(item)" v-for="(item,index) in qy" :key="index" :class="{active:qyVal.key== item.id}">{{item.qy_name}}</div>
+            </div>
+            <div class="sq">
+              <template v-if="sq.length>0">
+                <div class="item" :class="{active:sqVal.key == item.id}" v-for="(item,index) in sq" :key="index" @click="selectSq(item)">{{item.sq_name}}</div>
+              </template>
+              <div class="item" v-else>暂未开通</div>
+            </div>
 
           </div>
-        </template>
+          <div class="order-type" v-else-if="selectType == 2">
+            <div class="item" :class="{active:orderVal.key == item.key}" @click="selectOrder(item)" v-for="(item,index) in order" :key="index">{{item.val}}</div>
+          </div>
+          <div class="select" v-else-if='selectType == 3'>
+            <div class="item" :class="{active:searchVal.key == item.key}" v-for="(item,index) in search" :key="index">{{item.val}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-wrapper">
+      <scroller ref="myscroller" :on-infinite="infinite">
 
-        <span slot="doneTip">暂无更多服务</span>
-      </InfiniteScroll>
-    </Layout>
+        <div class="classify-list">
 
+          <service class="service" v-for="(item,index) in list" :key="index" :fwInfo='item'></service>
+
+        </div>
+      </scroller>
+    </div>
   </div>
 
 </template>
 
 <script>
+  import {
+    mapGetters
+  } from 'vuex';
   import addressSelect from "@/components/addressSelect/index";
   import service from "@/components/service/service";
   import {
@@ -91,7 +91,6 @@
     Layout
   } from "vue-ydui/dist/lib.px/layout";
   import checkLogin from "@/mixins/checkLogin.js";
-  import getLocation from "@/mixins/getLocation.js";
   export default {
     name: "service-list",
     data() {
@@ -141,10 +140,12 @@
             el: ".swiper-pagination"
           }
         },
+        select: {},
+
 
         classArr: [],
-        serviceList: [],
-
+        list: [],
+        noData: false,
         p: 1
       };
     },
@@ -153,61 +154,48 @@
       document.title = "";
       var _this = this;
 
-      this.getPosition().then(res => {
-        console.log("获取定位成功");
-        console.log(res);
-        this.SET_LOCATION(res);
-        this.get_fw().then(res => {
-          this.serviceList = res.list;
-        });
+      this.get_fw();
+      this.get_city();
+      this.get_gg();
 
-        this.$axios.get( "/Api/Show/get_gg").then(({
-          data
-        }) => {
-          // 获取头部广告
-          this.top_ad = data.list_banner;
-        });
-        this.get_city();
-      });
+    },
+    watch: {
+      currentLocation() {
+        // this.get_fw();
+      }
     },
     methods: {
-      get_fw(select) {
+      infinite(done) {
+        this.get_fw(done);
+      },
+      get_fw(fn) {
         var _this = this;
-        var deafultParams = {
-          fw_id: _this.classId,
-          num: 8,
-          p: _this.p,
-          lng: _this.location.lat,
-          lat: _this.location.lng,
-          city: this.location.province
-        };
 
-        var params = Object.assign(deafultParams, select);
-        return this.$axios
-          .get( "/Api/Yes/new_two_list", {
-            params
-          })
-          .then(({
+        if (this.noData) {
+          // 没有数据了
+          this.$refs.myscroller.finishInfinite(true);
+          return
+        } else {
+          // 还有数据
+          this.$axios.get('/Api/Yes/new_two_list', {
+            params: this.params
+          }).then(({
             data
           }) => {
+            console.log(data)
             this.setMetaTitle(data.fw_name)
-            console.log(data);
             if (data.ok == 1) {
-              _this.p++;
-            } else if (data.ok == 0) {
-              _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+              //   还有数据
+              this.p++;
+            } else {
+              //   没有数据
+              this.noData = true;
             }
-            _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
-            return data;
-          });
-      },
-      loadList() {
-        console.log('到底了')
-        var _this = this;
-        this.get_fw().then(res => {
-          console.log(res);
-          _this.serviceList = _this.serviceList.concat(res.serviceList);
-        });
+            console.log(this.list)
+            this.list = this.list.concat(data.list);
+            if (fn) fn();
+          })
+        }
       },
       selectAdd(type) {
         if (this.selectType == type) {
@@ -229,11 +217,11 @@
         this.sqVal.val = sq.sq_name;
         this.sqVal.key = sq.id;
         this.selectAddShow = false;
-        this.get_fw({
+
+        this.select = {
           sq_id: _this.sqVal.key
-        }).then(res => {
-          this.serviceList = res.list;
-        });
+        }
+        this.get_fw();
       },
       selectOrder(order) {
         this.orderVal.val = order.val;
@@ -268,10 +256,19 @@
               }
             });
           });
+      },
+      get_gg() {
+        this.$axios.get("/Api/Show/get_gg").then(({
+          data
+        }) => {
+          // 获取头部广告
+          this.top_ad = data.list_banner;
+        });
       }
     },
 
     computed: {
+      ...mapGetters(['currentLocation']),
       classId() {
         // 我们很快就会看到 `params` 是什么
         return this.$route.params.classId;
@@ -292,6 +289,19 @@
         return obj;
 
       },
+      params() {
+        var deafultParams = {
+          fw_id: this.classId,
+          num: 8,
+          p: this.p,
+          lng: this.currentLocation.lat,
+          lat: this.currentLocation.lng,
+          city: this.currentLocation.city
+        };
+
+        var params = Object.assign(deafultParams, this.select);
+        return params;
+      }
       // search(){
       //   return this.$route.query.search;
       // }
@@ -310,20 +320,17 @@
       swiperSlide,
       swiper
     },
-    mixins: [checkLogin, getLocation]
+    mixins: [checkLogin]
   };
 
 </script>
 
 <style lang='scss'>
   .service-list {
-    .swiper-container {
-      height: 2.4rem;
-    }
-    .classify-list {
-      .service {
-        margin-bottom: 0.133333rem;
-      }
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    .top1 {
       .term {
         position: relative;
         height: 1.386667rem;
@@ -366,22 +373,36 @@
           @include font-dpr(14px);
         }
       }
+      .address-select-box {
+        width: 100%;
+        z-index: 9999;
+        background: #ffffff;
+        .add {
+          display: flex;
+        }
+        .item {
+          padding: 0.266667rem 0.533333rem;
+          @include font-dpr(12px);
+        }
+        .active {
+          color: #cb2620;
+        }
+      }
     }
-    .address-select-box {
-      width: 100%;
-      z-index: 9999;
-      background: #ffffff;
-      .add {
-        display: flex;
-      }
-      .item {
-        padding: 0.266667rem 0.533333rem;
-        @include font-dpr(12px);
-      }
-      .active {
-        color: #cb2620;
-      }
+    .scroll-wrapper {
+    position: relative;
+      flex: 1;
     }
+    .swiper-container {
+      height: 2.4rem;
+    }
+    .classify-list {
+      .service {
+        margin-bottom: 0.133333rem;
+      }
+
+    }
+
   }
 
 </style>
