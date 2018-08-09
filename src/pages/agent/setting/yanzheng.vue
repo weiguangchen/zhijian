@@ -41,7 +41,7 @@
           text: "发送中"
         });
         const params = {
-          mobile: _this.userinfo.uphone
+          mobile: this.userinfo.uphone
         };
         this.$axios
           .get( "/Api/UserShow/fsyzm", {

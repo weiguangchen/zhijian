@@ -32,6 +32,7 @@
         <div class="fw_txt">
           <div class="fw_name">{{fwInfo.fw_mingzi}}</div>
           <div class="fw_content">{{fwInfo.sub_content}}</div>
+          <div>￥{{fwInfo.money}}<template v-if="fwInfo.fw_gg">/{{fwInfo.fw_gg}}</template></div>
         </div>
       </div>
       <div class="fw_num">
@@ -41,7 +42,7 @@
           <Cell title='选择服务时间' :isLink='true'>
             <DateTime v-model="selectDate" :start-date='startdate'></DateTime>
           </Cell>
-          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectJuan" v-model="cardname"></Cell>
+          <Cell title='选择活动卡 ' :isLink='true' @click.native="selectJuan" v-model="cardname"></Cell>
         </Group>
       </div>
 

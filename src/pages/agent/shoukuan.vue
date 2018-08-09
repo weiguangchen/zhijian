@@ -10,7 +10,7 @@
           </div>
         </div>
 
-        <div class="caniuse">可用金额&nbsp;&nbsp;￥{{userinfo.dl[0].dl_money}}&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="caniuse">可用收益金额&nbsp;&nbsp;￥{{userinfo.dl[0].dl_money}}&nbsp;&nbsp;&nbsp;&nbsp;
           <span class="total" @click="tixian_all">全部收款</span>
         </div>
 
@@ -93,11 +93,11 @@
         if (!this.tixian_money) {
           this.$vux.alert.show({
             title: '提示',
-            content: '请填写提现金额！'
+            content: '请填写收款金额！'
           })
           this.tixianing = false;
         } else {
-          this.$axios.get( '/Api/DlCore/dl_get_money', {
+          this.$axios.get('/Api/DlCore/dl_get_money', {
             params: {
               dl_id: this.userinfo.dl[0].id,
               user_id: this.id,
@@ -117,8 +117,14 @@
               this.$vux.alert.show({
                 title: '提示',
                 content: data.log,
-                onHide(){
-                  _this.get_user();
+                onHide() {
+                  // _this.get_user();
+                  _this.$router.push({
+                    path: '/tixianList',
+                    query: {
+                      type: 'shoukuan'
+                    }
+                  })
                 }
               })
             }
@@ -135,8 +141,8 @@
       sk_list() {
         this.$router.push({
           path: '/tixianList',
-          query:{
-              type:'shoukuan'
+          query: {
+            type: 'shoukuan'
           }
         })
       }

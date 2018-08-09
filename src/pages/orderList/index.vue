@@ -29,7 +29,8 @@
 
               <span>
                 <span class="count">共1件商品</span>
-                <template v-if="item.zf != 1">需付款：¥{{item.order_price}}</template>
+                <template v-if="item.zf != 1">实付款：¥{{item.order_price}}</template>
+                <template v-else>活动卡支付</template>
               </span>
             </div>
             <!-- <div class="xbtn"> -->

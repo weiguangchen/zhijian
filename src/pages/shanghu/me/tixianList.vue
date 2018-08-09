@@ -1,7 +1,7 @@
 <template>
   <div class="sh-tx-list page">
     <betterScroll @pullingUp='pullingUp' ref='scroll'>
-      <bigTitle title='提款记录' :icon='false'></bigTitle>
+      <bigTitle title='提现记录' :icon='false'></bigTitle>
       <div class="list">
         <div class="tx-item" @click="toTxDetail(item.id)" v-for="(item,index) in list" :key='index'>
           <div class="account">

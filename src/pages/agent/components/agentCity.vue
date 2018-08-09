@@ -5,8 +5,8 @@
                 <span class="icon">
                     <i class="iconfont icon-shijidaili"></i>
                 </span>
-                <span class="txt1">{{agent.city_name}}代理</span>
-                <span>{{agent.dl_name}}{{agent.dl_phone}}</span>
+                <span class="txt1">{{agent.sheng}}代理</span>
+                <span>{{agent.xingming}}&nbsp;&nbsp;{{agent.dl_phone}}</span>
             </div>
             <div class="line2">
                 <span class="txt1">地址</span>

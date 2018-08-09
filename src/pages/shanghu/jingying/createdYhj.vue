@@ -14,7 +14,7 @@
           <div class="input-wrapper">
             <span class="label">面额：</span>
             <Group class="reset-vux-input">
-              <XInput v-model="yhj_money" placeholder='请输入优惠券面额'></XInput>
+              <XInput v-model.number="yhj_money" placeholder='请输入优惠券面额'></XInput>
             </Group>
           </div>
         </div>
@@ -23,13 +23,13 @@
           <div class="input-wrapper">
             <span class="label">满减：</span>
             <Group class="reset-vux-input">
-              <XInput type='number' v-model.number="full_money" placeholder='请输入满足条件金额(限本店)'></XInput>
+              <XInput  v-model.number="full_money" placeholder='请输入满足条件金额(限本店)'></XInput>
             </Group>
           </div>
           <div class="input-wrapper">
             <span class="label">有效期：</span>
             <Group class="reset-vux-input">
-              <XInput v-model.number="youxiaoqi" placeholder='请输入优惠券的有效期天数' type='number'></XInput>
+              <XInput v-model.number="youxiaoqi" placeholder='请输入优惠券的有效期天数' ></XInput>
             </Group>
           </div>
           <div class="input-wrapper">
@@ -37,7 +37,7 @@
             <div class="num">
               <mu-radio color='#0fbd78' label="" v-model="provide_type" :value='2'></mu-radio>
               <Group class="reset-vux-input">
-                <XInput v-model.number="provide_num" placeholder='发放数量' type='number' :disabled='provide_type != 2'></XInput>
+                <XInput v-model.number="provide_num" placeholder='发放数量'  :disabled='provide_type != 2'></XInput>
 
               </Group>
             </div>
@@ -186,7 +186,7 @@
                 content: '添加优惠券成功！',
                 onHide() {
                   _this.$router.push({
-                    path: '/shanghu/jingying/yhjList'
+                    path: '/shanghu/jingying/yhjHandle'
                   })
                 }
               })
@@ -200,7 +200,9 @@
       },
       checkForm() {
         var _this = this;
-        console.log(1)
+        console.log(this.full_money)
+        alert(this.youxiaoqi)
+        console.log(this.isMoney(this.full_money))
         return new Promise((resolve, reject) => {
           if (!this.yhj_name) {
             _this.alertWarning("请填写优惠券名称！");
@@ -221,10 +223,10 @@
             _this.alertWarning("有效期必须为整数！");
             reject();
           } else if (!this.provide_type) {
-            _this.alertWarning("请选择优惠券发放数量类型！");
+            _this.alertWarning("请选择优惠券发放方式！");
             reject();
           } else if (this.provide_type === 2 && !isInteger(this.provide_num)) {
-            _this.alertWarning("优惠券发放数量必须为整数");
+            _this.alertWarning("请填写正确发放数量");
             reject();
           } else if (this.tiaojian === 1 && !this.class_val) {
             _this.alertWarning("请选择指定类别！");

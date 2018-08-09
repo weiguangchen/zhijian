@@ -5,9 +5,9 @@
       <div class="list">
         <div class="tx-item" @click="toTxDetail(item.id)" v-for="(item,index) in list" :key='index'>
           <div class="account">
-            <div>账户余额</div>
+            <div>账户收益</div>
             <img src="~img/public/tixian-arrow.png" alt="" class="arrow">
-            <div>微信账户
+            <div>余额
               <div class="phone">({{userinfo.uphone}})</div>
             </div>
           </div>
@@ -18,7 +18,7 @@
             <span class="txt">已完成</span>
             ￥{{item.money}}
           </div>
-          <div class="date">提现时间:{{item.time}}</div>
+          <div class="date">收款时间:{{item.time}}</div>
         </div>
       </div>
     </betterScroll>

@@ -4,14 +4,19 @@
     <div>
       <h1 class="yue">
         <img src="./img/money.png" alt="">
-        <span>余额 &nbsp;&nbsp;&nbsp;&nbsp;{{shop.shop_money}}</span>
+        <span>余额 &nbsp;&nbsp;&nbsp;&nbsp;{{userinfo.user_money}}</span>
         <XButton :mini='true' type='warn' @click.native="tixian">提现</XButton>
       </h1>
       <div class="shouyi">
         <div class="line">
-          <span class="tit">已结算收益：</span>
-          <span>{{info.y_money}}(元)</span>
+          <span class="tit">收益账户：</span>
+          <span> {{shop.shop_money}}(元)</span>  
+          <!-- {{info.y_money}} -->
           <XButton type='warn' :mini='true' @click.native="shoukuan">收款</XButton>
+        </div>
+        <div class="line">
+          <span class="tit">已结算收益: </span>
+          <span>{{info.y_money}}(元)</span>
         </div>
         <div class="line">
           <span class="tit">未结算收益: </span>

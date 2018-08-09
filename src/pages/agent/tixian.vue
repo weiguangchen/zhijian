@@ -12,7 +12,8 @@
         <div class="input-wrapper">
           <span>￥</span>
           <div class="input">
-            <wc-keyboard :value="tixian_money" @input='KeyboardInput' inter="10" decimal="2" placeholder="请输入金额" class="money-keyboard" />
+            <wc-keyboard :value="tixian_money" @input='KeyboardInput' inter="10" decimal="2" placeholder="请输入金额" class="money-keyboard"
+            />
           </div>
         </div>
 
@@ -34,15 +35,15 @@
           <CellGroup>
             <CellItem>
               <span slot="left">联系手机：</span>
-              <yd-input slot="right" :disabled='true' value='15022485790'></yd-input>
+              <yd-input slot="right" :disabled='true' :value='userinfo.uphone'></yd-input>
             </CellItem>
             <CellItem>
-              <yd-input slot="left"></yd-input>
-              <SendCode slot="right"></SendCode>
+              <yd-input slot="left" v-model="yzm"></yd-input>
+              <SendCode v-show="safe" slot="right" v-model="codeing" @click.native="sendCode1"></SendCode>
             </CellItem>
           </CellGroup>
           <div class="btn1">
-            <XButton :mini='true' type='primary'>确认</XButton>
+            <XButton :mini='true' :disabled='yanzhenging' type='primary' @click.native="yanzheng">确认</XButton>
 
           </div>
         </div>
@@ -80,13 +81,18 @@
     data() {
       return {
         safe: false,
+        isSafe: false,
         tixian_money: '',
-        tixianing: false
+        tixianing: false,
+
+        codeing: false,
+        code:'',
+        yzm:''
       }
     },
     created() {},
     methods: {
-      KeyboardInput(val){
+      KeyboardInput(val) {
         this.tixian_money = val;
       },
       tixian() {
@@ -100,8 +106,12 @@
             content: '请填写提现金额！'
           })
           this.tixianing = false;
+        } else if (!this.isSafe) {
+          this.safe = true;
+        this.tixianing = false;
+
         } else {
-          this.$axios.get( '/Api/UserShow/user_give_money', {
+          this.$axios.get('/Api/UserShow/user_give_money', {
             params: {
               uid: this.id,
               get_money: this.tixian_money
@@ -115,11 +125,7 @@
               this.$vux.alert.show({
                 title: '提示',
                 content: data.log,
-                onHide(){
-                  _this.$router.push({
-                    path:'/tixianList?type=tixian'
-                  })
-                }
+
               })
             } else if (data.status == 1) {
               this.$vux.alert.show({
@@ -128,7 +134,7 @@
                 onHide() {
                   // _this.get_user();
                   _this.$router.push({
-                    path:'/tixianList?type=tixian'
+                    path: '/tixianList?type=tixian'
                   })
                 }
               })
@@ -136,6 +142,43 @@
           })
         }
 
+      },
+      sendCode1() {
+        var _this = this;
+        this.$vux.loading.show({
+          text: "发送中"
+        });
+        const params = {
+          mobile: this.userinfo.uphone
+        };
+        this.$axios
+          .get("/Api/UserShow/fsyzm", {
+            params
+          })
+          .then(({
+            data
+          }) => {
+            this.codeing = true;
+            this.$vux.loading.hide();
+            this.$vux.toast.show({
+              text: "已发送",
+              position: "middle"
+            });
+            console.log(data);
+            this.code = data.code;
+          });
+      },
+      yanzheng(){
+        if(this.yzm != this.code){
+          this.$vux.alert.show({
+            title:'提示',
+            content:'验证码错误'
+          })
+        }else{
+          this.safe = false;
+          this.isSafe = true;
+        }
+        
       },
       closeSafe() {
         this.safe = false;
@@ -146,10 +189,15 @@
       tixian_list() {
         this.$router.push({
           path: '/tixianList',
-          query:{
-            type:'tixian'
+          query: {
+            type: 'tixian'
           }
         })
+      }
+    },
+    computed:{
+      yanzhenging(){
+        return this.yzm?false:true;
       }
     },
     components: {

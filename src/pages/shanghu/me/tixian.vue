@@ -8,7 +8,7 @@
           <span>{{userinfo.uphone}}</span>
         </div>
         <div class="line">
-          <span class="tit">当前可提现收益</span>
+          <span class="tit">当前可提现余额</span>
           <span>{{userinfo.user_money}}&nbsp;&nbsp;(元)</span>
         </div>
         <div class="line line2" @click="toList">
@@ -25,6 +25,27 @@
       </Group>
       <XButton type='warn' class="xbtn" @click.native='tixian' :disabled='txing'>提交</XButton>
     </div>
+    <Popup v-model='safe' position='center' width='80%'>
+      <div class="safe-wrapper">
+        <div class="title">安全验证
+          <i class="iconfont icon-cha" @click="closeSafe"></i>
+        </div>
+        <CellGroup>
+          <CellItem>
+            <span slot="left">联系手机：</span>
+            <yd-input slot="right" :disabled='true' :value='userinfo.uphone'></yd-input>
+          </CellItem>
+          <CellItem>
+            <yd-input slot="left" v-model="yzm"></yd-input>
+            <SendCode v-show="safe" slot="right" v-model="codeing" @click.native="sendCode1" :disabled='!safe'></SendCode>
+          </CellItem>
+        </CellGroup>
+        <div class="btn1">
+          <XButton :mini='true' :disabled='yanzhenging' type='primary' @click.native="yanzheng">确认</XButton>
+
+        </div>
+      </div>
+    </Popup>
   </div>
 </template>
 
@@ -32,7 +53,19 @@
   import bigTitle from "@/components/bigTitle/index";
   import keyboard from '@/components/wc-keyboard/KeyboardInput';
   import checkLogin from '@/mixins/checkLogin.js';
-
+  import {
+    Popup
+  } from 'vue-ydui/dist/lib.px/popup';
+  import {
+    CellGroup,
+    CellItem
+  } from 'vue-ydui/dist/lib.px/cell';
+  import {
+    SendCode
+  } from 'vue-ydui/dist/lib.px/sendcode';
+  import {
+    Input
+  } from 'vue-ydui/dist/lib.px/input';
   import {
     Group,
     XInput,
@@ -43,7 +76,13 @@
       return {
         tixian_money: '',
         shop: {},
-        txing: false
+        txing: false,
+
+        safe: false,
+        isSafe: false,
+        codeing: false,
+        code: '',
+        yzm: ''
       }
     },
     created() {
@@ -67,8 +106,12 @@
             content: '请填写提现金额！'
           })
           this.txing = false;
+        } else if (!this.isSafe) {
+          this.safe = true;
+          this.txing = false;
+
         } else {
-          this.$axios.get( '/Api/UserShow/user_give_money', {
+          this.$axios.get('/Api/UserShow/user_give_money', {
             params: {
               uid: this.id,
               get_money: this.tixian_money
@@ -82,11 +125,7 @@
               this.$vux.alert.show({
                 title: '提示',
                 content: data.log,
-                onHide() {
-                  _this.$router.push({
-                    path: '/tixianList?type=tixian'
-                  })
-                }
+
               })
             } else if (data.status == 1) {
               this.$vux.alert.show({
@@ -104,8 +143,48 @@
         }
 
       },
+      sendCode1() {
+        var _this = this;
+        this.$vux.loading.show({
+          text: "发送中"
+        });
+        const params = {
+          mobile: this.userinfo.uphone
+        };
+        this.$axios
+          .get("/Api/UserShow/fsyzm", {
+            params
+          })
+          .then(({
+            data
+          }) => {
+            this.codeing = true;
+            this.$vux.loading.hide();
+            this.$vux.toast.show({
+              text: "已发送",
+              position: "middle"
+            });
+            console.log(data);
+            this.code = data.code;
+          });
+      },
+      yanzheng() {
+        if (this.yzm != this.code) {
+          this.$vux.alert.show({
+            title: '提示',
+            content: '验证码错误'
+          })
+        } else {
+          this.safe = false;
+          this.isSafe = true;
+        }
+
+      },
+      closeSafe() {
+        this.safe = false;
+      },
       get_shop() {
-        this.$axios.get( '/Api/ShopCore/get_shop', {
+        this.$axios.get('/Api/ShopCore/get_shop', {
           params: {
             shop_id: this.userinfo.shop[0].id
           }
@@ -117,12 +196,22 @@
         })
       }
     },
+    computed: {
+      yanzhenging() {
+        return this.yzm ? false : true;
+      }
+    },
     components: {
       bigTitle,
       XInput,
       Group,
       XButton,
-      keyboard
+      keyboard,
+      SendCode,
+      CellGroup,
+      CellItem,
+      'yd-input': Input,
+      Popup,
     },
     mixins: [checkLogin]
   }
@@ -176,14 +265,37 @@
       .money-keyboard {
         display: flex;
         align-items: center;
-        height:1.2rem /* 90/75 */;
-        padding-left: .733333rem /* 55/75 */;
+        height: 1.2rem/* 90/75 */
+        ;
+        padding-left: .733333rem/* 55/75 */
+        ;
         .input-box {
           flex: 1;
         }
         .content {
           flex: 1;
         }
+      }
+    }
+    .safe-wrapper {
+      border-radius: .133333rem/* 10/75 */
+      ;
+      padding: .4rem/* 30/75 */
+      ;
+      background: #ffffff;
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: .4rem/* 30/75 */
+        ;
+        .icon-cha {}
+      }
+      .btn1 {
+        margin-top: .533333rem/* 40/75 */
+        ;
+        display: flex;
+        justify-content: space-between;
       }
     }
   }
