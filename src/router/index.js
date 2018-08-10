@@ -112,10 +112,11 @@ function getPosition() {
 // 默认路由
 import defaultRouterMaps from './routerMap/defaultRouterMap.js';
 // 商户路由
-import adminRouterMaps from './routerMap/adminRouterMaps.js';
+import adminRouterMaps from './routerMap/adminRouterMap.js';
 // 服务员路由
-import servicerRouterMaps from './routerMap/servicerRouterMaps.js'
-
+import servicerRouterMaps from './routerMap/servicerRouterMap.js'
+// 代理商路由
+import agentRouterMaps from './routerMap/agentRouterMap.js'
 
 
 
@@ -201,12 +202,17 @@ router.beforeEach((to, from, next) => {
           if (store.state.userinfo.shenfen == 0) {
             console.log('是最高权限');
             router.addRoutes(adminRouterMaps);
-            muta.SET_ROUTER_STATUS(store.state, true);
-          } else if (store.state.userinfo.shenfen == 1) {
+          }
+          if (store.state.userinfo.is_dl == 1) {
+            console.log('是代理商');
+            router.addRoutes(agentRouterMaps);
+          }
+          if (store.state.userinfo.shenfen == 1) {
             console.log('是服务员');
             router.addRoutes(servicerRouterMaps);
-            muta.SET_ROUTER_STATUS(store.state, true);
           }
+          muta.SET_ROUTER_STATUS(store.state, true);
+
         }
 
 
@@ -266,14 +272,16 @@ router.beforeEach((to, from, next) => {
   console.log('store.location')
   console.log(store.state.location)
   if (!store.state.location) {
-    getPosition().then(res=>{
+    getPosition().then(res => {
       console.log('获取到定位')
       console.log(res)
-      muta.SET_LOCATION(store.state,res)
+      muta.SET_LOCATION(store.state, res)
       console.log(111)
       console.log(store.state.location)
       next();
     })
+  } else {
+    next();
   }
 
   next();

@@ -122,7 +122,7 @@
     },
     computed: {
       level() {
-        if (this.userinfo && this.userinfo.dl[0]) {
+        if (this.userinfo && this.userinfo.dl) {
           if (this.userinfo.dl[0].dl_jb == 1) {
             return "股东代理";
           } else if (this.userinfo.dl[0].dl_jb == 2) {
@@ -133,7 +133,7 @@
         }
       },
       agentTitle() {
-        if (this.userinfo && this.userinfo.dl[0]) {
+        if (this.userinfo && this.userinfo.dl) {
           if (this.userinfo.dl[0].dl_jb == 1) {
             return "股东";
           } else if (this.userinfo.dl[0].dl_jb == 2) {

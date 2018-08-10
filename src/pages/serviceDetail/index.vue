@@ -18,8 +18,11 @@
               <div class="top">{{fw_info.fw_mingzi}}</div>
               <div class="middle">{{fw_info.sub_content}}</div>
               <div class="bottom">
-                <span class="left"><em>{{fw_info.money}}</em>&nbsp;&nbsp;元<template v-if="fw_info.fw_gg">/{{fw_info.fw_gg}}</template></span>
-                <span class="right">已售132单</span>  
+                <span class="left">
+                  <em>{{fw_info.money}}</em>&nbsp;&nbsp;元
+                  <template v-if="fw_info.fw_gg">/{{fw_info.fw_gg}}</template>
+                </span>
+                <span class="right">已售{{fw_info.buy_number}}单</span>
               </div>
             </div>
             <!-- <div class="comment">
@@ -27,7 +30,7 @@
               <span class="count">共{{fw_info.token_num}}个消费评价</span>
             </div> -->
 
-            <div class="address1" >
+            <div class="address1">
               <div class="top">
                 <div class="left" @click="toShop(faceInfo.id)">
                   <div class="name">{{faceInfo.face_name}}</div>
@@ -148,7 +151,6 @@
     },
     created() {
       var _this = this;
-      // this.$eruda.init();
       this.$dialog.loading.open();
       this.get_fw_info().then(data => {
         this.setMetaTitle(data.fw_mingzi)
@@ -163,7 +165,7 @@
 
         this.preloadImages();
         this.$wx.ready(function () {
-          console.log('jssdk配置ok')
+        console.log('wx分享配置')
           _this.share();
         })
       })
@@ -305,48 +307,6 @@
           link: url + this.$route.fullPath,
           imgUrl: this.fw_info.fw_img[0],
         });
-        // this.$wx.onMenuShareAppMessage({
-        //   title: this.fw_info.fw_mingzi, // 分享标题
-        //   desc: this.fw_info.sub_content, // 分享描述
-        //   link: url + this.$route.fullPath, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        //   imgUrl: this.fw_info.fw_img[0], // 分享图标
-        //   type: 'link', // 分享类型,music、video或link，不填默认为link
-        //   success: function () {
-        //     // 用户点击了分享后执行的回调函数
-        //   }
-        // });
-        // this.$wx.onMenuShareTimeline({
-        //   title: this.fw_info.fw_mingzi, // 分享标题
-        //   link: url + this.$route.fullPath, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        //   imgUrl: this.fw_info.fw_img[0], // 分享图标
-        //   success: function () {
-        //     // 用户点击了分享后执行的回调函数
-        //   }
-        // })
-        // this.$wx.onMenuShareQQ({
-        //   title: this.fw_info.fw_mingzi, // 分享标题
-        //   desc: this.fw_info.sub_content, // 分享描述
-        //   link: url + this.$route.fullPath, // 分享链接
-        //   imgUrl: this.fw_info.fw_img[0], // 分享图标
-        //   success: function () {
-        //     // 用户确认分享后执行的回调函数
-        //   },
-        //   cancel: function () {
-        //     // 用户取消分享后执行的回调函数
-        //   }
-        // });
-        // this.$wx.onMenuShareWeibo({
-        //   title: this.fw_info.fw_mingzi, // 分享标题
-        //   desc: this.fw_info.sub_content, // 分享描述
-        //   link: url + this.$route.fullPath, // 分享链接
-        //   imgUrl: this.fw_info.fw_img[0], // 分享图标
-        //   success: function () {
-        //     // 用户确认分享后执行的回调函数
-        //   },
-        //   cancel: function () {
-        //     // 用户取消分享后执行的回调函数
-        //   }
-        // });
 
       }
     },
@@ -455,8 +415,7 @@
 
     %public {
       background: #ffffff;
-      border-bottom: 1px solid #dfdfdf;
-      // line-height: 1;
+      border-bottom: 1px solid #dfdfdf; // line-height: 1;
       // color: #2b2b2b;
       // .top {
       //   .price {
@@ -487,13 +446,15 @@
       @extend %public;
       padding: 0.373333rem 0.4rem;
       .top {
-        font-size: .453333rem /* 34/75 */;
+        font-size: .453333rem/* 34/75 */
+        ;
         font-weight: bold;
         line-height: 1.414;
         margin-bottom: 0.32rem;
       }
-      .middle{
-        font-size: .346667rem /* 26/75 */;
+      .middle {
+        font-size: .346667rem/* 26/75 */
+        ;
         color: #a3a3a3;
         margin-bottom: 0.32rem;
       }
@@ -501,21 +462,23 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        .left{
-        font-size: .32rem /* 24/75 */;
+        .left {
+          font-size: .32rem/* 24/75 */
+          ;
           color: #f12522;
-          em{
+          em {
             font-weight: bold;
-            font-size: .48rem /* 36/75 */;
+            font-size: .48rem/* 36/75 */
+            ;
           }
         }
-        .right{
-          font-size: .346667rem /* 26/75 */;
+        .right {
+          font-size: .346667rem/* 26/75 */
+          ;
           color: #a3a3a3;
         }
       }
-    }
-    // .comment {
+    } // .comment {
     //   box-sizing: border-box;
     //   height: 1.16rem;
     //   @include font-dpr(14px);
@@ -544,7 +507,8 @@
         .left {
           flex: 1;
           .name {
-            font-size: .4rem /* 30/75 */;
+            font-size: .4rem/* 30/75 */
+            ;
             margin-bottom: 0.426667rem;
           }
           .info {
@@ -561,15 +525,17 @@
           }
         }
         .right {
-          width: 1.973333rem /* 148/75 */;
+          width: 1.973333rem/* 148/75 */
+          ;
           display: flex;
           justify-content: center;
           align-items: center;
           flex: none;
           border-left: 1px solid #7f7f7f;
-          .iconfont{
-          font-size: .64rem /* 48/75 */;
-          color: #292929;
+          .iconfont {
+            font-size: .64rem/* 48/75 */
+            ;
+            color: #292929;
 
           }
         }

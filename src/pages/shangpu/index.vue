@@ -18,7 +18,9 @@
             <span>速度：{{format_fenshu(faceInfo.sd_star)}}</span>
             <span>质量：{{format_fenshu(faceInfo.zl_star)}}</span>
           </div>
-          <div>营业时间：<template v-if="faceInfo.start_day">{{faceInfo.start_day}}到{{faceInfo.end_day}} {{faceInfo.start_time}} —— {{faceInfo.end_time}}</template></div>
+          <div>营业时间：
+            <template v-if="faceInfo.start_day">{{faceInfo.start_day}}到{{faceInfo.end_day}} {{faceInfo.start_time}} —— {{faceInfo.end_time}}</template>
+          </div>
         </div>
         <button class="guanzhu" :disabled='collecting'>
           <img src="./img/weiguanzhu.png" alt="" @click='collect' v-if="!ifCollect">
@@ -150,6 +152,7 @@
     SliderItem
   } from 'vue-ydui/dist/lib.px/slider';
 
+  import defaultImg from './img/mr_face.jpg';
   export default {
     data() {
       return {
@@ -219,7 +222,7 @@
       },
       get_shop() {
         this.$axios
-          .get( "/Api/Show/get_shop", {
+          .get("/Api/Show/get_shop", {
             params: {
               shop_id: this.shopId
             }
@@ -237,7 +240,7 @@
       get_card() {
         // 获取所有活动
         this.$axios
-          .get( "/Api/Show/get_card", {
+          .get("/Api/Show/get_card", {
             params: {
               shop_id: this.shopId
             }
@@ -250,7 +253,7 @@
           });
       },
       get_gg() {
-        this.$axios.get( "/Api/Show/get_gg").then(({
+        this.$axios.get("/Api/Show/get_gg").then(({
           data
         }) => {
           // 获取头部广告
@@ -258,7 +261,8 @@
         });
       },
       get_face_info() {
-        this.$axios.get( '/Api/show/get_face', {
+        var _this = this;
+        this.$axios.get('/Api/show/get_face', {
           params: {
             face_id: this.shopId
           }
@@ -273,10 +277,14 @@
           this.current_fw_list = data.fw;
           this.huodong = data.hd;
           this.get_pl();
+
+          this.$wx.ready(function () {
+            _this.share();
+          })
         })
       },
       get_pl() {
-        this.$axios.get( '/Api/Show/shop_get_token', {
+        this.$axios.get('/Api/Show/shop_get_token', {
           params: {
             shop_id: this.faceInfo.fw_shop_id
           }
@@ -305,7 +313,7 @@
       collect() {
         this.collecting = true;
         if (this.ifCollect) {
-          this.$axios.get( '/Api/UserShow/user_dlike', {
+          this.$axios.get('/Api/UserShow/user_dlike', {
             params: {
               id: this.collect_id
             }
@@ -321,7 +329,7 @@
             this.collecting = false;
           })
         } else {
-          this.$axios.get( '/Api/UserShow/user_like', {
+          this.$axios.get('/Api/UserShow/user_like', {
             params: this.collect_params
           }).then(({
             data
@@ -339,7 +347,7 @@
 
       },
       collect_status() {
-        this.$axios.get( '/Api/UserShow/yes_like', {
+        this.$axios.get('/Api/UserShow/yes_like', {
           params: this.collect_params
         }).then(({
           data
@@ -357,6 +365,17 @@
         if (num) {
           return (num.toString()).indexOf('.') < 0 ? `${num}.0` : num
         }
+      },
+      share() {
+        var windowUrl = window.location.href;
+        var url = this.$production_url;
+        this.$wxShare({
+          title: this.faceInfo.face_name,
+          desc: '',
+          link: url + this.$route.fullPath,
+          imgUrl: this.faceInfo.face_img || defaultImg,
+        });
+
       }
     },
     computed: {
@@ -446,11 +465,11 @@
         flex-direction: column;
         justify-content: space-around;
       }
-      .blur-bg1{
-        position:absolute;
+      .blur-bg1 {
+        position: absolute;
         width: 100%;
-        top:0;
-        left:0;
+        top: 0;
+        left: 0;
         filter: blur(5px);
       }
       .blur-bg {
@@ -486,14 +505,16 @@
         flex-direction: column;
 
         .iconfont {
-          font-size: .6rem /* 45/75 */;
+          font-size: .6rem/* 45/75 */
+          ;
         }
-        span{
+        span {
           line-height: 1;
-          font-size: .32rem /* 24/75 */;
+          font-size: .32rem/* 24/75 */
+          ;
         }
         .icon-yonghupingjiaweixuanzhong {
-          font-size: .533333rem /* 40/75 */
+          font-size: .533333rem/* 40/75 */
           ;
         }
 

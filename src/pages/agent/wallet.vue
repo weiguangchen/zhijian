@@ -34,13 +34,13 @@
         <div class="list">
           <div class="item" v-for="(item,index) in list" :key="index">
             <div class="l">
-              <div class="tit" v-if="item.zt == 1">可用收益充值</div>
+              <div class="tit" v-if="item.zt == 1">可用收益提现到余额</div>
               <div class="tit" v-else-if="item.zt == 2">提现到微信</div>
               <div class="date">{{item.time}}</div>
             </div>
             <div class="r"  :class="{add:item.zt == 1,down:item.zt == 2}">
-              <i v-if="item.zt == 1">+</i>
-              <i v-if="item.zt == 2">-</i>{{item.money}}</div>
+              <i v-if="item.zt == 1">+{{item.money}}</i>
+              <i v-if="item.zt == 2">-{{item.price}}</i></div>
           </div>
         </div>
       </scroller>

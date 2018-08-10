@@ -200,9 +200,6 @@
       },
       checkForm() {
         var _this = this;
-        console.log(this.full_money)
-        alert(this.youxiaoqi)
-        console.log(this.isMoney(this.full_money))
         return new Promise((resolve, reject) => {
           if (!this.yhj_name) {
             _this.alertWarning("请填写优惠券名称！");
@@ -212,6 +209,9 @@
             reject();
           } else if (!this.isMoney(this.yhj_money)) {
             _this.alertWarning("优惠券面额应为纯数字！");
+            reject();
+          } else if (!this.full_money) {
+            _this.alertWarning("请填写满减金额！");
             reject();
           } else if (!this.isMoney(this.full_money)) {
             _this.alertWarning("满减金额格式有误！");
@@ -228,7 +228,10 @@
           } else if (this.provide_type === 2 && !isInteger(this.provide_num)) {
             _this.alertWarning("请填写正确发放数量");
             reject();
-          } else if (this.tiaojian === 1 && !this.class_val) {
+          } else if (!this.tiaojian) {
+            _this.alertWarning("请选择使用条件！");
+            reject();
+          }  else if (this.tiaojian === 1 && !this.class_val) {
             _this.alertWarning("请选择指定类别！");
             reject();
           } else if (this.tiaojian === 2 && !this.fw_val) {
