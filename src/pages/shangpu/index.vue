@@ -2,30 +2,37 @@
   <div class="page shop-wrapper">
     <betterScroll>
       <div class="info-wrapper">
-        <!-- <img :src="faceInfo.face_img[0]" alt="" class="blur-bg1" v-if="faceInfo.face_img"> -->
         <img src='~img/shangpu/banner.png' alt="" class="blur-bg1">
-        <div class="logo">
-          <img :src="faceInfo.face_img[0]" alt="" class="img" v-if="faceInfo.face_img">
-          <img src="./img/mr_face.jpg" alt="" class="img" v-else>
-        </div>
-        <div class="info">
-          <div>{{faceInfo.face_name}}</div>
-          <div>
-            <rater :val='faceInfo.star' class="rater"></rater>
-          </div>
-          <div>
-            <span>态度：{{format_fenshu(faceInfo.td_star)}}</span>
-            <span>速度：{{format_fenshu(faceInfo.sd_star)}}</span>
-            <span>质量：{{format_fenshu(faceInfo.zl_star)}}</span>
-          </div>
-          <div>营业时间：
-            <template v-if="faceInfo.start_day">{{faceInfo.start_day}}到{{faceInfo.end_day}} {{faceInfo.start_time}} —— {{faceInfo.end_time}}</template>
-          </div>
-        </div>
         <button class="guanzhu" :disabled='collecting'>
           <img src="./img/weiguanzhu.png" alt="" @click='collect' v-if="!ifCollect">
           <img src="./img/guanzhu.png" alt="" @click='collect' v-else>
         </button>
+        <div class="info-box">
+          <div class="logo">
+            <img :src="faceInfo.face_img[0]" alt="" class="img" v-if="faceInfo.face_img">
+            <img src="./img/mr_face.jpg" alt="" class="img" v-else>
+          </div>
+          <div class="info">
+            <div>{{faceInfo.face_name}}</div>
+            <div>
+              <rater :val='faceInfo.star' class="rater"></rater>
+            </div>
+            <div>
+              <span>态度：{{format_fenshu(faceInfo.td_star)}}</span>
+              <span>速度：{{format_fenshu(faceInfo.sd_star)}}</span>
+              <span>质量：{{format_fenshu(faceInfo.zl_star)}}</span>
+            </div>
+            <div>营业时间：
+              <template v-if="faceInfo.start_day">{{faceInfo.start_day}}到{{faceInfo.end_day}} {{faceInfo.start_time}} —— {{faceInfo.end_time}}</template>
+            </div>
+          </div>
+        </div>
+        <div class="btn-box">
+          <div class="yhj-btn" @click="toYhjList">点击领取优惠券》</div>
+
+        </div>
+
+
 
 
       </div>
@@ -376,6 +383,15 @@
           imgUrl: this.faceInfo.face_img || defaultImg,
         });
 
+      },
+      toYhjList(){
+        var query = {
+          shopId:this.shopId
+        }
+        this.$router.push({
+          path:'/lqYhj',
+          query
+        })
       }
     },
     computed: {
@@ -434,37 +450,59 @@
     padding-bottom: 50px;
     .info-wrapper {
       position: relative;
-      display: flex;
       padding: .533333rem/* 40/75 */
       .4rem/* 30/75 */
       ;
       margin-bottom: $bot;
       color: #ffffff;
       overflow: hidden;
-      .logo {
-        position: relative;
+      .info-box {
+        display: flex;
         z-index: 9999;
-        width: 2.133333rem/* 160/75 */
-        ;
-        height: 2.133333rem/* 160/75 */
-        ;
-        margin-right: .466667rem/* 35/75 */
-        ;
-        border-radius: .133333rem/* 10/75 */
-        ;
-        overflow: hidden;
-        flex: none;
-        .img {
-          width: 100%;
+        .logo {
+          position: relative;
+          width: 2.133333rem/* 160/75 */
+          ;
+          height: 2.133333rem/* 160/75 */
+          ;
+          margin-right: .466667rem/* 35/75 */
+          ;
+          border-radius: .133333rem/* 10/75 */
+          ;
+          overflow: hidden;
+          flex: none;
+          .img {
+            width: 100%;
+          }
+        }
+        .info {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+
         }
       }
-      .info {
-        position: relative;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+      .btn-box {
+        padding-left: 2.6rem/* 195/75 */
+        ;
+        .yhj-btn {
+          position: relative;
+          width: 2.933333rem/* 220/75 */
+          ;
+          z-index: 9999;
+          margin-top: .266667rem/* 20/75 */
+          ;
+          height: .533333rem/* 40/75 */
+          ;
+          background: url(./img/yhj-btn.png) no-repeat;
+          background-size: cover;
+          text-align: center;
+          font-size: .32rem/* 24/75 */
+          ;
+        }
       }
+
       .blur-bg1 {
         position: absolute;
         width: 100%;

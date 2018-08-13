@@ -244,7 +244,29 @@ export default [{
     meta: {
       title: '选择地址'
     }
+  },{
+    path: '/yhj',
+    name: 'yhj',
+    component: resolve => require(['@/pages/yhj/index'], resolve),
+    meta: {
+      title: '我的优惠券'
+    }
+  },{
+    path: '/lqYhj',
+    name: 'lqYhj',
+    component: resolve => require(['@/pages/yhj/index1'], resolve),
+    meta: {
+      title: '优惠券'
+    }
+  },{
+    path: '/selectYhj',
+    name: 'selectYhj',
+    component: resolve => require(['@/pages/queren/selectYhj'], resolve),
+    meta: {
+      title: '选择优惠券'
+    }
   },
+
 
 
 

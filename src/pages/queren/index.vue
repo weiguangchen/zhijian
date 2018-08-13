@@ -32,7 +32,9 @@
         <div class="fw_txt">
           <div class="fw_name">{{fwInfo.fw_mingzi}}</div>
           <div class="fw_content">{{fwInfo.sub_content}}</div>
-          <div>￥{{fwInfo.money}}<template v-if="fwInfo.fw_gg">/{{fwInfo.fw_gg}}</template></div>
+          <div>￥{{fwInfo.money}}
+            <template v-if="fwInfo.fw_gg">/{{fwInfo.fw_gg}}</template>
+          </div>
         </div>
       </div>
       <div class="fw_num">
@@ -43,6 +45,7 @@
             <DateTime v-model="selectDate" :start-date='startdate'></DateTime>
           </Cell>
           <Cell title='选择活动卡 ' :isLink='true' @click.native="selectJuan" v-model="cardname"></Cell>
+          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectYhj" v-model="cardname"></Cell>
         </Group>
       </div>
 
@@ -342,6 +345,22 @@
         })
 
       },
+      selectYhj() {
+        var query = {
+          serviceId: this.serviceId,
+          faceId: this.faceId,
+          shopId: this.shopId
+        };
+        if (this.yhjVal) {
+          Object.assign(query, {
+            yhjVal: this.yhjVal
+          })
+        }
+        this.$router.push({
+          path: '/selectYhj',
+          query
+        })
+      },
       finish(val) {
         this.juanShow = val;
       },
@@ -380,6 +399,9 @@
       },
       cardVal() {
         return this.$route.query.cardVal;
+      },
+      yhjVal() {
+        return this.$route.query.yhjVal;
       },
       cardname() {
         if (this.$route.query.cardVal) {
@@ -431,16 +453,31 @@
 
       }
       .fw_txt {
-        @include font-dpr(14px);
+        flex: 1;
+        font-size: .186667rem/* 14/75 */
+        ;
         line-height: 0.48rem;
         color: #2b2b2b;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         .fw_name {
           font-weight: bold;
           margin-bottom: 0.373333rem;
         }
         .fw_content {
+          min-width: 0;
+          font-size: .32rem/* 24/75 */
+          ;
+          line-height: 1.4;
+          height: .896rem/* 67.2/75 */
+          ;
           opacity: 0.8;
+          display: -webkit-box;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
         }
       }
     }

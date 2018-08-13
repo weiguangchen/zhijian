@@ -5,9 +5,6 @@
         <ul class="content">
           <div>
             <div class="banner">
-              <!-- <div class="share">
-                <i class="iconfont icon-fenxiang" @click="share"></i>
-              </div> -->
               <Swiper height='5.12rem' :show-dots='false'>
                 <SwiperItem v-for="(item,index) in fw_info.fw_img" :key="index">
                   <img :src="item" alt="" class="img">
@@ -48,6 +45,27 @@
                 <span class="iconfont icon-weizhi1"></span>
                 <span class="txt" v-if="faceInfo.map">{{faceInfo.map.poiaddress}}</span>
               </div>
+            </div>
+            <div class="yhj">
+              <span class="tit">领劵</span>
+              <div class="yhjs">
+                <span class="yhj-item">
+                  <i class="l"></i>
+                  <span class="c">满2000减200</span>
+                  <i class="r"></i>
+                </span>
+                <span class="yhj-item">
+                  <i class="l"></i>
+                  <span class="c">满2000减200</span>
+                  <i class="r"></i>
+                </span>
+                <span class="yhj-item">
+                  <i class="l"></i>
+                  <span class="c">满2000减200</span>
+                  <i class="r"></i>
+                </span>
+              </div>
+              <i class="iconfont icon-jinru" @click='toList'></i>
             </div>
             <div class="detail">
               <myTitle>
@@ -155,17 +173,17 @@
       this.get_fw_info().then(data => {
         this.setMetaTitle(data.fw_mingzi)
         this.fw_info = data;
-        if (typeof data.fw_img == "string") {
-          var arr = [];
-          arr.push(data.fw_img);
-          data.fw_img = arr;
-        }
+
+
+
         this.fw_info.token = data.token.slice(0, 2);
+        var arr = [];
+        arr.push(data.fw_img);
         this.fw_info.fw_img = arr;
 
         this.preloadImages();
         this.$wx.ready(function () {
-        console.log('wx分享配置')
+          console.log('wx分享配置')
           _this.share();
         })
       })
@@ -308,6 +326,16 @@
           imgUrl: this.fw_info.fw_img[0],
         });
 
+      },
+      toList() {
+        var query = {
+          fwId: this.fwId,
+          shopId: this.fw_info.shop_id
+        }
+        this.$router.push({
+          path: '/lqYhj',
+          query
+        })
       }
     },
     mounted() {
@@ -416,31 +444,6 @@
     %public {
       background: #ffffff;
       border-bottom: 1px solid #dfdfdf; // line-height: 1;
-      // color: #2b2b2b;
-      // .top {
-      //   .price {
-      //     margin-right: 0.213333rem;
-      //   }
-      //   .num {
-      //     color: #e13131;
-      //   }
-      // }
-      // .middle,
-      // .bottom {
-      //   display: flex;
-      //   align-items: center;
-      // }
-      // .top,
-      // .middle {
-      //   margin-bottom: 0.32rem;
-      // }
-      // .middle,
-      // .bottom {
-      //   .txt {
-      //     color: #2b2b2b;
-      //     opacity: 0.5;
-      //   }
-      // }
     }
     .sp-info {
       @extend %public;
@@ -556,7 +559,58 @@
         }
       }
     }
-
+    .yhj {
+      display: flex;
+      align-items: center;
+      height: 1.866667rem/* 140/75 */
+      ;
+      background: #ffffff;
+      margin-bottom: $bot;
+      .tit {
+        width: 1.653333rem/* 124/75 */
+        ;
+        flex: none;
+        text-align: center;
+      }
+      .yhjs {
+        display: flex;
+        justify-content: space-between;
+        flex: 1;
+        .yhj-item {
+          display: flex;
+          height: 1.146667rem/* 86/75 */
+          ;
+          %lr {
+            width: .053333rem/* 4/75 */
+            ;
+            flex: 1;
+            background-size: cover;
+            background-repeat: no-repeat;
+          }
+          .l {
+            @extend %lr;
+            background-image: url(./img/yhj-l.png);
+          }
+          .r {
+            @extend %lr;
+            background-image: url(./img/yhj-r.png);
+          }
+          .c {
+            display: flex;
+            align-items: center;
+            background: url(./img/yhj-bg.png);
+            color: #ffffff;
+            padding: 0 .16rem /* 12/75 */;
+          }
+        }
+      }
+      .iconfont {
+        width: 1.066667rem/* 80/75 */
+        ;
+        flex: none;
+        text-align: center;
+      }
+    }
     .detail {
       margin-bottom: 0.373333rem;
       .content {

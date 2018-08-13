@@ -2,37 +2,41 @@
   <div class="page collect">
     <Tab active-color='#e86359' class="x-tab" v-model="tabActiveIndex">
       <TabItem selected='selected' @on-item-click='changeTab'>
-        <span>服务</span>
+        <span>未使用</span>
       </TabItem>
       <TabItem @on-item-click='changeTab'>
-        <span>活动</span>
+        <span>已使用</span>
       </TabItem>
       <TabItem @on-item-click='changeTab'>
-        <span>店铺</span>
+        <span>已过期</span>
       </TabItem>
     </Tab>
     <div class="swiper-box">
       <swiper :options="swiperOption" ref="mySwiper" @transitionEnd='transitionEnd'>
         <swiper-slide>
-          <betterScroll @pullingUp='pullingUp' ref='scroll0'>
-            <div class="list1">
-              <fw v-for="(item,index) in fwList" :key="index" :fw='item' :index='index' @deleteFw='deleteFw'></fw>
-            </div>
-          </betterScroll>
+          <div class="scroll-wrapper">
+            <scroller>
+              <div class="list">
+              <yhj v-for="(item,index) in 20" :key="index">
+              </yhj>
+   
+              </div>
+            </scroller>
+          </div>
         </swiper-slide>
         <swiper-slide>
-          <betterScroll @pullingUp='pullingUp' ref='scroll1'>
-            <div class="list1">
-              <hd v-for="(item,index) in hdList" :key="index" :hd='item' :index='index' @deleteHd='deleteHd'></hd>
-            </div>
-          </betterScroll>
+          <div class="scroll-wrapper">
+            <scroller>
+              <yhj></yhj>
+            </scroller>
+          </div>
         </swiper-slide>
         <swiper-slide>
-          <betterScroll @pullingUp='pullingUp' ref='scroll2'>
-            <div class="list1">
-              <md v-for="(item,index) in mdList" :key="index" :md='item'  @deleteMd='deleteMd'></md>
-            </div>
-          </betterScroll>
+          <div class="scroll-wrapper">
+            <scroller>
+              <yhj></yhj>
+            </scroller>
+          </div>
         </swiper-slide>
       </swiper>
     </div>
@@ -46,7 +50,6 @@
     Tab,
     TabItem,
     Sticky,
-    Selector,
   } from "vux";
   import {
     swiper,
@@ -54,10 +57,8 @@
   } from "vue-awesome-swiper";
   import betterScroll from '@/components/betterScroll/scroll';
   import checkLogin from "@/mixins/checkLogin.js";
+  import yhj from './components/index';
 
-  import fw from './fw';
-  import hd from './hd';
-  import md from './mendian';
 
   export default {
     data() {
@@ -95,7 +96,7 @@
         Object.assign(params, {
           tj: this.format(type) /* 0门店1服务2活动 */
         })
-        return this.$axios.get( '/Api/UserShow/get_like_list', {
+        return this.$axios.get('/Api/UserShow/get_like_list', {
           params
         }).then(({
           data
@@ -118,7 +119,7 @@
       deleteHd(i) {
         this.hdList.splice(i, 1);
       },
-      deleteMd(i){
+      deleteMd(i) {
         this.mdList.splice(i, 1);
       },
       pullingUp() {
@@ -157,7 +158,7 @@
       swiper() {
         return this.$refs.mySwiper.swiper
       },
-      
+
     },
     mounted() {
 
@@ -168,12 +169,9 @@
       Tab,
       TabItem,
       Sticky,
-      betterScroll,
       swiperSlide,
       swiper,
-      fw,
-      hd,
-      md
+      yhj
     },
     mixins: [checkLogin]
   };
@@ -194,6 +192,13 @@
       height: 100%;
       .swiper-container {
         height: 100%;
+        .scroll-wrapper {
+          position: relative;
+          height: 100%;
+          .list{
+            padding:  .8rem /* 60/75 */ .4rem /* 30/75 */;
+          }
+        }
       }
       .list1 {
         padding: .4rem/* 30/75 */
