@@ -3,7 +3,7 @@
     <scroller :on-infinite="infinite" ref="myscroller">
       <h1 class="desc-tit">可领优惠券</h1>
       <div class="list">
-        <yhj :info='item' v-for="(item,index) in list" :key="index" @btnClick='lingqu(item,index)'>
+        <yhj :info='item' v-for="(item,index) in list" :key="index" @btnClick='lingqu(item,index)' :disabled='item.l_yes == 0' :status="item.l_yes == 0?1:''">
           <span>点击领取</span>
         </yhj>
       </div>
@@ -77,12 +77,24 @@
           params: {
             yhq_id: yhj.id,
             shop_id: this.shopId,
-            user_id: id
+            user_id: this.id
           }
         }).then(({
           data
         }) => {
           console.log(data)
+          if (data.status == 1) {
+            this.list[index].l_yes = 0;
+            this.$vux.alert.show({
+              title: '提示',
+              content: '领取成功！'
+            })
+          } else {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '领取失败！'
+            })
+          }
         })
       }
     },

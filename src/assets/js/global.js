@@ -62,30 +62,37 @@ export function setMetaTitle(title) {
 
 export function wxShare(config) {
   // 分享给朋友
-  var onMenuShareAppMessageConfig = Object.assign(config,{
-    success(){},
+  var onMenuShareAppMessageConfig = Object.assign(config, {
+    success() {},
   })
   wx.onMenuShareAppMessage(onMenuShareAppMessageConfig);
   // 分享到朋友圈
-  var onMenuShareTimelineConfig = Object.assign(config,{
-    success(){},
+  var onMenuShareTimelineConfig = Object.assign(config, {
+    success() {},
   })
   wx.onMenuShareTimeline(onMenuShareTimelineConfig);
   // 分享到qq
-  var onMenuShareQQConfig = Object.assign(config,{
-    success(){},
+  var onMenuShareQQConfig = Object.assign(config, {
+    success() {},
   })
   wx.onMenuShareQQ(onMenuShareQQConfig);
   // 分享到微博
-  var onMenuShareWeiboConfig = Object.assign(config,{
-    success(){},
+  var onMenuShareWeiboConfig = Object.assign(config, {
+    success() {},
   })
   wx.onMenuShareWeibo(onMenuShareWeiboConfig);
   // 分享到qq空间
-  var onMenuShareQZoneConfig = Object.assign(config,{
-    success(){},
+  var onMenuShareQZoneConfig = Object.assign(config, {
+    success() {},
   })
   wx.onMenuShareQZone(onMenuShareQZoneConfig);
+}
+
+function filter_money(num) {
+  console.log(num.toString())
+  if (num.toString().indexOf('.') > 0) {
+    return num.split('.')[0];
+  }
 }
 
 export default {
@@ -97,5 +104,6 @@ export default {
     Vue.prototype.$production_url = production_url;
     Vue.prototype.$development_url = development_url;
     Vue.prototype.$wxShare = wxShare;
+    Vue.prototype.$filter_money = filter_money;
   }
 };

@@ -46,22 +46,12 @@
                 <span class="txt" v-if="faceInfo.map">{{faceInfo.map.poiaddress}}</span>
               </div>
             </div>
-            <div class="yhj">
+            <div class="yhj" v-if="yhj.length>0">
               <span class="tit">领劵</span>
               <div class="yhjs">
-                <span class="yhj-item">
+                <span class="yhj-item" v-for="(item,index) in yhj" :key="index">
                   <i class="l"></i>
-                  <span class="c">满2000减200</span>
-                  <i class="r"></i>
-                </span>
-                <span class="yhj-item">
-                  <i class="l"></i>
-                  <span class="c">满2000减200</span>
-                  <i class="r"></i>
-                </span>
-                <span class="yhj-item">
-                  <i class="l"></i>
-                  <span class="c">满2000减200</span>
+                  <span class="c">满{{$filter_money(item.man_jian)}}减{{$filter_money(item.yh_money)}}</span>
                   <i class="r"></i>
                 </span>
               </div>
@@ -162,6 +152,7 @@
         ifCollect: false,
         collecting: false,
         collect_id: {},
+        yhj:[],
 
         mountedStatus: false,
         imgLoaded: false,
@@ -186,6 +177,7 @@
           console.log('wx分享配置')
           _this.share();
         })
+        this.get_yhj();
       })
       this.get_face();
       this.collect_status();
@@ -335,6 +327,22 @@
         this.$router.push({
           path: '/lqYhj',
           query
+        })
+      },
+      get_yhj() {
+        this.$axios.get('/Api/Yhq/fw_yhq_list', {
+          params: {
+            shop_id: this.fw_info.shop_id,
+            fw_id: this.fwId,
+            user_id: this.id,
+            num: 3,
+            p: 1
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data)
+          this.yhj = data.list;
         })
       }
     },
@@ -600,7 +608,8 @@
             align-items: center;
             background: url(./img/yhj-bg.png);
             color: #ffffff;
-            padding: 0 .16rem /* 12/75 */;
+            padding: 0 .16rem/* 12/75 */
+            ;
           }
         }
       }

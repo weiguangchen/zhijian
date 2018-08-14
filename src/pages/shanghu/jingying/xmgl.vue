@@ -447,6 +447,11 @@
       isPositiveInteger(s) {
         var re = /^[1-9]\d*$/;
         return re.test(s);
+      },
+      get_js(){
+        this.$axios.get('/Api/yhj/get_js').then(({data})=>{
+          console.log(data)
+        })
       }
     },
     computed: {

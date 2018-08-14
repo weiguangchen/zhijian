@@ -45,7 +45,7 @@
             <DateTime v-model="selectDate" :start-date='startdate'></DateTime>
           </Cell>
           <Cell title='选择活动卡 ' :isLink='true' @click.native="selectJuan" v-model="cardname"></Cell>
-          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectYhj" v-model="cardname"></Cell>
+          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectYhj" v-model="yhjname"></Cell>
         </Group>
       </div>
 
@@ -400,8 +400,8 @@
       cardVal() {
         return this.$route.query.cardVal;
       },
-      yhjVal() {
-        return this.$route.query.yhjVal;
+      yhjId() {
+        return this.$route.query.yhjId;
       },
       cardname() {
         if (this.$route.query.cardVal) {
@@ -411,6 +411,9 @@
             }
           }
         }
+      },
+      yhjname(){
+        
       },
       has_add() {
         return this.add_status == 0 ? false : true;

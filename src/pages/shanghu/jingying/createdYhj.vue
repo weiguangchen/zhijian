@@ -23,13 +23,13 @@
           <div class="input-wrapper">
             <span class="label">满减：</span>
             <Group class="reset-vux-input">
-              <XInput  v-model.number="full_money" placeholder='请输入满足条件金额(限本店)'></XInput>
+              <XInput v-model.number="full_money" placeholder='请输入满足条件金额(限本店)'></XInput>
             </Group>
           </div>
           <div class="input-wrapper">
             <span class="label">有效期：</span>
             <Group class="reset-vux-input">
-              <XInput v-model.number="youxiaoqi" placeholder='请输入优惠券的有效期天数' ></XInput>
+              <XInput v-model.number="youxiaoqi" placeholder='请输入优惠券的有效期天数'></XInput>
             </Group>
           </div>
           <div class="input-wrapper">
@@ -37,7 +37,7 @@
             <div class="num">
               <mu-radio color='#0fbd78' label="" v-model="provide_type" :value='2'></mu-radio>
               <Group class="reset-vux-input">
-                <XInput v-model.number="provide_num" placeholder='发放数量'  :disabled='provide_type != 2'></XInput>
+                <XInput v-model.number="provide_num" placeholder='发放数量' :disabled='provide_type != 2'></XInput>
 
               </Group>
             </div>
@@ -117,6 +117,7 @@
         alertShow: false,
         all_class: [],
         fwList: [],
+        faceList:[],
 
         yhj_name: "",
         yhj_money: "",
@@ -136,6 +137,7 @@
 
       this.get_fw_class();
       this.get_fw();
+      this.get_face();
       if (this.yhjId) {
         this.get_old_info();
       }
@@ -152,8 +154,8 @@
 
           if (this.yhjId) {
             // 编辑
-            var params = Object.assign({},this.params,{
-              id:this.yhjId
+            var params = Object.assign({}, this.params, {
+              id: this.yhjId
             })
             this.$axios.get('/Api/Yhq/yhq_edit', {
               params
@@ -231,7 +233,7 @@
           } else if (!this.tiaojian) {
             _this.alertWarning("请选择使用条件！");
             reject();
-          }  else if (this.tiaojian === 1 && !this.class_val) {
+          } else if (this.tiaojian === 1 && !this.class_val) {
             _this.alertWarning("请选择指定类别！");
             reject();
           } else if (this.tiaojian === 2 && !this.fw_val) {
@@ -285,6 +287,21 @@
             this.fwList = data;
           });
       },
+      get_face() {
+        this.$axios
+          .get("/Api/Shop/get_face", {
+            params: {
+              shop_id: this.userinfo.shop[0].id, //商户id
+              phone: this.userinfo.uphone
+            }
+          })
+          .then(({
+            data
+          }) => {
+            console.log(data);
+            this.faceList = data;
+          });
+      },
       uploadComplete(imgs) {
         this.tupian = imgs;
       },
@@ -334,6 +351,7 @@
           yh_fw_id: this.fw_val,
           man_jian: this.full_money,
           shop_id: this.userinfo.shop[0].id,
+          face_id:this.faceList[0].id
         }
       },
       yhjId() {

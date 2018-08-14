@@ -1,53 +1,58 @@
 <template>
-  <div class="page collect">
-    <Tab active-color='#e86359' class="x-tab" v-model="tabActiveIndex">
+  <div class="page selectYhj">
+    <!-- <Tab active-color='#e86359' class="x-tab" v-model="tabActiveIndex">
       <TabItem @on-item-click='changeTab'>
         <span>可用优惠券</span>
       </TabItem>
       <TabItem @on-item-click='changeTab'>
         <span>不可用优惠券</span>
       </TabItem>
-    </Tab>
-    <div class="swiper-box">
+    </Tab> -->
+    <!-- <div class="swiper-box">
       <swiper :options="swiperOption" ref="mySwiper" @transitionEnd='transitionEnd'>
         <swiper-slide>
           <div class="scroll-wrapper">
-            <scroller>
-              <div class="list">
-              <yhj v-for="(item,index) in 20" :key="index">
-              </yhj>
-   
-              </div>
-            </scroller>
+            <mineScroller></mineScroller>
           </div>
         </swiper-slide>
         <swiper-slide>
           <div class="scroll-wrapper">
-            <scroller>
-              <yhj></yhj>
-            </scroller>
+            <mineScroller></mineScroller>
           </div>
         </swiper-slide>
       </swiper>
+    </div> -->
+    <div class="scroll-wrapper">
+      <scroller :on-infinite="infinite" ref="myscroller">
+        <Checker v-model="yhj_val" selected-item-class='selected-yhj' default-item-class='default-yhj'>
+          <CheckerItem v-for="(item,index) in list" :key="index" :value='item.id'>
+            <yhj :info='item.content' :hasBtn='false'></yhj>
+            <img src="./gou.png" alt="" class="gou">
+          </CheckerItem>
+        </Checker>
+      </scroller>
+      <XButton type='warn' class="xbtn" @click.native="ok">确定</XButton>
     </div>
+
   </div>
 </template>
 <script>
+  import yhj from '@/pages/yhj/components/index';
   import {
-    ViewBox,
     Cell,
     Group,
     Tab,
     TabItem,
     Sticky,
+    Checker,
+    CheckerItem,
+    XButton
   } from "vux";
   import {
     swiper,
     swiperSlide
   } from "vue-awesome-swiper";
-  import betterScroll from '@/components/betterScroll/scroll';
   import checkLogin from "@/mixins/checkLogin.js";
-  import yhj from '@/pages/yhj/components/index';
 
 
   export default {
@@ -55,100 +60,89 @@
       return {
         tabActiveIndex: 0,
         swiperOption: {},
-        p0: 1,
-        p1: 1,
-        p2: 1,
-        fwList: [],
-        hdList: [],
-        mdList: []
+
+        noData: false,
+        p: 1,
+        list: [],
+
+        yhj_val: ''
       };
     },
     created() {
-      var _this = this;
-      this.get_list(2).then(data => {
-        this.mdList = this.mdList.concat(data);
-      })
-      this.get_list(0).then(data => {
-        this.fwList = this.fwList.concat(data);
-      })
-      this.get_list(1).then(data => {
-        this.hdList = this.hdList.concat(data);
-      })
+      this.get_list();
     },
     methods: {
-      get_list(type) {
-        var params = {
-          uid: this.id,
-          num: 8,
-          p: this['p' + type]
+      infinite(done) {
+        console.log('触发')
+        this.get_list(done);
+      },
+      get_list(fn) {
+        if (this.noData) {
+          // 没有数据了
+          this.$refs.myscroller.finishInfinite(true);
+          return
+        } else {
+          // 还有数据
+          this.$axios.get('/Api/Yhq/fw_user_yhq', {
+            params: {
+              user_id: this.id,
+              fw_id: this.fwId,
+              shop_id: this.shopId,
+              p: this.p,
+              num: 8,
+            }
+          }).then(({
+            data
+          }) => {
+            console.log(data)
+            if (data.ok == 1) {
+              //   还有数据
+              this.p++;
+            } else {
+              //   没有数据
+              this.noData = true;
+            }
+            this.list = this.list.concat(data.list);
+            if (fn) fn();
+          })
         }
-        console.log(type)
-        Object.assign(params, {
-          tj: this.format(type) /* 0门店1服务2活动 */
-        })
-        return this.$axios.get('/Api/UserShow/get_like_list', {
-          params
-        }).then(({
-          data
-        }) => {
-          console.log(data)
-          if (data.ok == 1) {
-            console.log("还有数据");
-            this['p' + type] = this['p' + type] + 1;
-          } else if (data.ok == 0) {
-            console.log("没数据了");
-            this.$refs['scroll' + type].closePullUp();
-          }
-          this.$refs['scroll' + type].pullupLoadend();
-          return data.list;
-        })
       },
-      deleteFw(i) {
-        this.fwList.splice(i, 1);
-      },
-      deleteHd(i) {
-        this.hdList.splice(i, 1);
-      },
-      deleteMd(i) {
-        this.mdList.splice(i, 1);
-      },
-      pullingUp() {
-        this.get_list(this.tabActiveIndex).then(data => {
-          if (this.tabActiveIndex == 0) {
-            this.fwList = this.fwList.concat(data)
-          } else if (this.tabActiveIndex == 1) {
-            this.hdList = this.hdList.concat(data)
-          } else if (this.tabActiveIndex == 2) {
-            this.mdList = this.mdList.concat(data)
-          }
-        })
-        this.$refs['scroll' + this.tabActiveIndex].finishPullupload();
-      },
-      transitionEnd() {
-        this.tabActiveIndex = this.swiper.activeIndex
-      },
-      changeTab(val) {
-        this.swiper.slideTo(val, 200, false)
-      },
-
-      format(type) {
-        if (type == 0) {
-          return 1;
-        } else if (type == 1) {
-          return 2;
-        } else if (type == 2) {
-          return 0;
+      ok() {
+        var query = {
+          serviceId: this.fwId,
+          faceId: this.faceId,
+          shopId: this.shopId,
+          yhjId: this.yhj_val
         }
+        this.$router.replace({
+          path: '/queren',
+          query
+        })
       }
+      //   transitionEnd() {
+      //     this.tabActiveIndex = this.swiper.activeIndex
+      //   },
+      //   changeTab(val) {
+      //     this.swiper.slideTo(val, 200, false)
+      //   },
+
 
 
 
     },
     computed: {
       swiper() {
-        return this.$refs.mySwiper.swiper
+        return this.$refs.mySwiper.swiper;
       },
-
+      fwId() {
+        return this.$route.query.serviceId;
+      },
+      shopId() {
+        return this.$route.query.shopId;
+      },
+      faceId() {
+        return this.$route.query.faceId;
+      }
     },
     mounted() {
 
@@ -161,7 +155,10 @@
       Sticky,
       swiperSlide,
       swiper,
-      yhj
+      yhj,
+      Checker,
+      CheckerItem,
+      XButton
     },
     mixins: [checkLogin]
   };
@@ -169,31 +166,72 @@
 </script>
 
 <style lang='scss'>
-  .collect {
+  .selectYhj {
     background: #ffffff;
-    .x-tab {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-    }
-    .swiper-box {
-      padding-top: 44px;
+    padding: .4rem/* 30/75 */
+    ;
+    .scroll-wrapper {
+      position: relative;
       height: 100%;
-      .swiper-container {
-        height: 100%;
-        .scroll-wrapper {
-          position: relative;
-          height: 100%;
-          .list{
-            padding:  .8rem /* 60/75 */ .4rem /* 30/75 */;
-          }
-        }
-      }
-      .list1 {
-        padding: .4rem/* 30/75 */
+      .vux-checker-item {
+        width: 100%;
+        position: relative;
+        margin-bottom: .666667rem/* 50/75 */
         ;
       }
+      .gou {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: none;
+        width: 1.173333rem/* 88/75 */
+        ;
+      }
+      .selected-yhj {
+        border: .053333rem/* 4/75 */
+        solid #f16764 !important;
+        .gou {
+          display: block;
+        }
+      }
+      .default-yhj {
+        border: .053333rem/* 4/75 */
+        solid transparent;
+      }
+      .xbtn {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: 99999;
+      }
+    }
+  }
+
+  .x-tab {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .swiper-box {
+    padding-top: 44px;
+    height: 100%;
+    .swiper-container {
+      height: 100%;
+      .scroll-wrapper {
+        position: relative;
+        height: 100%;
+        .list {
+          padding: .8rem/* 60/75 */
+          .4rem/* 30/75 */
+          ;
+        }
+      }
+    }
+    .list1 {
+      padding: .4rem/* 30/75 */
+      ;
     }
   }
 

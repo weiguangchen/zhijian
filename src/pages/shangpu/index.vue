@@ -43,7 +43,7 @@
         </swiper-slide>
       </swiper>
       <!-- <Sticky> -->
-      <Tab active-color='#e86359' class="x-tab" v-model="tabActiveIndex">
+      <Tab active-color='#e86359' class="x-tab" v-model="tabActiveIndex" :scroll-threshold='5'>
         <TabItem selected='selected' @on-item-click='changeTab'>
           <i class="iconfont icon-quanbufuwuweixuanzhong"></i>
           <span>全部服务</span>
@@ -55,6 +55,10 @@
         <TabItem @on-item-click='changeTab'>
           <i class="iconfont icon-yonghupingjiaweixuanzhong"></i>
           <span>用户评价</span>
+        </TabItem>
+        <TabItem @on-item-click='changeTab'>
+          <i class="iconfont icon-youhuiquan"></i>
+          <span>优惠券</span>
         </TabItem>
         <TabItem @on-item-click='changeTab'>
           <i class="iconfont icon-shangpuxiangqingxuanzhong"></i>
@@ -76,10 +80,10 @@
 
           </div>
           <div class="list" v-if="showType == 1">
-            <fw v-for="(item,index) in current_fw_list" :key="index" :info='item' :faceId='shopId'></fw>
+            <fw v-for="(item,index) in current_fw_list" :key="index" :info='item' :faceId='faceId'></fw>
           </div>
           <div class="fw-list" v-else-if="showType == 2">
-            <fw2 v-for="(item,index) in current_fw_list" :key="index" :info='item' :faceId='shopId' class="fw2-item"></fw2>
+            <fw2 v-for="(item,index) in current_fw_list" :key="index" :info='item' :faceId='faceId' class="fw2-item"></fw2>
           </div>
         </swiper-slide>
         <swiper-slide>
@@ -93,6 +97,11 @@
               <pinglun :info='item' v-for="(item,index) in pl" :key="index"></pinglun>
 
             </div>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="yhj-list">
+            <yhj v-for="(item,index) in yhj_list" :key="index" :info='item' :disabled='item.l_yes == 0' :status="item.l_yes == 0?1:''" @btnClick='lingqu(item,index)'></yhj>
           </div>
         </swiper-slide>
         <swiper-slide>
@@ -153,13 +162,13 @@
   import checkLogin from "@/mixins/checkLogin.js";
   import pinglun from "@/components/pinglun/index";
 
-  var StackBlur = require("stackblur-canvas");
   import {
     Slider,
     SliderItem
   } from 'vue-ydui/dist/lib.px/slider';
 
   import defaultImg from './img/mr_face.jpg';
+  import yhj from '@/pages/yhj/components';
   export default {
     data() {
       return {
@@ -184,7 +193,11 @@
         faceInfo: {},
         pl: [],
         tag1: [],
-        tag2: []
+        tag2: [],
+
+        yhj_noData: false,
+        yhj_p: 1,
+        yhj_list: []
       };
     },
     created() {
@@ -196,10 +209,7 @@
       this.get_face_info();
     },
     methods: {
-      load_blur_bg() {
-        console.log('加载好了')
-        StackBlur.image('blur-bg', 'blur-canvas', 100, true);
-      },
+
       transitionEnd() {
         console.log(this.swiper.activeIndex)
         this.tabActiveIndex = this.swiper.activeIndex
@@ -231,7 +241,7 @@
         this.$axios
           .get("/Api/Show/get_shop", {
             params: {
-              shop_id: this.shopId
+              shop_id: this.faceId
             }
           })
           .then(({
@@ -249,7 +259,7 @@
         this.$axios
           .get("/Api/Show/get_card", {
             params: {
-              shop_id: this.shopId
+              shop_id: this.faceId
             }
           })
           .then(({
@@ -271,7 +281,7 @@
         var _this = this;
         this.$axios.get('/Api/show/get_face', {
           params: {
-            face_id: this.shopId
+            face_id: this.faceId
           }
         }).then(({
           data
@@ -284,7 +294,7 @@
           this.current_fw_list = data.fw;
           this.huodong = data.hd;
           this.get_pl();
-
+          this.get_yhj();
           this.$wx.ready(function () {
             _this.share();
           })
@@ -384,18 +394,52 @@
         });
 
       },
-      toYhjList(){
-        var query = {
-          shopId:this.shopId
-        }
-        this.$router.push({
-          path:'/lqYhj',
-          query
+      toYhjList() {
+        this.swiper.slideTo(3, 200, false)
+      },
+      get_yhj() {
+        this.$axios.get('/Api/yhq/shop_yhq_list', {
+          params: {
+            shop_id: this.faceInfo.fw_shop_id,
+            user_id: this.id,
+            num: 99999,
+            p: this.yhj_p
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data);
+          this.yhj_list = data.list;
+        })
+      },
+      lingqu(yhj, index) {
+        this.$axios.get('/Api/Yhq/user_get_yhq', {
+          params: {
+            yhq_id: yhj.id,
+            shop_id: this.faceInfo.fw_shop_id,
+            user_id: this.id
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data)
+          if (data.status == 1) {
+            this.yhj_list[index].l_yes = 0;
+            this.$vux.alert.show({
+              title: '提示',
+              content: '领取成功！'
+            })
+          } else {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '领取失败！'
+            })
+          }
         })
       }
     },
     computed: {
-      shopId() {
+      faceId() {
         return this.$route.params.shangpuId;
       },
       swiper() {
@@ -404,8 +448,8 @@
       collect_params() {
         return {
           uid: this.id,
-          sid: this.shopId,
-          face_id: this.shopId,
+          sid: this.faceId,
+          face_id: this.faceId,
           tj: 0
         }
       }
@@ -433,7 +477,8 @@
       swiper,
       Selector,
       Blur,
-      pinglun
+      pinglun,
+      yhj
     },
     mixins: [checkLogin]
   };
@@ -648,7 +693,11 @@
     .top-ad {
       height: 2.4rem;
     }
-
+    .yhj-list {
+      background: #ffffff;
+      padding: .4rem/* 30/75 */
+      ;
+    }
     %public {
       padding: 0.32rem 0.56rem 0.32rem 0.4rem;
       background: #ffffff;
