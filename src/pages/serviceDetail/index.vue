@@ -46,16 +46,16 @@
                 <span class="txt" v-if="faceInfo.map">{{faceInfo.map.poiaddress}}</span>
               </div>
             </div>
-            <div class="yhj" v-if="yhj.length>0">
+            <div class="yhj" @click='toList'>
               <span class="tit">领劵</span>
-              <div class="yhjs">
+              <div class="yhjs" v-if="yhj.length>0">
                 <span class="yhj-item" v-for="(item,index) in yhj" :key="index">
                   <i class="l"></i>
                   <span class="c">满{{$filter_money(item.man_jian)}}减{{$filter_money(item.yh_money)}}</span>
                   <i class="r"></i>
                 </span>
               </div>
-              <i class="iconfont icon-jinru" @click='toList'></i>
+              <i class="iconfont icon-jinru"></i>
             </div>
             <div class="detail">
               <myTitle>
@@ -570,6 +570,7 @@
     .yhj {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       height: 1.866667rem/* 140/75 */
       ;
       background: #ffffff;

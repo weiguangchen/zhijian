@@ -191,7 +191,8 @@
       /* 判断系统 */
       this.checkSystem();
       // this.$eruda.init();
-
+      // 获取结算比例
+      this.get_js();
       /* 获取表单所需列表 */
       this.$axios
         .get("/api/ShopFw/shop_fw", {
@@ -449,8 +450,9 @@
         return re.test(s);
       },
       get_js(){
-        this.$axios.get('/Api/yhj/get_js').then(({data})=>{
+        this.$axios.get('/Api/Yhq/get_js').then(({data})=>{
           console.log(data)
+          this.jsPrecent = data.hd_lv;
         })
       }
     },

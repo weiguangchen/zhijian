@@ -25,7 +25,7 @@
     <div class="scroll-wrapper">
       <scroller :on-infinite="infinite" ref="myscroller">
         <Checker v-model="yhj_val" selected-item-class='selected-yhj' default-item-class='default-yhj'>
-          <CheckerItem v-for="(item,index) in list" :key="index" :value='item.id'>
+          <CheckerItem v-for="(item,index) in list" :key="index" :value='item.yhq_id'>
             <yhj :info='item.content' :hasBtn='false'></yhj>
             <img src="./gou.png" alt="" class="gou">
           </CheckerItem>
@@ -70,6 +70,7 @@
     },
     created() {
       this.get_list();
+      this.yhj_val = this.yhjId;
     },
     methods: {
       infinite(done) {
@@ -88,6 +89,7 @@
               user_id: this.id,
               fw_id: this.fwId,
               shop_id: this.shopId,
+              money: this.money,
               p: this.p,
               num: 8,
             }
@@ -112,7 +114,8 @@
           serviceId: this.fwId,
           faceId: this.faceId,
           shopId: this.shopId,
-          yhjId: this.yhj_val
+          yhjId: this.yhj_val,
+          num: this.num
         }
         this.$router.replace({
           path: '/queren',
@@ -142,6 +145,15 @@
       },
       faceId() {
         return this.$route.query.faceId;
+      },
+      yhjId(){
+          return this.$route.query.yhjId;
+      },
+      money() {
+        return this.$route.query.money;
+      },
+      num() {
+        return this.$route.query.num;
       }
     },
     mounted() {
@@ -205,33 +217,33 @@
         z-index: 99999;
       }
     }
-  }
 
-  .x-tab {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-  }
+    .x-tab {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
 
-  .swiper-box {
-    padding-top: 44px;
-    height: 100%;
-    .swiper-container {
+    .swiper-box {
+      padding-top: 44px;
       height: 100%;
-      .scroll-wrapper {
-        position: relative;
+      .swiper-container {
         height: 100%;
-        .list {
-          padding: .8rem/* 60/75 */
-          .4rem/* 30/75 */
-          ;
+        .scroll-wrapper {
+          position: relative;
+          height: 100%;
+          .list {
+            padding: .8rem/* 60/75 */
+            .4rem/* 30/75 */
+            ;
+          }
         }
       }
-    }
-    .list1 {
-      padding: .4rem/* 30/75 */
-      ;
+      .list1 {
+        padding: .4rem/* 30/75 */
+        ;
+      }
     }
   }
 

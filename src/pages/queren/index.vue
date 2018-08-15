@@ -32,20 +32,21 @@
         <div class="fw_txt">
           <div class="fw_name">{{fwInfo.fw_mingzi}}</div>
           <div class="fw_content">{{fwInfo.sub_content}}</div>
-          <div>￥{{fwInfo.money}}
+          <div class="fw_price">￥{{fwInfo.money}}
             <template v-if="fwInfo.fw_gg">/{{fwInfo.fw_gg}}</template>
           </div>
         </div>
       </div>
       <div class="fw_num">
         <Group class="form">
-          <XNumber title='购买数量' :min='fwInfo.min' v-model="num" class="xnum" :fillable='true'></XNumber>
-          <Cell title='总价' :value='money'></Cell>
+          <XNumber title='购买数量' :min='fwInfo.min' v-model="num" class="xnum" :fillable='true' v-if="!yhjId"></XNumber>
+          <Cell title='购买数量' v-else>{{num}}</Cell>
           <Cell title='选择服务时间' :isLink='true'>
             <DateTime v-model="selectDate" :start-date='startdate'></DateTime>
           </Cell>
           <Cell title='选择活动卡 ' :isLink='true' @click.native="selectJuan" v-model="cardname"></Cell>
-          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectYhj" v-model="yhjname"></Cell>
+          <Cell title='选择优惠券 ' :isLink='true' @click.native="selectYhj">{{current_yhj_name}}</Cell>
+          <Cell title='总价'>{{money}}元</Cell>
         </Group>
       </div>
 
@@ -80,29 +81,40 @@
   export default {
     data() {
       return {
-        fwInfo: {},
+        fwInfo: '',
+        /* 服务信息 */
         orderNum: "",
+        /* 微信支付成功订单号 */
         card_list: [],
+        /* 已有活动卡 */
         hasCard: false,
-        mapShow: false,
         submiting: false,
+        /* 防止重复提交 */
 
-        num: 1,
-        lianxiren: "",
-        phone: "",
-        mapInfo: "",
-
-        moren_add: '',
         add_status: '',
-        juanShow: false,
+        /* 是否有默认地址 */
+        moren_add: '',
+        /* 默认地址 */
+        num: 1,
+        /* 购买数量 */
         selectDate: '',
 
-        startdate: ''
+        startdate: '',
+        /*  开始时间 */
+        // 当前选择优惠券
+        current_yhj: '',
+        // 优惠券列表
+        yhj_list: []
       };
     },
     created() {
       this.get_fw_info();
       this.get_card();
+      this.get_yhj_info();
+
+      if (this.pre_num) {
+        this.num = this.pre_num;
+      }
       // 判断是否使用默认地址,默认从服务页下单使用默认地址
       if (this.if_moren_add) {
         this.get_moren_add();
@@ -110,7 +122,7 @@
         this.moren_add = this.selected_add;
         this.add_status = 1;
       }
-
+      // 当前时间
       this.startdate = this.$moment().format("YYYY-MM-DD HH:mm");
     },
     methods: {
@@ -147,6 +159,7 @@
                           card_id: _this.cardVal,
                           fw_time: _this.selectDate,
                           face_face: _this.faceId
+
                         }
                       })
                       .then(({
@@ -175,22 +188,37 @@
                 })
               } else {
                 // 微信支付
+                var params = {
+                  shop_fw_id: _this.serviceId,
+                  num: _this.num,
+                  uid: _this.id,
+                  adress: _this.moren_add.adress,
+                  dianhua: _this.moren_add.phone,
+                  xingming: _this.moren_add.name,
+                  three: _this.moren_add.three,
+                  car_card: _this.moren_add.car_card,
+                  car_color: _this.moren_add.car_color,
+                  car_xing: _this.moren_add.car_xing,
+                  fw_time: _this.selectDate,
+                  face_face: _this.faceId,
+                }
+
+                if (_this.yhjId) {
+                  // 使用优惠券
+                  Object.assign(params, {
+                    yhq_id: _this.yhjId,
+                    user_yhq: _this.current_yhj.user_yhq.id
+                  })
+                } else {
+                  // 不使用优惠券
+                  Object.assign(params, {
+                    yhq_id: 0,
+                    user_yhq: 0
+                  })
+                }
                 _this.$axios
                   .get("/api/WxPay/pay", {
-                    params: {
-                      shop_fw_id: _this.serviceId,
-                      num: _this.num,
-                      uid: _this.id,
-                      adress: _this.moren_add.adress,
-                      dianhua: _this.moren_add.phone,
-                      xingming: _this.moren_add.name,
-                      three: _this.moren_add.three,
-                      car_card: _this.moren_add.car_card,
-                      car_color: _this.moren_add.car_color,
-                      car_xing: _this.moren_add.car_xing,
-                      fw_time: _this.selectDate,
-                      face_face: _this.faceId
-                    }
+                    params
                   })
                   .then(({
                     data
@@ -293,6 +321,8 @@
             if (this.fwInfo.min > 0) {
               this.num = this.fwInfo.min;
             }
+            this.canuse_yhj();
+
           });
       },
       get_card() {
@@ -329,6 +359,7 @@
         })
       },
       selectJuan() {
+        if (this.yhjId) return;
         var query = {
           serviceId: this.serviceId,
           faceId: this.faceId,
@@ -339,30 +370,67 @@
             cardVal: this.cardVal
           })
         }
-        this.$router.push({
+        this.$router.replace({
           path: '/selectJuan',
           query
         })
 
       },
       selectYhj() {
+        // 已选活动卡不能使用优惠券
+        if (this.cardVal) return;
+
         var query = {
           serviceId: this.serviceId,
           faceId: this.faceId,
-          shopId: this.shopId
+          shopId: this.shopId,
+          yhjId: this.yhjId,
+          money: this.money,
+          num: this.num
         };
         if (this.yhjVal) {
           Object.assign(query, {
             yhjVal: this.yhjVal
           })
         }
-        this.$router.push({
+        this.$router.replace({
           path: '/selectYhj',
           query
         })
       },
-      finish(val) {
-        this.juanShow = val;
+      get_yhj_info() {
+        if (!this.yhjId) return;
+        this.$axios.get('/Api/Yhq/get_yhq_content', {
+          params: {
+            yhq_id: this.yhjId,
+            user_id: this.id
+          }
+        }).then(({
+          data
+        }) => {
+          this.current_yhj = data;
+        })
+      },
+      canuse_yhj() {
+        console.log(this.num)
+        console.log(this.fwInfo)
+        console.log(this.fwInfo.money)
+        console.log(this.num * this.fwInfo.money)
+        this.$axios.get('/Api/Yhq/fw_user_yhq', {
+          params: {
+            user_id: this.id,
+            fw_id: this.serviceId,
+            shop_id: this.shopId,
+            money: this.money,
+            p: this.p,
+            num: 999999,
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data)
+          this.yhj_list = data.list;
+        })
       },
 
       currentCard() {
@@ -380,6 +448,14 @@
 
       }
     },
+    watch: {
+      num() {
+        // 获取可用优惠券
+        if (this.fwInfo) {
+          this.canuse_yhj();
+        }
+      }
+    },
     computed: {
       ...mapState(['if_moren_add', 'selected_add']),
       serviceId() {
@@ -395,13 +471,16 @@
         return this.$route.query.mrAdd;
       },
       money() {
-        return `${(this.num * this.fwInfo.money).toFixed(2)}元`;
+        return (this.num * this.fwInfo.money).toFixed(2);
       },
       cardVal() {
         return this.$route.query.cardVal;
       },
       yhjId() {
         return this.$route.query.yhjId;
+      },
+      pre_num() {
+        return this.$route.query.num;
       },
       cardname() {
         if (this.$route.query.cardVal) {
@@ -412,8 +491,20 @@
           }
         }
       },
-      yhjname(){
-        
+      current_yhj_name() {
+        if (this.current_yhj) {
+          // 已选择优惠券
+          return this.current_yhj.yh_name;
+        } else {
+          // 未选择优惠券
+          if (this.yhj_list.length > 0) {
+            // 有可用优惠券
+            return '请选择优惠券'
+          } else {
+            // 无可用优惠券
+            return '无可用优惠券'
+          }
+        }
       },
       has_add() {
         return this.add_status == 0 ? false : true;
@@ -467,6 +558,8 @@
         .fw_name {
           font-weight: bold;
           margin-bottom: 0.373333rem;
+          font-size: .346667rem/* 26/75 */
+          ;
         }
         .fw_content {
           min-width: 0;
@@ -481,6 +574,10 @@
           overflow: hidden;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
+        }
+        .fw_price {
+          font-size: .32rem/* 24/75 */
+          ;
         }
       }
     }

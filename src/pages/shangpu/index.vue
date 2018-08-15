@@ -101,7 +101,8 @@
         </swiper-slide>
         <swiper-slide>
           <div class="yhj-list">
-            <yhj v-for="(item,index) in yhj_list" :key="index" :info='item' :disabled='item.l_yes == 0' :status="item.l_yes == 0?1:''" @btnClick='lingqu(item,index)'></yhj>
+            <yhj v-for="(item,index) in yhj_list" :key="index" :info='item' :disabled='item.l_yes == 0' :status="item.l_yes == 0?1:''"
+              @btnClick='lingqu(item,index)' class="yhj"></yhj>
           </div>
         </swiper-slide>
         <swiper-slide>
@@ -486,13 +487,12 @@
 </script>
 
 <style lang='scss'>
-  .banner {
-    height: 5.12rem;
-    overflow: hidden;
-  }
-
   .shop-wrapper {
     padding-bottom: 50px;
+    .banner {
+      height: 5.12rem;
+      overflow: hidden;
+    }
     .info-wrapper {
       position: relative;
       padding: .533333rem/* 40/75 */
@@ -697,52 +697,22 @@
       background: #ffffff;
       padding: .4rem/* 30/75 */
       ;
+      &>.yhj {
+        margin-bottom: .666667rem/* 50/75 */
+        ;
+      }
     }
     %public {
       padding: 0.32rem 0.56rem 0.32rem 0.4rem;
       background: #ffffff;
       border-bottom: 1px solid #dfdfdf;
-      line-height: 1;
-      color: #2b2b2b;
-      .top,
-      .middle,
-      .bottom {
-        display: flex;
-        align-items: center;
-      }
+      color: #2b2b2b; // 
       .top,
       .middle {
         margin-bottom: 0.32rem;
       }
-      .middle,
-      .bottom {
-        .txt {
-          color: #2b2b2b;
-          opacity: 0.5;
-        }
-      }
+
     }
-
-    .sp-info1 {
-      @extend %public;
-
-      .top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        @include font-dpr(16px);
-        color: #2b2b2b;
-      }
-      .bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .rater {
-        margin-right: 0.8rem;
-      }
-    }
-
     .sp-info2 {
       .iconfont {
         @include font-dpr(22px);
@@ -761,17 +731,21 @@
       .middle {
         .txt {
           margin-right: 0.88rem;
+          color: #2b2b2b;
+          opacity: 0.5;
         }
       }
       .bottom {
         .txt {
-          display: flex;
-          align-items: center;
+          display: inline-block;
           padding: 0 0.213333rem;
           height: 0.453333rem;
+          line-height: 0.453333rem;
           border: 1px solid #7f7f7f;
           border-radius: 0.08rem;
           margin-right: 0.293333rem;
+          color: #2b2b2b;
+          opacity: 0.5;
         }
       }
     }

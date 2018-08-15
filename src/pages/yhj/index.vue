@@ -61,6 +61,7 @@
   import checkLogin from "@/mixins/checkLogin.js";
   import yhj from './components/index';
   import mineScroller from './components/scroller';
+  import setTitle from '@/mixins/setTitle.js'
 
   export default {
     data() {
@@ -103,7 +104,7 @@
       yhj,
       mineScroller
     },
-    mixins: [checkLogin]
+    mixins: [checkLogin,setTitle]
   };
 
 </script>

@@ -1,13 +1,13 @@
 <template>
   <div class="youhui">
     <betterScroll>
-      <div class="select">
-        <!-- <div class=" item">全部</div> -->
+      <!-- <div class="select">
+        <div class=" item">全部</div>
         <i class="iconfont icon-a"></i>
         <div class="item active">活动卡</div>
         <div class="item">优惠券</div>
         <div class="item">代金券</div>
-      </div>
+      </div> -->
       <div class="juan-list">
         <juan v-for="(item,index) in cardList" :key="index" :info='item' @chooseFw='chooseFw'></juan>
       </div>

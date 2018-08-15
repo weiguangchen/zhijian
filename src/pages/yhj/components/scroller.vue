@@ -1,7 +1,8 @@
 <template>
   <scroller :on-infinite="infinite" ref="myscroller">
     <div class="list">
-      <yhj v-for="(item,index) in list" :key="index" :info='item.content' :isDelete='true' @btnClick='use_yhj(item.content)' @deleteYhj='deleteYhj'>
+      <yhj class="yhj" v-for="(item,index) in list" :key="index" :info='item.content' :isDelete='true' @btnClick='use_yhj(item.content)'
+        @deleteYhj='deleteYhj(item.id,index)'>
         点击使用
       </yhj>
     </div>
@@ -78,8 +79,23 @@
           })
         }
       },
-      deleteYhj() {
+      deleteYhj(id, index) {
+        this.$axios.get('/Api/yhq/user_delete_yhq', {
+          params: {
+            id
+          }
+        }).then(({
+          data
+        }) => {
+          console.log(data)
+          if (data.status == 1) {
+            // 删除成功
+            this.list.splice(index, 1);
 
+          } else {
+            // 删除失败
+          }
+        })
       }
     },
     components: {
@@ -90,7 +106,10 @@
 
 </script>
 
-<style lang='scss'>
-
+<style lang='scss' scoped>
+  .yhj {
+    margin-bottom: .666667rem/* 50/75 */
+    ;
+  }
 
 </style>

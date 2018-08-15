@@ -3,7 +3,7 @@
     <scroller :on-infinite="infinite" ref="myscroller">
       <h1 class="desc-tit">可领优惠券</h1>
       <div class="list">
-        <yhj :info='item' v-for="(item,index) in list" :key="index" @btnClick='lingqu(item,index)' :disabled='item.l_yes == 0' :status="item.l_yes == 0?1:''">
+        <yhj :info='item' v-for="(item,index) in list" :key="index" @btnClick='lingqu(item,index)' :disabled='item.l_yes == 0' :status="item.l_yes == 0?1:''" class="yhj">
           <span>点击领取</span>
         </yhj>
       </div>
@@ -26,6 +26,7 @@
 <script>
   import yhj from './components/index';
   import checkLogin from '@/mixins/checkLogin.js';
+  import setTitle from '@/mixins/setTitle.js'
 
   export default {
     data() {
@@ -35,7 +36,9 @@
         p: 1
       }
     },
-    created() {},
+    created() {
+        
+    },
     methods: {
       infinite(done) {
         this.get_list(done);
@@ -109,7 +112,7 @@
     components: {
       yhj
     },
-    mixins: [checkLogin]
+    mixins: [checkLogin,setTitle]
   }
 
 </script>
@@ -131,6 +134,9 @@
     .list {
       padding: .4rem/* 30/75 */
       ;
+      .yhj{
+          margin-bottom: .666667rem /* 50/75 */;
+      }
     }
     .line {
       display: flex;

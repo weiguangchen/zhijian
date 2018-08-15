@@ -18,7 +18,6 @@
                 <span class="iconfont icon-fuwuxiangqingzan">好评率97%</span>
                 <span class="count">共{{fw_info.token_num}}个消费评价</span>
             </div> -->
-
           <div class="address1" @click="toShop(huodong_info.card_face_id)">
             <div class="top">
               <div class="left">
@@ -105,7 +104,6 @@
   import {
     Swiper,
     SwiperItem,
-    ViewBox,
     Cell,
     Group,
   } from "vux";
@@ -314,14 +312,13 @@
         return {
           uid: this.id,
           sid: this.huodongId,
-          face_id:this.huodong_info.card_face_id,
+          face_id:this.faceId,
           tj: 2
         }
       },
     },
 
     components: {
-      ViewBox,
       Swiper,
       SwiperItem,
       rater,
