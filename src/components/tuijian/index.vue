@@ -114,9 +114,7 @@
         border-radius: .133333rem/* 10/75 */
         ;
         .img {
-          max-width: none;
-          height: 100%;
-          transform: translateX(-15%);
+          width: 100%;
         }
       }
       .name,

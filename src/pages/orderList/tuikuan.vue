@@ -62,7 +62,7 @@
         </div>
         <div class="xbtn">
             <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 0">去支付</XButton>
-            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 1" @click.native="tuikuan">申请退款</XButton>
+            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 1">申请退款</XButton>
             <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(orderDetail.order_num)" v-if="orderDetail.status == 2">去评价</XButton>
             <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 2">再次购买</XButton> -->
             <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="orderDetail.status == 3">退款中</XButton>
@@ -175,15 +175,6 @@
           }
         })
 
-      },
-      tuikuan(){
-        this.$router.push({
-          path:'/me/tuikuan',
-          query:{
-            order_num:this.order_num,
-            type:this.zf
-          }
-        })
       }
     },
     computed: {

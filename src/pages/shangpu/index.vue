@@ -381,7 +381,7 @@
       },
       format_fenshu(num) {
         if (num) {
-          return (num.toString()).indexOf('.') < 0 ? `${num}.0` : num
+          return num.toFixed(1);
         }
       },
       share() {

@@ -583,12 +583,13 @@
       }
       .yhjs {
         display: flex;
-        justify-content: space-between;
+        // justify-content: space-between;
         flex: 1;
         .yhj-item {
           display: flex;
           height: 1.146667rem/* 86/75 */
           ;
+          margin-right: .4rem /* 30/75 */;
           %lr {
             width: .053333rem/* 4/75 */
             ;
