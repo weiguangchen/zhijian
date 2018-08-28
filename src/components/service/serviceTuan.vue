@@ -56,8 +56,7 @@
       margin-right: 0.32rem;
       overflow: hidden;
       .img{
-        height: 100%;
-        transform: translateX(-15%);
+        width: 100%;
       }
     }
     .info {

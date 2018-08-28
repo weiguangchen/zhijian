@@ -57,7 +57,7 @@
               </div>
               <div class="text">已完成</div>
             </div>
-            <div class="order-term-item">
+            <div class="order-term-item" @click="toOrderList(3)">
               <div class="icon">
                 <span class="iconfont icon-tuikuandan"></span>
               </div>

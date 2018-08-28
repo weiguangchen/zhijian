@@ -75,9 +75,10 @@
     border-bottom: 1px solid #dfdfdf;
     .img-box {
       .img {
-        transform: translateX(-20%);
-        height: 100%;
-        max-width: none;
+        // transform: translateX(-20%);
+        // height: 100%;
+        // max-width: none;
+        width: 100%;
       }
       width: 2.346667rem;
       height: 2.346667rem;

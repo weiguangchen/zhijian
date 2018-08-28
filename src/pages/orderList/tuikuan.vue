@@ -1,21 +1,18 @@
 <template>
-  <div class="page c-order">
+  <div class="page tuikuan">
     <betterScroll>
-      <div class="order-detail">
-        <div class="order-time">
-          <span v-if="orderDetail.status == 1">未使用订单</span>
-          <span v-else-if="orderDetail.status == 2 || orderDetail.status == 7">已完成订单</span>
-          <span v-else-if="orderDetail.status == 0">未付款订单</span>
-        </div>
-        <div class="address">
-          <div class="shr">
-            <span class="sh-user">
-              <i class="iconfont icon-weizhi1"></i>{{orderDetail.xingming}}</span>
-            <span class="sh-phone">{{orderDetail.phone}}</span>
-          </div>
-          <div class="add">地址：{{orderDetail.adress}}</div>
-          <div class="add">车辆信息：{{orderDetail.car_card}}&nbsp;&nbsp;{{orderDetail.car_color}}&nbsp;&nbsp;{{orderDetail.car_xing}}&nbsp;&nbsp;</div>
-        </div>
+      <Group>
+        <Cell title='退款原因：'></Cell>
+        <XTextarea autosize placeholder='填写退款原因（选填）' v-model="textarea"></XTextarea>
+      </Group>
+      <Group>
+        <Cell title='退款来源：'></Cell>
+        <Radio :options="tkType" v-model="tk" disabled></Radio>
+      </Group>
+      <Group>
+        <Cell title='退款金额' class="price">{{price}}</Cell>
+      </Group>
+      <Group>
         <div class="order-item">
           <div class="title" @click="toMendian(orderDetail.face_face)">
             <span class="shop-name">
@@ -35,92 +32,69 @@
             <span v-if="zf == 0">需付款：¥{{orderDetail.order_price}}</span>
           </div>
         </div>
-        <div class="order-info">
-          <div class="num">订单编号：{{orderDetail.order_num}}</div>
-          <div>下单时间：{{orderDetail.data}}</div>
-          <div>消费码：{{orderDetail.pay_num}}</div>
-          <div>约定服务时间：{{orderDetail.data}}</div>
-        </div>
-        <div class="qh-img" v-if="orderDetail.q_img && orderDetail.h_img">
-          <h2>服务前照片</h2>
-          <div class="fw-imgs">
-            <div class="img-box" v-for="(item,index) in orderDetail.q_img" :key="index" @click='previewImg(item,orderDetail.q_img)'>
-              <img :src="item" alt="" class="img">
-            </div>
-          </div>
-          <h2>服务后照片</h2>
-          <div class="fw-imgs">
-            <div class="img-box" v-for="(item,index) in orderDetail.h_img" :key="index" @click='previewImg(item,orderDetail.h_img)'>
-              <img :src="item" alt="" class="img">
-            </div>
-          </div>
-          <div class="qr-btn" v-if="orderDetail.status  == 1">
-            <div>
-              <XButton :mini='true' :plain='true' type='warn' @click.native="queren">确认服务</XButton>
-            </div>
-          </div>
-        </div>
-        <div class="xbtn">
-            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 0">去支付</XButton>
-            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 1">申请退款</XButton>
-            <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(orderDetail.order_num)" v-if="orderDetail.status == 2">去评价</XButton>
-            <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 2">再次购买</XButton> -->
-            <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="orderDetail.status == 3">退款中</XButton>
-            <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 4">再次购买</XButton>
-          <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="orderDetail.status == 5">再次购买</XButton> -->
-
-        </div>
-        <div class="lianxi">
-          <router-link class="link" to='/'>联系商家</router-link>
-          <router-link class="link" to='/'>联系客服</router-link>
-        </div>
-      </div>
+      </Group>
     </betterScroll>
-
-
+    <XButton type='warn' class="Xbtn" :disabled='submiting' @click.native='submit'>提交</XButton>
   </div>
 </template>
 
 <script>
   import betterScroll from '@/components/betterScroll';
   import {
-    XButton
+    XButton,
+    XTextarea,
+    Group,
+    Cell,
+    Radio
   } from "vux";
   export default {
     data() {
       return {
-        orderDetail: {}
+        submiting: false,
+        orderDetail: {},
+        tkType: [{
+          key: 0,
+          value: '退款至您的支付账户'
+        }, {
+          key: 1,
+          value: '退还服务致您的支付活动卡'
+        }],
+        tk: '',
+        textarea: ''
       };
     },
     created() {
-      console.log(this.$route)
       var _this = this;
-      if (this.zf == 1) {
-        this.$axios
-          .get( "/Api/UserShow/order_content1", {
-            params: {
-              order_num: _this.order_num
-            }
-          })
-          .then(res => {
-            console.log(res);
-            _this.orderDetail = res.data[0];
-          });
-      } else {
-        this.$axios
-          .get( "/Api/UserShow/order_content", {
-            params: {
-              order_num: _this.order_num
-            }
-          })
-          .then(res => {
-            console.log(res);
-            _this.orderDetail = res.data[0];
-          });
-      }
-
+      this.tk = this.zf;
+      this.get_info();
     },
     methods: {
+      get_info() {
+        if (this.zf == 1) {
+          this.$axios
+            .get("/Api/UserShow/order_content1", {
+              params: {
+                order_num: this.order_num
+              }
+            })
+            .then(res => {
+              console.log(res);
+              this.orderDetail = res.data[0];
+
+            });
+        } else {
+          this.$axios
+            .get("/Api/UserShow/order_content", {
+              params: {
+                order_num: this.order_num
+              }
+            })
+            .then(res => {
+              console.log(res);
+              this.orderDetail = res.data[0];
+            });
+        }
+      },
       pingjia(orderId) {
         console.log(orderId);
         this.$router.push({
@@ -130,14 +104,14 @@
           }
         });
       },
-      toDetail(id,faceId) {
+      toDetail(id, faceId) {
         this.$router.push({
-          path:'/serviceDetail/'+id+'/'+faceId
+          path: '/serviceDetail/' + id + '/' + faceId
         });
       },
-      toMendian(id){
+      toMendian(id) {
         this.$router.push({
-          path:'/shangpu/'+id
+          path: '/shangpu/' + id
         })
       },
       previewImg(curimg, allimg) {
@@ -153,7 +127,7 @@
           content: '是否确认服务？',
           onCancel() {},
           onConfirm() {
-            _this.$axios.get( "/Api/Order/yes_ok", {
+            _this.$axios.get("/Api/Order/yes_ok", {
               params: {
                 zf: _this.zf,
                 id: _this.orderDetail.id
@@ -163,17 +137,21 @@
             }) => {
               console.log(data)
               _this.$vux.alert.show({
-                title:'提示',
-                content:'已确认服务！',
-                onHide(){
+                title: '提示',
+                content: '已确认服务！',
+                onHide() {
                   _this.$router.replace({
-                    path:'/me/orderList/6'
+                    path: '/me/orderList/6'
                   })
                 }
               })
             })
           }
         })
+
+      },
+      submit() {
+        this.submiting = true;
 
       }
     },
@@ -183,211 +161,132 @@
       },
       zf() {
         return this.$route.query.type;
+      },
+      price() {
+        return this.zf == 0 ? `￥${this.orderDetail.order_price}` : '活动卡支付';
       }
-
     },
+
     components: {
       XButton,
+      XTextarea,
+      Group,
+      Cell,
+      Radio,
       betterScroll
     }
   };
 
 </script>
 
-<style lang='scss' scoped>
-  .c-order {
-    .order-detail {
-      .order-time {
+<style lang='scss'>
+  .tuikuan {
+      padding-bottom: 50px;
+    .order-item {
+      background: #ffffff;
+      @include font-dpr(12px);
+      margin-bottom: $bot;
+      .title {
+        color: #2b2b2b;
         display: flex;
-        @include font-dpr(17px);
-        padding: 0 0.4rem;
-        align-items: center;
         justify-content: space-between;
-        background: url(~img/public/order-bg.png) no-repeat;
-        height: 1.6rem;
-        color: #ffffff;
-        margin-bottom: $bot;
-      }
-      .address {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin-bottom: $bot;
-        padding: .266667rem/* 20/75 */
-        0.4rem;
-        background: #ffffff;
-        min-height: 2rem;
-        .shr {
+        align-items: center;
+        height: 0.866667rem;
+        padding: 0 0.4rem;
+        border-bottom: 1px solid #f0f0f0;
+        .shop-name {
+          .icon-dianpu {
+            font-size: .346667rem/* 26/75 */
+            ;
+            margin-right: 0.186667rem;
+          }
+          .icon-jinru {
+            margin-left: 0.293333rem;
+            font-size: .16rem/* 12/75 */
+            ;
+          }
           display: flex;
           align-items: center;
-          margin-bottom: 0.266667rem;
-          @include font-dpr(14px);
-          .sh-user {
-            display: flex;
-            align-items: center;
-            margin-right: 1.066667rem;
-            .iconfont {
-              @include font-dpr(20px);
-              color: #a7a7a7;
-              margin-right: 0.266667rem;
-            }
-          }
         }
-        .add,
-        .card {
-          padding-left: 0.666667rem;
-          color: #a7a7a7;
-          line-height: .506667rem /* 38/75 */;
+        .status {
+          color: #e14946;
         }
       }
-      .order-item {
-        background: #ffffff;
-        @include font-dpr(12px);
-        margin-bottom: $bot;
-        .title {
-          color: #2b2b2b;
+      .content {
+        display: flex;
+        padding: 0.4rem;
+        border-bottom: 1px solid #f0f0f0;
+        background: #f3f3f3;
+        .thumb {
+          width: 2.666667rem;
+          height: 2.133333rem;
+          margin-right: 0.266667rem;
+        }
+        .text {
           display: flex;
+          flex-direction: column;
           justify-content: space-between;
-          align-items: center;
-          height: 0.866667rem;
-          padding: 0 0.4rem;
-          border-bottom: 1px solid #f0f0f0;
-          .shop-name {
-            .icon-dianpu {
-              font-size: .346667rem/* 26/75 */
-              ;
-              margin-right: 0.186667rem;
-            }
-            .icon-jinru {
-              margin-left: 0.293333rem;
-              font-size: .16rem/* 12/75 */
-              ;
-            }
-            display: flex;
-            align-items: center;
-          }
-          .status {
-            color: #e14946;
-          }
-        }
-        .content {
-          display: flex;
-          padding: 0.4rem;
-          border-bottom: 1px solid #f0f0f0;
-          .thumb {
-            width: 2.666667rem;
-            height: 2.133333rem;
-            margin-right: 0.266667rem;
-          }
-          .text {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            @include font-dpr(14px);
-            line-height: 0.506667rem;
-            flex: 1;
-            padding-top: .266667rem/* 20/75 */
-            ;
-            .fw-mingzi {
-              font-size: .346667rem/* 26/75 */
-              ;
-              font-weight: bold;
-            }
-            .sub-content {
-              font-size: .293333rem/* 22/75 */
-              ;
-            }
-          }
-        }
-        .price {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          height: 1.173333rem;
-          border-bottom: 1px solid #f0f0f0;
-          padding-right: 0.4rem;
           @include font-dpr(14px);
-          font-weight: bold;
-          .count {
-            margin-right: 0.426667rem;
+          line-height: 0.506667rem;
+          flex: 1;
+          padding-top: .266667rem/* 20/75 */
+          ;
+          .fw-mingzi {
+            font-size: .346667rem/* 26/75 */
+            ;
+            font-weight: bold;
+          }
+          .sub-content {
+            font-size: .293333rem/* 22/75 */
+            ;
           }
         }
       }
-      .order-info {
-        margin-bottom: $bot;
-        color: #a6a6a6;
+      .price {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background: #ffffff;
-        line-height: 1;
-        padding: .266667rem /* 20/75 */ 0 .266667rem /* 20/75 */ 0.4rem;
-        line-height: .56rem /* 42/75 */;
-      }
-      .qh-img {
-        padding: .4rem/* 30/75 */
-        ;
-        background: #ffffff;
-        ;
-        margin-bottom: $bot;
-        h2 {
-          font-size: .373333rem/* 28/75 */
-          ;
-          margin-bottom: .4rem/* 30/75 */
-          ;
-        }
-        .fw-imgs {
-          margin-bottom: .533333rem/* 40/75 */
-          ;
-          &:after {
-            content: '';
-            display: block;
-            clear: both;
-          }
-          .img-box {
-            float: left;
-            width: 1.533333rem/* 115/75 */
-            ;
-            height: 1.533333rem/* 115/75 */
-            ;
-            overflow: hidden;
-            margin-right: .933333rem/* 70/75 */
-            ;
-            .img {
-              width: 100%;
-              height: 100%;
-            }
-          }
-        }
-        .qr-btn {
-          display: flex;
-          justify-content: flex-end;
-        }
-      }
-      .xbtn {
-        height: 1.4rem;
-        display: flex;
-        
         justify-content: flex-end;
         align-items: center;
-        padding: 0 0.4rem;
-        background: #ffffff;
-        margin-bottom: $bot;
-        .btn {
-          margin: 0 0 0 0.266667rem;
+        height: 1.173333rem;
+        border-bottom: 1px solid #f0f0f0;
+        padding-right: 0.4rem;
+        @include font-dpr(14px);
+        font-weight: bold;
+        .count {
+          margin-right: 0.426667rem;
         }
       }
-      .lianxi{
-        height: 1.4rem /* 105/75 */;
-        display: flex;
-        align-items: center;
-        background: #ffffff;
-        &>.link{
-          text-align: center;
-          flex:1;
-          font-size: .32rem /* 24/75 */;
-        }
+    }
+    .weui-textarea {
+      font-size: .373333rem/* 28/75 */
+      ;
+      &::-webkit-input-placeholder {
+        font-size: .373333rem/* 28/75 */
+        ;
       }
+    }
+    .price{
+        .weui-cell__ft{
+            font-size: .373333rem /* 28/75 */;
+            color: #dd3231;
+        }
+    }
+    .vux-no-group-title {
+      margin-top: 0;
+      margin-bottom: $bot;
+    }
+    .vux-label {
+      font-size: .373333rem/* 28/75 */
+      ;
+      font-weight: bold;
+    }
+    .weui-cell_radio {
+      font-size: .373333rem/* 28/75 */
+      ;
+    }
+    .Xbtn {
+      position: fixed;
+      left: 0;
+      bottom: 0;
     }
   }
 

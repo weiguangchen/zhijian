@@ -27,6 +27,7 @@ import {
   Checkbox,
   Popover,
   List,
+  Stepper,
 } from 'muse-ui';
 // import 'muse-ui/lib/styles/theme.less';
 Vue.component('mu-radio', Radio);
@@ -34,6 +35,7 @@ Vue.component('mu-checkbox', Checkbox);
 Vue.component('mu-popover', Popover)
 Vue.component('mu-list', List)
 Vue.component('mu-list-item', List.ListItem)
+Vue.use(Stepper)
 
 
 import 'iview/dist/styles/iview.css';

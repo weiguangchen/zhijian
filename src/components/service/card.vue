@@ -82,9 +82,7 @@
       height: 2.346667rem;
       margin-right: 0.32rem;
       .img {
-        height: 100%;
-        max-width: none;
-        transform: translateX(-15%);
+        width: 100%;
       }
     }
     .info {

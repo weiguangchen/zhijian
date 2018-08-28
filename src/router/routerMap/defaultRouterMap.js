@@ -110,6 +110,16 @@ export default [{
     meta: {
       title: '申请退款'
     }
+  },{
+    path: '/me/tuikuanStep',
+    name: 'orderList',
+    components: {
+      default: resolve => require(['@/pages/orderList/tuikuanStep'], resolve)
+      // tab: tab
+    },
+    meta: {
+      title: '退款进度'
+    }
   }, {
     path: '/queren',
     name: 'queren',
