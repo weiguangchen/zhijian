@@ -9,38 +9,68 @@
     </Group>
     <div class="steps">
       <h1>退款流程</h1>
-      <iview-steps :current="0" direction="vertical">
-          <iview-step title='提交成功'>
-              123456
-          </iview-step>
-          <iview-step title='提交成功' content='6543211'>
-          </iview-step>
-          <iview-step title='提交成功'>
-              123456
-          </iview-step>
-      </iview-steps>
-      <!-- <mu-stepper  :active-step='1' orientation="vertical" :linear='false'>
-          <mu-step >
-              <mu-step-label>提交成功</mu-step-label>
-              <mu-step-content>
-                  <p>您的退款申请提交成功，请等待平台审核</p>
-                  <p>2018.7.30 18:00:00</p>
-              </mu-step-content>
-          </mu-step>
-          <mu-step>
-              <mu-step-label>商家回复</mu-step-label>
-              <mu-step-content>
-                  <p>商家已同意您的退单申请。稍后将为您退单</p>
-                  <p>2018.7.30 18:00:00</p>
-              </mu-step-content>
-          </mu-step>
-          <mu-step>
-              <mu-step-label>退款成功</mu-step-label>
-              <mu-step-content>
-                  <p>你的本次服务已退还至支付活动卡</p>
-              </mu-step-content>
-          </mu-step>
+      <!-- <mu-stepper :active-step='1' orientation="vertical" >
+        <mu-step>
+          <mu-step-label>提交成功</mu-step-label>
+          <mu-step-content>
+            <p>您的退款申请提交成功，请等待平台审核</p>
+            <p>2018.7.30 18:00:00</p>
+          </mu-step-content>
+        </mu-step>
+        <mu-step>
+          <mu-step-label>商家回复</mu-step-label>
+          <mu-step-content>
+            <p>商家已同意您的退单申请。稍后将为您退单</p>
+            <p>2018.7.30 18:00:00</p>
+          </mu-step-content>
+        </mu-step>
+        <mu-step>
+          <mu-step-label>退款成功</mu-step-label>
+          <mu-step-content>
+            <p>你的本次服务已退还至支付活动卡</p>
+          </mu-step-content>
+        </mu-step>
       </mu-stepper> -->
+      <div class="mine-stepper">
+        <div class="mine-step">
+          <div class="mine-num">
+            <span class="circle"></span>
+            <span class="mine-label">自动退款</span>
+          </div>
+          <div class="mine-main">
+            <div class="mine-line"></div>
+            <div class="mine-content">
+              <p>您访问富瀚微复合物费覅额分解我分解为IE服务魏就饿哦附件为附件为偶发金额为 </p>
+              <p>2392309209320329392039099099</p>
+            </div>
+          </div>
+        </div>
+        <div class="mine-step">
+          <div class="mine-num">
+            <span class="circle"></span>
+            <span class="mine-label">自动退款</span>
+          </div>
+          <div class="mine-main">
+            <div class="mine-line"></div>
+            <div class="mine-content">
+              <p>您访问富瀚微复合物费覅额分解我分解为IE服务魏就饿哦附件为附件为偶发金额为 </p>
+              <p>2392309209320329392039099099</p>
+            </div>
+          </div>
+        </div>
+        <div class="mine-step">
+          <div class="mine-num mine-num-active">
+            <span class="circle"></span>
+            <span class="mine-label">自动退款</span>
+          </div>
+          <div class="mine-main">
+            <div class="mine-content">
+              <p>您访问富瀚微复合物费覅额分解我分解为IE服务魏就饿哦附件为附件为偶发金额为 </p>
+              <p>2392309209320329392039099099</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -50,7 +80,10 @@
   import {
     XButton,
     Group,
-    Cell
+    Cell,
+    Flow,
+    FlowState,
+    FlowLine
   } from "vux";
   export default {
     data() {
@@ -165,7 +198,10 @@
       XButton,
       Group,
       Cell,
-      betterScroll
+      betterScroll,
+      Flow,
+      FlowState,
+      FlowLine
     }
   };
 
@@ -204,12 +240,78 @@
     }
     .steps {
       h1 {
-        font-size: .373333rem/* 28/75 */;
+        font-size: .373333rem/* 28/75 */
+        ;
+        margin-bottom: .533333rem /* 40/75 */;
       }
-      background: #ffffff;
+      .mine-stepper {
+        .mine-step {
+          // display: flex;
+          .mine-num {
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            font-size: .346667rem/* 26/75 */
+            ;
+            .circle {
+              width: .533333rem/* 40/75 */
+              ;
+              display: flex;
+              justify-content: center;
+              &::before {
+                content: '';
+                display: block;
+                width: .32rem/* 24/75 */
+                ;
+                height: .32rem/* 24/75 */
+                ;
+                border-radius: 50%;
+                background: #bfbfbf;
+              }
+
+            }
+
+          }
+          .mine-num-active{
+            color: #48b2e7;
+            .circle{
+              &::before{
+                 background: #48b2e7;
+              }
+             
+            }
+          }
+          .mine-main {
+            position: relative;
+            width: 6.666667rem/* 500/75 */
+            ;
+            color: #aaaaaa;
+            display: flex;
+            flex: 1;
+            padding: .266667rem/* 20/75 */
+            0 .266667rem/* 20/75 */
+            .533333rem/* 40/75 */
+            ;
+            .mine-line {
+              position: absolute;
+              height: 100%;
+              width: 1px;
+              top: 0;
+              left: .266667rem/* 20/75 */
+              ;
+              border-left: 1px solid #bfbfbf;
+
+
+            }
+          }
+        }
+
+      }
       padding: 10px 15px;
+      background: #ffffff;
       flex: 1;
     }
+
   }
 
 </style>

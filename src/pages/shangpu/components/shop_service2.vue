@@ -58,8 +58,8 @@
     box-sizing: border-box;
     width: 4.4rem/* 330/75 */
     ;
-    height: 5.333333rem/* 400/75 */
-    ;
+    // height: 5.333333rem/* 400/75 */
+    // ;
     padding: .133333rem/* 10/75 */
     ;
     font-size: .32rem/* 24/75 */
@@ -69,12 +69,12 @@
     .img-box {
       overflow: hidden;
       width: 100%;
-      height: 2.666667rem/* 200/75 */
-      ;
+      // height: 2.666667rem/* 200/75 */
+      // ;
       margin-bottom: .2rem/* 15/75 */
       ;
       .img {
-        height: 100%;
+        width: 100%;
       }
     }
     .info {

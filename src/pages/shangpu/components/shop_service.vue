@@ -67,9 +67,7 @@
       ;
       overflow: hidden;
       .img {
-        height: 100%;
-        max-width: none;
-        transform: translateX(-15%);
+        width: 100%;
       }
     }
     .info {
