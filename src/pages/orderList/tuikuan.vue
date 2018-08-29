@@ -152,7 +152,16 @@
       },
       submit() {
         this.submiting = true;
-
+        this.$axios.get('/Api/Tk/tui_kuan',{
+            params:{
+                zf:this.zf,
+                order_id:this.order_num,
+                ly:this.textarea
+            }
+        }).then(({data})=>{
+            this.submiting = false;
+            console.log(data)
+        })
       }
     },
     computed: {

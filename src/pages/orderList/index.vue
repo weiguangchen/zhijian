@@ -12,8 +12,8 @@
               <!-- <span class="status" v-if="item.status == 0">等待付款</span> -->
               <span class="status" v-if="item.status == 1">未使用</span>
               <!-- <span class="iconfont icon-lajixiang" v-else-if="item.status == 2 || item.status == 7"></span> -->
-              <span class="status" v-else-if="item.status == 3">申请退款中</span>
-              <span class="status" v-else-if="item.status == 4">已退款</span>
+              <span class="status" v-else-if="item.status == 3">待处理</span>
+              <span class="status" v-else-if="item.status == 4">成功</span>
               <span class="status" v-else-if="item.status == 5">已过期</span>
               <span class="status" v-else-if="item.status == 2 || item.status == 7">已完成</span>
             </div>
@@ -33,8 +33,8 @@
                 <template v-else>活动卡支付</template>
               </span>
             </div>
-            <!-- <div class="xbtn"> -->
-            <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 0">去支付</XButton> -->
+            <div class="xbtn">
+            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 3" @click.native="toTuikuan(item.order_num,item.zf)">查看进度</XButton>
             <!-- <template v-if="item.status == 1">
                 <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
                 <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(item.order_num,item.zf)">去评价</XButton>
@@ -44,7 +44,7 @@
               <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="item.status == 3">退款中</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 4"  @click.native="buy(item.shop_fw_id)">再次购买</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 5"  @click.native="buy(item.shop_fw_id)">再次购买</XButton> -->
-            <!-- </div> -->
+            </div>
           </div>
         </div>
         <span slot="doneTip">暂无更多订单</span>
@@ -168,6 +168,15 @@ import betterScroll from '@/components/betterScroll'
         console.log(id)
         this.$router.push({
           path: '/serviceDetail/' + id
+        })
+      },
+      toTuikuan(order_num,zf){
+        this.$router.push({
+          path:'/me/tuikuanStep',
+          query:{
+            order_num,
+            zf
+          }
         })
       }
     },

@@ -6,6 +6,7 @@
           <span v-if="orderDetail.status == 1">未使用订单</span>
           <span v-else-if="orderDetail.status == 2 || orderDetail.status == 7">已完成订单</span>
           <span v-else-if="orderDetail.status == 0">未付款订单</span>
+          <span v-else-if="orderDetail.status == 3">退款中</span>
         </div>
         <div class="address">
           <div class="shr">
