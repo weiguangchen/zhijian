@@ -151,16 +151,36 @@
 
       },
       submit() {
+        var _this = this;
         this.submiting = true;
-        this.$axios.get('/Api/Tk/tui_kuan',{
-            params:{
-                zf:this.zf,
-                order_id:this.order_num,
-                ly:this.textarea
-            }
-        }).then(({data})=>{
-            this.submiting = false;
-            console.log(data)
+        this.$axios.get('/Api/Tk/tui_kuan', {
+          params: {
+            zf: this.zf,
+            order_id: this.order_num,
+            ly: this.textarea
+          }
+        }).then(({
+          data
+        }) => {
+          this.submiting = false;
+          console.log(data)
+          if (data.status == 1) {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '提交退款申请成功！',
+              onHide() {
+                _this.$router.push({
+                  path: '/me/orderList/3'
+                })
+              }
+            })
+          } else {
+            this.$vux.alert.show({
+              title: '提示',
+              content: '提交退款申请失败！'
+            })
+          }
+
         })
       }
     },
@@ -190,7 +210,7 @@
 
 <style lang='scss'>
   .tuikuan {
-      padding-bottom: 50px;
+    padding-bottom: 50px;
     .order-item {
       background: #ffffff;
       @include font-dpr(12px);
@@ -273,11 +293,12 @@
         ;
       }
     }
-    .price{
-        .weui-cell__ft{
-            font-size: .373333rem /* 28/75 */;
-            color: #dd3231;
-        }
+    .price {
+      .weui-cell__ft {
+        font-size: .373333rem/* 28/75 */
+        ;
+        color: #dd3231;
+      }
     }
     .vux-no-group-title {
       margin-top: 0;

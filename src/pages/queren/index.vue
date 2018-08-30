@@ -540,9 +540,7 @@
         margin-right: 0.266667rem;
         overflow: hidden;
         .thumb {
-          height: 100%;
-          max-width: none;
-          transform: translateX(-15%);
+          width: 100%;
         }
 
       }

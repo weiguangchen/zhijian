@@ -116,7 +116,28 @@ export default [{
         meta: {
           role: 32
         }
+      },{
+        path: 'tuikuan',
+        name: 'tuikuan',
+        component: resolve => require(['@/pages/shanghu/jingying/tuikuan'], resolve),
+        meta: {
+          role: 32
+        }
+      },{
+        path: 'tuikuanList',
+        name: 'tuikuanList',
+        component: resolve => require(['@/pages/shanghu/jingying/tuikuanList'], resolve),
+        meta: {
+          role: 32
+        }
       }, {
+        path: 'tuikuanDetail',
+        name: 'tuikuanDetail',
+        component: resolve => require(['@/pages/shanghu/jingying/tuikuanDetail'], resolve),
+        meta: {
+          role: 32
+        }
+      },{
         path: 'cardOrderList',
         name: 'cardOrderList',
         component: resolve => require(['@/pages/shanghu/jingying/cardOrderList'], resolve),

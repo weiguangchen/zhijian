@@ -6,6 +6,7 @@
         <div class="order-num">
           <div>订单号：{{detail.order_num}}</div>
           <div>下单时间：{{detail.date}}</div>
+
         </div>
         <div class="order-info">
           <div class="line">
@@ -28,7 +29,7 @@
             <span class="title">交易数量：</span>
             <span class="content">{{detail.shop_num}}</span>
           </div>
-          <div class="line" >
+          <div class="line">
             <span class="title">交易金额：</span>
             <span class="content" v-if="detail.order_price">{{detail.order_price}}</span>
             <span class="content" v-else>其他支付方式</span>
@@ -49,10 +50,13 @@
             <span class="title">车型：</span>
             <span class="content">{{detail.car_xing}}</span>
           </div>
+          <div class="line">
+            <XButton type='warn' :mini='true' @click.native='tuikuan' :disabled='detail.tui_status !=0' v-if="!detail.tui_status">退单</XButton>
+          </div>
         </div>
       </div>
       <!-- paidan_status为  1未派单   2已派单   3已接单     4已完成     5申请退单 -->
-      <div class="paidan-status">
+      <div class="paidan-status" v-if="!detail.tui_status">
         <div v-if="detail.paidan_status == 1" class="paidan">
           <h2>派单</h2>
           <Group class="reset-vux-input select">
@@ -112,12 +116,25 @@
           <XButton type='warn' @click.native="agree_tui">同意退单</XButton>
         </div>
       </div>
+      <div class="stepper" v-else>
+        <stepper :orderDetail='detail'>
+          <!-- <step>
+            <p>提交成功</p>
+            <div>
+              <p>退单申请提交成功</p>
+              <p>2018.7.31 10:20:46</p>
+            </div>
+          </step> -->
+        </stepper>
+
+      </div>
     </div>
 
   </betterScroll>
 </template>
 
 <script>
+  import stepper from '@/pages/orderList/components/stepper';
   import betterScroll from '@/components/betterScroll/index';
   import {
     Selector,
@@ -139,7 +156,7 @@
       this.$emit("showPopup", false);
       this.get_detail();
       this.get_son();
-      
+
     },
     methods: {
       showPopup(val) {
@@ -147,7 +164,7 @@
       },
       get_son() {
         this.$axios
-          .get( "/Api/UserShow/get_son", {
+          .get("/Api/UserShow/get_son", {
             params: {
               shop_id: this.userinfo.shop[0].id
             }
@@ -159,7 +176,7 @@
       },
       get_detail() {
         this.$axios
-          .get( "/Api/Order/get_order_content", {
+          .get("/Api/Order/get_order_content", {
             params: {
               id: this.orderId,
               zf: this.zf
@@ -172,7 +189,7 @@
       },
       paidan() {
         var _this = this;
-        this.$axios.get( '/Api/Order/pf_order', {
+        this.$axios.get('/Api/Order/pf_order', {
           params: {
             zf: this.zf,
             phone: this.pf_phone,
@@ -190,7 +207,7 @@
         })
       },
       rePaidan() {
-        this.$axios.get( '/Api/Order/new_order', {
+        this.$axios.get('/Api/Order/new_order', {
           params: {
             zf: this.zf,
             phone: this.detail.fw_user_phone,
@@ -210,7 +227,7 @@
       },
       agree_tui() {
         var _this = this;
-        this.$axios.get( '/Api/order/ty_tui', {
+        this.$axios.get('/Api/order/ty_tui', {
           params: {
             zf: this.zf,
             order_id: this.orderId,
@@ -242,11 +259,20 @@
           }
         })
       },
-      previewImg(curimg,allimg) {
+      previewImg(curimg, allimg) {
         this.$wx.previewImage({
           current: curimg, // 当前显示图片的http链接
           urls: allimg // 需要预览的图片http链接列表
         });
+      },
+      tuikuan() {
+        this.$router.push({
+          path: '/shanghu/jingying/tuikuan',
+          query: {
+            order_num: this.detail.order_num,
+            zf: this.zf
+          }
+        })
       }
     },
     computed: {
@@ -262,7 +288,8 @@
       Selector,
       XButton,
       Group,
-      betterScroll
+      betterScroll,
+      stepper
     },
     mixins: [checkLogin]
   };
@@ -387,6 +414,11 @@
           ;
         }
       }
+    }
+    .stepper {
+      padding: .666667rem /* 50/75 */ .4rem/* 30/75 */
+      ;
+      background: #ffffff;
     }
   }
 

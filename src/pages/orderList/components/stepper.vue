@@ -13,14 +13,9 @@
         }
       },
       zf: {}
-      //   level: {
-      //     type: Number,
-      //     required: true
-      //   }
     },
     render(createElement) {
-      console.log('slots')
-      console.log(createElement(step))
+
 
       var tijiao = createElement(step, {
         props: {
@@ -82,15 +77,47 @@
       var VNode = [];
       if (this.orderDetail.tui_status == 0) {
         //   提交成功
+        var tijiao = createElement(step, {
+          props: {
+            title: "提交成功",
+            content: "您的退款申请提交成功，等待商家回复。",
+            time: this.orderDetail.tui_one_time,
+            active: true
+          }
+        })
         VNode = [tijiao]
       } else if (this.orderDetail.tui_status == 1) {
         //   商家同意
+        var shopAgree = createElement(step, {
+          props: {
+            title: "商家回复",
+            content: "商家已同意您的退款申请,请等待平台审核。",
+            time: this.orderDetail.tui_two_time,
+            active: true
+          }
+        })
         VNode = [tijiao, shopAgree]
       } else if (this.orderDetail.tui_status == 2) {
         //   商家拒绝
+        var fail = createElement(step, {
+          props: {
+            title: "退单失败",
+            content: "您的本次退单失败",
+            time: this.orderDetail.tui_one_time,
+            active: true
+          }
+        })
         VNode = [tijiao, shopReject, fail]
       } else if (this.orderDetail.tui_status == 3) {
         //   平台同意
+        var success = createElement(step, {
+          props: {
+            title: "退款成功",
+            content: "你的本次服务已退还至支付活动卡",
+            time: this.orderDetail.tui_one_time,
+            active: true
+          }
+        })
         if (this.zf == 0) {
           // 花钱购买
           VNode = [tijiao, shopAgree, platAgree, tuikuaning, success]
@@ -101,54 +128,29 @@
         }
       } else if (this.orderDetail.tui_status == 4) {
         //   平台拒绝
+        var fail = createElement(step, {
+          props: {
+            title: "退单失败",
+            content: "您的本次退单失败",
+            time: this.orderDetail.tui_one_time,
+            active: true
+          }
+        })
         VNode = [tijiao, shopAgree, platReject, fail]
       }
 
-      console.log('VNode')
-      console.log(VNode)
+
       return createElement('div', {
         'class': 'mine-stepper'
       }, VNode)
 
-      // 创建 kebabCase 风格的ID
-      //   console.log(this.$slots.default)
-      //   console.log(this.getChildrenTextContent(this.$slots.default))
-      //   var headingId = this.getChildrenTextContent(this.$slots.default)
-      //     .toLowerCase()
-      //     .replace(/\W+/g, '-')
-      //     .replace(/(^\-|\-$)/g, '')
-      //   console.log('createElement')
-      //   console.log(createElement('a', {
-      //     attrs: {
-      //       name: headingId,
-      //       href: '#' + headingId
-      //     }
-      //   }, this.$slots.default))
 
-
-      //   return createElement(
-      //     'h' + this.level, [
-      //       createElement('a', {
-      //         attrs: {
-      //           name: headingId,
-      //           href: '#' + headingId
-      //         }
-      //       }, this.$slots.default)
-      //     ]
-      //   )
     },
     components: {
       step
     },
     methods: {
-      getChildrenTextContent(children) {
-        var _this = this;
-        return children.map(function (node) {
-          return node.children ?
-            _this.getChildrenTextContent(node.children) :
-            node.text
-        }).join('')
-      }
+
     }
   }
 
