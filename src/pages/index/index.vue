@@ -1,4 +1,5 @@
-/* * @Author: 魏广辰 * @Date: 2018-05-26 12:02:12 * @Last Modified by: mikey.zhaopeng * @Last Modified time: 2018-06-28 16:05:58
+/* * @Author: 魏广辰 * @Date: 2018-05-26 12:02:12 * @Last Modified by: mikey.zhaopeng * @Last Modified time: 2018-06-28
+16:05:58
 */
 <template>
   <div class="page index">
@@ -160,20 +161,25 @@
             this.listArr = data.info;
           });
       },
-      toHd(id) {
-        var arr = id.split('-');
-        if (arr[0] == 1) {
-          // 跳转服务详情页
-          this.$router.push({
-            path: '/serviceDetail/' + arr[1]
-          })
-        } else if (arr[0] == 2) {
-          // 跳转发现页
-          this.SET_INDEX_HD_ID(arr[1])
-          this.$router.push({
-            path: '/faxian',
-          })
-        }
+      toHd(keyword) {
+        console.log(keyword)
+        this.SET_INDEX_HD_ID(keyword)
+        this.$router.push({
+          path: '/faxian',
+        })
+        // var arr = id.split('-');
+        // if (arr[0] == 1) {
+        //   // 跳转服务详情页
+        //   this.$router.push({
+        //     path: '/serviceDetail/' + arr[1]
+        //   })
+        // } else if (arr[0] == 2) {
+        //   // 跳转发现页
+        //   this.SET_INDEX_HD_ID(arr[1])
+        //   this.$router.push({
+        //     path: '/faxian',
+        //   })
+        // }
 
       },
       transitionEnd(n) {
@@ -290,62 +296,87 @@
 <style lang='scss'>
   .index {
     padding-bottom: 50px;
+
     .top-ad {
       .swiper-container {
         height: 2.666667rem;
       }
+
       position: relative;
+
       .top-input {
         box-sizing: border-box;
         display: flex;
         align-items: center;
-        padding: .266667rem/* 20/75 */
-        .4rem/* 30/75 */
-        .266667rem/* 20/75 */
-        .533333rem/* 40/75 */
+        padding: .266667rem
+          /* 20/75 */
+          .4rem
+          /* 30/75 */
+          .266667rem
+          /* 20/75 */
+          .533333rem
+          /* 40/75 */
         ;
         @include font-dpr(19px);
         color: #292929;
+
         .weui-search-bar__form {
-          border-radius: .346667rem/* 26/75 */
+          border-radius: .346667rem
+            /* 26/75 */
           ;
           border: 1px solid #000000;
           overflow: hidden;
         }
+
         .weui-search-bar__cancel-btn {
-          font-size: .32rem/* 24/75 */
+          font-size: .32rem
+            /* 24/75 */
           ;
         }
+
         .weui-search-bar {
           padding: 0;
           background: transparent;
+
           &::before,
           &::after {
             display: none;
           }
         }
+
         .weui-search-bar__cancel-btn {
-          font-size: .426667rem/* 32/75 */
+          font-size: .426667rem
+            /* 32/75 */
           ;
         }
+
         .vux-search-fixed {
-          padding: .266667rem/* 20/75 */
-          .4rem/* 30/75 */
-          .266667rem/* 20/75 */
-          .533333rem/* 40/75 */
+          padding: .266667rem
+            /* 20/75 */
+            .4rem
+            /* 30/75 */
+            .266667rem
+            /* 20/75 */
+            .533333rem
+            /* 40/75 */
           ;
         }
+
         .add {
-          font-size: .346667rem/* 26/75 */
+          font-size: .346667rem
+            /* 26/75 */
           ;
           margin-right: 0.333333rem;
           line-height: 1;
           flex: none;
+
           .iconfont {
-            font-size: .32rem/* 24/75 */
+            font-size: .32rem
+              /* 24/75 */
             ;
           }
         }
+
         .search {
           padding-left: 0.266667rem;
           flex: 1;
@@ -355,6 +386,7 @@
           outline: none;
           @include font-dpr(12px);
         }
+
         form {
           display: flex;
           flex: 1;
@@ -368,6 +400,7 @@
       // box-sizing: border-box;
       padding: 0.16rem 0.4rem 0;
       background: #ffffff;
+
       .swiper-container {
         height: 2.986667rem;
       }
@@ -381,11 +414,13 @@
       padding: 0.36rem 0.4rem;
       height: 6.866667rem;
       margin-bottom: $bot;
+
       .item {
         width: 4.4rem;
         height: 2.933333rem;
         overflow: hidden;
         margin-bottom: .133333rem;
+
         .img {
           vertical-align: top;
         }
@@ -397,39 +432,53 @@
         border-bottom: 1px solid #dfdfdf;
       }
     }
+
     .popup1 {
-      width: 8rem/* 600/75 */
+      width: 8rem
+        /* 600/75 */
       ;
       background: #ffffff;
-      border-radius: .133333rem/* 10/75 */
+      border-radius: .133333rem
+        /* 10/75 */
       ;
-      font-size: .373333rem/* 28/75 */
+      font-size: .373333rem
+        /* 28/75 */
       ;
+
       h1,
       .face {
         display: flex;
         align-items: center;
-        padding: 0 .4rem/* 30/75 */
+        padding: 0 .4rem
+          /* 30/75 */
         ;
       }
+
       h1 {
-        font-size: .426667rem/* 32/75 */
+        font-size: .426667rem
+          /* 32/75 */
         ;
-        height: 1.106667rem/* 83/75 */
+        height: 1.106667rem
+          /* 83/75 */
         ;
         justify-content: space-between;
       }
+
       .face {
-        height: 1.186667rem/* 89/75 */
+        height: 1.186667rem
+          /* 89/75 */
         ;
+
         &:nth-child(even) {
           background: #f8f8f8;
           border: 1px solid #dedede;
         }
       }
+
       em {
         color: #6d6d6d;
-        font-size: .24rem/* 18/75 */
+        font-size: .24rem
+          /* 18/75 */
         ;
       }
     }

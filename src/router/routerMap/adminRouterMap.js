@@ -117,6 +117,13 @@ export default [{
           role: 32
         }
       },{
+        path: 'orderStep',
+        name: 'orderStep',
+        component: resolve => require(['@/pages/orderList/tuikuanStep'], resolve),
+        meta: {
+          role: 32
+        }
+      },{
         path: 'tuikuan',
         name: 'tuikuan',
         component: resolve => require(['@/pages/shanghu/jingying/tuikuan'], resolve),

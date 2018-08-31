@@ -214,7 +214,7 @@
 
         this.noData = true;
         var params = Object.assign(this.params, {
-          id: this.index_hd_id
+          like: this.index_hd_id
         })
 
         this.$axios

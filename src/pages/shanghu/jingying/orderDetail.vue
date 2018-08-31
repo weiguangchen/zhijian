@@ -51,7 +51,7 @@
             <span class="content">{{detail.car_xing}}</span>
           </div>
           <div class="line">
-            <XButton type='warn' :mini='true' @click.native='tuikuan' :disabled='detail.tui_status !=0' v-if="!detail.tui_status">退单</XButton>
+            <XButton type='warn' :mini='true' @click.native='tuikuan' :disabled='detail.tui_status' v-if="!detail.tui_status">退单</XButton>
           </div>
         </div>
       </div>
@@ -118,13 +118,27 @@
       </div>
       <div class="stepper" v-else>
         <stepper :orderDetail='detail'>
-          <!-- <step>
+          <step>
             <p>提交成功</p>
-            <div>
+            <div slot="content">
               <p>退单申请提交成功</p>
               <p>2018.7.31 10:20:46</p>
             </div>
-          </step> -->
+          </step>
+          <step>
+            <p>提交成功</p>
+            <div slot="content">
+              <p>退单申请提交成功</p>
+              <p>2018.7.31 10:20:46</p>
+            </div>
+          </step>
+          <step>
+            <p>提交成功</p>
+            <div slot="content">
+              <p>退单申请提交成功</p>
+              <p>2018.7.31 10:20:46</p>
+            </div>
+          </step>
         </stepper>
 
       </div>
@@ -135,6 +149,7 @@
 
 <script>
   import stepper from '@/pages/orderList/components/stepper';
+  import step from '@/pages/orderList/components/step';
   import betterScroll from '@/components/betterScroll/index';
   import {
     Selector,
@@ -289,7 +304,8 @@
       XButton,
       Group,
       betterScroll,
-      stepper
+      stepper,
+      step
     },
     mixins: [checkLogin]
   };

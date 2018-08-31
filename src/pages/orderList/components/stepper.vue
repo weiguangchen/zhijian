@@ -1,5 +1,5 @@
 <script>
-  import step from './step.vue';
+  // import step from './step.vue';
   export default {
     data() {
       return {
@@ -14,143 +14,155 @@
       },
       zf: {}
     },
-    render(createElement) {
+    render(h) {
 
 
-      var tijiao = createElement(step, {
-        props: {
-          title: "提交成功",
-          content: "您的退款申请提交成功，等待商家回复。",
-          time: this.orderDetail.tui_one_time
-        }
-      })
-      var shopAgree = createElement(step, {
-        props: {
-          title: "商家回复",
-          content: "商家已同意您的退款申请,请等待平台审核。",
-          time: this.orderDetail.tui_two_time
-        }
-      })
-      var shopReject = createElement(step, {
-        props: {
-          title: "商家回复",
-          content: "商家已拒绝您的退款申请。",
-          time: this.orderDetail.tui_two_time
-        }
-      })
-      var platAgree = createElement(step, {
-        props: {
-          title: "审核结果",
-          content: "您的退款申请已通过审核,稍后将为您退单",
-          time: this.orderDetail.tui_three_time
-        }
-      })
-      var platReject = createElement(step, {
-        props: {
-          title: "审核结果",
-          content: "平台已拒绝您的退款申请。",
-          time: this.orderDetail.tui_three_time
-        }
-      })
-      var success = createElement(step, {
-        props: {
-          title: "退款成功",
-          content: "你的本次服务已退还至支付活动卡",
-          time: this.orderDetail.tui_one_time
-        }
-      })
-      var fail = createElement(step, {
-        props: {
-          title: "退单失败",
-          content: "您的本次退单失败",
-          time: this.orderDetail.tui_one_time
-        }
-      })
-      var tuikuaning = createElement(step, {
-        props: {
-          title: "退款中",
-          content: "您的退款将在1-3个工作日之内退回您的支付账户",
-          time: ''
-        }
-      })
+      // var tijiao = createElement(step, {
+      //   props: {
+      //     title: "提交成功",
+      //     content: "您的退款申请提交成功，等待商家回复。",
+      //     time: this.orderDetail.tui_one_time
+      //   }
+      // })
+      // var shopAgree = createElement(step, {
+      //   props: {
+      //     title: "商家回复",
+      //     content: "商家已同意您的退款申请,请等待平台审核。",
+      //     time: this.orderDetail.tui_two_time
+      //   }
+      // })
+      // var shopReject = createElement(step, {
+      //   props: {
+      //     title: "商家回复",
+      //     content: "商家已拒绝您的退款申请。",
+      //     time: this.orderDetail.tui_two_time
+      //   }
+      // })
+      // var platAgree = createElement(step, {
+      //   props: {
+      //     title: "审核结果",
+      //     content: "您的退款申请已通过审核,稍后将为您退单",
+      //     time: this.orderDetail.tui_three_time
+      //   }
+      // })
+      // var platReject = createElement(step, {
+      //   props: {
+      //     title: "审核结果",
+      //     content: "平台已拒绝您的退款申请。",
+      //     time: this.orderDetail.tui_three_time
+      //   }
+      // })
+      // var success = createElement(step, {
+      //   props: {
+      //     title: "退款成功",
+      //     content: "你的本次服务已退还至支付活动卡",
+      //     time: this.orderDetail.tui_one_time
+      //   }
+      // })
+      // var fail = createElement(step, {
+      //   props: {
+      //     title: "退单失败",
+      //     content: "您的本次退单失败",
+      //     time: this.orderDetail.tui_one_time
+      //   }
+      // })
+      // var tuikuaning = createElement(step, {
+      //   props: {
+      //     title: "退款中",
+      //     content: "您的退款将在1-3个工作日之内退回您的支付账户",
+      //     time: ''
+      //   }
+      // })
 
-      var VNode = [];
-      if (this.orderDetail.tui_status == 0) {
-        //   提交成功
-        var tijiao = createElement(step, {
-          props: {
-            title: "提交成功",
-            content: "您的退款申请提交成功，等待商家回复。",
-            time: this.orderDetail.tui_one_time,
-            active: true
-          }
-        })
-        VNode = [tijiao]
-      } else if (this.orderDetail.tui_status == 1) {
-        //   商家同意
-        var shopAgree = createElement(step, {
-          props: {
-            title: "商家回复",
-            content: "商家已同意您的退款申请,请等待平台审核。",
-            time: this.orderDetail.tui_two_time,
-            active: true
-          }
-        })
-        VNode = [tijiao, shopAgree]
-      } else if (this.orderDetail.tui_status == 2) {
-        //   商家拒绝
-        var fail = createElement(step, {
-          props: {
-            title: "退单失败",
-            content: "您的本次退单失败",
-            time: this.orderDetail.tui_one_time,
-            active: true
-          }
-        })
-        VNode = [tijiao, shopReject, fail]
-      } else if (this.orderDetail.tui_status == 3) {
-        //   平台同意
-        var success = createElement(step, {
-          props: {
-            title: "退款成功",
-            content: "你的本次服务已退还至支付活动卡",
-            time: this.orderDetail.tui_one_time,
-            active: true
-          }
-        })
-        if (this.zf == 0) {
-          // 花钱购买
-          VNode = [tijiao, shopAgree, platAgree, tuikuaning, success]
-        } else {
-          // 使用优惠券
-          VNode = [tijiao, shopAgree, platAgree, success]
+      // var VNode = [];
+      // if (this.orderDetail.tui_status == 0) {
+      //   //   提交成功
+      //   var tijiao = createElement(step, {
+      //     props: {
+      //       title: "提交成功",
+      //       content: "您的退款申请提交成功，等待商家回复。",
+      //       time: this.orderDetail.tui_one_time,
+      //       active: true
+      //     }
+      //   })
+      //   VNode = [tijiao]
+      // } else if (this.orderDetail.tui_status == 1) {
+      //   //   商家同意
+      //   var shopAgree = createElement(step, {
+      //     props: {
+      //       title: "商家回复",
+      //       content: "商家已同意您的退款申请,请等待平台审核。",
+      //       time: this.orderDetail.tui_two_time,
+      //       active: true
+      //     }
+      //   })
+      //   VNode = [tijiao, shopAgree]
+      // } else if (this.orderDetail.tui_status == 2) {
+      //   //   商家拒绝
+      //   var fail = createElement(step, {
+      //     props: {
+      //       title: "退单失败",
+      //       content: "您的本次退单失败",
+      //       time: this.orderDetail.tui_one_time,
+      //       active: true
+      //     }
+      //   })
+      //   VNode = [tijiao, shopReject, fail]
+      // } else if (this.orderDetail.tui_status == 3) {
+      //   //   平台同意
+      //   var success = createElement(step, {
+      //     props: {
+      //       title: "退款成功",
+      //       content: "你的本次服务已退还至支付活动卡",
+      //       time: this.orderDetail.tui_one_time,
+      //       active: true
+      //     }
+      //   })
+      //   if (this.zf == 0) {
+      //     // 花钱购买
+      //     VNode = [tijiao, shopAgree, platAgree, tuikuaning, success]
+      //   } else {
+      //     // 使用优惠券
+      //     VNode = [tijiao, shopAgree, platAgree, success]
 
-        }
-      } else if (this.orderDetail.tui_status == 4) {
-        //   平台拒绝
-        var fail = createElement(step, {
-          props: {
-            title: "退单失败",
-            content: "您的本次退单失败",
-            time: this.orderDetail.tui_one_time,
-            active: true
-          }
-        })
-        VNode = [tijiao, shopAgree, platReject, fail]
-      }
+      //   }
+      // } else if (this.orderDetail.tui_status == 4) {
+      //   //   平台拒绝
+      //   var fail = createElement(step, {
+      //     props: {
+      //       title: "退单失败",
+      //       content: "您的本次退单失败",
+      //       time: this.orderDetail.tui_one_time,
+      //       active: true
+      //     }
+      //   })
+      //   VNode = [tijiao, shopAgree, platReject, fail]
+      // }
+
+      console.log('default')
+      console.log(this.$slots.default)
+
+      var newSlot = this.getNewSlot(this.$slots.default);
+      newSlot[newSlot.length - 1].componentOptions.propsData.active = true
 
 
-      return createElement('div', {
+
+      return h('div', {
         'class': 'mine-stepper'
-      }, VNode)
+      }, newSlot)
 
 
     },
     components: {
-      step
+      // step
     },
     methods: {
-
+      getNewSlot(slot) {
+        var newSlot = slot.filter(m => {
+          return m.tag;
+        })
+        return newSlot;
+      }
     }
   }
 

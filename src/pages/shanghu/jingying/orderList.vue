@@ -11,7 +11,7 @@
           <iview-op value='5'>正在退款订单</iview-op>
         </iview-select>
       </bigTitle>
-      <div class="order-item" v-for="(item,index) in list" :key="index" @click="toDetail(item.id,item.zf)">
+      <div class="order-item" v-for="(item,index) in list" :key="index" @click="toDetail(item.id,item.zf,item.tui_status,item.order_num)">
         <div class="order-num">
           <div>订单号：{{item.order_num}}</div>
           <div>交易时间：{{item.date}}</div>
@@ -102,14 +102,25 @@
         this.p = 1;
         this.get_order_list();
       },
-      toDetail(id, zf) {
-        this.$router.push({
-          path: '/shanghu/jingying/orderDetail',
-          query: {
-            id,
-            zf
-          }
-        })
+      toDetail(id, zf, tui_status, order_num) {
+        if (tui_status) {
+          this.$router.push({
+            path: '/shanghu/jingying/orderStep',
+            query: {
+              order_num,
+              zf
+            }
+          })
+        } else {
+          this.$router.push({
+            path: '/shanghu/jingying/orderDetail',
+            query: {
+              id,
+              zf
+            }
+          })
+        }
+
       },
       getStep(status) {
         if (status == 1) {
