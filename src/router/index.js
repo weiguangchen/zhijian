@@ -269,18 +269,22 @@ router.beforeEach((to, from, next) => {
 
 
   // 获取定位
-  console.log('store.location')
+  console.log('store.location123')
   console.log(store.state.location)
+  // alert('获取定位')
   if (!store.state.location) {
     getPosition().then(res => {
-      console.log('获取到定位')
+      // alert('获取到定位')
+      console.log('获取到定位123')
       console.log(res)
       muta.SET_LOCATION(store.state, res)
-      console.log(111)
+      console.log('store.location456')
       console.log(store.state.location)
       next();
     })
   } else {
+    // alert('已有定位')
+
     next();
   }
 

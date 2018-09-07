@@ -1,10 +1,21 @@
 <template>
   <scroller :on-infinite="infinite" ref="myscroller">
     <div class="list">
-      <yhj class="yhj" v-for="(item,index) in list" :key="index" :info='item.content' :isDelete='true' @btnClick='use_yhj(item.content)'
-        @deleteYhj='deleteYhj(item.id,index)'>
-        点击使用
-      </yhj>
+      <template v-if="status == 0">
+          <yhj class="yhj" v-for="(item,index) in list" :key="index" :info='item.content' :isDelete='true' @btnClick='use_yhj(item.content)'
+          @deleteYhj='deleteYhj(item.id,index)' :status='status'>
+          点击使用
+        </yhj>
+
+      </template>
+      <template v-else>
+          <yhj class="yhj" v-for="(item,index) in list" :key="index" :info='item.content' :isDelete='true' @btnClick='use_yhj(item.content)'
+          @deleteYhj='deleteYhj(item.id,index)' :status='status' :hasBtn='false' :disabled='true'>
+          点击使用
+        </yhj>
+
+      </template>
+      
     </div>
   </scroller>
 </template>
@@ -62,6 +73,7 @@
 
       },
       use_yhj(yhj) {
+        console.log(yhj)
         if (yhj.yh_status == 1) {
           //   类别
           this.$router.push({
@@ -72,8 +84,9 @@
           this.$router.push({
             path: '/serviceDetail/' + yhj.yh_fw_id + '/' + yhj.yh_face_id
           })
-        } else if (yhj.status == 3) {
+        } else if (yhj.yh_status == 3) {
           //   商户
+          console.log('气得我群多')
           this.$router.push({
             path: '/shangpu/' + yhj.yh_face_id
           })

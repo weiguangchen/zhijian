@@ -286,7 +286,7 @@
           border-bottom: 1px solid #f0f0f0;
           .thumb {
             width: 2.666667rem;
-            height: 2.133333rem;
+            height:2.666667rem;
             margin-right: 0.266667rem;
           }
           .text {

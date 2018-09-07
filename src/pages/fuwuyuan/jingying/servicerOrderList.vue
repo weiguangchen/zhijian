@@ -29,8 +29,9 @@
           <img :src="item.fw_img" alt="" class="img">
           <div class="info">
             <div class="mingzi">{{item.fw_mingzi}}</div>
-            <div class="mingzi">下单会员：{{item.nickname}}</div>
-            <div class="mingzi">手机号：{{item.phone}}</div>
+            <div class="mingzi">下单会员：{{item.xingming}}</div>
+            <div class="mingzi">手机号：{{item.dianhua}}</div>
+            <div class="mingzi">服务时间：{{item.fwy_fw_time}}</div>
           </div>
         </div>
         <div class="count">

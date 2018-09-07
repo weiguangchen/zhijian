@@ -127,7 +127,7 @@
         color: #888888;
         .img {
           width: 2.666667rem;
-          height: 2.133333rem;
+          height: 2.666667rem;
           border-radius: 0.133333rem;
           margin-right: 0.24rem;
         }

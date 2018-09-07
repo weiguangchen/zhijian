@@ -61,6 +61,12 @@
               <div class="icon">
                 <span class="iconfont icon-tuikuandan"></span>
               </div>
+              <div class="text">退款进度</div>
+            </div>
+            <div class="order-term-item" @click="toOrderList(4)">
+              <div class="icon">
+                <span class="iconfont icon-tuikuandan"></span>
+              </div>
               <div class="text">退款单</div>
             </div>
             <div class="order-term-item" @click="toOrderList(6)">

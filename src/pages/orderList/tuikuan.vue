@@ -248,7 +248,7 @@
         background: #f3f3f3;
         .thumb {
           width: 2.666667rem;
-          height: 2.133333rem;
+          height:2.666667rem;
           margin-right: 0.266667rem;
         }
         .text {

@@ -35,7 +35,15 @@
             <div>
               <span class="tit">数量：</span>
               <span v-if="item.yh_num_status == 1">一人一张</span>
-              <span v-else>{{item.yh_num}}</span>
+              <span v-else>{{item.yh_num}}张</span>
+            </div>
+            <div  v-if="item.yh_num_status == 1">
+              <span class="tit">下架时间：</span>
+              <span>{{($moment.unix(item.yh_xj_day)).format('YYYY-MM-DD')}}</span>
+            </div>
+            <div v-else-if="item.yh_num_status == 2">
+              <span class="tit">剩余数量：</span>
+              <span>{{item.yh_num-item.ok_num}}张</span>
             </div>
           </div>
           <div class="total">
@@ -100,6 +108,8 @@
               this.noData = true;
             }
             this.list = this.list.concat(data.list);
+            console.log(this.$moment.unix(this.list[0].yh_xj_day))
+
             if (fn) fn();
           })
         }
@@ -128,7 +138,7 @@
 
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
   .order-gl {
     height: 100%;
     background: #f0f0f0;
@@ -162,8 +172,7 @@
         ;
         .tit {
           flex: none;
-          width: 1.666667rem/* 125/75 */
-          ;
+          width: 2rem;
         }
         &>div {
           display: flex;

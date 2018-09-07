@@ -108,6 +108,7 @@
       };
     },
     created() {
+      // this.$eruda.init();
       this.get_fw_info();
       this.get_card();
       this.get_yhj_info();
@@ -213,7 +214,7 @@
                   // 不使用优惠券
                   Object.assign(params, {
                     yhq_id: 0,
-                    user_yhq: 0
+                    user_yhq: ''
                   })
                 }
                 _this.$axios
@@ -244,10 +245,26 @@
                   .then(res => {
                     console.log("支付成功回调");
                     console.log(res);
+                    var resparams = {
+                      order_num: _this.orderNum
+                    };
+                    if (_this.yhjId) {
+                      // 使用优惠券
+                      Object.assign(resparams, {
+                        yhq_id: _this.yhjId,
+                        user_yhq: _this.current_yhj.user_yhq.id
+                      })
+                    } else {
+                      // 不使用优惠券
+                      Object.assign(resparams, {
+                        yhq_id: 0,
+                        user_yhq: ''
+                      })
+                    }
+                    console.log('resparams')
+                    console.log(resparams)
                     return _this.$axios.get("/api/WxPay/fs", {
-                      params: {
-                        order_num: _this.orderNum
-                      }
+                      params: resparams
                     });
                   })
                   .then(res => {
@@ -533,38 +550,47 @@
       background: #ffffff;
       display: flex;
       padding: 0.666667rem 0.4rem;
+
       .img-box {
         flex: none;
         width: 2.666667rem;
         height: 2.666667rem;
         margin-right: 0.266667rem;
         overflow: hidden;
+
         .thumb {
           width: 100%;
         }
 
       }
+
       .fw_txt {
         flex: 1;
-        font-size: .186667rem/* 14/75 */
+        font-size: .186667rem
+          /* 14/75 */
         ;
         line-height: 0.48rem;
         color: #2b2b2b;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
         .fw_name {
           font-weight: bold;
           margin-bottom: 0.373333rem;
-          font-size: .346667rem/* 26/75 */
+          font-size: .346667rem
+            /* 26/75 */
           ;
         }
+
         .fw_content {
           min-width: 0;
-          font-size: .32rem/* 24/75 */
+          font-size: .32rem
+            /* 24/75 */
           ;
           line-height: 1.4;
-          height: .896rem/* 67.2/75 */
+          height: .896rem
+            /* 67.2/75 */
           ;
           opacity: 0.8;
           display: -webkit-box;
@@ -573,88 +599,121 @@
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
         }
+
         .fw_price {
-          font-size: .32rem/* 24/75 */
+          font-size: .32rem
+            /* 24/75 */
           ;
         }
       }
     }
+
     .weui-btn {
       border-radius: 0;
+
       &::after {
         border-radius: 0;
       }
     }
+
     .fw_num {
       margin-bottom: $bot;
+
       .form {
         margin-bottom: $bot;
       }
     }
+
     .address-wrapper {
       .bg {
-        height: .4rem/* 30/75 */
+        height: .4rem
+          /* 30/75 */
         ;
         background: url(~img/public/queren-bg.png);
       }
+
       .my-address {
-        min-height: 4.266667rem/* 320/75 */
+        min-height: 4.266667rem
+          /* 320/75 */
         ;
         background: #ffffff;
         display: flex;
         align-items: center;
+
         .my-add-box {
-          padding: .266667rem/* 20/75 */
-          0 .266667rem/* 20/75 */
-          .4rem/* 30/75 */
+          padding: .266667rem
+            /* 20/75 */
+            0 .266667rem
+            /* 20/75 */
+            .4rem
+            /* 30/75 */
           ;
+
           .title {
             display: flex;
             align-items: center;
-            margin-bottom: .4rem/* 30/75 */
+            margin-bottom: .4rem
+              /* 30/75 */
             ;
+
             .iconfont {
-              width: .933333rem/* 70/75 */
+              width: .933333rem
+                /* 70/75 */
               ;
-              font-size: .6rem/* 45/75 */
+              font-size: .6rem
+                /* 45/75 */
               ;
             }
-            font-size: .373333rem/* 28/75 */
+
+            font-size: .373333rem
+            /* 28/75 */
             ;
           }
+
           .add-info {
             color: #4f4f4f;
-            font-size: .346667rem/* 26/75 */
+            font-size: .346667rem
+              /* 26/75 */
             ;
             line-height: 2;
             display: flex;
             align-items: center;
-            padding-left: .933333rem/* 70/75 */
+            padding-left: .933333rem
+              /* 70/75 */
             ;
+
             .info-wrapper {
               word-wrap: break-word;
               overflow: hidden;
               flex: none;
-              width: 7.466667rem/* 560/75 */
+              width: 7.466667rem
+                /* 560/75 */
               ;
+
               .txt {
                 float: left;
               }
+
               .car-info {
-                font-size: .32rem/* 24/75 */
+                font-size: .32rem
+                  /* 24/75 */
                 ;
                 color: #5f5f5f;
               }
             }
+
             .icon-jinru {
-              font-size: .56rem/* 42/75 */
+              font-size: .56rem
+                /* 42/75 */
               ;
               color: #000000;
-              margin-left: .2rem/* 15/75 */
+              margin-left: .2rem
+                /* 15/75 */
               ;
             }
           }
         }
+
         .no-add {
           flex: 1;
           display: flex;
@@ -662,98 +721,129 @@
           align-items: center;
           width: 100%;
           height: 100%;
-          font-size: .48rem/* 36/75 */
+          font-size: .48rem
+            /* 36/75 */
           ;
           opacity: .5;
         }
       }
     }
+
     .fw_time {
       margin-bottom: $bot;
     }
+
     .xbtn {
       // margin-top: 1.333333rem;
     }
+
     .card-list {
       box-sizing: bor der-box;
       background: #ffffff;
+
       .sub-title {
         padding: 10px 15px;
         @include font-dpr(17px);
         background: #ffffff;
       }
+
       .card-item {
         display: flex;
-        padding-right: .6rem/* 45/75 */
+        padding-right: .6rem
+          /* 45/75 */
         ;
-        margin-bottom: .666667rem/* 50/75 */
+        margin-bottom: .666667rem
+          /* 50/75 */
         ;
+
         .card-radio {
           display: flex;
           justify-content: center;
           align-items: center;
           flex: 1;
         }
+
         .card {
           display: flex;
           position: relative;
-          width: 8rem/* 600/75 */
+          width: 8rem
+            /* 600/75 */
           ;
-          padding: .133333rem/* 10/75 */
-          0 .133333rem/* 10/75 */
-          .666667rem/* 50/75 */
+          padding: .133333rem
+            /* 10/75 */
+            0 .133333rem
+            /* 10/75 */
+            .666667rem
+            /* 50/75 */
           ;
-          min-height: 1.786667rem/* 134/75 */
+          min-height: 1.786667rem
+            /* 134/75 */
           ;
           background-image: url(~img/public/card-bg.png);
-          background-position-y: .533333rem/* 40/75 */
+          background-position-y: .533333rem
+            /* 40/75 */
           ;
-          background-size: 5.533333rem/* 415/75 */
+          background-size: 5.533333rem
+            /* 415/75 */
           ;
           background-repeat: no-repeat;
           background-color: #ffffff;
           box-shadow: 0 0 10px 4px rgba(#000000, .1);
-          font-size: .32rem/* 24/75 */
+          font-size: .32rem
+            /* 24/75 */
           ;
+
           .card-info {
-            width: 5.533333rem/* 415/75 */
+            width: 5.533333rem
+              /* 415/75 */
             ;
             border-right: 1px dashed #7b7b7b;
-            line-height: .64rem/* 48/75 */
+            line-height: .64rem
+              /* 48/75 */
             ;
             display: flex;
+
             .text {
               flex: none;
             }
+
             .fw-box {
-              padding: 0 .266667rem/* 20/75 */
+              padding: 0 .266667rem
+                /* 20/75 */
               ;
+
               .fw {
                 display: inline-block;
               }
             }
           }
+
           .cishu {
             display: flex;
             flex-direction: column;
             align-items: center;
             flex: 1;
             text-align: center;
-            padding: .4rem/* 30/75 */
-            0;
+            padding: .4rem
+              /* 30/75 */
+              0;
+
             em {
-              font-size: .64rem/* 48/75 */
+              font-size: .64rem
+                /* 48/75 */
               ;
               font-weight: bold;
               color: #de3232;
             }
           }
+
           .left-circle {
             position: absolute;
             top: 50%;
             left: 0;
             transform: translate(-50%, -50%);
-            width: .533333rem/* 40/75 */
+            width: .533333rem
+              /* 40/75 */
             ;
           }
         }

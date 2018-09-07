@@ -8,6 +8,7 @@
             <h2>①&nbsp;&nbsp;门店接单</h2>
             <div>订单号：{{detail.order_num}}</div>
             <div>下单时间：{{detail.date}}</div>
+            <div>预约时间：{{detail.fwy_fw_time}}</div>
           </div>
           <div class="order-info">
             <div class="line">

@@ -127,6 +127,7 @@
       this.get_fw();
       this.get_one_class();
       this.get_gg();
+      
     },
     watch: {
       currentLocation() {

@@ -3,10 +3,11 @@
     <bigTitle title="退款单管理" @showPopup='showPopup' :icon='false' :right='true'>
       <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="status" @on-change='changeType'>
         <iview-op value='0'>全部订单</iview-op>
+        <iview-op value='5'>未处理订单</iview-op>
         <iview-op value='1'>商户已同意</iview-op>
-        <!-- <iview-op value='2'>商户已拒绝</iview-op> -->
+        <iview-op value='2'>商户已拒绝</iview-op>
         <iview-op value='3'>平台已同意</iview-op>
-        <!-- <iview-op value='4'>平台已拒绝</iview-op> -->
+        <iview-op value='4'>平台已拒绝</iview-op>
       </iview-select>
     </bigTitle>
     <div class="list">
@@ -48,7 +49,7 @@
             </div>
             <div class="count-item">
               <template v-if="item.tui_status == 0">状态：
-                <span class="warn">未处理</span>
+                <span class="warn">商家未处理</span>
               </template>
               <template v-else-if="item.tui_status == 1">状态：
                 <span class="success">商家已同意</span>

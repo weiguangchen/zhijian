@@ -27,7 +27,7 @@
         </swiper-slide>
         <swiper-slide>
           <div class="scroll-wrapper">
-            <mineScroller :status='1'></mineScroller>
+            <mineScroller :status='2'></mineScroller>
             <!-- <scroller :on-infinite="infinite2" ref="myscroller2">
               <yhj></yhj>
             </scroller> -->
@@ -35,7 +35,7 @@
         </swiper-slide>
         <swiper-slide>
           <div class="scroll-wrapper">
-            <mineScroller :status='2'></mineScroller>
+            <mineScroller :status='3'></mineScroller>
             <!-- <scroller :on-infinite="infinite3" ref="myscroller3">
               <yhj></yhj>
             </scroller> -->

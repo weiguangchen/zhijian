@@ -6,7 +6,7 @@
         <div class="order-num">
           <div>订单号：{{detail.order_num}}</div>
           <div>下单时间：{{detail.date}}</div>
-
+          <div>预约时间：{{detail.fwy_fw_time}}</div>
         </div>
         <div class="order-info">
           <div class="line">
@@ -19,7 +19,7 @@
           </div>
           <div class="line">
             <span class="title">联系方式：</span>
-            <span class="content">{{detail.phone}}</span>
+            <span class="content">{{detail.dianhua}}</span>
           </div>
           <div class="line">
             <span class="title">地址：</span>
@@ -51,7 +51,7 @@
             <span class="content">{{detail.car_xing}}</span>
           </div>
           <div class="line">
-            <XButton type='warn' :mini='true' @click.native='tuikuan' :disabled='detail.tui_status' v-if="!detail.tui_status">退单</XButton>
+            <XButton type='warn' :mini='true' @click.native='tuikuan' :disabled='detail.tui_status || detail.paidan_status == 4' v-if="!detail.tui_status">退单</XButton>
           </div>
         </div>
       </div>

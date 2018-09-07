@@ -13,7 +13,7 @@
               <span class="status" v-if="item.status == 1">未使用</span>
               <!-- <span class="iconfont icon-lajixiang" v-else-if="item.status == 2 || item.status == 7"></span> -->
               <span class="status" v-else-if="item.status == 3">待处理</span>
-              <span class="status" v-else-if="item.status == 4">成功</span>
+              <span class="status" v-else-if="item.status == 4">退款成功</span>
               <span class="status" v-else-if="item.status == 5">已过期</span>
               <span class="status" v-else-if="item.status == 2 || item.status == 7">已完成</span>
             </div>
@@ -229,7 +229,7 @@ import betterScroll from '@/components/betterScroll'
         background: #f1f2f6;
         .thumb {
           width: 2.666667rem;
-          height: 2.133333rem;
+          height: 2.666667rem;
           margin-right: 0.266667rem;
         }
         .text {
