@@ -104,7 +104,7 @@ function wxConfig(url) {
 
 function getPosition() {
   return new Promise((resolve, reject) => {
-    var geolocation = new qq.maps.Geolocation('62KBZ-2WXKQ-5GI53-GDT33-LKMPV-34FWO', 'mykey');
+    var geolocation = new qq.maps.Geolocation('PLPBZ-3HZKW-AMFRO-RR4RX-CWUNK-GGB64', '51jzdw');
     geolocation.getLocation(resolve);
   })
 
@@ -149,6 +149,12 @@ router.beforeEach((to, from, next) => {
   }
 
   // 授权登录回调
+  console.log('to')
+  console.log(to)
+  console.log(' /^\/logining/.test(to.fullPath)')
+  console.log( /^\/logining/.test(to.fullPath))
+  console.log('to.query.id && /^\/logining/.test(to.fullPath)')
+  console.log(to.query.id && /^\/logining/.test(to.fullPath))
   if (to.query.id && /^\/logining/.test(to.fullPath)) {
     VueCookies.set('user', to.query.id);
     var url = VueCookies.get('enterBeforeUrl');
@@ -169,7 +175,9 @@ router.beforeEach((to, from, next) => {
     console.log(window.location.href)
     var windowUrl = window.location.href;
     var state;
-    if (/http:\/\/qd.daonian.cn/.test(windowUrl)) {
+
+    
+    if (/https:\/\/phone.51zjdw.com/.test(windowUrl)) {
       // 线上
       state = 0;
     } else {
@@ -177,9 +185,17 @@ router.beforeEach((to, from, next) => {
       state = 1;
     }
 
+    // console.log('windowUrl'+windowUrl)
+    // console.log(/https:\/\/api.51zjdw.com/.test(windowUrl))
+    // console.log(state)
+    // return;
+
     // state=1是线下环境state=0线上环境
-    window.location.href =
-      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=" + state + "#wechat_redirect";
+    // window.location.href =
+    //   "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=" + state + "#wechat_redirect";
+      window.location.href =
+      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=https%3A%2F%2Fapi.51zjdw.com%2FApi%2Fwechat%2FgetOpenId&response_type=code&scope=snsapi_userinfo&state=" + state + "#wechat_redirect";
+      
   } else {
     // 有cookies
     // 获取用户信息

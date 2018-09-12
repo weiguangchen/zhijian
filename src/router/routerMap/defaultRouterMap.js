@@ -1,7 +1,7 @@
 export default [{
     path: '/',
     redirect: '/index',
-    base: '/qd/',
+    // base: '/qd/',
   }, {
     path: '/index',
     name: 'index',

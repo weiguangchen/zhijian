@@ -1,6 +1,6 @@
 import wx from 'weixin-js-sdk';
-export const API_URL = 'http://zj.daonian.cn';
-export const production_url = 'http://qd.daonian.cn';
+export const API_URL = 'https://api.51zjdw.com';
+export const production_url = 'https://phone.51zjdw.com';
 export const development_url = 'http://192.168.31.76:8081';
 const $toDetail = function (id) {
   var _this = this;
