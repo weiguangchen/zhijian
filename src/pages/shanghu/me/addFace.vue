@@ -132,6 +132,7 @@
     },
     created() {
       var _this = this;
+      this.$eruda.init();
       // this.$eruda.init();
       this.$emit("showPopup", false);
       if (this.faceId) {

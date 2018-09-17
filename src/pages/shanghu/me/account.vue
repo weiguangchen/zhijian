@@ -10,12 +10,12 @@
         <XButton type='warn' class="xbtn" @click.native='add_son_account'>添加子账户</XButton>
         <div class="account-list">
           <Group class="reset-vux-input account-item" v-for="(item,index) in accountList" :key="index">
-            <div class="tit">账号的名称：{{item.sub_name}}</div>
-            <div class="tit">管理的门店：
+            <div class="tit"><span class="lab">账号的名称：</span>{{item.sub_name}}</div>
+            <div class="tit"><span class="lab">管理的门店：</span>
               <span v-for="(item,index) in item.face" :key="index">{{item.face_name}}&nbsp;&nbsp;&nbsp;</span>
             </div>
-            <div class="tit">手机号：{{item.phone}}</div>
-            <div class="tit" v-if="item.wx">绑定微信：<img :src="item.wx.headimgurl" alt="" class="avatar" >{{item.wx.nickname}}</div>
+            <div class="tit"><span class="lab">手机号：</span>{{item.phone}}</div>
+            <div class="tit" v-if="item.wx"><span class="lab">绑定微信：</span><img :src="item.wx.headimgurl" alt="" class="avatar" >{{item.wx.nickname}}</div>
             <!-- <div class="tit last-tit">账号说明：李海东</div> -->
             <div class="xbtn-box">
               <!-- <XButton :mini='true' :plain='true' type='warn' class="mini-btn" @click.native="setAuth">权限设置</XButton> -->
@@ -135,6 +135,9 @@
           align-items: center;
           @include font-dpr(14px);
           margin-bottom: .56rem /* 42/75 */;
+          .lab{
+            flex: none;
+          }
           .avatar{
             width: .6rem /* 45/75 */;
             height: .6rem /* 45/75 */;

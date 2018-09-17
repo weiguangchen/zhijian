@@ -65,8 +65,8 @@
           <div class="form-group" v-if="currentSq">
             <h2 class="sub-title">分类</h2>
             <Group class="reset-vux-input">
-              <Selector :options='one_class_list' title='1' :value-map="['id','class_name']" @on-change='changeOneClass' v-model="one_class_val"
-                v-if="one_class_list"></Selector>
+              <Selector :options='one_class_list' title='1' :value-map="['id','class_name']" @on-change='changeOneClass'
+                v-model="one_class_val" v-if="one_class_list"></Selector>
             </Group>
           </div>
 
@@ -88,7 +88,8 @@
           <div class="form-group" v-if="!hdId">
             <h2 class="sub-title">支持门店:</h2>
 
-            <mu-checkbox v-model="faceVal" :value='item.id' v-for="(item,index) in face_list" :key="index" :label='item.face_name' color='#e03233'></mu-checkbox>
+            <mu-checkbox v-model="faceVal" :value='item.id' v-for="(item,index) in face_list" :key="index" :label='item.face_name'
+              color='#e03233'></mu-checkbox>
           </div>
           <div class="form-group" v-if="!hdId">
             <h2 class="sub-title">服务类别:</h2>
@@ -133,11 +134,21 @@
       </div>
 
     </betterScroll>
+    <Popup position='right' v-model="popupShow">
+      <div class="popup-list">
+        <Group>
+          <Cell title='管理活动' link='/shanghu/jingying/hdList'></Cell>
+        </Group>
 
+      </div>
+    </Popup>
   </div>
 </template>
 
 <script>
+  import {
+    Popup
+  } from "vue-ydui/dist/lib.px/popup";
   import betterScroll from '@/components/betterScroll/index';
   import {
     TransferDomDirective as TransferDom
@@ -153,7 +164,8 @@
     CheckerItem,
     XTextarea,
     XNumber,
-    XDialog
+    XDialog,
+    Cell
   } from "vux";
   import {
     CheckBox,
@@ -176,6 +188,7 @@
   export default {
     data() {
       return {
+        popupShow: false,
         step: 1,
         twDetailShow: false,
         twDetailContent: "",
@@ -215,12 +228,13 @@
       // this.$eruda.init();
       var _this = this;
       this.checkSystem();
+      this.popupShow = false;
       this.$emit("showPopup", false);
       if (this.hdId) {
         this.getOldInfo()
       }
       this.$axios
-        .get( "/Api/YouHui/card_add", {
+        .get("/Api/YouHui/card_add", {
           params: {
             phone: _this.userinfo.uphone
           }
@@ -238,7 +252,7 @@
 
     methods: {
       showPopup(val) {
-        this.$emit("showPopup", val);
+        this.popupShow = true;
       },
       changeCity(val) {
         console.log(val);
@@ -262,7 +276,7 @@
       changeOneClass(val) {
         var _this = this;
         this.$axios
-          .get( "/Api/YouHui/get_hd_content", {
+          .get("/Api/YouHui/get_hd_content", {
             params: {
               id: val
             }
@@ -293,7 +307,7 @@
           bk_num: this.fw_num,
           card_subname: this.sub_name,
           face: this.faceVal,
-          card_face_id:this.faceVal[0],
+          card_face_id: this.faceVal[0],
           card_max_num: this.card_max_num,
           card_fw_num: this.card_fw_num
         }
@@ -305,7 +319,7 @@
               })
               // 修改活动
               this.$axios
-                .get( "/Api/Card/card_edit", {
+                .get("/Api/Card/card_edit", {
                   headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                   },
@@ -341,7 +355,7 @@
             } else {
               // 添加活动
               this.$axios
-                .get( "/Api/YouHui/add_card", {
+                .get("/Api/YouHui/add_card", {
                   headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                   },
@@ -457,7 +471,7 @@
         var _this = this;
         console.log(id);
         this.$axios
-          .get( "/Api/YouHui/content", {
+          .get("/Api/YouHui/content", {
             params: {
               id
             }
@@ -472,7 +486,7 @@
       },
       // 获取已有数据
       getOldInfo() {
-        this.$axios.get( '/Api/card/edit_card', {
+        this.$axios.get('/Api/card/edit_card', {
           params: {
             id: this.hdId
           }
@@ -536,7 +550,7 @@
           success: function (res) {
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get( "/api/wechat/bcimg", {
+              .get("/api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }
@@ -622,7 +636,9 @@
       RadioGroup,
       Radio,
       XDialog,
-      betterScroll
+      betterScroll,
+      Popup,
+      Cell
     },
     mixins: [checkLogin]
   };
@@ -632,6 +648,7 @@
 <style lang='scss'>
   .uploadImage {
     display: flex;
+
     .upload-btn {
       margin: 0 0.4rem;
       text-align: center;
@@ -643,6 +660,7 @@
       border: 1px dashed #2a2a2a;
       border-radius: 0.133333rem;
     }
+
     .thumb {
       width: 2rem;
       height: 2rem;
@@ -663,14 +681,17 @@
   .creat-huodong {
     height: 100%;
     background: #ffffff;
+
     .fw-item {
       margin: 0 0.426667rem;
       border-bottom: 1px solid #e4e4e4;
     }
+
     .select-num {
       display: flex;
       justify-content: flex-end;
       align-items: center;
+
       .weui-cell {
         &::before {
           border-top: none;
@@ -679,9 +700,11 @@
     }
 
     .mu-checkbox {
-      margin-right: .2rem/* 20/100 */
+      margin-right: .2rem
+        /* 20/100 */
       ;
-      margin-bottom: .2rem/* 20/100 */
+      margin-bottom: .2rem
+        /* 20/100 */
       ;
     }
 
@@ -689,21 +712,28 @@
     .radio-box {
       display: flex;
       align-items: center;
-      margin-right: .2rem/* 20/100 */
+      margin-right: .2rem
+        /* 20/100 */
       ;
-      margin-bottom: .2rem/* 20/100 */
+      margin-bottom: .2rem
+        /* 20/100 */
       ;
+
       .yulan {
-        border-radius: .1rem/* 10/100 */
+        border-radius: .1rem
+          /* 10/100 */
         ;
-        padding: .1rem/* 10/100 */
+        padding: .1rem
+          /* 10/100 */
         ;
         color: #e03233;
-        margin-left: .1rem/* 10/100 */
+        margin-left: .1rem
+          /* 10/100 */
         ;
         border: 1px solid #e03233;
       }
     }
+
     .weui-dialog {
       display: block;
       top: 0.4rem;
@@ -711,6 +741,7 @@
       background: #ffffff;
       overflow: scroll;
     }
+
     .vux-selector {
       .weui-cell__hd {
         visibility: hidden;

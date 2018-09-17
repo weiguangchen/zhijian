@@ -1,6 +1,6 @@
 <template>
     <div class="map-box">
-        <iframe id="mapPage" width="100%" height="100%" frameborder=0 src="http://apis.map.qq.com/tools/locpicker?search=1&type=1&key=62KBZ-2WXKQ-5GI53-GDT33-LKMPV-34FWO&referer=myapp">
+        <iframe id="mapPage" width="100%" height="100%" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=62KBZ-2WXKQ-5GI53-GDT33-LKMPV-34FWO&referer=myapp">
         </iframe>
     </div>
 </template>

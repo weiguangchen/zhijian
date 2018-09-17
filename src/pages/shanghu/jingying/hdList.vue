@@ -15,7 +15,14 @@
       </div>
       <div class="loading-wrapper"></div>
     </div>
+     <Popup position='right' v-model="popupShow">
+      <div class="popup-list">
+        <Group>
+          <Cell title='添加活动' link='/shanghu/jingying/addhuodong'></Cell>
+        </Group>
 
+      </div>
+    </Popup>
   </div>
 </template>
 
@@ -24,17 +31,23 @@
   import checkLogin from '@/mixins/checkLogin.js';
   import {
     ViewBox,
-    XButton
+    XButton,
+    Group,
+    Cell
   } from "vux";
+   import {
+    Popup
+  } from "vue-ydui/dist/lib.px/popup";
   export default {
     data() {
       return {
         hdList: [],
         p: 1,
+        popupShow:false
       };
     },
     created() {
-
+      this.popupShow= false;
       this.$emit("showPopup", false);
       this.get_hd_list();
     },
@@ -129,6 +142,7 @@
       },
       showPopup(val) {
         // 关闭侧栏
+        this.popupShow = true;
         this.$emit("showPopup", val);
       }
     },
@@ -136,7 +150,10 @@
     components: {
       ViewBox,
       bigTitle,
-      XButton
+      XButton,
+      Popup,
+      Group,
+      Cell
     }
   };
 

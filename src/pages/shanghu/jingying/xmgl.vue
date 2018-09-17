@@ -112,7 +112,14 @@
         <XButton type='warn' class="xbtn" @click.native="finish" v-else-if="step == 3 && !querys" :disabled='submiting'>提交</XButton>
       </div>
     </betterScroll>
+    <Popup position='right' v-model="popupShow">
+      <div class="popup-list">
+        <Group>
+          <Cell title='管理服务' link='/shanghu/jingying/fwList'></Cell>
+        </Group>
 
+      </div>
+    </Popup>
   </div>
 </template>
 
@@ -128,8 +135,12 @@
     Checker,
     CheckerItem,
     XTextarea,
-    XDialog
+    XDialog,
+    Cell
   } from "vux";
+    import {
+    Popup
+  } from "vue-ydui/dist/lib.px/popup";
   import bigTitle from "@/components/bigTitle/index";
   import shanghuSelect from "@/components/shanghu_form/face_select";
   import shanghuInput from "@/components/shanghu_form/input";
@@ -150,6 +161,7 @@
   export default {
     data() {
       return {
+        popupShow:true,
         scroll: "",
         jsPrecent: 0.3 /* 结算比例 */ ,
         alertShow: false,
@@ -186,6 +198,7 @@
     },
     created() {
       var _this = this;
+      this.popupShow = false;
       /* 关闭侧栏 */
       this.$emit("showPopup", false);
       /* 判断系统 */
@@ -223,7 +236,7 @@
     },
     methods: {
       showPopup(val) {
-        this.$emit("showPopup", val);
+        this.popupShow = true;
       },
       next1() {
         if (!this.fw_name) {
@@ -486,7 +499,9 @@
       RadioGroup,
       Radio,
       XDialog,
-      betterScroll
+      betterScroll,
+      Popup,
+      Cell
     },
     mixins: [checkLogin]
   };

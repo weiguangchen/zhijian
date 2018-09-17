@@ -28,8 +28,8 @@
         </div>
       </SwipeoutItem>
     </Swipeout>
-    <div class="status-text is-lq" v-if="status==1">已领取</div>
-    <div class="status-text is-use" v-if="status==2">已使用</div>
+    <!-- <div class="status-text is-lq" v-if="status==0">已领取</div> -->
+    <div class="status-text is-use" v-if="status==1">已使用</div>
     <div class="status-text is-use" v-if="status==2">已过期</div>
   </div>
 

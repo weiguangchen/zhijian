@@ -2,8 +2,8 @@
   <div class="tixian">
     <div class="tx">
       <h1>到账账户
-        <span>{{userinfo.uphone}}
-          <i> (微信账户)</i>
+        <span class="info">{{userinfo.uphone}}
+          <img :src="userinfo.headimgurl" alt="" class="avatar"> <i> (微信账户)</i>
         </span>
       </h1>
 
@@ -235,8 +235,17 @@
         border-bottom: 1px solid #f3f3f3;
         font-size: .32rem/* 24/75 */
         ;
+        .info{
+          display: flex;
+          align-items: center;
+        }
         i {
           color: #a1a1a1;
+        }
+        .avatar{
+          width: .6rem /* 45/75 */;
+          height: .6rem /* 45/75 */;
+          border-radius: 50%;
         }
       }
       .content {

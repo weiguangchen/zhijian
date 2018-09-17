@@ -11,10 +11,10 @@
           <span class="tit">当前可提现余额</span>
           <span>{{userinfo.user_money}}&nbsp;&nbsp;(元)</span>
         </div>
-        <div class="line line2" @click="toList">
+        <!-- <div class="line line2" @click="toList">
           <span>提现记录</span>
           <i class="iconfont icon-jinru"></i>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="tixian">
@@ -24,6 +24,8 @@
         <keyboard :value="tixian_money" @input='KeyboardInput' inter="10" decimal="2" placeholder="请输入金额" class="money-keyboard"></keyboard>
       </Group>
       <XButton type='warn' class="xbtn" @click.native='tixian' :disabled='txing'>提交</XButton>
+          <div @click="toList" style="text-align:center;margin-top:.5rem;">提现记录</div>
+
     </div>
     <Popup v-model='safe' position='center' width='80%'>
       <div class="safe-wrapper">
@@ -33,7 +35,7 @@
         <CellGroup>
           <CellItem>
             <span slot="left">联系手机：</span>
-            <yd-input slot="right" :disabled='true' :value='userinfo.uphone'></yd-input>
+            <yd-input slot="right" :disabled='true' :value='formatPhone'></yd-input>
           </CellItem>
           <CellItem>
             <yd-input slot="left" v-model="yzm"></yd-input>
@@ -42,8 +44,8 @@
         </CellGroup>
         <div class="btn1">
           <XButton :mini='true' :disabled='yanzhenging' type='primary' @click.native="yanzheng">确认</XButton>
-
         </div>
+
       </div>
     </Popup>
   </div>
@@ -199,6 +201,9 @@
     computed: {
       yanzhenging() {
         return this.yzm ? false : true;
+      },
+      formatPhone(){
+        return `${this.userinfo.uphone.slice(0,3)}****${this.userinfo.uphone.slice(7)}`;
       }
     },
     components: {

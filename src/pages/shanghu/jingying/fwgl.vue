@@ -1,22 +1,11 @@
 <template>
   <div>
-    <bigTitle title='经营管理' :icon='false'></bigTitle>  
-     <!-- @showPopup='showPopup' -->
+    <bigTitle title='服务管理' @showPopup='showPopup'></bigTitle>
     <div class="my-form">
       <div class="form-box">
         <Group>
-          <Cell title='服务统计' :is-link='true' link='/shanghu/jingying/tongji'></Cell>
-          <Cell title='活动卡统计' :is-link='true' link='/shanghu/jingying/hdTongji'></Cell>
-          <Cell title='订单管理' :is-link='true' link='/shanghu/jingying/orderGl'></Cell>
-          <Cell title='退款单管理' :is-link='true' link='/shanghu/jingying/tuikuanList'></Cell>
-          <Cell title='活动卡订单管理' :is-link='true' link='/shanghu/jingying/cardOrderList'></Cell>
-          <Cell title='服务管理' :is-link='true' link='/shanghu/jingying/fwList'></Cell>
-          <!-- <Cell title='添加服务' :is-link='true' link='/shanghu/jingying/xmgl'></Cell>
-          <Cell title='管理服务' :is-link='true' link='/shanghu/jingying/fwList'></Cell> -->
-          <!-- <Cell title='添加活动' :is-link='true' link='/shanghu/jingying/addhuodong' ></Cell> -->
-          <Cell title='活动管理' :is-link='true' link='/shanghu/jingying/hdList' ></Cell>
-          <Cell title='创建优惠券' :is-link='true' link='/shanghu/jingying/createdYhj' ></Cell>
-          <Cell title='优惠券管理' :is-link='true' link='/shanghu/jingying/yhjList' ></Cell>
+          <Cell title='添加服务' :is-link='true' link='/shanghu/jingying/xmgl'></Cell>
+          <Cell title='管理服务' :is-link='true' link='/shanghu/jingying/fwList'></Cell>
         </Group>
       </div>
     </div>

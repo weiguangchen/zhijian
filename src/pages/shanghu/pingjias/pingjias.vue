@@ -30,7 +30,8 @@ export default {
     this.$axios
       .get( "/Api/Shop/shop_fw", {
         params: {
-          shop_id: this.userinfo.shop[0].id
+          shop_id: this.userinfo.shop[0].id,
+          x:2
         }
       })
       .then(res => {

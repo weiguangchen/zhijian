@@ -166,6 +166,13 @@ export default [{
           role: 32
         }
       },  {
+        path: 'fwgl',
+        name: 'shanghumefwgl',
+        component: resolve => require(['@/pages/shanghu/jingying/fwgl'], resolve),
+        meta: {
+          role: 41
+        }
+      }, {
         path: 'xmgl',
         name: 'shanghumexmgl',
         component: resolve => require(['@/pages/shanghu/jingying/xmgl'], resolve),

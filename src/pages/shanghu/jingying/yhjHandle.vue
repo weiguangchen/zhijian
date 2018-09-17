@@ -5,9 +5,9 @@
         <iview-op value='all'>全部</iview-op>
         <iview-op value='5'>未审核</iview-op>
         <iview-op value='1'>已审核未上架</iview-op>
-        <iview-op value='3'>已上架</iview-op>
         <iview-op value='4'>未通过审核</iview-op>
         <iview-op value='6'>已下架</iview-op>
+        <iview-op value='3'>已上架</iview-op>
 
       </iview-select>
     </bigTitle>

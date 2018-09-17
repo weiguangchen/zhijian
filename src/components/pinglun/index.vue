@@ -19,7 +19,7 @@
         <span>浏览</span>
         <span>
           <span @click="huifu(info.id)" v-if="shanghu&&!info.hf">回复</span>
-          <span>
+          <span v-if="dianzan">
             <i class="iconfont icon-dianzan"></i>
           </span>
         </span>
@@ -45,6 +45,9 @@
       },
       shanghu: {
         default: false
+      },
+      dianzan:{
+        default:true
       }
     },
     created() {

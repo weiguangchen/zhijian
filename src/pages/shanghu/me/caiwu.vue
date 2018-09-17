@@ -23,16 +23,16 @@
           <span>{{info.w_money}}(元)</span>
         </div>
       </div>
-      <div class="dingdan">
+      <!-- <div class="dingdan"> -->
         <!-- <div class="line">
           <span class="tit">订单总额：</span>
           <span>10000.00(元)</span>
         </div> -->
-        <div class="line">
+        <!-- <div class="line">
           <span class="tit">订单总数：</span>
           <span>{{info.all_order}}</span>
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
       <div class="account">
         <h2>收款账户信息</h2>
         <div>

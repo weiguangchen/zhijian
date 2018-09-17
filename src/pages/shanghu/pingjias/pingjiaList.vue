@@ -38,7 +38,7 @@
 
           <div class="pingjia-content">
 
-            <pinglun v-for="(item,index) in list" :key="index" :info='item' :shanghu='true'></pinglun>
+            <pinglun v-for="(item,index) in list" :key="index" :info='item' :shanghu='true' :dianzan='false'></pinglun>
           </div>
 
         </div>
@@ -182,9 +182,9 @@
         position: relative;
         margin-right: 0.24rem;
         .star {
-          position: absolute;
-          bottom: 0.266667rem;
-          left: 0.266667rem;
+          // position: absolute;
+          // bottom: 0.266667rem;
+          // left: 0.266667rem;
         }
         .img-box {
           overflow: hidden;
@@ -192,9 +192,7 @@
           height: 2.133333rem;
           border-radius: 0.106667rem;
           .thumb {
-            height: 100%;
-            max-width: none;
-            transform: translateX(-15%);
+            width: 100%;
           }
         }
       }

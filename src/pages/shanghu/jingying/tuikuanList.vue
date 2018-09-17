@@ -54,13 +54,13 @@
               <template v-else-if="item.tui_status == 1">状态：
                 <span class="success">商家已同意</span>
               </template>
-              <template v-else-if="item.status == 2">状态：
+              <template v-else-if="item.tui_status == 2">状态：
                 <span class="warn">商家已拒绝</span>
               </template>
-              <template v-else-if="item.status == 3">状态：
+              <template v-else-if="item.tui_status == 3">状态：
                 <span class="success">平台已同意</span>
               </template>
-              <template v-else-if="item.status == 4">状态：
+              <template v-else-if="item.tui_status == 4">状态：
                 <span class="warn">平台已拒绝</span>
               </template>
             </div>

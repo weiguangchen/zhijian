@@ -2,7 +2,7 @@
   <div class="shanghu-box">
     <betterScroll v-if="isIndex">
       <transition name='router'>
-        <router-view @showPopup='showPopup' @showTextarea='showTextarea'></router-view>
+        <router-view @showPopup='showPopup' @showTextarea='showTextarea' ></router-view>
       </transition>
     </betterScroll>
     <transition name='router' v-else>

@@ -13,7 +13,10 @@
               <span class="status" v-if="item.status == 1">未使用</span>
               <!-- <span class="iconfont icon-lajixiang" v-else-if="item.status == 2 || item.status == 7"></span> -->
               <span class="status" v-else-if="item.status == 3">待处理</span>
-              <span class="status" v-else-if="item.status == 4">退款成功</span>
+              <span class="status" v-else-if="item.status == 4">
+                <template v-if="item.is_us && item.is_us == 0">商户退款</template>
+                <template v-if="item.is_us && item.is_us == 1">用户退款</template> 退款成功
+              </span>
               <span class="status" v-else-if="item.status == 5">已过期</span>
               <span class="status" v-else-if="item.status == 2 || item.status == 7">已完成</span>
             </div>
@@ -54,6 +57,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import betterScroll from '@/components/betterScroll'
   import {
     InfiniteScroll
@@ -74,7 +78,8 @@ import betterScroll from '@/components/betterScroll'
       };
     },
     created() {
-      this.resetList();
+      // this.SET_ISLOADING(true);
+      // this.$eruda.init();
       console.log("orderStatus:" + this.orderStatus);
 
       if (this.orderStatus == 6) {
@@ -91,6 +96,10 @@ import betterScroll from '@/components/betterScroll'
         document.title = "已评论订单";
       }
     },
+    mounted(){
+      this.resetList();
+
+    },
     watch: {
       $route(to, from) {
         console.log(to);
@@ -105,6 +114,7 @@ import betterScroll from '@/components/betterScroll'
       betterScroll
     },
     methods: {
+      ...mapMutations(['SET_ISLOADING']),
       toOrderDetail(order_num, type) {
         this.$router.push({
           path: "/me/orderDetail",
@@ -116,6 +126,9 @@ import betterScroll from '@/components/betterScroll'
       },
       getOrderList() {
         var _this = this;
+
+        console.log('id')
+        console.log(this.id)
         // jf=0微信支付if=1卡支付
         return this.$axios
           .get( "/Api/UserShow/get_order", {
@@ -137,6 +150,7 @@ import betterScroll from '@/components/betterScroll'
             }
             _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
             return data;
+            // this.SET_ISLOADING(false);
           });
       },
       appendList() {

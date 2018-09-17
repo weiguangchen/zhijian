@@ -149,12 +149,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // 授权登录回调
-  console.log('to')
-  console.log(to)
-  console.log(' /^\/logining/.test(to.fullPath)')
-  console.log( /^\/logining/.test(to.fullPath))
-  console.log('to.query.id && /^\/logining/.test(to.fullPath)')
-  console.log(to.query.id && /^\/logining/.test(to.fullPath))
+
   if (to.query.id && /^\/logining/.test(to.fullPath)) {
     VueCookies.set('user', to.query.id);
     var url = VueCookies.get('enterBeforeUrl');
@@ -176,7 +171,7 @@ router.beforeEach((to, from, next) => {
     var windowUrl = window.location.href;
     var state;
 
-    
+
     if (/https:\/\/phone.51zjdw.com/.test(windowUrl)) {
       // 线上
       state = 0;
@@ -185,21 +180,18 @@ router.beforeEach((to, from, next) => {
       state = 1;
     }
 
-    // console.log('windowUrl'+windowUrl)
-    // console.log(/https:\/\/api.51zjdw.com/.test(windowUrl))
-    // console.log(state)
-    // return;
 
     // state=1是线下环境state=0线上环境
     // window.location.href =
     //   "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=http%3a%2f%2fzj.daonian.cn%2fApi%2fwechat%2fgetOpenId&response_type=code&scope=snsapi_userinfo&state=" + state + "#wechat_redirect";
-      window.location.href =
+    window.location.href =
       "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe73b53fb0770a6a3&redirect_uri=https%3A%2F%2Fapi.51zjdw.com%2FApi%2Fwechat%2FgetOpenId&response_type=code&scope=snsapi_userinfo&state=" + state + "#wechat_redirect";
-      
+
   } else {
     // 有cookies
     // 获取用户信息
-
+    console.log('未登录')
+    // 未登录
     axios.get('/Api/Show/get_user', {
       params: {
         id: userId
@@ -221,6 +213,7 @@ router.beforeEach((to, from, next) => {
           }
           if (store.state.userinfo.is_dl == 1) {
             console.log('是代理商');
+            console.log(agentRouterMaps)
             router.addRoutes(agentRouterMaps);
           }
           if (store.state.userinfo.shenfen == 1) {
@@ -228,7 +221,9 @@ router.beforeEach((to, from, next) => {
             router.addRoutes(servicerRouterMaps);
           }
           muta.SET_ROUTER_STATUS(store.state, true);
-
+          muta.SET_ROUTER(store.state,router);
+          console.log('这是添加后的路由')
+          console.log(store.state.routerMap);
         }
 
 
@@ -270,6 +265,9 @@ router.beforeEach((to, from, next) => {
             next('/checkServicer');
           }
         }
+
+        next();
+
       } else {
         // 该用户无效
         console.log('无效cookie，删除')
@@ -279,15 +277,15 @@ router.beforeEach((to, from, next) => {
         next('/index');
       }
 
+
+
     })
   }
-
 
 
   // 获取定位
   console.log('store.location123')
   console.log(store.state.location)
-  // alert('获取定位')
   if (!store.state.location) {
     getPosition().then(res => {
       // alert('获取到定位')
@@ -296,17 +294,16 @@ router.beforeEach((to, from, next) => {
       muta.SET_LOCATION(store.state, res)
       console.log('store.location456')
       console.log(store.state.location)
-      next();
+      // next();
     })
   } else {
-    // alert('已有定位')
 
-    next();
+    // next();
   }
 
+
+
   next();
-
-
 })
 
 

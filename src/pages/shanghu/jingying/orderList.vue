@@ -107,9 +107,10 @@
       },
       changeType(val) {
         console.log(val)
-        this.$refs.scroll.openPullUp();
+        // this.$refs.scroll.openPullUp();
         this.list = [];
         this.p = 1;
+        this.noData = false;
         this.get_order_list();
       },
       toDetail(id, zf, tui_status, order_num) {
