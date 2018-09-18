@@ -2,8 +2,9 @@
   <div class="tixian">
     <div class="tx">
       <h1>到账账户
-        <span class="info">{{userinfo.uphone}}
-          <img :src="userinfo.headimgurl" alt="" class="avatar"> <i> (微信账户)</i>
+        <span class="info">
+          <img :src="userinfo.headimgurl" alt="" class="avatar"> 
+          &nbsp;&nbsp;<i>{{userinfo.nickname}}</i>
         </span>
       </h1>
 

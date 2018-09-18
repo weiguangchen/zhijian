@@ -4,8 +4,15 @@
     <bigTitle title="管理服务" @showPopup='showPopup'></bigTitle>
     <div class="form-box">
       <div v-for="(item,index) in fwList" :key="index" class="fw-item">
-        <div class="tit">项目名称：</div>
-        <div class="fw_name">{{item.fw_mingzi}}</div>
+        <div class="fw">
+          <div class="fw-img">
+            <img :src="item.fw_img" alt="">
+          </div>
+          <div class="fw-info">
+            <div class="fw-name">{{item.fw_mingzi}}</div>
+            <div class="fw-price">{{item.money}}</div>
+          </div>
+        </div>
         <div class="op-btn">
           <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.shop_fw_id)">编辑</XButton>
           <XButton :mini='true' :plain='true' type='warn' class="xbtn" :disabled='true' v-if="item.status == 0">审核中</XButton>
@@ -158,9 +165,34 @@
       flex-direction: column;
       justify-content: center;
       padding-left: 0.4rem;
-      height: 4.266667rem;
       border-bottom: 1px solid #f0f0f0;
       line-height: 1;
+      padding: .533333rem /* 40/75 */ 0;
+      .fw {
+        display: flex;
+        margin-bottom: .4rem /* 30/75 */;
+        .fw-img{
+          border-radius: .133333rem /* 10/75 */;  
+          flex:none;
+          width: 2.666667rem /* 200/75 */;
+          overflow: hidden;
+          img{
+            width: 100%;
+          }
+        }
+        .fw-info{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: .4rem /* 30/75 */;
+          .fw-name{
+            font-size: .266667rem /* 20/75 */;
+          }
+          .fw-price{
+            color: red;
+          }
+        }
+      }
 
       .tit {
         margin-bottom: 0.48rem;
@@ -171,11 +203,13 @@
       }
 
       .op-btn {
+        display: flex;
+        justify-content: flex-end;
         .xbtn {
-          margin-top: 0;
+         margin: 0;
           width: 2.133333rem;
           height: 0.853333rem;
-          margin-right: 0.613333rem;
+          margin-left: 0.613333rem;
         }
       }
     }

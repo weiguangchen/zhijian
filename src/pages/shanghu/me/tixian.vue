@@ -5,7 +5,7 @@
       <div>
         <div class="line">
           <span class="tit">到账账户</span>
-          <span>{{userinfo.uphone}}</span>
+          <span  class="ava"><img :src="userinfo.headimgurl" alt="" class="avatar">&nbsp;&nbsp;{{userinfo.nickname}}</span>
         </div>
         <div class="line">
           <span class="tit">当前可提现余额</span>
@@ -23,6 +23,7 @@
         <!-- <XInput v-model="tixian_money" type='number' ></XInput> -->
         <keyboard :value="tixian_money" @input='KeyboardInput' inter="10" decimal="2" placeholder="请输入金额" class="money-keyboard"></keyboard>
       </Group>
+      <div class="alltx" @click="tixian_all">全部提现</div>
       <XButton type='warn' class="xbtn" @click.native='tixian' :disabled='txing'>提交</XButton>
           <div @click="toList" style="text-align:center;margin-top:.5rem;">提现记录</div>
 
@@ -196,6 +197,9 @@
           console.log(data)
           this.shop = data;
         })
+      },
+      tixian_all(){
+        this.tixian_money = this.userinfo.user_money;
       }
     },
     computed: {
@@ -250,10 +254,19 @@
         ;
         display: flex;
         align-items: center;
+        .ava{
+          display: flex;
+        align-items: center;
+        }
         .tit {
           width: 4.266667rem/* 320/75 */
           ;
           flex: none;
+        }
+        .avatar{
+          width: .6rem /* 45/75 */;
+          height: .6rem /* 45/75 */;
+          border-radius: 50%;
         }
       }
       .line2 {
@@ -280,6 +293,9 @@
         .content {
           flex: 1;
         }
+      }
+      .alltx{
+        margin-top: .6rem /* 45/75 */;
       }
     }
     .safe-wrapper {

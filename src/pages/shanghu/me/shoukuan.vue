@@ -8,10 +8,10 @@
           <span class="tit">当前可收款收益</span>
           <span>{{shop.shop_money}}&nbsp;&nbsp;(元)</span>
         </div>
-        <div class="line line2" @click="toList">
+        <!-- <div class="line line2">
           <span>收款记录</span>
           <i class="iconfont icon-jinru"></i>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="tixian">
@@ -21,6 +21,7 @@
         <keyboard :value="sk_money" @input='KeyboardInput' inter="10" decimal="2" placeholder="请输入金额" class="money-keyboard"></keyboard>
       </Group>
       <XButton type='warn' class="xbtn" @click.native='shoukuan' :disabled='sking'>提交</XButton>
+      <div  @click="toList"  style="text-align:center;margin-top:.5rem;">收款记录</div>
     </div>
   </div>
 </template>

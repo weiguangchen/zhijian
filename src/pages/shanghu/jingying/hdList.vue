@@ -4,8 +4,15 @@
     <bigTitle title="管理活动" @showPopup='showPopup'></bigTitle>
     <div class="form-box">
       <div v-for="(item,index) in hdList" :key="index" class="fw-item">
-        <div class="tit">活动名称：</div>
-        <div class="fw_name">{{item.card_name}}</div>
+        <div class="fw">
+          <div class="fw-img">
+            <img :src="item.card_img" alt="">
+          </div>
+          <div class="fw-info">
+            <div class="fw-name">{{item.card_name}}</div>
+            <div class="fw-price">{{item.card_money}}</div>
+          </div>
+        </div>
         <div class="op-btn">
           <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.bk_id)">编辑</XButton>
           <XButton :mini='true' :plain='true' type='warn' class="xbtn" :disabled='true' v-if="item.status == 0">审核中</XButton>
@@ -15,7 +22,7 @@
       </div>
       <div class="loading-wrapper"></div>
     </div>
-     <Popup position='right' v-model="popupShow">
+    <Popup position='right' v-model="popupShow">
       <div class="popup-list">
         <Group>
           <Cell title='添加活动' link='/shanghu/jingying/addhuodong'></Cell>
@@ -35,7 +42,7 @@
     Group,
     Cell
   } from "vux";
-   import {
+  import {
     Popup
   } from "vue-ydui/dist/lib.px/popup";
   export default {
@@ -43,11 +50,11 @@
       return {
         hdList: [],
         p: 1,
-        popupShow:false
+        popupShow: false
       };
     },
     created() {
-      this.popupShow= false;
+      this.popupShow = false;
       this.$emit("showPopup", false);
       this.get_hd_list();
     },
@@ -55,15 +62,15 @@
       toChange(hdId) {
         this.$router.push({
           path: "/shanghu/jingying/addhuodong",
-          query:{
-              hdId
+          query: {
+            hdId
           }
         });
       },
       xiajia(fwId) {
         var _this = this;
         this.$axios
-          .get( "/Api/card/down", {
+          .get("/Api/card/down", {
             params: {
               id: fwId
             }
@@ -94,7 +101,7 @@
       shangjia(hdId) {
         var _this = this;
         this.$axios
-          .get( "/Api/card/up", {
+          .get("/Api/card/up", {
             params: {
               id: hdId
             }
@@ -125,7 +132,7 @@
       get_hd_list() {
         var _this = this;
         this.$axios
-          .get( "/Api/Card/get_card", {
+          .get("/Api/Card/get_card", {
             params: {
               shop_id: this.userinfo.shop[0].id,
               num: 8,
@@ -167,21 +174,69 @@
       flex-direction: column;
       justify-content: center;
       padding-left: 0.4rem;
-      height: 4.266667rem;
+      padding: .533333rem
+        /* 40/75 */
+        0;
       border-bottom: 1px solid #f0f0f0;
       line-height: 1;
+
+      .fw {
+        display: flex;
+        margin-bottom: .4rem
+          /* 30/75 */
+        ;
+
+        .fw-img {
+          border-radius: .133333rem
+            /* 10/75 */
+          ;
+          flex: none;
+          width: 2.666667rem
+            /* 200/75 */
+          ;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+          }
+        }
+
+        .fw-info {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: .4rem
+            /* 30/75 */
+          ;
+
+          .fw-name {
+            font-size: .266667rem
+              /* 20/75 */
+            ;
+          }
+
+          .fw-price {
+            color: red;
+          }
+        }
+      }
+
       .tit {
         margin-bottom: 0.48rem;
       }
+
       .fw_name {
         margin-bottom: 0.48rem;
       }
+
       .op-btn {
+        display: flex;
+        justify-content: flex-end;
         .xbtn {
-          margin-top: 0;
+          margin: 0;
           width: 2.133333rem;
           height: 0.853333rem;
-          margin-right: 0.613333rem;
+          margin-left: 0.613333rem;
         }
       }
     }

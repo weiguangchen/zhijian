@@ -1,6 +1,9 @@
 <template>
   <div class="order-gl">
     <bigTitle title="订单管理" @showPopup='showPopup' :icon='false' :right='true'>
+
+    </bigTitle>
+    <div class="select-box">
       <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择订单类型' v-model="orderType"
         @on-change='changeType'>
         <iview-op value='6'>全部订单({{orderStatus.all}})</iview-op>
@@ -10,7 +13,14 @@
         <iview-op value='4'>已完成订单({{orderStatus.ywc}})</iview-op>
         <!-- <iview-op value='5'>正在退款订单</iview-op> -->
       </iview-select>
-    </bigTitle>
+      <iview-select slot="right" class="select-wrapper" size='large' placeholder='请选择时间' v-model="orderDate" @on-change='changeDate'>
+        <iview-op :value='1'>全部</iview-op>
+        <iview-op :value='2'>一个月内</iview-op>
+        <iview-op :value='3'>一个星期内</iview-op>
+        <iview-op :value='4'>当天</iview-op>
+
+      </iview-select>
+    </div>
     <div class="list">
 
       <scroller :on-infinite="infinite" ref="myscroller">
@@ -86,7 +96,9 @@
       return {
         orderStatus: {},
         orderType: 6,
-
+        orderDate: 1,
+        start_time: this.$moment('2018-01-01').unix(),
+        end_time: this.$moment().unix(),
         noData: false,
         list: [],
         p: 1
@@ -112,6 +124,31 @@
         this.p = 1;
         this.noData = false;
         this.get_order_list();
+      },
+      changeDate(val) {
+        this.list = [];
+        this.p = 1;
+        this.noData = false;
+
+        if (val === 1) {
+          this.start_time = this.$moment('2018-08-04').unix();
+        } else if (val === 2) {
+          this.start_time = this.$moment().startOf('month').unix();
+        } else if (val === 3) {
+          this.start_time = this.$moment().startOf('week').unix();
+        } else if (val === 4) {
+          this.start_time = this.$moment().startOf('day').unix();
+        }
+
+
+
+        this.end_time = this.$moment().unix();
+
+        // console.log('开始时间'+this.start_time)
+        // console.log('结束时间'+this.end_time)
+
+        this.get_order_list();
+
       },
       toDetail(id, zf, tui_status, order_num) {
         if (tui_status) {
@@ -157,7 +194,9 @@
                 status: 6,
                 paidan_status: this.orderType,
                 num: 10,
-                p: this.p
+                p: this.p,
+                start_time: this.start_time,
+                end_time: this.end_time
               }
             })
             .then(({
@@ -224,11 +263,22 @@
     display: flex;
     flex-direction: column;
 
-    .select-wrapper {
-      font-size: .373333rem
-        /* 28/75 */
+    .select-box {
+      padding: .2rem
+        /* 15/75 */
       ;
+      display: flex;
+      justify-content: space-around;
+
+      .select-wrapper {
+        flex: none;
+        width: 40%;
+        font-size: .373333rem
+          /* 28/75 */
+        ;
+      }
     }
+
 
     .list {
       flex: 1;
@@ -263,7 +313,7 @@
 
           .img {
             width: 2.666667rem;
-            height:2.666667rem;
+            height: 2.666667rem;
             border-radius: 0.133333rem;
             margin-right: 0.24rem;
           }
