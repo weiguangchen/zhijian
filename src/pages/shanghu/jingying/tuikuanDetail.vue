@@ -35,7 +35,190 @@
             <XButton type='warn' :mini='true' @click.native='reject'>拒绝</XButton>
           </div>
         </template>
-        <template v-else-if='orderDetail.tui_status == 1'>
+        <div class="stepper" v-else>
+          <stepper v-if="orderDetail.tui_status == 1 && orderDetail.is_us == 1">
+            <step>
+              <p>提交成功</p>
+              <div slot="content">
+                <p>您的退单申请提交成功，请等待商家回复。</p>
+                <p>{{orderDetail.tui_one_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>商家回复</p>
+              <div slot="content">
+                <p>商家已同意您的退单申请，等待平台审核</p>
+                <p>{{orderDetail.tui_two_time}}</p>
+              </div>
+            </step>
+          </stepper>
+          <stepper v-if="orderDetail.tui_status == 1 && orderDetail.is_us == 0">
+            <step>
+              <p>提交成功</p>
+              <div slot="content">
+                <p>您的退单申请提交成功，请等待平台审核。</p>
+                <p>{{orderDetail.tui_one_time}}</p>
+              </div>
+            </step>
+          </stepper>
+
+          <stepper v-if="orderDetail.tui_status == 2 && orderDetail.is_us == 1">
+            <step>
+              <p>提交成功</p>
+              <div slot="content">
+                <p>您的退单申请提交成功，请等待商家回复。</p>
+                <p>{{orderDetail.tui_one_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>商家回复</p>
+              <div slot="content">
+                <p>商家已拒绝您的退单申请，等待平台审核</p>
+                <p>{{orderDetail.tui_two_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>退单失败</p>
+              <div slot="content">
+                <p>您的本次退单失败。</p>
+              </div>
+            </step>
+          </stepper>
+
+          <stepper v-if="orderDetail.tui_status == 3  && orderDetail.is_us == 1 && zf == 1">
+            <step>
+              <p>提交成功</p>
+              <div slot="content">
+                <p>您的退单申请提交成功，请等待商家回复。</p>
+                <p>{{orderDetail.tui_one_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>商家回复</p>
+              <div slot="content">
+                <p>商家已同意您的退单申请，等待平台审核</p>
+                <p>{{orderDetail.tui_two_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>审核结果</p>
+              <div slot="content">
+                <p>您的退款申请已通过审核，稍后将为您退单</p>
+                <p>{{orderDetail.tui_three_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>退单成功</p>
+              <div slot="content">
+                <p>您的本次服务已退还至支付活动卡。</p>
+              </div>
+            </step>
+          </stepper>
+          <stepper v-if="orderDetail.tui_status == 3  && orderDetail.is_us == 0 && zf == 1">
+            <step>
+              <p>提交成功</p>
+              <div slot="content">
+                <p>您的退单申请提交成功，请等待平台审核。</p>
+                <p>{{orderDetail.tui_one_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>审核结果</p>
+              <div slot="content">
+                <p>您的退款申请已通过审核，稍后将为您退单</p>
+                <p>{{orderDetail.tui_three_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>退单成功</p>
+              <div slot="content">
+                <p>已经取消订单，并向用户退还服务至活动卡</p>
+              </div>
+            </step>
+          </stepper>
+          <stepper v-if="orderDetail.tui_status == 3  && orderDetail.is_us == 1 && zf == 0">
+            <step>
+              <p>提交成功</p>
+              <div slot="content">
+                <p>您的退单申请提交成功，请等待商家回复。</p>
+                <p>{{orderDetail.tui_one_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>商家回复</p>
+              <div slot="content">
+                <p>商家已同意您的退单申请，等待平台审核</p>
+                <p>{{orderDetail.tui_two_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>审核结果</p>
+              <div slot="content">
+                <p>您的退款申请已通过审核，稍后将为您退单</p>
+                <p>{{orderDetail.tui_three_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>退款中</p>
+              <div slot="content">
+                <p>您的退款将在1-3个工作日之内退回您的支付账户</p>
+              </div>
+            </step>
+            <step>
+              <p>退单成功</p>
+              <div slot="content">
+                <p>您的退款已成功退至您的支付账户</p>
+              </div>
+            </step>
+          </stepper>
+          <stepper v-if="orderDetail.tui_status == 3  && orderDetail.is_us == 0 && zf == 0">
+            <step>
+              <p>提交成功</p>
+              <div slot="content">
+                <p>您的退单申请提交成功，请等待平台审核。</p>
+                <p>{{orderDetail.tui_one_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>审核结果</p>
+              <div slot="content">
+                <p>您的退款申请已通过审核，稍后将为您退单</p>
+                <p>{{orderDetail.tui_three_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>退单成功</p>
+              <div slot="content">
+                <p>已经取消订单，并向用户全额退款</p>
+              </div>
+            </step>
+          </stepper>
+
+
+          <stepper v-if="orderDetail.tui_status == 4 && orderDetail.is_us == 0">
+            <step>
+              <p>提交成功</p>
+              <div slot="content">
+                <p>您的退单申请提交成功，等待平台审核</p>
+                <p>{{orderDetail.tui_one_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>审核结果</p>
+              <div slot="content">
+                <p>您的退款申未通过审核</p>
+                <p>{{orderDetail.tui_three_time}}</p>
+              </div>
+            </step>
+            <step>
+              <p>退单失败</p>
+              <div slot="content">
+                <p>您的本次退单失败</p>
+              </div>
+            </step>
+          </stepper>
+        </div>
+        <!-- <template v-else-if='orderDetail.tui_status == 1'>
           <h3 v-if="zf == 1">已同意退还服务到支付活动卡</h3>
           <template v-else>
             <Group class="info">
@@ -66,53 +249,17 @@
               <Cell title='已拒绝退款'></Cell>
             </Group>
           </template>
-        </template>
+        </template> -->
       </div>
 
-      <div class="steps">
-        <!-- <h1>退款流程</h1> -->
-        <!-- <mu-stepper :active-step='1' orientation="vertical" >
-        <mu-step>
-          <mu-step-label>提交成功</mu-step-label>
-          <mu-step-content>
-            <p>您的退款申请提交成功，请等待平台审核</p>
-            <p>2018.7.30 18:00:00</p>
-          </mu-step-content>
-        </mu-step>
-        <mu-step>
-          <mu-step-label>商家回复</mu-step-label>
-          <mu-step-content>
-            <p>商家已同意您的退单申请。稍后将为您退单</p>
-            <p>2018.7.30 18:00:00</p>
-          </mu-step-content>
-        </mu-step>
-        <mu-step>
-          <mu-step-label>退款成功</mu-step-label>
-          <mu-step-content>
-            <p>你的本次服务已退还至支付活动卡</p>
-          </mu-step-content>
-        </mu-step>
-      </mu-stepper> -->
 
-        <!-- <step :level='1' :orderDetail='orderDetail'>
-        <span>111</span>
-        <div>2222</div>
-        <i>333</i>
-      </step> -->
-
-        <!-- <stepper :orderDetail='orderDetail' :zf='zf'>
-
-      </stepper> -->
-
-
-      </div>
     </betterScroll>
   </div>
 </template>
 
 <script>
-  //   import stepper from '@/components/stepper.vue';
-  //   import step from './components/step.vue';
+  import stepper from '@/pages/orderList/components/stepper';
+  import step from '@/pages/orderList/components/step';
   import betterScroll from '@/components/betterScroll';
   import {
     XButton,
@@ -231,9 +378,9 @@
       Group,
       Cell,
       betterScroll,
-      XTextarea
-      //   stepper,
-      //   step
+      XTextarea,
+      stepper,
+      step
     }
   };
 
@@ -243,77 +390,102 @@
   .tuikuan-step {
     display: flex;
     flex-direction: column;
+
     .info {
       margin-bottom: $bot;
+
       .weui-cells {
-        font-size: .373333rem/* 28/75 */
+        font-size: .373333rem
+          /* 28/75 */
         ;
         margin-top: 0;
         font-weight: bold;
+
         &:after,
         &::before {
           display: none;
         }
       }
+
       .weui-cell {
         &::before {
           display: none;
         }
       }
+
       .weui-cell__ft {
         color: #000000;
         font-weight: normal;
       }
+
       .vux-cell-bd {
-        width: 2.666667rem/* 200/75 */
+        width: 2.666667rem
+          /* 200/75 */
         ;
         flex: none;
       }
+
       textarea:disabled {
         background: #ffffff;
       }
+
       .textarea {
         .weui-label {
-          width: 2.666667rem/* 200/75 */
-           !important;
+          width: 2.666667rem
+            /* 200/75 */
+             !important;
           flex: none;
         }
       }
     }
+
     .handler {
       background: #ffffff;
+
       h3 {
         padding: 10px 15px;
-        font-size: .453333rem/* 34/75 */
+        font-size: .453333rem
+          /* 34/75 */
         ;
       }
+
       .btns {
         margin-top: 1.5rem;
         display: flex;
         justify-content: space-around;
+
         .weui-btn+.weui-btn {
           margin-top: 0;
         }
       }
+
       .user {
         display: flex;
         align-items: center;
       }
+
       .avatar {
-        width: .64rem/* 48/75 */
+        width: .64rem
+          /* 48/75 */
         ;
-        margin-right: .4rem/* 30/75 */
+        margin-right: .4rem
+          /* 30/75 */
         ;
         border-radius: 50%;
       }
 
+      .stepper {
+        padding: 10px 15px;
+      }
     }
 
     .steps {
       h1 {
-        font-size: .373333rem/* 28/75 */
+        font-size: .373333rem
+          /* 28/75 */
         ;
-        margin-bottom: .533333rem/* 40/75 */
+        margin-bottom: .533333rem
+          /* 40/75 */
         ;
       }
 

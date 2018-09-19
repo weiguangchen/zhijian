@@ -40,6 +40,15 @@
               <div class="mingzi">手机号：{{item.dianhua}}</div>
             </div>
           </div>
+          <div class="tui_sq">
+              退单申请人:
+            <template v-if="item.is_us == 1">
+              用户
+            </template>
+            <template v-else>
+              商家
+            </template>
+          </div>
           <div class="count">
             <div class="count-item" v-if="item.zf != 1">
               结算价：¥{{item.order_jprice}}
@@ -52,7 +61,8 @@
                 <span class="warn">商家未处理</span>
               </template>
               <template v-else-if="item.tui_status == 1">状态：
-                <span class="success">商家已同意</span>
+                <span class="success" v-if="item.is_us == 1">商家已同意</span>
+                <span class="success" v-else>商家发起退款</span>
               </template>
               <template v-else-if="item.tui_status == 2">状态：
                 <span class="warn">商家已拒绝</span>
@@ -246,7 +256,9 @@
             justify-content: space-around;
           }
         }
-
+        .tui_sq{
+          margin-bottom: 0.266667rem;
+        }
         .count {
           display: flex;
           .count-item {

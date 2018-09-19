@@ -4,7 +4,11 @@
       <img src="~img/public/uploadImgBtn.png" alt="" class="img">
     </div>
 
-    <template v-if="old.length>0">
+    <div class="img-box" v-for="(item,index) in value" :key="index" @click="previewImg(item,value)">
+      <img :src="item" alt="" class="thumb">
+      <i class="iconfont icon-shanchuguanbicha2" @click="deleteOldImg(index)" v-if="multiple"></i>
+    </div>
+    <!-- <template v-if="old.length>0">
       <div class="img-box" v-for="(item,index) in old" :key="index" @click="previewImg(item,all_tupian)">
         <img :src="item" alt="" class="thumb">
         <i class="iconfont icon-shanchuguanbicha2" @click="deleteOldImg(index)" v-if="multiple"></i>
@@ -15,7 +19,7 @@
         <img :src="item" alt="" class="thumb">
         <i class="iconfont icon-shanchuguanbicha2" @click="deleteImg(index)" v-if="multiple"></i>
       </div>
-    </template>
+    </template> -->
   </div>
 </template>
 
@@ -26,32 +30,42 @@
         system: 1,
         old: [],
         originImgs: [],
+        /* 原图 */
         previewImgs: [],
-        tupian: []
+        /* 预览图 */
+        tupian: [] /* 上传图 */
       }
     },
     props: {
+      value: {
+        default: [] /* 旧图片 */
+      },
       multiple: {
-        default: true
+        default: false
       },
       oldImgs: {
-        required:false,
-        default(){
+        required: false,
+        default () {
           return []
         }
       }
     },
+    computed: {
+      all_tupian() {
+        return this.old.concat(this.tupian);
+      },
+    },
     created() {
       this.checkSystem();
       console.log('初始化upload')
-      if (this.oldImgs) {
-        this.old = this.oldImgs;
-      }
-      if (this.multiple) {
-        // 多图上传
-      } else {
-        // 单图上传
-      }
+      // if (this.oldImgs) {
+      //   this.old = this.oldImgs;
+      // }
+      // if (this.multiple) {
+      //   // 多图上传
+      // } else {
+      //   // 单图上传
+      // }
 
     },
     methods: {
@@ -63,24 +77,44 @@
           sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
           success: function (res) {
             // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-            if (!_this.multiple) {
-              _this.originImgs = [];
-              _this.previewImgs = [];
-              _this.tupian = [];
-              _this.old = [];
-            }
-            _this.originImgs = _this.originImgs.concat(res.localIds);
-            if (_this.system == 1) {
-              // 安卓
-              _this.previewImgs = _this.previewImgs.concat(res.localIds)
-            } else if (_this.system == 2) {
-              _this.$wx.getLocalImgData({
-                localId: res.localIds[0], // 图片的localID
-                success: function (res) {
-                  _this.previewImgs = _this.previewImgs.concat(res.localData); // localData是图片的base64数据，可以用img标签显示
-                }
-              });
-            }
+
+
+
+            // if (!_this.multiple) {
+            //   _this.originImgs = [];
+            //   _this.previewImgs = [];
+            //   _this.tupian = [];
+            //   _this.old = [];
+            // }
+            // _this.originImgs = _this.originImgs.concat(res.localIds);
+            // if (_this.system == 1) {
+            //   // 安卓
+            //   _this.previewImgs = _this.previewImgs.concat(res.localIds)
+            // } else if (_this.system == 2) {
+            //   _this.$wx.getLocalImgData({
+            //     localId: res.localIds[0], // 图片的localID
+            //     success: function (res) {
+            //       _this.previewImgs = _this.previewImgs.concat(res.localData); // localData是图片的base64数据，可以用img标签显示
+            //     }
+            //   });
+            // }
+
+            // if (_this.system == 1) {
+            //   // 安卓
+            //   _this.previewImgs = _this.previewImgs.concat(res.localIds)
+            // } else if (_this.system == 2) {
+            //   _this.$wx.getLocalImgData({
+            //     localId: res.localIds[0], // 图片的localID
+            //     success: function (res) {
+            //       _this.previewImgs = _this.previewImgs.concat(res.localData); // localData是图片的base64数据，可以用img标签显示
+            //     }
+            //   });
+            // }
+
+
+            _this.$vux.loading.show({
+              text: '上传图片中'
+            })
             _this.uploadImg(res.localIds[0]);
 
           }
@@ -96,16 +130,30 @@
             console.log(res);
             var serverId = res.serverId; // 返回图片的服务器端ID
             _this.$axios
-              .get( "/Api/wechat/bcimg", {
+              .get("/Api/wechat/bcimg", {
                 params: {
                   imgs: res.serverId
                 }
               })
               .then(res => {
+                _this.$vux.loading.hide()
                 console.log(res);
-                _this.tupian = _this.tupian.concat(res.data);
-                _this.$emit('uploadComplete', _this.all_tupian);
+
+                if (!_this.multiple) {
+                  _this.value = []
+                }
+                _this.value = _this.value.concat(res.data);
+                _this.$emit('input', _this.value);
+
+                // _this.tupian = _this.tupian.concat(res.data);
+                // _this.$emit('uploadComplete', _this.all_tupian);
               });
+          },
+          fail: function (err) {
+            _this.$vux.alert.show({
+              title: '提示',
+              content: '上传失败,请重试'
+            })
           }
         });
       },
@@ -116,8 +164,8 @@
         this.$emit('uploadComplete', this.all_tupian);
       },
       deleteOldImg(index) {
-        this.old.splice(index, 1);
-        this.$emit('uploadComplete', this.all_tupian);
+        this.value.splice(index, 1);
+        this.$emit('input', this.value);
       },
       checkSystem() {
         var u = navigator.userAgent;
@@ -137,11 +185,6 @@
         });
       },
     },
-    computed: {
-      all_tupian() {
-        return this.old.concat(this.tupian);
-      }
-    },
     components: {
 
     }
@@ -155,15 +198,20 @@
     background: #ffffff;
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: -.48rem/* 36/75 */
+    margin-bottom: -.48rem
+      /* 36/75 */
     ;
+
     .upload-btn,
     .img-box {
-      margin-right: .48rem/* 36/75 */
+      margin-right: .48rem
+        /* 36/75 */
       ;
-      margin-bottom: .48rem/* 36/75 */
+      margin-bottom: .48rem
+        /* 36/75 */
       ;
     }
+
     .upload-btn {
       text-align: center;
       display: flex;
@@ -172,21 +220,25 @@
       width: 2rem;
       height: 2rem;
       background: #ececec;
+
       .img {
         width: 0.853333rem;
       }
     }
+
     .img-box {
       width: 2rem;
       height: 2rem;
       flex: none;
       position: relative;
+
       .icon-shanchuguanbicha2 {
         position: absolute;
         right: 0;
         top: 0;
         transform: translate(50%, -50%);
       }
+
       .thumb {
         width: 100%;
         height: 100%;

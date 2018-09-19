@@ -96,6 +96,13 @@ export default [{
           role: 31
         }
       }, {
+        path: 'hdcard',
+        name: 'hdcard',
+        component: resolve => require(['@/pages/shanghu/jingying/hdcard'], resolve),
+        meta: {
+          role: 31
+        }
+      },{
         path: 'hdTongji',
         name: 'hdTongji',
         component: resolve => require(['@/pages/shanghu/jingying/hdTongji'], resolve),

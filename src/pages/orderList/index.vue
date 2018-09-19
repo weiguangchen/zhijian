@@ -15,7 +15,7 @@
               <span class="status" v-else-if="item.status == 3">待处理</span>
               <span class="status" v-else-if="item.status == 4">
                 <template v-if="item.is_us && item.is_us == 0">商户退款</template>
-                <template v-if="item.is_us && item.is_us == 1">用户退款</template> 退款成功
+                <template v-if="item.is_us && item.is_us == 1">用户退款</template> 
               </span>
               <span class="status" v-else-if="item.status == 5">已过期</span>
               <span class="status" v-else-if="item.status == 2 || item.status == 7">已完成</span>
@@ -37,12 +37,12 @@
               </span>
             </div>
             <div class="xbtn">
-            <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 3" @click.native="toTuikuan(item.order_num,item.zf)">查看进度</XButton>
-            <!-- <template v-if="item.status == 1">
+              <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 3" @click.native="toTuikuan(item.order_num,item.zf)">查看进度</XButton>
+              <!-- <template v-if="item.status == 1">
                 <XButton :mini='true' :plain='true' type='warn' class="btn">去使用</XButton>
                 <XButton :mini='true' :plain='true' type='warn' class="btn" @click.native="pingjia(item.order_num,item.zf)">去评价</XButton>
               </template> -->
-            <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 1">去退款</XButton>
+              <!-- <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 1">去退款</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 2" @click.native="buy(item.shop_fw_id)">再次购买</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" :disabled='true' v-if="item.status == 3">退款中</XButton>
               <XButton :mini='true' :plain='true' type='warn' class="btn" v-if="item.status == 4"  @click.native="buy(item.shop_fw_id)">再次购买</XButton>
@@ -57,8 +57,10 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-import betterScroll from '@/components/betterScroll'
+  import {
+    mapMutations
+  } from 'vuex';
+  import betterScroll from '@/components/betterScroll'
   import {
     InfiniteScroll
   } from "vue-ydui/dist/lib.px/infinitescroll";
@@ -96,7 +98,7 @@ import betterScroll from '@/components/betterScroll'
         document.title = "已评论订单";
       }
     },
-    mounted(){
+    mounted() {
       this.resetList();
 
     },
@@ -116,13 +118,25 @@ import betterScroll from '@/components/betterScroll'
     methods: {
       ...mapMutations(['SET_ISLOADING']),
       toOrderDetail(order_num, type) {
-        this.$router.push({
-          path: "/me/orderDetail",
-          query: {
-            type,
-            order_num
-          }
-        });
+        if (this.orderStatus == 4) {
+          // 已退款
+          this.$router.push({
+            path: '/me/tuikuanStep',
+            query: {
+              order_num,
+              zf:type
+            }
+          })
+        } else {
+          this.$router.push({
+            path: "/me/orderDetail",
+            query: {
+              type,
+              order_num
+            }
+          });
+        }
+
       },
       getOrderList() {
         var _this = this;
@@ -131,7 +145,7 @@ import betterScroll from '@/components/betterScroll'
         console.log(this.id)
         // jf=0微信支付if=1卡支付
         return this.$axios
-          .get( "/Api/UserShow/get_order", {
+          .get("/Api/UserShow/get_order", {
             params: {
               uid: _this.id,
               status: _this.orderStatus,
@@ -184,10 +198,10 @@ import betterScroll from '@/components/betterScroll'
           path: '/serviceDetail/' + id
         })
       },
-      toTuikuan(order_num,zf){
+      toTuikuan(order_num, zf) {
         this.$router.push({
-          path:'/me/tuikuanStep',
-          query:{
+          path: '/me/tuikuanStep',
+          query: {
             order_num,
             zf
           }
@@ -215,6 +229,7 @@ import betterScroll from '@/components/betterScroll'
       background: #ffffff;
       margin-top: $bot;
       @include font-dpr(12px);
+
       .title {
         color: #2b2b2b;
         display: flex;
@@ -222,30 +237,37 @@ import betterScroll from '@/components/betterScroll'
         align-items: center;
         height: 0.866667rem;
         padding: 0 0.4rem;
+
         .shop-name {
           .icon-dianpu {
             margin-right: 0.186667rem;
           }
+
           .icon-jinru {
             @include font-dpr(12px);
             margin-left: 0.293333rem;
           }
+
           display: flex;
           align-items: center;
         }
+
         .status {
           color: #e14946;
         }
       }
+
       .content {
         display: flex;
         padding: 0.4rem;
         background: #f1f2f6;
+
         .thumb {
           width: 2.666667rem;
           height: 2.666667rem;
           margin-right: 0.266667rem;
         }
+
         .text {
           display: flex;
           flex-direction: column;
@@ -253,19 +275,25 @@ import betterScroll from '@/components/betterScroll'
           @include font-dpr(14px);
           line-height: 0.506667rem;
           flex: 1;
-          padding-top: .266667rem/* 20/75 */
+          padding-top: .266667rem
+            /* 20/75 */
           ;
+
           .fw-mingzi {
-            font-size: .346667rem/* 26/75 */
+            font-size: .346667rem
+              /* 26/75 */
             ;
             font-weight: bold;
           }
+
           .sub-content {
-            font-size: .293333rem/* 22/75 */
+            font-size: .293333rem
+              /* 22/75 */
             ;
           }
         }
       }
+
       .price {
         display: flex;
         justify-content: space-between;
@@ -274,20 +302,26 @@ import betterScroll from '@/components/betterScroll'
         border-bottom: 1px solid #f0f0f0;
         padding: 0 0.4rem;
         @include font-dpr(14px);
+
         .count {
           margin-right: 0.426667rem;
         }
-        .date{
-          font-size: .32rem /* 24/75 */;
+
+        .date {
+          font-size: .32rem
+            /* 24/75 */
+          ;
           color: #a6a6a6;
         }
       }
+
       .xbtn {
         display: flex;
         justify-content: flex-end;
         align-items: center;
         height: 1.173333rem;
         padding-right: 0.4rem;
+
         .btn {
           margin: 0 0 0 0.266667rem;
         }

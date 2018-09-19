@@ -139,34 +139,42 @@
       },
       tijiao() {
         var _this = this;
-        this.$axios.get('/Api/Tk/shop_tui', {
-          params: {
-            zf: this.zf,
-            order_id: this.order_num,
-            ly: this.ly
-          }
-        }).then(({
-          data
-        }) => {
-          console.log(data);
-          if (data.status == 1) {
-            this.$vux.alert.show({
-              title: '提示',
-              content: '退单成功',
-              onHide() {
-                _this.$router.replace({
-                  path: '/shanghu/jingying/tuikuanList'
-                })
-              }
-            })
-          }else{
+        if (!this.ly) {
+          this.$vux.alert.show({
+            title: '提示',
+            content: '请填写退款理由'
+          })
+        } else {
+          this.$axios.get('/Api/Tk/shop_tui', {
+            params: {
+              zf: this.zf,
+              order_id: this.order_num,
+              ly: this.ly
+            }
+          }).then(({
+            data
+          }) => {
+            console.log(data);
+            if (data.status == 1) {
               this.$vux.alert.show({
-                  title:'提示',
-                  content:'退单失败'
+                title: '提示',
+                content: '退单成功',
+                onHide() {
+                  _this.$router.replace({
+                    path: '/shanghu/jingying/tuikuanList'
+                  })
+                }
               })
-          }
+            } else {
+              this.$vux.alert.show({
+                title: '提示',
+                content: '退单失败'
+              })
+            }
 
-        })
+          })
+        }
+
       }
     },
     computed: {
@@ -195,43 +203,58 @@
   .tuikuan-step {
     display: flex;
     flex-direction: column;
+
     .info {
       margin-bottom: $bot;
+
       .weui-cells {
-        font-size: .373333rem/* 28/75 */
+        font-size: .373333rem
+          /* 28/75 */
         ;
         margin-top: 0;
         font-weight: bold;
+
         &:after,
         &::before {
           display: none;
         }
       }
+
       .weui-cell {
-        padding: .213333rem/* 16/75 */
-        .426667rem/* 32/75 */
+        padding: .213333rem
+          /* 16/75 */
+          .426667rem
+          /* 32/75 */
         ;
+
         &::before {
           display: none;
         }
       }
+
       .weui-cell__ft {
         color: #000000;
         font-weight: normal;
       }
+
       .vux-cell-bd {
-        width: 2.666667rem/* 200/75 */
+        width: 2.666667rem
+          /* 200/75 */
         ;
         flex: none;
       }
+
       textarea:disabled {
         background: #ffffff;
       }
+
       .textarea {
-        margin: .426667rem/* 32/75 */
+        margin: .426667rem
+          /* 32/75 */
         ;
         border: 1px solid #cdcdcd;
       }
+
       .btn {
         display: flex;
         justify-content: center;

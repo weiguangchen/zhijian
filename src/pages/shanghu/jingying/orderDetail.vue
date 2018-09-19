@@ -51,12 +51,12 @@
             <span class="content">{{detail.car_xing}}</span>
           </div>
           <div class="line">
-            <XButton type='warn' :mini='true' @click.native='tuikuan' :disabled='detail.tui_status || detail.paidan_status == 4' v-if="!detail.tui_status">退单</XButton>
+            <XButton type='warn' :mini='true' @click.native='tuikuan' :disabled='detail.paidan_status == 4'>退单</XButton>
           </div>
         </div>
       </div>
       <!-- paidan_status为  1未派单   2已派单   3已接单     4已完成     5申请退单 -->
-      <div class="paidan-status" v-if="!detail.tui_status">
+      <div class="paidan-status" >
         <div v-if="detail.paidan_status == 1" class="paidan">
           <h2>派单</h2>
           <Group class="reset-vux-input select">
@@ -116,40 +116,14 @@
           <XButton type='warn' @click.native="agree_tui">同意退单</XButton>
         </div>
       </div>
-      <div class="stepper" v-else>
-        <stepper :orderDetail='detail'>
-          <step>
-            <p>提交成功</p>
-            <div slot="content">
-              <p>退单申请提交成功</p>
-              <p>2018.7.31 10:20:46</p>
-            </div>
-          </step>
-          <step>
-            <p>提交成功</p>
-            <div slot="content">
-              <p>退单申请提交成功</p>
-              <p>2018.7.31 10:20:46</p>
-            </div>
-          </step>
-          <step>
-            <p>提交成功</p>
-            <div slot="content">
-              <p>退单申请提交成功</p>
-              <p>2018.7.31 10:20:46</p>
-            </div>
-          </step>
-        </stepper>
-
-      </div>
+     
     </div>
 
   </betterScroll>
 </template>
 
 <script>
-  import stepper from '@/pages/orderList/components/stepper';
-  import step from '@/pages/orderList/components/step';
+ 
   import betterScroll from '@/components/betterScroll/index';
   import {
     Selector,
@@ -304,8 +278,7 @@
       XButton,
       Group,
       betterScroll,
-      stepper,
-      step
+
     },
     mixins: [checkLogin]
   };

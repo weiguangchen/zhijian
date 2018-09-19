@@ -20,7 +20,7 @@
       </div>
       <Group class="pingjia">
         <XTextarea v-model="content" placeholder='请对本次服务进行点评，分享您的体验心得' :height='140'></XTextarea>
-        <uploadImage @uploadComplete='uploadComplete'></uploadImage>
+        <uploadImage v-model="tupian" :multiple='true'></uploadImage>
       </Group>
       <div class="shangpu">
         <h1 class="title">
@@ -61,7 +61,7 @@
         star3: 0,
         star4: 0,
         content: "",
-        tupian: "",
+        tupian: [],
 
       };
     },

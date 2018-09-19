@@ -44,8 +44,10 @@
           <Cell title='加盟区域' v-model="qyKey"></Cell>
           <Selector :options='sqList' title='加盟社区' :value-map="['id','sq_name']" direction='rtl' @on-change='changeSq' v-model='sqVal'></Selector>
         </Group>
+
         <h2 class="sub-title">门店图片：</h2>
-        <uploadImage @uploadComplete='uploadComplete' :multiple='false' :oldImgs='tupian' v-if="tupian.length>0"></uploadImage>
+        <uploadImage v-model="tupian"></uploadImage>
+
         <myMap v-show="mapShow" @finishAdd='finishAdd'></myMap>
         <XButton type='warn' class="xbtn" @click.native='add_face' v-if="!faceId" :disabled='submiting'>增加门店</XButton>
         <XButton type='warn' class="xbtn" @click.native='change_face' v-else :disabled='submiting'>提交修改</XButton>
@@ -132,7 +134,6 @@
     },
     created() {
       var _this = this;
-      this.$eruda.init();
       // this.$eruda.init();
       this.$emit("showPopup", false);
       if (this.faceId) {

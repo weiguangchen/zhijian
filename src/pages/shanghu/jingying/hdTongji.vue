@@ -85,7 +85,11 @@
       showPopup(val) {
         this.$emit("showPopup", val);
       },
-
+      toDetail(){
+        this.$router.push({
+          path:'/shanghu/jingying/hdcard'
+        })
+      }
     },
     components: {
       bigTitle,

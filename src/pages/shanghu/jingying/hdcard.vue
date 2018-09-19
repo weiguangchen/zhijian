@@ -1,7 +1,7 @@
 <template>
   <div class="gl-fw">
 
-    <bigTitle title="管理活动" @showPopup='showPopup'></bigTitle>
+    <bigTitle title="活动卡统计" @showPopup='showPopup' :icon='false'></bigTitle>
     <div class="hd-list">
       <scroller>
         <div class="form-box">
@@ -29,14 +29,7 @@
     </div>
 
 
-    <Popup position='right' v-model="popupShow">
-      <div class="popup-list">
-        <Group>
-          <Cell title='添加活动' link='/shanghu/jingying/addhuodong'></Cell>
-        </Group>
-
-      </div>
-    </Popup>
+    
   </div>
 </template>
 

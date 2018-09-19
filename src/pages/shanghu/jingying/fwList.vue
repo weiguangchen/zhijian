@@ -1,25 +1,30 @@
 <template>
   <div class="gl-fw">
-    <!-- <ViewBox class="shanghu-page"> -->
     <bigTitle title="管理服务" @showPopup='showPopup'></bigTitle>
-    <div class="form-box">
-      <div v-for="(item,index) in fwList" :key="index" class="fw-item">
-        <div class="fw">
-          <div class="fw-img">
-            <img :src="item.fw_img" alt="">
-          </div>
-          <div class="fw-info">
-            <div class="fw-name">{{item.fw_mingzi}}</div>
-            <div class="fw-price">{{item.money}}</div>
+    <div class="fw-list">
+      <scroller>
+        <div class="form-box">
+          <div v-for="(item,index) in fwList" :key="index" class="fw-item">
+            <div class="fw">
+              <div class="fw-img">
+                <img :src="item.fw_img" alt="">
+              </div>
+              <div class="fw-info">
+                <div class="fw-name">{{item.fw_mingzi}}</div>
+                <div class="fw-price">{{item.money}}</div>
+              </div>
+            </div>
+            <div class="op-btn">
+              <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.shop_fw_id)">编辑</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="xbtn" :disabled='true' v-if="item.status == 0">审核中</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='xiajia(item.shop_fw_id)' v-if="item.status == 1">下架</XButton>
+              <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='shangjia(item.shop_fw_id)'
+                v-if="item.status == 3">上架</XButton>
+            </div>
           </div>
         </div>
-        <div class="op-btn">
-          <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native="toChange(item.shop_fw_id)">编辑</XButton>
-          <XButton :mini='true' :plain='true' type='warn' class="xbtn" :disabled='true' v-if="item.status == 0">审核中</XButton>
-          <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='xiajia(item.shop_fw_id)' v-if="item.status == 1">下架</XButton>
-          <XButton :mini='true' :plain='true' type='warn' class="xbtn" @click.native='shangjia(item.shop_fw_id)' v-if="item.status == 3">上架</XButton>
-        </div>
-      </div>
+      </scroller>
+
     </div>
     <Popup position='right' v-model="popupShow">
       <div class="popup-list">
@@ -29,12 +34,12 @@
 
       </div>
     </Popup>
-
-    <!-- </ViewBox> -->
   </div>
 </template>
 
 <script>
+  import betterScroll from '@/components/betterScroll';
+
   import bigTitle from "@/components/bigTitle/index";
   import checkLogin from '@/mixins/checkLogin.js';
   import {
@@ -151,7 +156,8 @@
       XButton,
       Popup,
       Group,
-      Cell
+      Cell,
+      betterScroll
     }
   };
 
@@ -159,6 +165,15 @@
 
 <style lang='scss'>
   .gl-fw {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .fw-list {
+      position: relative;
+      flex: 1;
+    }
+
     .fw-item {
       @include font-dpr(14px);
       display: flex;
@@ -167,28 +182,46 @@
       padding-left: 0.4rem;
       border-bottom: 1px solid #f0f0f0;
       line-height: 1;
-      padding: .533333rem /* 40/75 */ 0;
+      padding: .533333rem
+        /* 40/75 */
+        0;
+
       .fw {
         display: flex;
-        margin-bottom: .4rem /* 30/75 */;
-        .fw-img{
-          border-radius: .133333rem /* 10/75 */;  
-          flex:none;
-          width: 2.666667rem /* 200/75 */;
+        margin-bottom: .4rem
+          /* 30/75 */
+        ;
+
+        .fw-img {
+          border-radius: .133333rem
+            /* 10/75 */
+          ;
+          flex: none;
+          width: 2.666667rem
+            /* 200/75 */
+          ;
           overflow: hidden;
-          img{
+
+          img {
             width: 100%;
           }
         }
-        .fw-info{
+
+        .fw-info {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          padding: .4rem /* 30/75 */;
-          .fw-name{
-            font-size: .266667rem /* 20/75 */;
+          padding: .4rem
+            /* 30/75 */
+          ;
+
+          .fw-name {
+            font-size: .266667rem
+              /* 20/75 */
+            ;
           }
-          .fw-price{
+
+          .fw-price {
             color: red;
           }
         }
@@ -205,8 +238,9 @@
       .op-btn {
         display: flex;
         justify-content: flex-end;
+
         .xbtn {
-         margin: 0;
+          margin: 0;
           width: 2.133333rem;
           height: 0.853333rem;
           margin-left: 0.613333rem;

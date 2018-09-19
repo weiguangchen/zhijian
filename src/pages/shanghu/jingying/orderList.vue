@@ -151,15 +151,15 @@
 
       },
       toDetail(id, zf, tui_status, order_num) {
-        if (tui_status) {
-          this.$router.push({
-            path: '/shanghu/jingying/orderStep',
-            query: {
-              order_num,
-              zf
-            }
-          })
-        } else {
+        // if (tui_status) {
+        //   this.$router.push({
+        //     path: '/shanghu/jingying/orderStep',
+        //     query: {
+        //       order_num,
+        //       zf
+        //     }
+        //   })
+        // } else {
           this.$router.push({
             path: '/shanghu/jingying/orderDetail',
             query: {
@@ -167,7 +167,7 @@
               zf
             }
           })
-        }
+        // }
 
       },
       getStep(status) {
