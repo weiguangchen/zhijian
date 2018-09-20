@@ -10,7 +10,7 @@
     </bigTitle>
     <div class="fwy-list">
       <scroller :on-infinite="infinite" ref="myscroller">
-        <router-link to='/shanghu/jingying/fwyDetail' v-for="(item,index) in list" :key="index">
+        <router-link :to="{path:'/shanghu/jingying/fwyDetail',query:{fwy_id:item.id}}" v-for="(item,index) in list" :key="index">
           <div class="fwy">
             <div class="name">{{item.sub_name}}</div>
             <div class="content">

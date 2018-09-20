@@ -7,38 +7,11 @@
           <div>服务类别</div>
           <div>数量</div>
         </div>
-        <div class="fw">
-          <div>上门洗车</div>
-          <div>123</div>
+        <div class="fw" v-for="(item,index) in list" :key="index">
+          <div>{{item.class_name}}</div>
+          <div>{{item.yes}}</div>
         </div>
-        <div class="fw">
-          <div>上门洗车</div>
-          <div>123</div>
-        </div>
-        <div class="fw">
-          <div>上门洗车</div>
-          <div>123</div>
-        </div>
-        <div class="fw">
-          <div>上门洗车</div>
-          <div>123</div>
-        </div>
-        <div class="fw">
-          <div>上门洗车</div>
-          <div>123</div>
-        </div>
-        <div class="fw">
-          <div>上门洗车</div>
-          <div>123</div>
-        </div>
-        <div class="fw">
-          <div>上门洗车</div>
-          <div>123</div>
-        </div>
-        <div class="fw">
-          <div>上门洗车</div>
-          <div>123</div>
-        </div>
+        
       </div>
     </betterScroll>
   </div>
@@ -86,9 +59,10 @@
           return;
         } else {
           this.$axios
-            .get("/Api/Order/get_hd_order", {
+            .get("/Api/Shop/fwy_list_content", {
               params: {
                 shop_id: this.userinfo.shop[0].id,
+                fwy_id: this.fwy_id,
                 num: 8,
                 p: this.p
               }
@@ -121,8 +95,8 @@
       changeDate(val) {}
     },
     computed: {
-      fw_id() {
-        return this.$route.query.id;
+      fwy_id() {
+        return this.$route.query.fwy_id;
       }
     },
     mixins: [checkLogin],
@@ -142,12 +116,16 @@
 <style lang='scss'>
   .fwy-detail {
     height: 100%;
-    padding:.4rem
+    padding: .4rem
       /* 30/75 */
     ;
 
     .btt {
-      margin:.4rem /* 30/75 */ 0 .666667rem /* 50/75 */;
+      margin: .4rem
+        /* 30/75 */
+        0 .666667rem
+        /* 50/75 */
+      ;
       font-size: .4rem
         /* 30/75 */
       ;
@@ -158,7 +136,9 @@
         /* 10/75 */
       ;
       overflow: hidden;
-        font-size: .4rem /* 30/75 */;
+      font-size: .4rem
+        /* 30/75 */
+      ;
 
       .title {
         background: #326dac;
@@ -178,6 +158,7 @@
         line-height: 1.2rem
           /* 90/75 */
         ;
+
         &:nth-child(odd) {
           background: #e8ebeb;
         }
