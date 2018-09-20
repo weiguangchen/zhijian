@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="tj-list">
-          <div class="tongji-item" v-for="(item,index) in list" :key="index" @click="toDetail(item.fw_id)">
+          <div class="tongji-item" v-for="(item,index) in list" :key="index" @click="toDetail(item.bk_id)">
             <img :src="item.hd_img" alt="" class="img">
             <div class="info">
               <div class="mingzi">{{item.card_name}}</div>
@@ -85,9 +85,12 @@
       showPopup(val) {
         this.$emit("showPopup", val);
       },
-      toDetail(){
+      toDetail(hdId){
         this.$router.push({
-          path:'/shanghu/jingying/hdcard'
+          path:'/shanghu/jingying/hdcard',
+          query:{
+            hdId
+          }
         })
       }
     },

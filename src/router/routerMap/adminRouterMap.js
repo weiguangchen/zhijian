@@ -88,6 +88,13 @@ export default [{
           menu: [],
           index:true
         }
+      },{
+        path: 'fws',
+        name: 'fws',
+        component: resolve => require(['@/pages/shanghu/jingying/fws'], resolve),
+        meta: {
+          role: 31
+        }
       }, {
         path: 'tongji',
         name: 'tongji',
@@ -232,6 +239,20 @@ export default [{
         path: 'yhjHandle',
         name: 'yhjHandle',
         component: resolve => require(['@/pages/shanghu/jingying/yhjHandle'], resolve),
+        meta: {
+          role: 43
+        }
+      }, {
+        path: 'fwyjl',
+        name: 'fwyjl',
+        component: resolve => require(['@/pages/shanghu/jingying/fwyjl'], resolve),
+        meta: {
+          role: 43
+        }
+      }, {
+        path: 'fwyDetail',
+        name: 'fwyDetail',
+        component: resolve => require(['@/pages/shanghu/jingying/fwydetail'], resolve),
         meta: {
           role: 43
         }
